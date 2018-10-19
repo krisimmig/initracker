@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import easyFirestore from "./store/vuex-easy-firestore";
+import { easyFirestore } from "./store/vuex-easy-firestore";
 
 Vue.use(Vuex);
 

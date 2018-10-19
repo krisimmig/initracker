@@ -1,16 +1,9 @@
 <template>
   <div>
-    <NpcsList />
+    <h1>Home</h1>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import NpcsList from "@/components/NpcsList.vue";
-
-export default {
-  components: {
-    NpcsList
-  }
-};
+export default {};
 </script>
