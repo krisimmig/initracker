@@ -1,12 +1,13 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import { firebase } from "./store/vuex-easy-firestore";
 import Home from "./views/Home.vue";
+import Dashboard from "./views/Dashboard.vue";
 import Encounter from "./views/Encounter.vue";
 import Login from "./views/Login.vue";
 import About from "./views/About.vue";
 import Register from "./views/Register.vue";
+import { isLoggedIn } from "./utils/auth";
 
 Vue.use(Router);
 
@@ -15,9 +16,17 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/",
+      path: "/home",
       name: "home",
       component: Home
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: Dashboard,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: "/encounter",
@@ -40,24 +49,20 @@ const router = new Router({
     {
       path: "/about",
       name: "about",
-      component: About,
-      meta: {
-        requiresAuth: true
-      }
+      component: About
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
-  if (requiresAuth && !currentUser) {
+  if (requiresAuth && !isLoggedIn()) {
     next({
       name: "login",
       query: { redirect: to.name }
     });
-  } else if (currentUser && ["login", "register"].includes(to.name)) {
+  } else if (isLoggedIn() && ["login", "register"].includes(to.name)) {
     next({ name: "home" });
   } else {
     next();

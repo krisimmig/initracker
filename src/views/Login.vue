@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { firebase } from "./../store/vuex-easy-firestore";
+import { mapActions } from "vuex";
 
 export default {
   data() {
@@ -26,19 +26,11 @@ export default {
   },
 
   methods: {
+    ...mapActions(["validateUser"]),
+
     submit() {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(
-          () =>
-            this.$router.push({ name: this.$route.query.redirect || "home" }),
-          error => console.error(error)
-        );
+      this.validateUser({ email: this.email, password: this.password });
     }
   }
 };
 </script>
-
-<style>
-</style>

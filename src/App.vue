@@ -1,29 +1,33 @@
 <template>
-  <div id="app">
+  <div>
     <div id="nav">
       <router-link :to="{ name: 'home' }">Home</router-link> |
-      <router-link :to="{ name: 'encounter' }">Encounter</router-link> |
-      <router-link :to="{ name: 'login' }">Login</router-link> |
-      <router-link :to="{ name: 'register' }">Register</router-link> |
-      <router-link :to="{ name: 'about' }">About</router-link> |
-      <button @click="logout">Logout</button>
+      <template v-if="isLoggedIn">
+        <router-link :to="{ name: 'dashboard' }">Dashboard</router-link> |
+        <router-link :to="{ name: 'encounter' }">Encounter</router-link> |
+        <a href="#" @click="logoutUser">Logout</a> | 
+      </template>
+      <template v-else>
+        <router-link :to="{ name: 'login' }">Login</router-link> |
+        <router-link :to="{ name: 'register' }">Register</router-link> |
+      </template>
+      <router-link :to="{ name: 'about' }">About</router-link>
+
     </div>
     <router-view/>
   </div>
 </template>
 
 <script>
-import { firebase } from "./store/vuex-easy-firestore";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
+  computed: {
+    ...mapGetters(["isLoggedIn"])
+  },
+
   methods: {
-    logout() {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => this.$router.push({ name: "home" }))
-        .catch(error => console.log("error logging out.", error));
-    }
+    ...mapActions(["logoutUser"])
   }
 };
 </script>

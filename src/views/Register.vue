@@ -30,7 +30,11 @@ export default {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
-        .then(user => console.log(user), error => console.error(error));
+        .then(
+          () =>
+            this.$router.push({ name: this.$route.query.redirect || "home" }),
+          error => console.error(error)
+        );
 
       console.log("Submit", this.email, this.password);
     }

@@ -4,6 +4,7 @@ require("firebase/firestore");
 import createEasyFirestore from "vuex-easy-firestore";
 import npcsDataModule from "./npcsDataModule";
 import usersDataModule from "./usersDataModule";
+import charactersDataModule from "./charactersDataModule";
 
 // Initialize the ain firbase app first.
 const firebase = Firebase.initializeApp({
@@ -20,7 +21,11 @@ const settings = { timestampsInSnapshots: true };
 const firestore = firebase.firestore();
 firestore.settings(settings);
 
-const storeDataModules = [usersDataModule, npcsDataModule];
+const storeDataModules = [
+  usersDataModule,
+  npcsDataModule,
+  charactersDataModule
+];
 
 // Setup the easy-firestore modules.
 // REMEMBER: When adding a new module, its connectio to the firestore needs to be opened
