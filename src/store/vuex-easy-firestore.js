@@ -32,7 +32,7 @@ const storeDataModules = [
 // with an action in the store.js file.
 // i.e. store.dispatch("npcsData/openDBChannel");.
 const easyFirestore = createEasyFirestore(storeDataModules, {
-  logging: true
+  logging: false
 });
 
 export { easyFirestore, firebase };

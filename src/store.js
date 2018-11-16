@@ -16,7 +16,6 @@ const store = new Vuex.Store({
 
   mutations: {
     setUser(state, user) {
-      console.log(user);
       state.user = user;
     }
   },

@@ -4,11 +4,10 @@
     <h3 v-if="user">User: {{  user.email }}</h3>
 
     <p>My characters</p>
-    <ul>
-      <li v-for="(character, key) in characters" :key="key">
-        {{ character.name }}
-      </li>
-    </ul>
+    <CharacterSheet
+      v-for="(character, key) in characters" :key="key"
+      v-bind="character"
+    />
 
     <p>Parties</p>
     <p>My Ecounters</p>
@@ -19,7 +18,11 @@
 <script>
 import { mapState } from "vuex";
 
+import CharacterSheet from "../components/CharacterSheet";
+
 export default {
+  components: { CharacterSheet },
+
   computed: {
     ...mapState("charactersData", ["characters"]),
     ...mapState(["user"])

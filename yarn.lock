@@ -5682,6 +5682,11 @@ hoek@5.x.x:
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-5.0.4.tgz#0f7fa270a1cafeb364a4b2ddfaa33f864e4157da"
   integrity sha512-Alr4ZQgoMlnere5FZJsIyfIjORBqZll5POhDsF4q64dPuJR6rNxXdDxtHSQq8OXRurhmx+PWYEE8bXRROY8h0w==
 
+hoek@6.x.x:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/hoek/-/hoek-6.0.0.tgz#747680290249203ad096ff33d1699adf5e8e73bd"
+  integrity sha512-NCB2kQcmiazLBKaM/uTvw+2XWSuwA8Q1ACBkvbEL9ScCe7DP8Divg3MF2aFOYLGdA64SPf9+gr2QESO9l0ULVQ==
+
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/home-or-tmp/-/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -6820,6 +6825,15 @@ joi@^13.0.0:
   integrity sha512-xuY5VkHfeOYK3Hdi91ulocfuFopwgbSORmIwzcwHKESQhC7w1kD5jaVSPnqDxS2I8t3RZ9omCKAxNwXN5zG1/Q==
   dependencies:
     hoek "5.x.x"
+    isemail "3.x.x"
+    topo "3.x.x"
+
+joi@^14.0.3:
+  version "14.0.3"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-14.0.3.tgz#5ab9091ec972837b348c05177c860e004f08991f"
+  integrity sha512-EtFiturEwhrNuTn1bpR4VodSPsi6r1A661BjLC6OMnETU+ClDdyV1aKWXgPTYKs+mVjvsPRtdn7rsgxbXU+jiQ==
+  dependencies:
+    hoek "6.x.x"
     isemail "3.x.x"
     topo "3.x.x"
 
