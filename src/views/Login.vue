@@ -14,23 +14,18 @@
   </div>
 </template>
 
-<script>
-import { mapActions } from "vuex";
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-export default {
-  data() {
-    return {
-      email: "",
-      password: ""
-    };
-  },
+import { dispatchValidateUser } from '../store/userModule';
 
-  methods: {
-    ...mapActions(["validateUser"]),
+@Component
+export default class Login extends Vue {
+  public email: string = '';
+  public password: string = '';
 
-    submit() {
-      this.validateUser({ email: this.email, password: this.password });
-    }
+  public submit() {
+    dispatchValidateUser(this.$store, { email: this.email, password: this.password });
   }
-};
+}
 </script>

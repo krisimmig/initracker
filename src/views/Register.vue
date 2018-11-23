@@ -14,32 +14,27 @@
   </div>
 </template>
 
-<script>
-import { firebase } from "./../store/vuex-easy-firestore";
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-export default {
-  data() {
-    return {
-      email: "",
-      password: ""
-    };
-  },
+import { firebase } from './../store/firebase';
 
-  methods: {
-    submit() {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(
-          () =>
-            this.$router.push({ name: this.$route.query.redirect || "home" }),
-          error => console.error(error)
-        );
+@Component
+export default class Register extends Vue {
+  public email: string = '';
+  public password: string = '';
 
-      console.log("Submit", this.email, this.password);
-    }
+  public submit(): void {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(this.email, this.password)
+      .then(
+        () =>
+          this.$router.push({ name: this.$route.query.redirect || 'home' }),
+        (error) => console.error(error),
+      );
   }
-};
+}
 </script>
 
 <style>

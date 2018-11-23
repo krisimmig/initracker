@@ -18,19 +18,24 @@
   </div>
 </template>
 
-<script>
-import { mapGetters, mapActions } from "vuex";
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-export default {
-  computed: {
-    ...mapGetters(["isLoggedIn"])
-  },
+import { readIsLoggedIn, dispatchLogoutUser } from './store/userModule';
 
-  methods: {
-    ...mapActions(["logoutUser"])
+@Component
+export default class App extends Vue {
+
+  public logoutUser() {
+    dispatchLogoutUser(this.$store);
   }
-};
+
+  get isLoggedIn(): boolean {
+    return readIsLoggedIn(this.$store);
+  }
+}
 </script>
+
 
 <style lang="scss">
 </style>

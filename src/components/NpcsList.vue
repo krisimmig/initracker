@@ -1,35 +1,55 @@
 <template>
-  <div>
-    <h1>All Npcs</h1>
-    <ul>
-      <li v-for="npc in npcs" :key="npc.id">
-        <p>Name: <b>{{ npc.name }}</b></p>
-        <p>ID: <em>{{ npc.id }}</em></p>
-      </li>
-    </ul>
+  <div class="NpcsList">
+    <p>Npcs List comp</p>
+    <p>{{ npcs.length }}</p>
 
-    <h1>All users</h1>
-    <ul>
-      <li v-for="user in users" :key="user.id">
-        <p>Name: <b>{{ user.name }}</b></p>
-        <p>ID: <em>{{ user.id }}</em></p>
-      </li>
-    </ul>
+    <input
+      type="text"
+      v-model="searchString"
+      placeholder="Search monsters..."
+      @keyup.enter="submit"
+    >
 
+    <h3>Results:</h3>
+    <Npc v-for="npc in searchResults" :key="npc.name" v-bind="npc" />
+
+    <h3>My Npcs:</h3>
+    <Npc v-for="npc in npcs" :key="npc.id" v-bind="npc" />
   </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import axios from 'axios';
 
-export default {
-  computed: {
-    ...mapState("npcsData", ["npcs"]),
-    ...mapState("usersData", ["users"])
-  },
+import Npc from './Npc.vue';
+import * as npcsModule from '../store/npcsModule';
+import { db } from '../store/firebase';
+import monsters from './monsters';
 
-  methods: {}
-};
+@Component({
+  components: { Npc },
+})
+export default class NpcsList extends Vue {
+  public searchString: string = '';
+
+  public mounted() {
+    npcsModule.dispatchOpenNpcsConnection(this.$store);
+    npcsModule.dispatchFetchSearchIndex(this.$store);
+  }
+
+  public async submit() {
+    console.log('submit');
+  }
+
+  get npcs() {
+    return npcsModule.readGetNpcs(this.$store);
+  }
+
+  get searchResults() {
+    return [];
+  }
+}
 </script>
 
 <style scoped lang="scss">

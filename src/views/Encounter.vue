@@ -1,24 +1,19 @@
 <template>
   <div>
-    <p>User: {{ user.email }}</p>
+    <p>Encounter Comp</p>
     <NpcsList />
   </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import NpcsList from "../components/NpcsList";
+import NpcsList from '../components/NpcsList.vue';
 
-export default {
-  components: {
-    NpcsList
-  },
-
-  computed: {
-    ...mapState(["user"])
-  }
-};
+@Component({
+  components: { NpcsList },
+})
+export default class Encounter extends Vue {}
 </script>
 
 <style>

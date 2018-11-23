@@ -1,66 +1,12 @@
 <template>
-  <div class="CharacterSheet">
-    <p>Name: {{ name }}</p>
-    <p>Level: {{ level }}</p>
-    <p>HP: {{ health }}</p>
-    <p>Class: {{ characterClass }}</p>
-    <p><small>{{ id }}</small></p>
-    <button @click="editing = !editing">Edit</button>
-
-    <CharacterEdit
-      v-if="editing"
-      :characterData="characterData"
-      @saved="editing = false"
-    />
-  </div>
+  <p>Character Sheet Comp</p>
 </template>
 
-<script>
-import CharacterEdit from "./CharacterEdit";
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-export default {
-  components: {
-    CharacterEdit
-  },
-
-  props: {
-    id: String,
-    name: String,
-    level: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    health: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    characterClass: {
-      type: String,
-      required: false,
-      default: "Not set"
-    }
-  },
-
-  data() {
-    return {
-      editing: false
-    };
-  },
-
-  computed: {
-    characterData() {
-      return {
-        id: this.id,
-        name: this.name,
-        level: this.level,
-        health: this.health,
-        characterClass: this.characterClass
-      };
-    }
-  }
-};
+@Component
+export default class CharacterSheet extends Vue {}
 </script>
 
 <style>

@@ -1,33 +1,18 @@
 <template>
-  <div class="Dashboard">
-    <h1>Dashboard</h1>
-    <h3 v-if="user">User: {{  user.email }}</h3>
-
-    <p>My characters</p>
-    <CharacterSheet
-      v-for="(character, key) in characters" :key="key"
-      v-bind="character"
-    />
-
-    <p>Parties</p>
-    <p>My Ecounters</p>
-    <p>Official NPCs</p>
+  <div>
+    <p>Dashboard</p>
+    <CharacterSheet />
   </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import CharacterSheet from '../components/CharacterSheet.vue';
 
-import CharacterSheet from "../components/CharacterSheet";
-
-export default {
+@Component({
   components: { CharacterSheet },
-
-  computed: {
-    ...mapState("charactersData", ["characters"]),
-    ...mapState(["user"])
-  }
-};
+})
+export default class Dashboard extends Vue {}
 </script>
 
 <style>
