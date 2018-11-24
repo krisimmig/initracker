@@ -23,15 +23,15 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import axios from 'axios';
 
 import Npc from './Npc.vue';
+import { INpcIndexEntry } from '../store/npcsModule';
 import * as npcsModule from '../store/npcsModule';
-import { db } from '../store/firebase';
-import monsters from './monsters';
 
 @Component({
   components: { Npc },
 })
 export default class NpcsList extends Vue {
   public searchString: string = '';
+  public searchResults: INpcIndexEntry[] = [];
 
   public mounted() {
     npcsModule.dispatchOpenNpcsConnection(this.$store);
@@ -39,15 +39,12 @@ export default class NpcsList extends Vue {
   }
 
   public async submit() {
-    console.log('submit');
+    const results = npcsModule.readGetSearchResults(this.$store)(this.searchString);
+    this.searchResults = results;
   }
 
   get npcs() {
     return npcsModule.readGetNpcs(this.$store);
-  }
-
-  get searchResults() {
-    return [];
   }
 }
 </script>

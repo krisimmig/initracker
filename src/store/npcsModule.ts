@@ -3,18 +3,18 @@ import { getStoreAccessors } from 'vuex-typescript';
 import { db } from './firebase';
 import { IRootState } from './index';
 
-interface INpcsState {
+export interface INpcsState {
   npcs: INpc[];
   searchIndex: INpcIndexEntry[];
 }
 
-interface INpc {
+export interface INpc {
   name: string;
   id: string;
   hit_dice: string;
 }
 
-interface INpcIndexEntry {
+export interface INpcIndexEntry {
   name: string;
   id: string;
 }
@@ -37,15 +37,23 @@ export const npcsModule = {
     getSearchIndex(state: INpcsState) {
       return state.searchIndex;
     },
+
+    getSearchResults: (state: INpcsState) => (query: string) => {
+      return state.searchIndex.filter((npxIndexEntry) =>
+        npxIndexEntry.name.toLowerCase().includes(query),
+      );
+    },
   },
 
   actions: {
     fetchSearchIndex(context: NpcsContext) {
       db.collection('monsters').onSnapshot((data) => {
-        const searchIndex: INpcIndexEntry[] = data.docs.reduce((acc: INpcIndexEntry[], current) => {
-          acc.push({ id: current.id, name: current.data().name });
-          return acc;
-        }, []);
+        const searchIndex: INpcIndexEntry[] = data.docs.reduce(
+          (acc: INpcIndexEntry[], current) => {
+            acc.push({ id: current.id, name: current.data().name });
+            return acc;
+          }, [],
+        );
         commitSetSearchIndex(context, searchIndex);
       });
     },
@@ -75,11 +83,16 @@ export const npcsModule = {
   },
 };
 
-const { commit, read, dispatch } = getStoreAccessors<INpcsState, IRootState>('npcsModule');
+const {
+  commit,
+  read,
+  dispatch,
+} = getStoreAccessors<INpcsState, IRootState>('npcsModule');
 
 // Getters
 export const readGetNpcs = read(npcsModule.getters.getNpcs);
 export const readGetSearchIndex = read(npcsModule.getters.getSearchIndex);
+export const readGetSearchResults = read(npcsModule.getters.getSearchResults);
 
 // Mutations
 export const commitSetNpcs = commit(npcsModule.mutations.setNpcs);
