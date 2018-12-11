@@ -21,7 +21,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import { readIsLoggedIn, dispatchLogoutUser } from './store/userModule';
+import { readIsLoggedIn, dispatchLogoutUser } from './store/usersModule';
 
 @Component
 export default class App extends Vue {

@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
 
-import { userModule } from './userModule';
+import { usersModule } from './usersModule';
 import { npcsModule } from './npcsModule';
+import { encountersModule } from './encountersModule';
 
 export interface IRootState {
   version: string;
@@ -17,8 +18,9 @@ const store: StoreOptions<IRootState> = {
   },
 
   modules: {
-    userModule,
+    usersModule,
     npcsModule,
+    encountersModule,
   },
 };
 

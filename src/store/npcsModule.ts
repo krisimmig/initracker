@@ -8,15 +8,23 @@ export interface INpcsState {
   searchIndex: INpcIndexEntry[];
 }
 
-export interface INpc {
-  name: string;
-  id: string;
-  hit_dice: string;
-}
-
 export interface INpcIndexEntry {
   name: string;
   id: string;
+  size: string;
+  type: string;
+  challenge_rating: string;
+  hit_points: number;
+}
+
+export interface INpc extends INpcIndexEntry {
+  hit_dice: string;
+  strength: number;
+  intelligence: number;
+  wisdom: number;
+  charisma: number;
+  constitution: number;
+  dexterity: number;
 }
 
 type NpcsContext = ActionContext<INpcsState, IRootState>;
@@ -50,7 +58,14 @@ export const npcsModule = {
       db.collection('monsters').onSnapshot((data) => {
         const searchIndex: INpcIndexEntry[] = data.docs.reduce(
           (acc: INpcIndexEntry[], current) => {
-            acc.push({ id: current.id, name: current.data().name });
+            acc.push({
+              id: current.id,
+              name: current.data().name,
+              challenge_rating: current.data().challenge_rating,
+              size: current.data().size,
+              type: current.data().type,
+              hit_points: current.data().hit_points,
+            });
             return acc;
           }, [],
         );

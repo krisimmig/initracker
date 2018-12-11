@@ -16,7 +16,7 @@ export interface IUserState {
   user: firebase.User | null;
 }
 
-export const userModule = {
+export const usersModule = {
   namespaced: true,
 
   state: {
@@ -65,15 +65,15 @@ export const userModule = {
   },
 };
 
-const { commit, read, dispatch } = getStoreAccessors<IUserState, IRootState>('userModule');
+const { commit, read, dispatch } = getStoreAccessors<IUserState, IRootState>('usersModule');
 
 // Getters
-export const readIsLoggedIn = read(userModule.getters.isLoggedIn);
+export const readIsLoggedIn = read(usersModule.getters.isLoggedIn);
 
 // Actions
-export const dispatchValidateUser = dispatch(userModule.actions.validateUser);
-export const dispatchLogoutUser = dispatch(userModule.actions.logoutUser);
-export const dispatchLoginUser = dispatch(userModule.actions.loginUser);
+export const dispatchValidateUser = dispatch(usersModule.actions.validateUser);
+export const dispatchLogoutUser = dispatch(usersModule.actions.logoutUser);
+export const dispatchLoginUser = dispatch(usersModule.actions.loginUser);
 
 // Mutations
-export const commitSetUser = commit(userModule.mutations.setUser);
+export const commitSetUser = commit(usersModule.mutations.setUser);

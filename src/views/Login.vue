@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import { dispatchValidateUser } from '../store/userModule';
+import { dispatchValidateUser } from '../store/usersModule';
 
 @Component
 export default class Login extends Vue {

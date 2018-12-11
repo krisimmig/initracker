@@ -6,7 +6,7 @@ import store from './store';
 Vue.config.productionTip = false;
 
 import { firebase } from './store/firebase';
-import { dispatchLoginUser } from './store/userModule';
+import { dispatchLoginUser } from './store/usersModule';
 
 const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
   // tslint:disable-next-line:no-unused-expression

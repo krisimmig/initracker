@@ -1,17 +1,17 @@
 <template>
   <div>
     <p>Encounter Comp</p>
-    <NpcsList />
+    <EncounterList />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import NpcsList from '../components/NpcsList.vue';
+import EncounterList from '../components/EncounterList.vue';
 
 @Component({
-  components: { NpcsList },
+  components: { EncounterList },
 })
 export default class Encounter extends Vue {}
 </script>
