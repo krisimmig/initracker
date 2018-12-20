@@ -22,6 +22,8 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import { readIsLoggedIn, dispatchLogoutUser } from './store/usersModule';
+import * as npcsModule from './store/npcsModule';
+import * as encountersModule from './store/encountersModule';
 
 @Component
 export default class App extends Vue {
@@ -33,9 +35,21 @@ export default class App extends Vue {
   get isLoggedIn(): boolean {
     return readIsLoggedIn(this.$store);
   }
+
+  public mounted() {
+    if (this.isLoggedIn) {
+      npcsModule.dispatchFetchMonsters(this.$store);
+      encountersModule.dispatchFetchEncounter(this.$store);
+    }
+  }
 }
 </script>
 
 
 <style lang="scss">
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 </style>

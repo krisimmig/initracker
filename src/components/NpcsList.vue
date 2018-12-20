@@ -1,7 +1,6 @@
 <template>
   <div class="NpcsList">
-    <p>Npcs List comp</p>
-    <p>{{ npcs.length }}</p>
+    <p>Search index count: <strong>{{ npcs.length }}</strong></p>
 
     <input
       type="text"
@@ -11,10 +10,11 @@
     >
 
     <h3>Results:</h3>
-    <Npc v-for="npc in searchResults" :key="npc.name" v-bind="npc" />
-
-    <h3>My Npcs:</h3>
-    <Npc v-for="npc in npcs" :key="npc.id" v-bind="npc" />
+    <ul v-if="searchResults.length > 0">
+      <li v-for="npc in searchResults" :key="npc.id">
+        <NpcSearchResult :id="npc.id" />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -22,25 +22,18 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import axios from 'axios';
 
-import Npc from './Npc.vue';
-import { INpcIndexEntry } from '../store/npcsModule';
+import NpcSearchResult from './NpcSearchResult.vue';
 import * as npcsModule from '../store/npcsModule';
 
 @Component({
-  components: { Npc },
+  components: { NpcSearchResult },
 })
 export default class NpcsList extends Vue {
   public searchString: string = '';
-  public searchResults: INpcIndexEntry[] = [];
-
-  public mounted() {
-    npcsModule.dispatchOpenNpcsConnection(this.$store);
-    npcsModule.dispatchFetchSearchIndex(this.$store);
-  }
+  public searchResults: npcsModule.INpc[] = [];
 
   public async submit() {
-    const results = npcsModule.readGetSearchResults(this.$store)(this.searchString);
-    this.searchResults = results;
+    this.searchResults = npcsModule.readGetSearchResults(this.$store)(this.searchString);
   }
 
   get npcs() {

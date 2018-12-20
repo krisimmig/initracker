@@ -4,6 +4,7 @@ import { getStoreAccessors } from 'vuex-typescript';
 import { db } from './firebase';
 import { IRootState } from './index';
 import { INpc } from './npcsModule';
+import { arrayUnion } from '../utils/firebaseUtils';
 
 export interface IEncounterState {
   encounters: IEncounter[];
@@ -30,6 +31,10 @@ export const encountersModule = {
       return state.encounters;
     },
 
+    getEncounterById: (state: IEncounterState) => (encounterId: string): IEncounter | undefined => {
+      return state.encounters.find((encounter) => encounter.id === encounterId);
+    },
+
     getEncounterNpcs: (state: IEncounterState) => (id: string) => {
       return state.encounterNpcs[id];
     },
@@ -38,36 +43,27 @@ export const encountersModule = {
   actions: {
     async fetchEncounter(context: EncountersContext) {
       try {
-        const data = await db.collection('encounters').get();
-        const encounters: IEncounter[] = data.docs.reduce((acc: IEncounter[], current) => {
-          const newEncounter: IEncounter = current.data() as IEncounter;
-          newEncounter.id = current.id;
-          acc.push(newEncounter);
+        await db.collection('encounters').onSnapshot((data) => {
+          const encounters: IEncounter[] = data.docs.reduce((acc: IEncounter[], current) => {
+            const newEncounter: IEncounter = current.data() as IEncounter;
+            newEncounter.id = current.id;
+            acc.push(newEncounter);
+            return acc;
+          }, []);
 
-          // dispatchFetchNpcsForEncounter(context, current.id);
-          return acc;
-        }, []);
-
-        commitSetEncounters(context, encounters);
+          commitSetEncounters(context, encounters);
+        });
       } catch (error) {
         console.log('error', error);
       }
     },
 
-    async fetchNpcsForEncounter(context: EncountersContext, id: string) {
-      try {
-        const npcsData = await db.collection('encounters').doc(id).collection('npcs').get();
-        const npcs: INpc[] = npcsData.docs.reduce((acc: INpc[], current) => {
-          const npc = current.data() as INpc;
-          npc.id = current.id;
-          acc.push(npc);
-          return acc;
-        }, []);
-
-        commitSetNpcsForEncounter(context, { id, npcs });
-      } catch (error) {
-        console.log('error', error);
-      }
+    async addNpcToEncounter(
+      context: EncountersContext,
+      { npcId, encounterId }: { npcId: string, encounterId: string },
+    ) {
+      const npcsRef = await db.collection('encounters').doc(encounterId);
+      npcsRef.update({ npcs: arrayUnion(npcId) });
     },
   },
 
@@ -92,6 +88,7 @@ const {
 
 // Getters
 export const readGetEncounters = read(encountersModule.getters.getEncounters);
+export const readGetEncounterById = read(encountersModule.getters.getEncounterById);
 export const readGetEncounterNpcs = read(encountersModule.getters.getEncounterNpcs);
 
 // Mutations
@@ -100,4 +97,4 @@ export const commitSetNpcsForEncounter = commit(encountersModule.mutations.setNp
 
 // Actions
 export const dispatchFetchEncounter = dispatch(encountersModule.actions.fetchEncounter);
-export const dispatchFetchNpcsForEncounter = dispatch(encountersModule.actions.fetchNpcsForEncounter);
+export const dispatchAddNpcToEncounter = dispatch(encountersModule.actions.addNpcToEncounter);

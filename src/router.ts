@@ -4,7 +4,7 @@ import { Route } from 'vue-router';
 
 import Home from './views/Home.vue';
 import Dashboard from './views/Dashboard.vue';
-import Encounter from './views/Encounter.vue';
+import EncounterView from './views/Encounter.vue';
 import Login from './views/Login.vue';
 import About from './views/About.vue';
 import Register from './views/Register.vue';
@@ -15,12 +15,14 @@ Vue.use(Router);
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+
   routes: [
     {
       path: '/home',
       name: 'home',
       component: Home,
     },
+
     {
       path: '/dashboard',
       name: 'dashboard',
@@ -29,24 +31,28 @@ const router = new Router({
         requiresAuth: true,
       },
     },
+
     {
       path: '/encounter',
       name: 'encounter',
-      component: Encounter,
+      component: EncounterView,
       meta: {
         requiresAuth: true,
       },
     },
+
     {
       path: '/login',
       name: 'login',
       component: Login,
     },
+
     {
       path: '/register',
       name: 'register',
       component: Register,
     },
+
     {
       path: '/about',
       name: 'about',

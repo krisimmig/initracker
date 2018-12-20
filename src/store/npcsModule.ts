@@ -5,19 +5,15 @@ import { IRootState } from './index';
 
 export interface INpcsState {
   npcs: INpc[];
-  searchIndex: INpcIndexEntry[];
 }
 
-export interface INpcIndexEntry {
+export interface INpc {
   name: string;
   id: string;
   size: string;
   type: string;
   challenge_rating: string;
   hit_points: number;
-}
-
-export interface INpc extends INpcIndexEntry {
   hit_dice: string;
   strength: number;
   intelligence: number;
@@ -34,7 +30,6 @@ export const npcsModule = {
 
   state: {
     npcs: [],
-    searchIndex: [],
   },
 
   getters: {
@@ -42,35 +37,34 @@ export const npcsModule = {
       return state.npcs;
     },
 
-    getSearchIndex(state: INpcsState) {
-      return state.searchIndex;
+    getNpcById: (state: INpcsState) => (npcId: string): INpc | undefined => {
+      return state.npcs.find((npc) => npc.id === npcId);
     },
 
-    getSearchResults: (state: INpcsState) => (query: string) => {
-      return state.searchIndex.filter((npxIndexEntry) =>
+    getSearchResults: (state: INpcsState) => (query: string): INpc[] => {
+      return state.npcs.filter((npxIndexEntry) =>
         npxIndexEntry.name.toLowerCase().includes(query),
       );
     },
   },
 
   actions: {
-    fetchSearchIndex(context: NpcsContext) {
-      db.collection('monsters').onSnapshot((data) => {
-        const searchIndex: INpcIndexEntry[] = data.docs.reduce(
-          (acc: INpcIndexEntry[], current) => {
-            acc.push({
-              id: current.id,
-              name: current.data().name,
-              challenge_rating: current.data().challenge_rating,
-              size: current.data().size,
-              type: current.data().type,
-              hit_points: current.data().hit_points,
-            });
+    async fetchMonsters(context: NpcsContext) {
+      try {
+        const monstersQuerySnapshot = await db.collection('monsters').get();
+        const monstersData: INpc[] = monstersQuerySnapshot.docs.reduce(
+          (acc: INpc[], current) => {
+            const newNpc: INpc = current.data() as INpc;
+            newNpc.id = current.id;
+            acc.push(newNpc);
             return acc;
           }, [],
         );
-        commitSetSearchIndex(context, searchIndex);
-      });
+        commitSetNpcs(context, monstersData);
+
+      } catch (error) {
+        console.log('Error:', error);
+      }
     },
 
     openNpcsConnection(context: NpcsContext) {
@@ -91,10 +85,6 @@ export const npcsModule = {
     setNpcs(state: INpcsState, npcs: INpc[]) {
       state.npcs = npcs;
     },
-
-    setSearchIndex(state: INpcsState, searchIndex: INpcIndexEntry[]) {
-      state.searchIndex = searchIndex;
-    },
   },
 };
 
@@ -106,13 +96,12 @@ const {
 
 // Getters
 export const readGetNpcs = read(npcsModule.getters.getNpcs);
-export const readGetSearchIndex = read(npcsModule.getters.getSearchIndex);
+export const readGetNpcById = read(npcsModule.getters.getNpcById);
 export const readGetSearchResults = read(npcsModule.getters.getSearchResults);
 
 // Mutations
 export const commitSetNpcs = commit(npcsModule.mutations.setNpcs);
-export const commitSetSearchIndex = commit(npcsModule.mutations.setSearchIndex);
 
 // Actions
 export const dispatchOpenNpcsConnection = dispatch(npcsModule.actions.openNpcsConnection);
-export const dispatchFetchSearchIndex = dispatch(npcsModule.actions.fetchSearchIndex);
+export const dispatchFetchMonsters = dispatch(npcsModule.actions.fetchMonsters);
