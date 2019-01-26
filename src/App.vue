@@ -47,6 +47,8 @@ export default class App extends Vue {
 
 
 <style lang="scss">
+@import './scss/helper-classes.scss';
+
 ul, li {
   list-style: none;
   margin: 0;
