@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <NpcsList />
-    <EncounterList />
+  <div class="IT-Flex">
+    <div class="IT-Flex-50">
+      <NpcsList />
+    </div> 
+    <div class="IT-Flex-50">
+      <EncounterList />
+    </div> 
   </div>
 </template>
 
