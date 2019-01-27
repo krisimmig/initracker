@@ -29,8 +29,7 @@ export default class Register extends Vue {
       .auth()
       .createUserWithEmailAndPassword(this.email, this.password)
       .then(
-        () =>
-          this.$router.push({ name: this.$route.query.redirect || 'home' }),
+        () => this.$router.push({ name: 'home' }),
         (error) => console.error(error),
       );
   }
