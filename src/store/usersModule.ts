@@ -1,18 +1,18 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
-import { IRootState } from './index';
+import { RootState } from './index';
 
-type UserContext = ActionContext<IUserState, IRootState>;
+type UserContext = ActionContext<UserState, RootState>;
 
 import { firebase } from './firebase';
 import router from '../router';
 
-export interface ILoginCredentials {
+export interface LoginCredentials {
   email: string;
   password: string;
 }
 
-export interface IUserState {
+export interface UserState {
   user: firebase.User | null;
 }
 
@@ -24,13 +24,13 @@ export const usersModule = {
   },
 
   getters: {
-    isLoggedIn(state: IUserState) {
+    isLoggedIn(state: UserState) {
       return state.user !== null;
     },
   },
 
   actions: {
-    async validateUser(context: UserContext, loginCredentials: ILoginCredentials): Promise<void> {
+    async validateUser(context: UserContext, loginCredentials: LoginCredentials): Promise<void> {
       try {
         const response = await firebase.auth().signInWithEmailAndPassword(
           loginCredentials.email,
@@ -59,13 +59,13 @@ export const usersModule = {
   },
 
   mutations: {
-    setUser(state: IUserState, user: firebase.User | null) {
+    setUser(state: UserState, user: firebase.User | null) {
       state.user = user;
     },
   },
 };
 
-const { commit, read, dispatch } = getStoreAccessors<IUserState, IRootState>('usersModule');
+const { commit, read, dispatch } = getStoreAccessors<UserState, RootState>('usersModule');
 
 // Getters
 export const readIsLoggedIn = read(usersModule.getters.isLoggedIn);

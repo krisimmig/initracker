@@ -1,13 +1,13 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 import { db } from './firebase';
-import { IRootState } from './index';
+import { RootState } from './index';
 
-export interface INpcsState {
-  npcs: INpc[];
+export interface NpcsState {
+  npcs: NpcEntity[];
 }
 
-export interface INpc {
+export interface NpcEntity {
   name: string;
   id: string;
   size: string;
@@ -23,7 +23,7 @@ export interface INpc {
   dexterity: number;
 }
 
-type NpcsContext = ActionContext<INpcsState, IRootState>;
+type NpcsContext = ActionContext<NpcsState, RootState>;
 
 export const npcsModule = {
   namespaced: true,
@@ -33,15 +33,15 @@ export const npcsModule = {
   },
 
   getters: {
-    getNpcs(state: INpcsState) {
+    getNpcs(state: NpcsState) {
       return state.npcs;
     },
 
-    getNpcById: (state: INpcsState) => (npcId: string): INpc | undefined => {
+    getNpcById: (state: NpcsState) => (npcId: string): NpcEntity | undefined => {
       return state.npcs.find((npc) => npc.id === npcId);
     },
 
-    getSearchResults: (state: INpcsState) => (query: string): INpc[] => {
+    getSearchResults: (state: NpcsState) => (query: string): NpcEntity[] => {
       return state.npcs.filter((npxIndexEntry) =>
         npxIndexEntry.name.toLowerCase().includes(query),
       );
@@ -52,9 +52,9 @@ export const npcsModule = {
     async fetchMonsters(context: NpcsContext) {
       try {
         const monstersQuerySnapshot = await db.collection('monsters').get();
-        const monstersData: INpc[] = monstersQuerySnapshot.docs.reduce(
-          (acc: INpc[], current) => {
-            const newNpc: INpc = current.data() as INpc;
+        const monstersData: NpcEntity[] = monstersQuerySnapshot.docs.reduce(
+          (acc: NpcEntity[], current) => {
+            const newNpc: NpcEntity = current.data() as NpcEntity;
             newNpc.id = current.id;
             acc.push(newNpc);
             return acc;
@@ -69,8 +69,8 @@ export const npcsModule = {
 
     openNpcsConnection(context: NpcsContext) {
       db.collection('npcs').onSnapshot((data) => {
-        const npcs: INpc[] = data.docs.reduce((acc: INpc[], current) => {
-          const newNpc: INpc = current.data() as INpc;
+        const npcs: NpcEntity[] = data.docs.reduce((acc: NpcEntity[], current) => {
+          const newNpc: NpcEntity = current.data() as NpcEntity;
           newNpc.id = current.id;
           acc.push(newNpc);
           return acc;
@@ -82,7 +82,7 @@ export const npcsModule = {
   },
 
   mutations: {
-    setNpcs(state: INpcsState, npcs: INpc[]) {
+    setNpcs(state: NpcsState, npcs: NpcEntity[]) {
       state.npcs = npcs;
     },
   },
@@ -92,7 +92,7 @@ const {
   commit,
   read,
   dispatch,
-} = getStoreAccessors<INpcsState, IRootState>('npcsModule');
+} = getStoreAccessors<NpcsState, RootState>('npcsModule');
 
 // Getters
 export const readGetNpcs = read(npcsModule.getters.getNpcs);

@@ -3,6 +3,7 @@
     <p>
       {{ npcData.name }} ({{ npcData.id }}) | {{ npcData.size }} | {{ npcData.type }} | {{ npcData.hit_points }}
     </p>
+    <p v-if="removable" @click="$emit('remove')">Remove</p>
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import * as npcsModule from '../store/npcsModule';
 @Component
 export default class Npc extends Vue {
   @Prop(String) public id!: string;
+  @Prop(Boolean) public removable!: boolean;
 
   get npcData() {
     return npcsModule.readGetNpcById(this.$store)(this.id);

@@ -30,7 +30,7 @@ import * as npcsModule from '../store/npcsModule';
 })
 export default class NpcsList extends Vue {
   public searchString: string = '';
-  public searchResults: npcsModule.INpc[] = [];
+  public searchResults: npcsModule.NpcEntity[] = [];
 
   public async submit() {
     this.searchResults = npcsModule.readGetSearchResults(this.$store)(this.searchString);

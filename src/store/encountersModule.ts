@@ -1,22 +1,23 @@
 import Vue from 'vue';
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
-import { db } from './firebase';
-import { IRootState } from './index';
-import { INpc } from './npcsModule';
-import { arrayUnion } from '../utils/firebaseUtils';
+import { db, firebase } from './firebase';
+import { RootState } from './index';
+import { NpcEntity } from './npcsModule';
+import { arrayUnion, arrayRemove } from '../utils/firebaseUtils';
 
-export interface IEncounterState {
-  encounters: IEncounter[];
-  encounterNpcs: { [key: string]: INpc[] };
+export interface EncountersState {
+  encounters: EncounterEntity[];
+  encounterNpcs: { [key: string]: NpcEntity[] };
 }
 
-export interface IEncounter {
+export interface EncounterEntity {
   name: string;
   id: string;
+  npcIDs: string[];
 }
 
-type EncountersContext = ActionContext<IEncounterState, IRootState>;
+type EncountersContext = ActionContext<EncountersState, RootState>;
 
 export const encountersModule = {
   namespaced: true,
@@ -27,15 +28,15 @@ export const encountersModule = {
   },
 
   getters: {
-    getEncounters(state: IEncounterState) {
+    getEncounters(state: EncountersState) {
       return state.encounters;
     },
 
-    getEncounterById: (state: IEncounterState) => (encounterId: string): IEncounter | undefined => {
+    getEncounterById: (state: EncountersState) => (encounterId: string): EncounterEntity | undefined => {
       return state.encounters.find((encounter) => encounter.id === encounterId);
     },
 
-    getEncounterNpcs: (state: IEncounterState) => (id: string) => {
+    getEncounterNpcs: (state: EncountersState) => (id: string) => {
       return state.encounterNpcs[id];
     },
   },
@@ -44,8 +45,8 @@ export const encountersModule = {
     async fetchEncounter(context: EncountersContext) {
       try {
         await db.collection('encounters').onSnapshot((data) => {
-          const encounters: IEncounter[] = data.docs.reduce((acc: IEncounter[], current) => {
-            const newEncounter: IEncounter = current.data() as IEncounter;
+          const encounters: EncounterEntity[] = data.docs.reduce((acc: EncounterEntity[], current) => {
+            const newEncounter: EncounterEntity = current.data() as EncounterEntity;
             newEncounter.id = current.id;
             acc.push(newEncounter);
             return acc;
@@ -63,18 +64,34 @@ export const encountersModule = {
       { npcId, encounterId }: { npcId: string, encounterId: string },
     ) {
       const npcsRef = await db.collection('encounters').doc(encounterId);
-      npcsRef.update({ npcs: arrayUnion(npcId) });
+      npcsRef.update({ npcIDs: arrayUnion(npcId) });
+    },
+
+    removeNpcFromEncounter(
+      context: EncountersContext,
+      { npcID, encounterId }: { npcID: string, encounterId: string },
+    ) {
+      console.log('Action: remove npc from encounter', npcID, encounterId);
+      try {
+        db.collection('encounters')
+          .doc(encounterId)
+          .update({
+            npcIDs: arrayRemove(npcID),
+          });
+      } catch (error) {
+        console.log('error', error);
+      }
     },
   },
 
   mutations: {
-    setEncounters(state: IEncounterState, encounters: IEncounter[]) {
+    setEncounters(state: EncountersState, encounters: EncounterEntity[]) {
       state.encounters = encounters;
     },
 
     setNpcsForEncounter(
-      state: IEncounterState,
-      { id, npcs }: { id: string, npcs: INpc[] }) {
+      state: EncountersState,
+      { id, npcs }: { id: string, npcs: NpcEntity[] }) {
         Vue.set(state.encounterNpcs, id, npcs);
     },
   },
@@ -84,7 +101,7 @@ const {
   commit,
   read,
   dispatch,
-} = getStoreAccessors<IEncounterState, IRootState>('encountersModule');
+} = getStoreAccessors<EncountersState, RootState>('encountersModule');
 
 // Getters
 export const readGetEncounters = read(encountersModule.getters.getEncounters);
@@ -98,3 +115,4 @@ export const commitSetNpcsForEncounter = commit(encountersModule.mutations.setNp
 // Actions
 export const dispatchFetchEncounter = dispatch(encountersModule.actions.fetchEncounter);
 export const dispatchAddNpcToEncounter = dispatch(encountersModule.actions.addNpcToEncounter);
+export const dispatchRemoveNpcFromEncounter = dispatch(encountersModule.actions.removeNpcFromEncounter);

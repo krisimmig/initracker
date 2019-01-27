@@ -12,7 +12,7 @@
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
 
-import { INpc } from '../store/npcsModule';
+import { NpcEntity } from '../store/npcsModule';
 import * as encountersModule from '../store/encountersModule';
 import Encounter from './Encounter.vue';
 
@@ -22,7 +22,7 @@ import Encounter from './Encounter.vue';
 export default class EncounterList extends Vue {
   public showNpcsInEncounter: boolean = false;
 
-  get encounters(): encountersModule.IEncounter[] {
+  get encounters(): encountersModule.EncounterEntity[] {
     return encountersModule.readGetEncounters(this.$store);
   }
 

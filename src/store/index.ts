@@ -5,13 +5,13 @@ import { usersModule } from './usersModule';
 import { npcsModule } from './npcsModule';
 import { encountersModule } from './encountersModule';
 
-export interface IRootState {
+export interface RootState {
   version: string;
 }
 
 Vue.use(Vuex);
 
-const store: StoreOptions<IRootState> = {
+const store: StoreOptions<RootState> = {
 
   state: {
     version: '1.0.0',
@@ -24,4 +24,4 @@ const store: StoreOptions<IRootState> = {
   },
 };
 
-export default new Vuex.Store<IRootState>(store);
+export default new Vuex.Store<RootState>(store);

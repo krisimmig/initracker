@@ -1,17 +1,19 @@
 <template>
-  <div @click="showNpcsInEncounter = !showNpcsInEncounter" v-if="encounterData">
-    {{ encounterData.name }} -- ({{ encounterData.id }})
+  <div v-if="encounterData">
+    <p @click="showNpcsInEncounter = !showNpcsInEncounter">
+      {{ encounterData.name }} -- ({{ encounterData.id }})
+    </p>
 
-    <ul v-if="showNpcsInEncounter && encounterData.npcs && encounterData.npcs.length > 0">
+    <ul v-if="showNpcsInEncounter && encounterHasNpcs()">
       <li
-        v-for="npc in encounterData.npcs"
-        :key="npc"
+        v-for="npcID in encounterData.npcIDs"
+        :key="npcID"
       >
-        <Npc :id="npc" />
+        <Npc :id="npcID" :removable="true" v-on:remove="removeNpcFromEncounter(npcID)" />
       </li>
     </ul>
 
-    <p v-if="showNpcsInEncounter && !encounterData.npcs">
+    <p v-if="showNpcsInEncounter && !encounterData.npcIDs">
       No Npcs in this encounter yet!
     </p>
   </div>
@@ -20,7 +22,6 @@
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import { INpc } from '../store/npcsModule';
 import * as encountersModule from '../store/encountersModule';
 import Npc from './Npc.vue';
 
@@ -32,8 +33,22 @@ export default class Encounter extends Vue {
 
   public showNpcsInEncounter: boolean = false;
 
-  get encounterData(): encountersModule.IEncounter | undefined {
+  get encounterData() {
     return encountersModule.readGetEncounterById(this.$store)(this.id);
+  }
+
+  public encounterHasNpcs(): boolean {
+    if (this.encounterData) {
+      return this.encounterData.npcIDs.length > 0;
+    }
+    return false;
+  }
+
+  public removeNpcFromEncounter(npcID: string) {
+    encountersModule.dispatchRemoveNpcFromEncounter(this.$store, {
+      npcID,
+      encounterId: this.id,
+    });
   }
 }
 </script>
