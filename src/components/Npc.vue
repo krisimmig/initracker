@@ -8,7 +8,6 @@
 </template>
 
 <script lang='ts'>
-// tslint:disable:variable-name
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import * as npcsModule from '../store/npcsModule';
 
@@ -16,8 +15,14 @@ import * as npcsModule from '../store/npcsModule';
 export default class Npc extends Vue {
   @Prop(String) public id!: string;
   @Prop(Boolean) public removable!: boolean;
+  @Prop(Object) public npc!: object;
 
   get npcData() {
+    if (this.npc) {
+      console.log('Using available npc data.');
+      return this.npc;
+    }
+
     return npcsModule.readGetNpcById(this.$store)(this.id);
   }
 }

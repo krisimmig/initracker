@@ -37,8 +37,12 @@ export const npcsModule = {
       return state.npcs;
     },
 
-    getNpcById: (state: NpcsState) => (npcId: string): NpcEntity | undefined => {
-      return state.npcs.find((npc) => npc.id === npcId);
+    getNpcById: (state: NpcsState) => (npcID: string): NpcEntity | undefined => {
+      const npcIDclean = npcID.replace(/--[0-9]+/, '');
+      console.log(npcIDclean);
+      return state.npcs.find((npc) => npc.id === npcIDclean);
+
+      // TODO: move whole npc object into encounter.npcs
     },
 
     getSearchResults: (state: NpcsState) => (query: string): NpcEntity[] => {
@@ -50,21 +54,16 @@ export const npcsModule = {
 
   actions: {
     async fetchMonsters(context: NpcsContext) {
-      try {
-        const monstersQuerySnapshot = await db.collection('monsters').get();
-        const monstersData: NpcEntity[] = monstersQuerySnapshot.docs.reduce(
-          (acc: NpcEntity[], current) => {
-            const newNpc: NpcEntity = current.data() as NpcEntity;
-            newNpc.id = current.id;
-            acc.push(newNpc);
-            return acc;
-          }, [],
-        );
-        commitSetNpcs(context, monstersData);
-
-      } catch (error) {
-        console.log('Error:', error);
-      }
+      const monstersQuerySnapshot = await db.collection('monsters').get();
+      const monstersData: NpcEntity[] = monstersQuerySnapshot.docs.reduce(
+        (acc: NpcEntity[], current) => {
+          const newNpc: NpcEntity = current.data() as NpcEntity;
+          newNpc.id = current.id;
+          acc.push(newNpc);
+          return acc;
+        }, [],
+      );
+      commitSetNpcs(context, monstersData);
     },
 
     openNpcsConnection(context: NpcsContext) {

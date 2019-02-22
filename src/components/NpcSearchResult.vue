@@ -3,16 +3,7 @@
     <p>
       {{ npcData.name }} ({{ npcData.id }}) | {{ npcData.size }} | {{ npcData.type }} | {{ npcData.hit_points }}
     </p>
-    <p @click="showEncounterList = !showEncounterList">Add to encounter</p>
-    <ul v-if="showEncounterList">
-      <li
-        v-for="encounter in encounters"
-        :key="encounter.id"
-        @click="addToEncounter(encounter.id)"
-      >
-        {{ encounter.name }}
-      </li>
-    </ul>
+    <p @click="addToEncounter">Add to encounter</p>
   </div>
 </template>
 
@@ -25,6 +16,7 @@ import * as encountersModule from '../store/encountersModule';
 @Component
 export default class NpcSearchResult extends Vue {
   @Prop(String) public id!: string;
+  @Prop(String) public encounterId!: string;
 
   public showEncounterList: boolean = false;
 
@@ -36,14 +28,14 @@ export default class NpcSearchResult extends Vue {
     return encountersModule.readGetEncounters(this.$store);
   }
 
-  public addToEncounter(encounterId: string) {
+  public addToEncounter() {
     if (!this.npcData) {
       return;
     }
 
     encountersModule.dispatchAddNpcToEncounter(this.$store, {
-      npcId: this.npcData.id,
-      encounterId,
+      npcData: this.npcData,
+      encounterId: this.encounterId,
     });
   }
 }

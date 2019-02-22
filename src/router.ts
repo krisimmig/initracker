@@ -4,7 +4,8 @@ import { Route } from 'vue-router';
 
 import Home from './views/Home.vue';
 import Dashboard from './views/Dashboard.vue';
-import EncounterView from './views/Encounter.vue';
+import Encounters from './views/Encounters.vue';
+import EncounterDetails from './views/EncounterDetails.vue';
 import Login from './views/Login.vue';
 import About from './views/About.vue';
 import Register from './views/Register.vue';
@@ -33,9 +34,18 @@ const router = new Router({
     },
 
     {
-      path: '/encounter',
-      name: 'encounter',
-      component: EncounterView,
+      path: '/encounters',
+      name: 'encounters',
+      component: Encounters,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+
+    {
+      path: '/encounter/:encounterId',
+      name: 'encounterDetails',
+      component: EncounterDetails,
       meta: {
         requiresAuth: true,
       },

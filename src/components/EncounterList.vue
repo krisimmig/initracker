@@ -27,7 +27,7 @@ export default class EncounterList extends Vue {
   }
 
   public mounted() {
-    encountersModule.dispatchFetchEncounter(this.$store);
+    encountersModule.dispatchFetchEncounters(this.$store);
   }
 }
 </script>

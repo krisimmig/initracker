@@ -14,7 +14,7 @@ export interface EncountersState {
 export interface EncounterEntity {
   name: string;
   id: string;
-  npcIDs: string[];
+  npcs: NpcEntity[];
 }
 
 type EncountersContext = ActionContext<EncountersState, RootState>;
@@ -32,55 +32,58 @@ export const encountersModule = {
       return state.encounters;
     },
 
-    getEncounterById: (state: EncountersState) => (encounterId: string): EncounterEntity | undefined => {
-      return state.encounters.find((encounter) => encounter.id === encounterId);
-    },
-
-    getEncounterNpcs: (state: EncountersState) => (id: string) => {
-      return state.encounterNpcs[id];
+    getEncounterById: (state: EncountersState) => (encounterID: string): EncounterEntity | undefined => {
+      return state.encounters.find((encounter) => encounter.id === encounterID);
     },
   },
 
   actions: {
-    async fetchEncounter(context: EncountersContext) {
-      try {
-        await db.collection('encounters').onSnapshot((data) => {
-          const encounters: EncounterEntity[] = data.docs.reduce((acc: EncounterEntity[], current) => {
-            const newEncounter: EncounterEntity = current.data() as EncounterEntity;
-            newEncounter.id = current.id;
-            acc.push(newEncounter);
-            return acc;
-          }, []);
+    getEncounterNpcs(context: EncountersContext, { encounterId }: { encounterId: string }) {
+      db.collection('encounters').doc(encounterId).collection('npcs').onSnapshot((data) => {
+        const npcs: NpcEntity[] = data.docs.reduce((acc: NpcEntity[], current) => {
+          const newNpc: NpcEntity = current.data() as NpcEntity;
+          newNpc.id = current.id;
+          acc.push(newNpc);
+          return acc;
+        }, []);
 
-          commitSetEncounters(context, encounters);
-        });
-      } catch (error) {
-        console.log('error', error);
-      }
+        commitSetNpcsForEncounter(context, { id: encounterId, npcs });
+      });
+    },
+
+    fetchEncounters(context: EncountersContext) {
+      db.collection('encounters').onSnapshot((data) => {
+        const encounters: EncounterEntity[] = data.docs.reduce((acc: EncounterEntity[], current) => {
+          const newEncounter: EncounterEntity = current.data() as EncounterEntity;
+          newEncounter.id = current.id;
+          acc.push(newEncounter);
+          return acc;
+        }, []);
+
+        commitSetEncounters(context, encounters);
+        context.state.encounters.forEach((encounter) =>
+          dispatchGetEncounterNpcs(context, { encounterId: encounter.id }),
+        );
+      });
     },
 
     async addNpcToEncounter(
       context: EncountersContext,
-      { npcId, encounterId }: { npcId: string, encounterId: string },
+      { npcData, encounterId }: { npcData: NpcEntity, encounterId: string },
     ) {
       const npcsRef = await db.collection('encounters').doc(encounterId);
-      npcsRef.update({ npcIDs: arrayUnion(npcId) });
+      npcsRef.collection('npcs').add(npcData);
     },
 
     removeNpcFromEncounter(
       context: EncountersContext,
       { npcID, encounterId }: { npcID: string, encounterId: string },
     ) {
-      console.log('Action: remove npc from encounter', npcID, encounterId);
-      try {
-        db.collection('encounters')
-          .doc(encounterId)
-          .update({
-            npcIDs: arrayRemove(npcID),
-          });
-      } catch (error) {
-        console.log('error', error);
-      }
+      db.collection('encounters')
+        .doc(encounterId)
+        .collection('npcs')
+        .doc(npcID)
+        .delete();
     },
   },
 
@@ -89,10 +92,13 @@ export const encountersModule = {
       state.encounters = encounters;
     },
 
-    setNpcsForEncounter(
-      state: EncountersState,
-      { id, npcs }: { id: string, npcs: NpcEntity[] }) {
-        Vue.set(state.encounterNpcs, id, npcs);
+    setNpcsForEncounter(state: EncountersState, { id, npcs }: { id: string, npcs: NpcEntity[] }) {
+      const encounterIndex = state.encounters.findIndex((e) => e.id === id);
+      if (encounterIndex !== -1) {
+        const moddedEncounter = state.encounters[encounterIndex];
+        moddedEncounter.npcs = npcs;
+        Vue.set(state.encounters, encounterIndex, moddedEncounter);
+      }
     },
   },
 };
@@ -106,13 +112,13 @@ const {
 // Getters
 export const readGetEncounters = read(encountersModule.getters.getEncounters);
 export const readGetEncounterById = read(encountersModule.getters.getEncounterById);
-export const readGetEncounterNpcs = read(encountersModule.getters.getEncounterNpcs);
 
 // Mutations
 export const commitSetEncounters = commit(encountersModule.mutations.setEncounters);
 export const commitSetNpcsForEncounter = commit(encountersModule.mutations.setNpcsForEncounter);
 
 // Actions
-export const dispatchFetchEncounter = dispatch(encountersModule.actions.fetchEncounter);
+export const dispatchFetchEncounters = dispatch(encountersModule.actions.fetchEncounters);
 export const dispatchAddNpcToEncounter = dispatch(encountersModule.actions.addNpcToEncounter);
 export const dispatchRemoveNpcFromEncounter = dispatch(encountersModule.actions.removeNpcFromEncounter);
+export const dispatchGetEncounterNpcs = dispatch(encountersModule.actions.getEncounterNpcs);
