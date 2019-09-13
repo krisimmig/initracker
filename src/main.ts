@@ -1,9 +1,13 @@
 import Vue from 'vue';
+import VTooltip from 'v-tooltip';
+
 import App from './App.vue';
 import router from './router';
 import store from './store';
 
 Vue.config.productionTip = false;
+
+Vue.use(VTooltip);
 
 import { firebase } from './store/firebase';
 import { dispatchLoginUser } from './store/usersModule';

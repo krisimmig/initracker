@@ -9,9 +9,14 @@
         v-for="(npc, index) in encounterData.npcs"
         :key="index"
       >
-        <Npc :id="npc.id" :npc="npc" :removable="true" v-on:remove="removeNpcFromEncounter(npc.id)" />
+        <Npc
+          :id="npc.id"
+          :npc="npc"
+          :removable="true" @remove="removeNpcFromEncounter(npc.id)"
+        />
       </li>
     </ul>
+
   </div>
 </template>
 
@@ -30,7 +35,6 @@ export default class Encounter extends Vue {
   public showNpcsInEncounter: boolean = false;
 
   get encounterData() {
-    console.log('get encounterData');
     return encountersModule.readGetEncounterById(this.$store)(this.id);
   }
 

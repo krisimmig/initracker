@@ -3,12 +3,12 @@ import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 import { db, firebase } from './firebase';
 import { RootState } from './index';
-import { NpcEntity } from './npcsModule';
-import { arrayUnion, arrayRemove } from '../utils/firebaseUtils';
+import { NpcEntity, StatusTypes } from './npcsModule';
 
 export interface EncountersState {
   encounters: EncounterEntity[];
   encounterNpcs: { [key: string]: NpcEntity[] };
+  npcInDetail?: NpcEntity;
 }
 
 export interface EncounterEntity {
@@ -25,6 +25,7 @@ export const encountersModule = {
   state: {
     encounters: [],
     encounterNpcs: {},
+    npcInDetail: null,
   },
 
   getters: {
@@ -34,6 +35,12 @@ export const encountersModule = {
 
     getEncounterById: (state: EncountersState) => (encounterID: string): EncounterEntity | undefined => {
       return state.encounters.find((encounter) => encounter.id === encounterID);
+    },
+
+    getNpcInDetail(state: EncountersState) {
+      console.log('getNpcInDetail', state);
+
+      return state.npcInDetail;
     },
   },
 
@@ -71,8 +78,11 @@ export const encountersModule = {
       context: EncountersContext,
       { npcData, encounterId }: { npcData: NpcEntity, encounterId: string },
     ) {
+      const moddedNpcData = npcData;
+      moddedNpcData.status = [ StatusTypes.Poisened, StatusTypes.Stunned ];
+      moddedNpcData.initiative = 10;
       const npcsRef = await db.collection('encounters').doc(encounterId);
-      npcsRef.collection('npcs').add(npcData);
+      npcsRef.collection('npcs').add(moddedNpcData);
     },
 
     removeNpcFromEncounter(
@@ -100,6 +110,10 @@ export const encountersModule = {
         Vue.set(state.encounters, encounterIndex, moddedEncounter);
       }
     },
+
+    setNpcInDetail(state: EncountersState, npc: NpcEntity) {
+      state.npcInDetail = npc;
+    },
   },
 };
 
@@ -112,10 +126,12 @@ const {
 // Getters
 export const readGetEncounters = read(encountersModule.getters.getEncounters);
 export const readGetEncounterById = read(encountersModule.getters.getEncounterById);
+export const readGetNpcInDetail = read(encountersModule.getters.getNpcInDetail);
 
 // Mutations
 export const commitSetEncounters = commit(encountersModule.mutations.setEncounters);
 export const commitSetNpcsForEncounter = commit(encountersModule.mutations.setNpcsForEncounter);
+export const commitSetNpcInDetail = commit(encountersModule.mutations.setNpcInDetail);
 
 // Actions
 export const dispatchFetchEncounters = dispatch(encountersModule.actions.fetchEncounters);

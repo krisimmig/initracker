@@ -7,6 +7,13 @@ export interface NpcsState {
   npcs: NpcEntity[];
 }
 
+export enum StatusTypes {
+  Poisened,
+  Stunned,
+  Prone,
+  Blinded,
+}
+
 export interface NpcEntity {
   name: string;
   id: string;
@@ -21,6 +28,8 @@ export interface NpcEntity {
   charisma: number;
   constitution: number;
   dexterity: number;
+  status: StatusTypes[];
+  initiative: number;
 }
 
 type NpcsContext = ActionContext<NpcsState, RootState>;
@@ -39,10 +48,7 @@ export const npcsModule = {
 
     getNpcById: (state: NpcsState) => (npcID: string): NpcEntity | undefined => {
       const npcIDclean = npcID.replace(/--[0-9]+/, '');
-      console.log(npcIDclean);
       return state.npcs.find((npc) => npc.id === npcIDclean);
-
-      // TODO: move whole npc object into encounter.npcs
     },
 
     getSearchResults: (state: NpcsState) => (query: string): NpcEntity[] => {

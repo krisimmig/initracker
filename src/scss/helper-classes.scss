@@ -1,5 +1,9 @@
 $buttonColor: rgb(90, 231, 34);
 
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
 .IT-Button {
   color: $buttonColor;
   border: 1px solid $buttonColor;
@@ -14,6 +18,16 @@ $buttonColor: rgb(90, 231, 34);
 
 .IT-Flex-50 {
   width: 50%;
+  margin: 10px;
+}
+
+.IT-Flex-40 {
+  width: 40%;
+  margin: 10px;
+}
+
+.IT-Flex-30 {
+  width: 30%;
   margin: 10px;
 }
 

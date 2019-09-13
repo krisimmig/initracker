@@ -1,9 +1,16 @@
 <template>
   <div class="Npc" v-if="npcData">
-    <p>
-      {{ npcData.name }} ({{ npcData.id }}) | {{ npcData.size }} | {{ npcData.type }} | {{ npcData.hit_points }}
-    </p>
-    <p @click="addToEncounter">Add to encounter</p>
+    <v-popover placement="right-end" :autoHide="true" trigger="click">
+      <h4>{{ npcData.name }}</h4>
+      <NpcDetails slot="popover" :npcData="npcData" :isWide="true" />
+    </v-popover>
+
+     <span
+      @click="addToEncounter"
+      class="IT-Button"
+    >+</span>
+    {{ npcData.hit_points }} HP | {{ npcData.size }} | {{ npcData.type }}
+
   </div>
 </template>
 
@@ -12,8 +19,11 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import * as npcsModule from '../store/npcsModule';
 import * as encountersModule from '../store/encountersModule';
+import NpcDetails from './NpcDetails.vue';
 
-@Component
+@Component({
+  components: { NpcDetails },
+})
 export default class NpcSearchResult extends Vue {
   @Prop(String) public id!: string;
   @Prop(String) public encounterId!: string;

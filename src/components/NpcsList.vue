@@ -7,16 +7,22 @@
         type="text"
         v-model="searchString"
         placeholder="Search monsters..."
-        @keyup.enter="submit"
       >
 
       <h3>Results:</h3>
-      <ul v-if="searchResults.length > 0">
-        <li v-for="npc in searchResults" :key="npc.id">
-          <NpcSearchResult :id="npc.id" :encounterId="encounterId" />
-        </li>
-      </ul>
+      <div class="NpcsList-results">
+        <ul v-if="npcs.length > 0">
+          <li v-for="npc in npcs" :key="npc.id">
+            <NpcSearchResult
+              v-if="npc.name.toLowerCase().includes(searchString.toLowerCase())"
+              :id="npc.id"
+              :encounterId="encounterId"
+            />
+          </li>
+        </ul>
+      </div>
     </div>
+
     <div v-else><p>Loading...</p></div>
   </div>
 </template>
@@ -37,21 +43,24 @@ export default class NpcsList extends Vue {
   public searchResults: npcsModule.NpcEntity[] = [];
   public loading: boolean = false;
 
-  public submit() {
-    this.searchResults = npcsModule.readGetSearchResults(this.$store)(this.searchString);
-  }
-
   get npcs() {
     return npcsModule.readGetNpcs(this.$store);
   }
 
   public async mounted() {
-    this.loading = true;
-    await npcsModule.dispatchFetchMonsters(this.$store);
-    this.loading = false;
+    if (this.npcs.length < 1) {
+      this.loading = true;
+      await npcsModule.dispatchFetchMonsters(this.$store);
+      this.loading = false;
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.NpcsList-results {
+  max-height: calc(100vh - 265px);
+  overflow-y: scroll;
+  border: 1px solid green;
+}
 </style>

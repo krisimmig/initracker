@@ -40,6 +40,7 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import './scss/helper-classes.scss';
+@import './scss/popover.scss';
 
 ul, li {
   list-style: none;
