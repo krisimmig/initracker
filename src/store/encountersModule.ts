@@ -95,6 +95,19 @@ export const encountersModule = {
         .doc(npcID)
         .delete();
     },
+
+    async addNewEncounter(
+      context: EncountersContext,
+      { encounterName }: { encounterName: string },
+    ) {
+      const encountersRef = await db.collection('encounters');
+      const newEncounter: EncounterEntity = {
+        id: '',
+        name: encounterName,
+        npcs: [],
+      };
+      encountersRef.add(newEncounter);
+    },
   },
 
   mutations: {
@@ -138,3 +151,4 @@ export const dispatchFetchEncounters = dispatch(encountersModule.actions.fetchEn
 export const dispatchAddNpcToEncounter = dispatch(encountersModule.actions.addNpcToEncounter);
 export const dispatchRemoveNpcFromEncounter = dispatch(encountersModule.actions.removeNpcFromEncounter);
 export const dispatchGetEncounterNpcs = dispatch(encountersModule.actions.getEncounterNpcs);
+export const dispatchAddNewEncounter = dispatch(encountersModule.actions.addNewEncounter);

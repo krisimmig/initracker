@@ -1,16 +1,23 @@
 <template>
-  <div>
-    <h1>Encounter Overview11</h1>
-    <ul>
-      <li
-        v-for="encounter in encounters"
-        :key="encounter.id"
-        class="EncounterOverview-item"
-        @click="toEncounterView(encounter.id)"
-      >
-        {{ encounter.name }} -- (Size: {{ encounterSize(encounter)  }})
-      </li>
-    </ul>
+  <div class="IT-Flex">
+    <div>
+
+      <h1>Encounter Overview</h1>
+      <ul>
+        <li
+          v-for="encounter in encounters"
+          :key="encounter.id"
+          class="EncounterOverview-item"
+          @click="toEncounterView(encounter.id)"
+        >
+          {{ encounter.name }} -- (Size: {{ encounterSize(encounter)  }})
+        </li>
+      </ul>
+    </div>
+
+    <div class="IT-Flex-40">
+      <EncounterNew />
+    </div>
   </div>
 </template>
 
@@ -19,9 +26,10 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import { NpcEntity } from '../store/npcsModule';
 import * as encountersModule from '../store/encountersModule';
+import EncounterNew from '../components/EncounterNew.vue';
 
 @Component({
-  components: {},
+  components: { EncounterNew },
 })
 export default class Encounters extends Vue {
 

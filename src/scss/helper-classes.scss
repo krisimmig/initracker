@@ -16,6 +16,11 @@ body {
   display: flex;
 }
 
+.IT-Flex > div {
+  flex-grow: 0;
+  width: 100%;
+}
+
 .IT-Flex-50 {
   width: 50%;
   margin: 10px;
