@@ -11,7 +11,7 @@
         :key="index"
         class="Npc-status"
       >{{ statusString(status) }} - </span>
-      <span class="Npc-status">+</span>
+      <span class="Npc-status" @click="addStatus">+</span>
     </div>
     <p v-if="removable" @click="$emit('remove')" class="IT-Button">Remove</p>
   </div>
@@ -44,6 +44,22 @@ export default class Npc extends Vue {
     }
 
     return npcsModule.readGetNpcById(this.$store)(this.id);
+  }
+
+  get currentEncounterId() {
+    return encountersModule.readGetEncounterInViewId(this.$store);
+  }
+
+  public addStatus() {
+    const newStatus: npcsModule.StatusTypes = 2;
+    const encounterId = this.currentEncounterId;
+    console.log('foo', encounterId);
+    if (!encounterId) { return; }
+    // return npcsModule.dispatchUpdateStatus(this.$store, {
+    //   encounterId,
+    //   npcId: this.npc.id,
+    //   newStatus,
+    // });
   }
 }
 </script>

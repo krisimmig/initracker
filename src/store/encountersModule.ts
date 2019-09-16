@@ -9,6 +9,7 @@ export interface EncountersState {
   encounters: EncounterEntity[];
   encounterNpcs: { [key: string]: NpcEntity[] };
   npcInDetail?: NpcEntity;
+  encounterInView: string;
 }
 
 export interface EncounterEntity {
@@ -41,6 +42,11 @@ export const encountersModule = {
       console.log('getNpcInDetail', state);
 
       return state.npcInDetail;
+    },
+
+    getEncounterInViewId(state: EncountersState) {
+      console.log('getEncounterInViewId', state);
+      return state.encounters;
     },
   },
 
@@ -127,6 +133,10 @@ export const encountersModule = {
     setNpcInDetail(state: EncountersState, npc: NpcEntity) {
       state.npcInDetail = npc;
     },
+
+    setEncounterInView(state: EncountersState, encounterId: string) {
+      state.encounterInView = encounterId;
+    },
   },
 };
 
@@ -140,11 +150,13 @@ const {
 export const readGetEncounters = read(encountersModule.getters.getEncounters);
 export const readGetEncounterById = read(encountersModule.getters.getEncounterById);
 export const readGetNpcInDetail = read(encountersModule.getters.getNpcInDetail);
+export const readGetEncounterInViewId = read(encountersModule.getters.getEncounterInViewId);
 
 // Mutations
 export const commitSetEncounters = commit(encountersModule.mutations.setEncounters);
 export const commitSetNpcsForEncounter = commit(encountersModule.mutations.setNpcsForEncounter);
 export const commitSetNpcInDetail = commit(encountersModule.mutations.setNpcInDetail);
+export const commitSetEncounterInView = commit(encountersModule.mutations.setEncounterInView);
 
 // Actions
 export const dispatchFetchEncounters = dispatch(encountersModule.actions.fetchEncounters);

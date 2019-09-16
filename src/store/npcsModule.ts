@@ -84,6 +84,28 @@ export const npcsModule = {
         commitSetNpcs(context, npcs);
       });
     },
+
+    updateStatus(
+      context: NpcsContext,
+      { encounterId, npcId, newStatus }: { encounterId: string, npcId: string, newStatus: StatusTypes }) {
+      const encounterRef = db.collection('encounters').doc(encounterId);
+      const npcRef = encounterRef.collection('npcs').doc(npcId);
+
+      npcRef.set({
+        status: [newStatus],
+      }, { merge: true });
+
+      db.collection('npcs').onSnapshot((data) => {
+        const npcs: NpcEntity[] = data.docs.reduce((acc: NpcEntity[], current) => {
+          const newNpc: NpcEntity = current.data() as NpcEntity;
+          newNpc.id = current.id;
+          acc.push(newNpc);
+          return acc;
+        }, []);
+
+        commitSetNpcs(context, npcs);
+      });
+    },
   },
 
   mutations: {
@@ -110,3 +132,4 @@ export const commitSetNpcs = commit(npcsModule.mutations.setNpcs);
 // Actions
 export const dispatchOpenNpcsConnection = dispatch(npcsModule.actions.openNpcsConnection);
 export const dispatchFetchMonsters = dispatch(npcsModule.actions.fetchMonsters);
+export const dispatchUpdateStatus = dispatch(npcsModule.actions.updateStatus);
