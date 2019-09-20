@@ -27,6 +27,7 @@ export const encountersModule = {
     encounters: [],
     encounterNpcs: {},
     npcInDetail: null,
+    encounterInView: '',
   },
 
   getters: {
@@ -38,15 +39,12 @@ export const encountersModule = {
       return state.encounters.find((encounter) => encounter.id === encounterID);
     },
 
-    getNpcInDetail(state: EncountersState) {
-      console.log('getNpcInDetail', state);
-
-      return state.npcInDetail;
+    getEncounterId(state: EncountersState) {
+      return state.encounterInView;
     },
 
-    getEncounterInViewId(state: EncountersState) {
-      console.log('getEncounterInViewId', state);
-      return state.encounters;
+    getNpcInDetail(state: EncountersState) {
+      return state.npcInDetail;
     },
   },
 
@@ -85,7 +83,7 @@ export const encountersModule = {
       { npcData, encounterId }: { npcData: NpcEntity, encounterId: string },
     ) {
       const moddedNpcData = npcData;
-      moddedNpcData.status = [ StatusTypes.Poisened, StatusTypes.Stunned ];
+      moddedNpcData.status = [];
       moddedNpcData.initiative = 10;
       const npcsRef = await db.collection('encounters').doc(encounterId);
       npcsRef.collection('npcs').add(moddedNpcData);
@@ -150,7 +148,7 @@ const {
 export const readGetEncounters = read(encountersModule.getters.getEncounters);
 export const readGetEncounterById = read(encountersModule.getters.getEncounterById);
 export const readGetNpcInDetail = read(encountersModule.getters.getNpcInDetail);
-export const readGetEncounterInViewId = read(encountersModule.getters.getEncounterInViewId);
+export const readGetEncounterId = read(encountersModule.getters.getEncounterId);
 
 // Mutations
 export const commitSetEncounters = commit(encountersModule.mutations.setEncounters);

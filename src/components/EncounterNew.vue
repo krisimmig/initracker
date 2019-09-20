@@ -20,7 +20,6 @@ export default class EncounterNew extends Vue {
   public encounterName: string = '';
 
   public submitNewEncounter(): void {
-    console.log(this.encounterName);
     encountersModule.dispatchAddNewEncounter(this.$store, {
       encounterName: this.encounterName,
     });

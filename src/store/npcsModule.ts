@@ -1,6 +1,7 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 import { db } from './firebase';
+import { arrayRemove, arrayUnion } from '../utils/firebaseUtils';
 import { RootState } from './index';
 
 export interface NpcsState {
@@ -12,6 +13,7 @@ export enum StatusTypes {
   Stunned,
   Prone,
   Blinded,
+  Charmed,
 }
 
 export interface NpcEntity {
@@ -56,6 +58,19 @@ export const npcsModule = {
         npxIndexEntry.name.toLowerCase().includes(query),
       );
     },
+
+    getNpcStates() {
+      // const map = Array<object>();
+      const map: Array<{ id: string, name: string }> = [];
+
+      for (const n in StatusTypes) {
+          if (typeof StatusTypes[n] === 'number') {
+              map.push({ id: StatusTypes[n], name: n});
+          }
+      }
+
+      return map;
+    },
   },
 
   actions: {
@@ -92,19 +107,19 @@ export const npcsModule = {
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({
-        status: [newStatus],
+        status: arrayUnion(newStatus),
       }, { merge: true });
+    },
 
-      db.collection('npcs').onSnapshot((data) => {
-        const npcs: NpcEntity[] = data.docs.reduce((acc: NpcEntity[], current) => {
-          const newNpc: NpcEntity = current.data() as NpcEntity;
-          newNpc.id = current.id;
-          acc.push(newNpc);
-          return acc;
-        }, []);
+    async removeStatusFromNpc(
+      context: NpcsContext,
+      { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: StatusTypes }) {
+      const encounterRef = db.collection('encounters').doc(encounterId);
+      const npcRef = encounterRef.collection('npcs').doc(npcId);
 
-        commitSetNpcs(context, npcs);
-      });
+      npcRef.set({
+        status: arrayRemove(statusIndex),
+      }, { merge: true });
     },
   },
 
@@ -125,6 +140,7 @@ const {
 export const readGetNpcs = read(npcsModule.getters.getNpcs);
 export const readGetNpcById = read(npcsModule.getters.getNpcById);
 export const readGetSearchResults = read(npcsModule.getters.getSearchResults);
+export const readGetNpcStates = read(npcsModule.getters.getNpcStates);
 
 // Mutations
 export const commitSetNpcs = commit(npcsModule.mutations.setNpcs);
@@ -133,3 +149,4 @@ export const commitSetNpcs = commit(npcsModule.mutations.setNpcs);
 export const dispatchOpenNpcsConnection = dispatch(npcsModule.actions.openNpcsConnection);
 export const dispatchFetchMonsters = dispatch(npcsModule.actions.fetchMonsters);
 export const dispatchUpdateStatus = dispatch(npcsModule.actions.updateStatus);
+export const dispatchRemoveStatusFromNpc = dispatch(npcsModule.actions.removeStatusFromNpc);

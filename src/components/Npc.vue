@@ -8,11 +8,24 @@
     <div>
       <span
         v-for="(status, index) in npcData.status"
+        @click="removeStatus(status)"
         :key="index"
         class="Npc-status"
       >{{ statusString(status) }} - </span>
-      <span class="Npc-status" @click="addStatus">+</span>
     </div>
+
+    <select
+      v-model="newStatus"
+      placeholder="Select"
+      @change="addStatus"
+    >
+      <option selected disabled>Add status</option>
+      <option
+        v-for="(state, index) in npcStates"
+        v-bind:value="state.id"
+        :key="index"
+      >{{ state.name }}</option>
+    </select>
     <p v-if="removable" @click="$emit('remove')" class="IT-Button">Remove</p>
   </div>
 </template>
@@ -27,6 +40,7 @@ export default class Npc extends Vue {
   @Prop(String) public id!: string;
   @Prop(Boolean) public removable!: boolean;
   @Prop(Object) public npc!: npcsModule.NpcEntity;
+  public newStatus: npcsModule.StatusTypes | 'default' = 'default';
 
   public statusString(enumValue: npcsModule.StatusTypes): string {
     return npcsModule.StatusTypes[enumValue];
@@ -38,6 +52,15 @@ export default class Npc extends Vue {
     }
   }
 
+  public removeStatus(statusIndex: npcsModule.StatusTypes) {
+    const encounterId = encountersModule.readGetEncounterId(this.$store);
+    npcsModule.dispatchRemoveStatusFromNpc(this.$store, {
+      encounterId,
+      npcId: this.id,
+      statusIndex,
+    });
+  }
+
   get npcData(): npcsModule.NpcEntity | undefined {
     if (this.npc) {
       return this.npc;
@@ -46,20 +69,19 @@ export default class Npc extends Vue {
     return npcsModule.readGetNpcById(this.$store)(this.id);
   }
 
-  get currentEncounterId() {
-    return encountersModule.readGetEncounterInViewId(this.$store);
+  get npcStates() {
+    return npcsModule.readGetNpcStates(this.$store);
   }
 
   public addStatus() {
-    const newStatus: npcsModule.StatusTypes = 2;
-    const encounterId = this.currentEncounterId;
-    console.log('foo', encounterId);
-    if (!encounterId) { return; }
-    // return npcsModule.dispatchUpdateStatus(this.$store, {
-    //   encounterId,
-    //   npcId: this.npc.id,
-    //   newStatus,
-    // });
+    if (this.newStatus === 'default') { return; }
+    const encounterId = encountersModule.readGetEncounterId(this.$store);
+
+    return npcsModule.dispatchUpdateStatus(this.$store, {
+      encounterId,
+      npcId: this.npc.id,
+      newStatus: this.newStatus,
+    });
   }
 }
 </script>
