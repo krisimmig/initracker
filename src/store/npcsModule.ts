@@ -111,6 +111,17 @@ export const npcsModule = {
       }, { merge: true });
     },
 
+    updateInitiative(
+      context: NpcsContext,
+      { encounterId, npcId, newInitiative }: { encounterId: string, npcId: string, newInitiative: number }) {
+      const encounterRef = db.collection('encounters').doc(encounterId);
+      const npcRef = encounterRef.collection('npcs').doc(npcId);
+
+      npcRef.set({
+        initiative: newInitiative,
+      }, { merge: true });
+    },
+
     async removeStatusFromNpc(
       context: NpcsContext,
       { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: StatusTypes }) {
@@ -150,3 +161,4 @@ export const dispatchOpenNpcsConnection = dispatch(npcsModule.actions.openNpcsCo
 export const dispatchFetchMonsters = dispatch(npcsModule.actions.fetchMonsters);
 export const dispatchUpdateStatus = dispatch(npcsModule.actions.updateStatus);
 export const dispatchRemoveStatusFromNpc = dispatch(npcsModule.actions.removeStatusFromNpc);
+export const dispatchUpdateInitiative = dispatch(npcsModule.actions.updateInitiative);

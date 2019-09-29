@@ -7,7 +7,6 @@ import { NpcEntity, StatusTypes } from './npcsModule';
 
 export interface EncountersState {
   encounters: EncounterEntity[];
-  encounterNpcs: { [key: string]: NpcEntity[] };
   npcInDetail?: NpcEntity;
   encounterInView: string;
 }
@@ -25,7 +24,6 @@ export const encountersModule = {
 
   state: {
     encounters: [],
-    encounterNpcs: {},
     npcInDetail: null,
     encounterInView: '',
   },
@@ -39,6 +37,10 @@ export const encountersModule = {
       return state.encounters.find((encounter) => encounter.id === encounterID);
     },
 
+    getCurrentEncounter(state: EncountersState) {
+      return state.encounters.find((encounter) => encounter.id === state.encounterInView);
+    },
+
     getEncounterId(state: EncountersState) {
       return state.encounterInView;
     },
@@ -50,7 +52,12 @@ export const encountersModule = {
 
   actions: {
     getEncounterNpcs(context: EncountersContext, { encounterId }: { encounterId: string }) {
-      db.collection('encounters').doc(encounterId).collection('npcs').onSnapshot((data) => {
+      db
+        .collection('encounters')
+        .doc(encounterId)
+        .collection('npcs')
+        .orderBy('initiative', 'desc')
+        .onSnapshot((data) => {
         const npcs: NpcEntity[] = data.docs.reduce((acc: NpcEntity[], current) => {
           const newNpc: NpcEntity = current.data() as NpcEntity;
           newNpc.id = current.id;
@@ -149,6 +156,7 @@ export const readGetEncounters = read(encountersModule.getters.getEncounters);
 export const readGetEncounterById = read(encountersModule.getters.getEncounterById);
 export const readGetNpcInDetail = read(encountersModule.getters.getNpcInDetail);
 export const readGetEncounterId = read(encountersModule.getters.getEncounterId);
+export const readGetCurrentEncounter = read(encountersModule.getters.getCurrentEncounter);
 
 // Mutations
 export const commitSetEncounters = commit(encountersModule.mutations.setEncounters);
