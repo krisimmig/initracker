@@ -38,32 +38,32 @@
         <div class="abilities">
           <div class="ability-strength">
             <h4>STR</h4>
-            <p>{{ npcData.strength }} ({{ calcModifier(npcData.strength) }})</p>
+            <p>{{ npcData.strength }} ({{ stringModifier(npcData.strength) }})</p>
           </div>
 
           <div class="ability-dexterity">
             <h4>DEX</h4>
-            <p>{{ npcData.dexterity }} ({{ calcModifier(npcData.dexterity) }})</p>
+            <p>{{ npcData.dexterity }} ({{ stringModifier(npcData.dexterity) }})</p>
           </div>
 
           <div class="ability-constitution">
             <h4>CON</h4>
-            <p>{{ npcData.constitution }} ({{ calcModifier(npcData.constitution) }})</p>
+            <p>{{ npcData.constitution }} ({{ stringModifier(npcData.constitution) }})</p>
           </div>
 
           <div class="ability-intelligence">
             <h4>INT</h4>
-            <p>{{ npcData.intelligence }} ({{ calcModifier(npcData.intelligence) }})</p>
+            <p>{{ npcData.intelligence }} ({{ stringModifier(npcData.intelligence) }})</p>
           </div>
 
           <div class="ability-wisdom">
             <h4>WIS</h4>
-            <p>{{ npcData.wisdom }} ({{ calcModifier(npcData.wisdom) }})</p>
+            <p>{{ npcData.wisdom }} ({{ stringModifier(npcData.wisdom) }})</p>
           </div>
 
           <div class="ability-charisma">
             <h4>CHA</h4>
-            <p>{{ npcData.charisma }} ({{ calcModifier(npcData.charisma) }})</p>
+            <p>{{ npcData.charisma }} ({{ stringModifier(npcData.charisma) }})</p>
           </div>
 
         </div>
@@ -158,14 +158,14 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import { NpcEntity } from '../store/npcsModule';
-import { calcModifier as cm } from '../utils/dnd';
+import { stringModifier as cm } from '../utils/dnd';
 
 @Component
 export default class NpcDetails extends Vue {
   @Prop(Object) public npcData!: NpcEntity;
   @Prop(Boolean) public isWide!: boolean;
 
-  public calcModifier(abilityScore: number): number | string {
+  public stringModifier(abilityScore: number): number | string {
     return cm(abilityScore);
   }
 }
