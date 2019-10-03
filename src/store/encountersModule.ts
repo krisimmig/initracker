@@ -133,6 +133,16 @@ export const encountersModule = {
         .delete();
     },
 
+    async updateName(
+      context: EncountersContext,
+      { encounterId, newName }: { encounterId: string, newName: string },
+    ) {
+      const encounterRef = await db.collection('encounters').doc(encounterId);
+      encounterRef.set({
+        name: newName,
+      }, { merge: true });
+    },
+
     async updateRound(
       context: EncountersContext,
       { encounterId, newRoundIndex }: { encounterId: string, newRoundIndex: number },
@@ -206,3 +216,4 @@ export const dispatchAddNewEncounter = dispatch(encountersModule.actions.addNewE
 export const dispatchUpdateRound = dispatch(encountersModule.actions.updateRound);
 export const dispatchUpdateActiveEntityIndex = dispatch(encountersModule.actions.updateActiveEntityIndex);
 export const dispatchRemoveEncounter = dispatch(encountersModule.actions.removeEncounter);
+export const dispatchUpdateName = dispatch(encountersModule.actions.updateName);
