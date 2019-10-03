@@ -8,9 +8,16 @@
           v-for="encounter in encounters"
           :key="encounter.id"
           class="EncounterOverview-item"
-          @click="toEncounterView(encounter.id)"
         >
-          {{ encounter.name }} -- (Size: {{ encounterSize(encounter)  }})
+          <p @click="toEncounterView(encounter.id)">
+            {{ encounter.name }} -- (Size: {{ encounterSize(encounter)  }})
+          </p>
+          <button
+            class="IT-Button IT-Button--secondary"
+            @click.prevent="deleteEncounter(encounter.id)"
+          >
+            Delete
+          </button>
         </li>
       </ul>
     </div>
@@ -43,6 +50,13 @@ export default class Encounters extends Vue {
 
   public toEncounterView(encounterId: string) {
     this.$router.push({ name: 'encounterDetails', params: { encounterId } });
+  }
+
+  public deleteEncounter(encounterId: string) {
+    console.log('delete encouter', encounterId);
+    encountersModule.dispatchRemoveEncounter(this.$store, {
+      encounterId,
+    });
   }
 
   public mounted() {

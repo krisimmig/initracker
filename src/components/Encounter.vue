@@ -12,7 +12,7 @@
       <button @click="next">Next</button>
       <p>Current round: {{ currentRound }}</p>
       <p>Current npcIndex: {{ currentNpcIndex }}</p>
-      <p>Totla npcs: {{ totalNpcs }}</p>
+      <p>Total npcs: {{ totalNpcs }}</p>
     </div>
 
     <ul>

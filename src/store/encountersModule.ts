@@ -124,6 +124,15 @@ export const encountersModule = {
       encountersRef.add(newEncounter);
     },
 
+    removeEncounter(
+      context: EncountersContext,
+      { encounterId }: { encounterId: string },
+    ) {
+      db.collection('encounters')
+        .doc(encounterId)
+        .delete();
+    },
+
     async updateRound(
       context: EncountersContext,
       { encounterId, newRoundIndex }: { encounterId: string, newRoundIndex: number },
@@ -196,3 +205,4 @@ export const dispatchGetEncounterNpcs = dispatch(encountersModule.actions.getEnc
 export const dispatchAddNewEncounter = dispatch(encountersModule.actions.addNewEncounter);
 export const dispatchUpdateRound = dispatch(encountersModule.actions.updateRound);
 export const dispatchUpdateActiveEntityIndex = dispatch(encountersModule.actions.updateActiveEntityIndex);
+export const dispatchRemoveEncounter = dispatch(encountersModule.actions.removeEncounter);

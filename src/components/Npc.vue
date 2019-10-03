@@ -19,17 +19,16 @@
 
     <select
       v-model="newStatus"
-      placeholder="Select"
       @change="addStatus"
     >
-      <option selected disabled>Add status</option>
+      <option disabled value="default">Select new state</option>
       <option
         v-for="(state, index) in npcStates"
         v-bind:value="state.id"
         :key="index"
       >{{ state.name }}</option>
     </select>
-    <p v-if="removable" @click="$emit('remove')" class="IT-Button">Remove</p>
+    <p v-if="removable" @click="$emit('remove')" class="IT-Button IT-Button--secondary">Remove</p>
   </div>
 </template>
 
@@ -81,11 +80,13 @@ export default class Npc extends Vue {
     if (this.newStatus === 'default') { return; }
     const encounterId = encountersModule.readGetEncounterId(this.$store);
 
-    return npcsModule.dispatchUpdateStatus(this.$store, {
+    npcsModule.dispatchUpdateStatus(this.$store, {
       encounterId,
       npcId: this.npc.id,
       newStatus: this.newStatus,
     });
+
+    this.newStatus = 'default';
   }
 }
 </script>
@@ -99,7 +100,8 @@ export default class Npc extends Vue {
 }
 
 .Npc.is-active {
-  border-color: red;
+  border-color: green;
+  background-color: rgb(189, 255, 214);
 }
 
 .Npc-status {

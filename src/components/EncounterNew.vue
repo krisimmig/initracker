@@ -5,6 +5,7 @@
       type="text"
       placeholder="name"
       v-model="encounterName"
+      @keyup.enter="submitNewEncounter"
       />
     <button @click="submitNewEncounter">Save</button>
   </div>
