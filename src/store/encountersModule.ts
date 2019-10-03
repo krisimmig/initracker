@@ -1,20 +1,22 @@
 import Vue from 'vue';
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
-import { db, firebase } from './firebase';
+import { db } from './firebase';
 import { RootState } from './index';
-import { NpcEntity, StatusTypes } from './npcsModule';
+import * as npcModule from './npcsModule';
 
 export interface EncountersState {
   encounters: EncounterEntity[];
-  npcInDetail?: NpcEntity;
+  npcInDetail?: npcModule.NpcEntity;
   encounterInView: string;
 }
 
 export interface EncounterEntity {
   name: string;
   id: string;
-  npcs: NpcEntity[];
+  npcs: npcModule.NpcEntity[];
+  round: number;
+  activeEntityIndex: number;
 }
 
 type EncountersContext = ActionContext<EncountersState, RootState>;
@@ -58,8 +60,8 @@ export const encountersModule = {
         .collection('npcs')
         .orderBy('initiative', 'desc')
         .onSnapshot((data) => {
-        const npcs: NpcEntity[] = data.docs.reduce((acc: NpcEntity[], current) => {
-          const newNpc: NpcEntity = current.data() as NpcEntity;
+        const npcs: npcModule.NpcEntity[] = data.docs.reduce((acc: npcModule.NpcEntity[], current) => {
+          const newNpc: npcModule.NpcEntity = current.data() as npcModule.NpcEntity;
           newNpc.id = current.id;
           acc.push(newNpc);
           return acc;
@@ -87,13 +89,13 @@ export const encountersModule = {
 
     async addNpcToEncounter(
       context: EncountersContext,
-      { npcData, encounterId }: { npcData: NpcEntity, encounterId: string },
+      { npcData, encounterId }: { npcData: npcModule.NpcEntity, encounterId: string },
     ) {
       const moddedNpcData = npcData;
       moddedNpcData.status = [];
-      moddedNpcData.initiative = 10;
-      const npcsRef = await db.collection('encounters').doc(encounterId);
-      npcsRef.collection('npcs').add(moddedNpcData);
+      moddedNpcData.initiative = 0;
+      const encounterRef = await db.collection('encounters').doc(encounterId);
+      encounterRef.collection('npcs').add(moddedNpcData);
     },
 
     removeNpcFromEncounter(
@@ -116,8 +118,30 @@ export const encountersModule = {
         id: '',
         name: encounterName,
         npcs: [],
+        round: 1,
+        activeEntityIndex: 1,
       };
       encountersRef.add(newEncounter);
+    },
+
+    async updateRound(
+      context: EncountersContext,
+      { encounterId, newRoundIndex }: { encounterId: string, newRoundIndex: number },
+    ) {
+      const encounterRef = await db.collection('encounters').doc(encounterId);
+      encounterRef.set({
+        round: newRoundIndex,
+      }, { merge: true });
+    },
+
+    async updateActiveEntityIndex(
+      context: EncountersContext,
+      { encounterId, activeEntityIndex }: { encounterId: string, activeEntityIndex: number },
+    ) {
+      const encounterRef = await db.collection('encounters').doc(encounterId);
+      encounterRef.set({
+        activeEntityIndex,
+      }, { merge: true });
     },
   },
 
@@ -126,7 +150,7 @@ export const encountersModule = {
       state.encounters = encounters;
     },
 
-    setNpcsForEncounter(state: EncountersState, { id, npcs }: { id: string, npcs: NpcEntity[] }) {
+    setNpcsForEncounter(state: EncountersState, { id, npcs }: { id: string, npcs: npcModule.NpcEntity[] }) {
       const encounterIndex = state.encounters.findIndex((e) => e.id === id);
       if (encounterIndex !== -1) {
         const moddedEncounter = state.encounters[encounterIndex];
@@ -135,7 +159,7 @@ export const encountersModule = {
       }
     },
 
-    setNpcInDetail(state: EncountersState, npc: NpcEntity) {
+    setNpcInDetail(state: EncountersState, npc: npcModule.NpcEntity) {
       state.npcInDetail = npc;
     },
 
@@ -170,3 +194,5 @@ export const dispatchAddNpcToEncounter = dispatch(encountersModule.actions.addNp
 export const dispatchRemoveNpcFromEncounter = dispatch(encountersModule.actions.removeNpcFromEncounter);
 export const dispatchGetEncounterNpcs = dispatch(encountersModule.actions.getEncounterNpcs);
 export const dispatchAddNewEncounter = dispatch(encountersModule.actions.addNewEncounter);
+export const dispatchUpdateRound = dispatch(encountersModule.actions.updateRound);
+export const dispatchUpdateActiveEntityIndex = dispatch(encountersModule.actions.updateActiveEntityIndex);

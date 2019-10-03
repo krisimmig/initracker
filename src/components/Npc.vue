@@ -1,5 +1,8 @@
 <template>
-  <div class="Npc" v-if="npcData">
+  <div
+    class="Npc" v-if="npcData"
+    :class="{ 'is-active': isActive }"
+  >
     <h4 @click="showInDetail">{{ npcData.name }}</h4>
     <p>
        {{ npcData.hit_points }} HP | {{ npcData.size }} | {{ npcData.type }} | 
@@ -40,6 +43,7 @@ export default class Npc extends Vue {
   @Prop(String) public id!: string;
   @Prop(Boolean) public removable!: boolean;
   @Prop(Object) public npc!: npcsModule.NpcEntity;
+  @Prop(Boolean) public isActive!: boolean;
   public newStatus: npcsModule.StatusTypes | 'default' = 'default';
 
   public statusString(enumValue: npcsModule.StatusTypes): string {
@@ -92,6 +96,10 @@ export default class Npc extends Vue {
   background-color: ghostwhite;
   padding: 10px;
   margin-bottom: 15px;
+}
+
+.Npc.is-active {
+  border-color: red;
 }
 
 .Npc-status {
