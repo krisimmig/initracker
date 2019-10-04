@@ -94,6 +94,7 @@ export const encountersModule = {
       const moddedNpcData = npcData;
       moddedNpcData.status = [];
       moddedNpcData.initiative = 0;
+      moddedNpcData.hit_points_current = moddedNpcData.hit_points;
       const encounterRef = await db.collection('encounters').doc(encounterId);
       encounterRef.collection('npcs').add(moddedNpcData);
     },

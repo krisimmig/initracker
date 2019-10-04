@@ -5,9 +5,45 @@
   >
     <h4 @click="showInDetail">{{ npcData.name }}</h4>
     <p>
-       {{ npcData.hit_points }} HP | {{ npcData.size }} | {{ npcData.type }} | 
+       <span @click="showHitPointChangeInput = true" class="Npc-HP">
+          {{ npcData.hit_points_current }}/{{ npcData.hit_points }} HP
+        </span> {{ npcData.armor_class }}AC | {{ npcData.size }} | {{ npcData.type }}
     </p>
+
+    <div v-if="showHitPointChangeInput">
+      <input
+        type="number"
+        v-model.number="hitPointChangeAmount"
+        placeholder="Enter HP healed or damaged"
+      >
+      <button class="IT_Button" @click="increaseHitPoints">Heal</button>
+      <button class="IT_Button IT-Buton--secondary" @click="decreaseHitPoints">Damage</button>
+    </div>
+
     <p>Initiative: {{ npcData.initiative }}</p>
+    <div v-if="!showInitiativeInput">
+      <button
+        class="It-Button"
+        @click="showInitiativeInput = true"
+      >
+        Set initiative
+      </button>
+    </div>
+    <div v-else>
+      <input
+        placeholde="Enter inititive"
+        type="number"
+        v-model.number="manuelInititive"
+        @keyup.enter="setInititive"
+      >
+      <button
+        class="It-Button"
+        @click="setInititive"
+      >
+        Set initiative
+      </button>
+    </div>
+
     <div>
       <span
         v-for="(status, index) in npcData.status"
@@ -44,6 +80,10 @@ export default class Npc extends Vue {
   @Prop(Object) public npc!: npcsModule.NpcEntity;
   @Prop(Boolean) public isActive!: boolean;
   public newStatus: npcsModule.StatusTypes | 'default' = 'default';
+  public manuelInititive: number = 0;
+  public showInitiativeInput: boolean = false;
+  public hitPointChangeAmount: number = 0;
+  public showHitPointChangeInput: boolean = false;
 
   public statusString(enumValue: npcsModule.StatusTypes): string {
     return npcsModule.StatusTypes[enumValue];
@@ -88,6 +128,41 @@ export default class Npc extends Vue {
 
     this.newStatus = 'default';
   }
+
+  public setInititive() {
+    npcsModule.dispatchUpdateInitiative(this.$store, {
+      encounterId: encountersModule.readGetEncounterId(this.$store),
+      npcId: this.id,
+      newInitiative: this.manuelInititive,
+    });
+    this.showInitiativeInput = false;
+    this.manuelInititive = 10;
+  }
+
+  public increaseHitPoints() {
+    if (!this.npcData) { return; }
+    const newHitPoints = Math.min(this.npcData.hit_points, this.npcData.hit_points_current + this.hitPointChangeAmount);
+    console.log('newHitPoints', newHitPoints, this.npcData.hit_points_current, this.hitPointChangeAmount);
+    npcsModule.dispatchUpdateHitPointCurrent(this.$store, {
+      encounterId: encountersModule.readGetEncounterId(this.$store),
+      npcId: this.id,
+      newHitPoints,
+    });
+    this.showHitPointChangeInput = false;
+    this.hitPointChangeAmount = 0;
+  }
+
+  public decreaseHitPoints() {
+    if (!this.npcData) { return; }
+    const newHitPoints = this.npcData.hit_points_current - this.hitPointChangeAmount;
+    npcsModule.dispatchUpdateHitPointCurrent(this.$store, {
+      encounterId: encountersModule.readGetEncounterId(this.$store),
+      npcId: this.id,
+      newHitPoints,
+    });
+    this.showHitPointChangeInput = false;
+    this.hitPointChangeAmount = 0;
+  }
 }
 </script>
 
@@ -110,5 +185,15 @@ export default class Npc extends Vue {
   border: 1px solid blue;
   padding: 5px;
   margin-right: 5px;
+}
+
+.Npc-HP {
+  display: inline-block;
+  border: 1px solid #08199f;
+  border-radius: 4px;
+  padding: 2px 5px;
+  background: #6262fe;
+  color: white;
+  cursor: pointer;
 }
 </style>

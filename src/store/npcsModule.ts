@@ -23,6 +23,7 @@ export interface NpcEntity {
   type: string;
   challenge_rating: string;
   hit_points: number;
+  hit_points_current: number;
   hit_dice: string;
   strength: number;
   intelligence: number;
@@ -111,6 +112,17 @@ export const npcsModule = {
       }, { merge: true });
     },
 
+    async removeStatusFromNpc(
+      context: NpcsContext,
+      { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: StatusTypes }) {
+      const encounterRef = db.collection('encounters').doc(encounterId);
+      const npcRef = encounterRef.collection('npcs').doc(npcId);
+
+      npcRef.set({
+        status: arrayRemove(statusIndex),
+      }, { merge: true });
+    },
+
     updateInitiative(
       context: NpcsContext,
       { encounterId, npcId, newInitiative }: { encounterId: string, npcId: string, newInitiative: number }) {
@@ -122,14 +134,15 @@ export const npcsModule = {
       }, { merge: true });
     },
 
-    async removeStatusFromNpc(
+    updateHitPointCurrent(
       context: NpcsContext,
-      { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: StatusTypes }) {
+      { encounterId, npcId, newHitPoints }: { encounterId: string, npcId: string, newHitPoints: number }) {
+      console.log('updateHitPointCurrent', newHitPoints);
       const encounterRef = db.collection('encounters').doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({
-        status: arrayRemove(statusIndex),
+        hit_points_current: newHitPoints,
       }, { merge: true });
     },
   },
@@ -162,3 +175,4 @@ export const dispatchFetchMonsters = dispatch(npcsModule.actions.fetchMonsters);
 export const dispatchUpdateStatus = dispatch(npcsModule.actions.updateStatus);
 export const dispatchRemoveStatusFromNpc = dispatch(npcsModule.actions.removeStatusFromNpc);
 export const dispatchUpdateInitiative = dispatch(npcsModule.actions.updateInitiative);
+export const dispatchUpdateHitPointCurrent = dispatch(npcsModule.actions.updateHitPointCurrent);
