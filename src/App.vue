@@ -4,6 +4,7 @@
       <router-link :to="{ name: 'home' }">Home</router-link> |
       <template v-if="isLoggedIn">
         <router-link :to="{ name: 'dashboard' }">Dashboard</router-link> |
+        <router-link :to="{ name: 'characters' }">Characters</router-link> |
         <router-link :to="{ name: 'encounters' }">Encounters</router-link> |
         <a href="#" @click="logoutUser">Logout</a> | 
       </template>

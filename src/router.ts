@@ -4,6 +4,7 @@ import { Route } from 'vue-router';
 
 import Home from './views/Home.vue';
 import Dashboard from './views/Dashboard.vue';
+import Characters from './views/Characters.vue';
 import Encounters from './views/Encounters.vue';
 import EncounterDetails from './views/EncounterDetails.vue';
 import Login from './views/Login.vue';
@@ -28,6 +29,15 @@ const router = new Router({
       path: '/dashboard',
       name: 'dashboard',
       component: Dashboard,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+
+    {
+      path: '/characters',
+      name: 'characters',
+      component: Characters,
       meta: {
         requiresAuth: true,
       },
