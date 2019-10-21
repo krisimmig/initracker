@@ -23,7 +23,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import { NpcEntity } from '../store/npcsModule';
-import * as encountersModule from '../store/encountersModule';
+import * as charactersModule from '../store/charactersModule';
 import CharacterNew from '../components/CharacterNew.vue';
 import CharacterTeaser from '../components/CharacterTeaser.vue';
 
@@ -31,7 +31,14 @@ import CharacterTeaser from '../components/CharacterTeaser.vue';
   components: { CharacterNew, CharacterTeaser },
 })
 export default class Encounters extends Vue {
-  public characters: any[] = [];
+
+  get characters(): charactersModule.CharacterEntity[] {
+    return charactersModule.readGetCharacters(this.$store);
+  }
+
+  public mounted() {
+    charactersModule.dispatchFetchCharacters(this.$store);
+  }
 }
 </script>
 

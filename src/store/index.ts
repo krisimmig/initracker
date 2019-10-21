@@ -4,6 +4,7 @@ import Vuex, { StoreOptions } from 'vuex';
 import { usersModule } from './usersModule';
 import { npcsModule } from './npcsModule';
 import { encountersModule } from './encountersModule';
+import { charactersModule } from './charactersModule';
 
 export interface RootState {
   version: string;
@@ -21,6 +22,7 @@ const store: StoreOptions<RootState> = {
     usersModule,
     npcsModule,
     encountersModule,
+    charactersModule,
   },
 };
 

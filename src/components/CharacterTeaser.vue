@@ -1,6 +1,7 @@
 <template>
   <div class="CharacterTeaser">
-    <h1>CharacterTeaser</h1>
+    <h3>CharacterTeaser</h3>
+    <p>{{ name }}</p>
   </div>
 </template>
 
@@ -9,6 +10,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class CharacterTeaser extends Vue {
+  @Prop(String) public name!: string;
 }
 </script>
 
