@@ -93,7 +93,6 @@ export default class Encounter extends Vue {
       this.currentEncounter.npcs.forEach((npc) => {
         const mod = stringifyModifier(calcModifier(npc.dexterity));
         const newInitiative = new DiceRoll(`1d20${mod}`);
-        console.log(`${npc.name} rolled ${newInitiative}`);
         npcsModule.dispatchUpdateInitiative(this.$store, {
           encounterId: this.id,
           npcId: npc.id,

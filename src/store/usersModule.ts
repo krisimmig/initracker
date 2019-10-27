@@ -27,6 +27,10 @@ export const usersModule = {
     isLoggedIn(state: UserState) {
       return state.user !== null;
     },
+
+    userString(state: UserState) {
+      return state.user ? `${state.user.displayName} <${state.user.email}>` : false;
+    },
   },
 
   actions: {
@@ -69,6 +73,7 @@ const { commit, read, dispatch } = getStoreAccessors<UserState, RootState>('user
 
 // Getters
 export const readIsLoggedIn = read(usersModule.getters.isLoggedIn);
+export const readUserString = read(usersModule.getters.userString);
 
 // Actions
 export const dispatchValidateUser = dispatch(usersModule.actions.validateUser);

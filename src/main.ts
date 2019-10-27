@@ -1,29 +1,33 @@
 import Vue from 'vue';
 import VTooltip from 'v-tooltip';
 
+import './instance-props';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import { firebase } from './store/firebase';
+
+import { dispatchLoginUser } from './store/usersModule';
 
 Vue.config.productionTip = false;
 
 Vue.use(VTooltip);
 
-import { firebase } from './store/firebase';
-import { dispatchLoginUser } from './store/usersModule';
+Vue.prototype.$fireLoginUi = null;
 
-const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
-  // tslint:disable-next-line:no-unused-expression
-  new Vue({
-    el: '#app',
-    router,
-    store,
-    render: (h) => h(App),
-    created() {
-      if (firebaseUser) {
-        dispatchLoginUser(this.$store, firebaseUser);
+// tslint:disable-next-line:no-unused-expression
+new Vue({
+  el: '#app',
+  router,
+  store,
+  created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        dispatchLoginUser(this.$store, user);
+      } else {
+        this.$router.push('/login');
       }
+     });
     },
-  });
-  unsubscribe();
+  render: (h) => h(App),
 });

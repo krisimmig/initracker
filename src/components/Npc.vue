@@ -142,7 +142,6 @@ export default class Npc extends Vue {
   public increaseHitPoints() {
     if (!this.npcData) { return; }
     const newHitPoints = Math.min(this.npcData.hit_points, this.npcData.hit_points_current + this.hitPointChangeAmount);
-    console.log('newHitPoints', newHitPoints, this.npcData.hit_points_current, this.hitPointChangeAmount);
     npcsModule.dispatchUpdateHitPointCurrent(this.$store, {
       encounterId: encountersModule.readGetEncounterId(this.$store),
       npcId: this.id,

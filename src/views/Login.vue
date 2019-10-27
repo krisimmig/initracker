@@ -1,31 +1,31 @@
 <template>
-  <div>
-    <p>Login</p>
-    <div>
-      <label for="email">Email</label>
-      <input type="email" placeholder="name@mail.com" v-model="email">
-    </div>
-
-    <div>
-      <label for="password">Password</label>
-      <input type="password" v-model="password">
-    </div>
-    <button @click="submit">Login</button>
-  </div>
+  <div id="firebaseui-auth-container"></div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import { dispatchValidateUser } from '../store/usersModule';
+// tslint:disable-next-line:no-var-requires
+const firebaseui = require('firebaseui');
+// tslint:disable-next-line:no-var-requires
+const firebase = require('firebase');
+
 
 @Component
-export default class Login extends Vue {
-  public email: string = '';
-  public password: string = '';
+export default class Npc extends Vue {
+  public mounted() {
+    const uiConfig = {
+      signInSuccessUrl: '/about',
+      signInOptions: [
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+      ],
+    };
 
-  public submit() {
-    dispatchValidateUser(this.$store, { email: this.email, password: this.password });
+    const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
+
+    ui.start('#firebaseui-auth-container', uiConfig);
   }
 }
 </script>

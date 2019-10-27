@@ -68,7 +68,6 @@ export default class Encounter extends Vue {
       encounterId: this.id,
       newName: this.newName,
     }).then(() => {
-      console.log('then..');
       this.newName = '';
       this.isEditingName = false;
     });

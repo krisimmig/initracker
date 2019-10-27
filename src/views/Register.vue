@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import { firebase } from './../store/firebase';
+// import { firebase } from './../store/firebase';
 
 @Component
 export default class Register extends Vue {
@@ -25,13 +25,13 @@ export default class Register extends Vue {
   public password: string = '';
 
   public submit(): void {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.email, this.password)
-      .then(
-        () => this.$router.push({ name: 'home' }),
-        (error) => console.error(error),
-      );
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(this.email, this.password)
+    //   .then(
+    //     () => this.$router.push({ name: 'home' }),
+    //     (error) => console.error(error),
+    //   );
   }
 }
 </script>

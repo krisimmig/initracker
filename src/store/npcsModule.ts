@@ -137,7 +137,6 @@ export const npcsModule = {
     updateHitPointCurrent(
       context: NpcsContext,
       { encounterId, npcId, newHitPoints }: { encounterId: string, npcId: string, newHitPoints: number }) {
-      console.log('updateHitPointCurrent', newHitPoints);
       const encounterRef = db.collection('encounters').doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
