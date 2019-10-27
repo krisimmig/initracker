@@ -3,11 +3,26 @@
     class="Npc" v-if="npcData"
     :class="{ 'is-active': isActive }"
   >
-    <h4 @click="showInDetail">{{ npcData.name }}</h4>
     <p>
-       <span @click="showHitPointChangeInput = true" class="Npc-HP">
-          {{ npcData.hit_points_current }}/{{ npcData.hit_points }} HP
-        </span> {{ npcData.armor_class }}AC | {{ npcData.size }} | {{ npcData.type }}
+      <span @click="showInDetail"><b>{{ npcData.name }}</b></span>&nbsp;
+      <span @click="showHitPointChangeInput = true" class="Npc-HP">
+         {{ npcData.hit_points_current }}/{{ npcData.hit_points }} HP
+      </span> {{ npcData.armor_class }}AC |
+      <span @click="showInitiativeInput = true"><b>Ini: {{ npcData.initiative }}</b></span> | 
+
+      <select
+        v-model="newStatus"
+        @change="addStatus"
+        class="Npc-statusSelect"
+      >
+        <option disabled value="default">Select new state</option>
+        <option
+          v-for="(state, index) in npcStates"
+          v-bind:value="state.id"
+          :key="index"
+        >{{ state.name }}</option>
+      </select> | 
+      <span v-if="removable" @click="$emit('remove')" style="color: red;"><b>X</b></span>
     </p>
 
     <div v-if="showHitPointChangeInput">
@@ -20,26 +35,14 @@
       <button class="IT_Button IT-Buton--secondary" @click="decreaseHitPoints">Damage</button>
     </div>
 
-    <p>Initiative: {{ npcData.initiative }}</p>
-    <div v-if="!showInitiativeInput">
-      <button
-        class="It-Button"
-        @click="showInitiativeInput = true"
-      >
-        Set initiative
-      </button>
-    </div>
-    <div v-else>
+    <div v-if="showInitiativeInput">
       <input
         placeholde="Enter inititive"
         type="number"
         v-model.number="manuelInititive"
         @keyup.enter="setInititive"
       >
-      <button
-        class="It-Button"
-        @click="setInititive"
-      >
+      <button @click="setInititive">
         Set initiative
       </button>
     </div>
@@ -50,21 +53,8 @@
         @click="removeStatus(status)"
         :key="index"
         class="Npc-status"
-      >{{ statusString(status) }} - </span>
+      >{{ statusString(status) }}</span>
     </div>
-
-    <select
-      v-model="newStatus"
-      @change="addStatus"
-    >
-      <option disabled value="default">Select new state</option>
-      <option
-        v-for="(state, index) in npcStates"
-        v-bind:value="state.id"
-        :key="index"
-      >{{ state.name }}</option>
-    </select>
-    <p v-if="removable" @click="$emit('remove')" class="IT-Button IT-Button--secondary">Remove</p>
   </div>
 </template>
 
@@ -169,7 +159,7 @@ export default class Npc extends Vue {
 .Npc {
   border: 1px solid gainsboro;
   background-color: ghostwhite;
-  padding: 10px;
+  padding: 0px 20px 10px 19px;
   margin-bottom: 15px;
 }
 
@@ -180,10 +170,12 @@ export default class Npc extends Vue {
 
 .Npc-status {
   display: inline-block;
-  color: blue;
+  color: #ffffff;
   border: 1px solid blue;
-  padding: 5px;
+  padding: 2px 7px;
   margin-right: 5px;
+  border-radius: 12px;
+  background-color: #6162fe;
 }
 
 .Npc-HP {
@@ -191,7 +183,7 @@ export default class Npc extends Vue {
   border: 1px solid #08199f;
   border-radius: 4px;
   padding: 2px 5px;
-  background: #6262fe;
+  background: #6e0ca3;
   color: white;
   cursor: pointer;
 }
