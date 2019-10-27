@@ -3,6 +3,7 @@ import { getStoreAccessors } from 'vuex-typescript';
 import { db } from './firebase';
 import { arrayRemove, arrayUnion } from '../utils/firebaseUtils';
 import { RootState } from './index';
+import * as usersModule from './usersModule';
 
 export interface NpcsState {
   npcs: NpcEntity[];
@@ -104,7 +105,8 @@ export const npcsModule = {
     updateStatus(
       context: NpcsContext,
       { encounterId, npcId, newStatus }: { encounterId: string, npcId: string, newStatus: StatusTypes }) {
-      const encounterRef = db.collection('encounters').doc(encounterId);
+      const userUid = usersModule.readUserUid(context);
+      const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({
@@ -115,7 +117,8 @@ export const npcsModule = {
     async removeStatusFromNpc(
       context: NpcsContext,
       { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: StatusTypes }) {
-      const encounterRef = db.collection('encounters').doc(encounterId);
+      const userUid = usersModule.readUserUid(context);
+      const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({
@@ -126,7 +129,8 @@ export const npcsModule = {
     updateInitiative(
       context: NpcsContext,
       { encounterId, npcId, newInitiative }: { encounterId: string, npcId: string, newInitiative: number }) {
-      const encounterRef = db.collection('encounters').doc(encounterId);
+      const userUid = usersModule.readUserUid(context);
+      const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({
@@ -137,7 +141,8 @@ export const npcsModule = {
     updateHitPointCurrent(
       context: NpcsContext,
       { encounterId, npcId, newHitPoints }: { encounterId: string, npcId: string, newHitPoints: number }) {
-      const encounterRef = db.collection('encounters').doc(encounterId);
+      const userUid = usersModule.readUserUid(context);
+      const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({

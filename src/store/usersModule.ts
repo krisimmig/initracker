@@ -28,8 +28,12 @@ export const usersModule = {
       return state.user !== null;
     },
 
-    userString(state: UserState) {
-      return state.user ? `${state.user.displayName} <${state.user.email}>` : false;
+    getUserString(state: UserState) {
+      return state.user ? `${state.user.displayName} <${state.user.email}> (${state.user.uid})` : false;
+    },
+
+    getUserUid(state: UserState) {
+      return state.user ? state.user.uid : false;
     },
   },
 
@@ -69,11 +73,12 @@ export const usersModule = {
   },
 };
 
-const { commit, read, dispatch } = getStoreAccessors<UserState, RootState>('usersModule');
+const { commit, read, dispatch } = getStoreAccessors<UserState | any, RootState>('usersModule');
 
 // Getters
 export const readIsLoggedIn = read(usersModule.getters.isLoggedIn);
-export const readUserString = read(usersModule.getters.userString);
+export const readUserString = read(usersModule.getters.getUserString);
+export const readUserUid = read(usersModule.getters.getUserUid);
 
 // Actions
 export const dispatchValidateUser = dispatch(usersModule.actions.validateUser);

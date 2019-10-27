@@ -1,20 +1,21 @@
 import Vue from 'vue';
-import { ActionContext } from 'vuex';
+import { ActionContext, Store } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 import { db } from './firebase';
 import { RootState } from './index';
-import * as npcModule from './npcsModule';
+import * as npcsModule from './npcsModule';
+import * as usersModule from './usersModule';
 
 export interface EncountersState {
   encounters: EncounterEntity[];
-  npcInDetail?: npcModule.NpcEntity;
+  npcInDetail?: npcsModule.NpcEntity;
   encounterInView: string;
 }
 
 export interface EncounterEntity {
   name: string;
   id: string;
-  npcs: npcModule.NpcEntity[];
+  npcs: npcsModule.NpcEntity[];
   round: number;
   activeEntityIndex: number;
 }
@@ -54,14 +55,14 @@ export const encountersModule = {
 
   actions: {
     getEncounterNpcs(context: EncountersContext, { encounterId }: { encounterId: string }) {
-      db
-        .collection('encounters')
+      const userUid = usersModule.readUserUid(context);
+      db.collection(`users/${userUid}/encounters`)
         .doc(encounterId)
         .collection('npcs')
         .orderBy('initiative', 'desc')
         .onSnapshot((data) => {
-        const npcs: npcModule.NpcEntity[] = data.docs.reduce((acc: npcModule.NpcEntity[], current) => {
-          const newNpc: npcModule.NpcEntity = current.data() as npcModule.NpcEntity;
+        const npcs: npcsModule.NpcEntity[] = data.docs.reduce((acc: npcsModule.NpcEntity[], current) => {
+          const newNpc: npcsModule.NpcEntity = current.data() as npcsModule.NpcEntity;
           newNpc.id = current.id;
           acc.push(newNpc);
           return acc;
@@ -72,13 +73,12 @@ export const encountersModule = {
     },
 
     fetchEncounters(context: EncountersContext) {
-      db.collection('encounters').onSnapshot((data) => {
-        const encounters: EncounterEntity[] = data.docs.reduce((acc: EncounterEntity[], current) => {
-          const newEncounter: EncounterEntity = current.data() as EncounterEntity;
-          newEncounter.id = current.id;
-          acc.push(newEncounter);
-          return acc;
-        }, []);
+      const userUid = usersModule.readUserUid(context);
+      db.collection(`users/${userUid}/encounters`).onSnapshot((data) => {
+        const encounters: EncounterEntity[] = [];
+        data.forEach((doc) => {
+          encounters.push(doc.data());
+        });
 
         commitSetEncounters(context, encounters);
         context.state.encounters.forEach((encounter) =>
@@ -89,13 +89,15 @@ export const encountersModule = {
 
     async addNpcToEncounter(
       context: EncountersContext,
-      { npcData, encounterId }: { npcData: npcModule.NpcEntity, encounterId: string },
+      { npcData, encounterId }: { npcData: npcsModule.NpcEntity, encounterId: string },
     ) {
+      const userUid = usersModule.readUserUid(context);
+
       const moddedNpcData = npcData;
       moddedNpcData.status = [];
       moddedNpcData.initiative = 0;
       moddedNpcData.hit_points_current = moddedNpcData.hit_points;
-      const encounterRef = await db.collection('encounters').doc(encounterId);
+      const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
       encounterRef.collection('npcs').add(moddedNpcData);
     },
 
@@ -103,7 +105,9 @@ export const encountersModule = {
       context: EncountersContext,
       { npcID, encounterId }: { npcID: string, encounterId: string },
     ) {
-      db.collection('encounters')
+      const userUid = usersModule.readUserUid(context);
+
+      db.collection(`users/${userUid}/encounters`)
         .doc(encounterId)
         .collection('npcs')
         .doc(npcID)
@@ -114,7 +118,9 @@ export const encountersModule = {
       context: EncountersContext,
       { encounterName }: { encounterName: string },
     ) {
-      const encountersRef = await db.collection('encounters');
+      const userUid = usersModule.readUserUid(context);
+
+      const encountersRef = await db.collection(`users/${userUid}/encounters`);
       const newEncounter: EncounterEntity = {
         id: '',
         name: encounterName,
@@ -129,7 +135,9 @@ export const encountersModule = {
       context: EncountersContext,
       { encounterId }: { encounterId: string },
     ) {
-      db.collection('encounters')
+      const userUid = usersModule.readUserUid(context);
+
+      db.collection(`users/${userUid}/encounters`)
         .doc(encounterId)
         .delete();
     },
@@ -138,7 +146,9 @@ export const encountersModule = {
       context: EncountersContext,
       { encounterId, newName }: { encounterId: string, newName: string },
     ) {
-      const encounterRef = await db.collection('encounters').doc(encounterId);
+      const userUid = usersModule.readUserUid(context);
+
+      const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
       encounterRef.set({
         name: newName,
       }, { merge: true });
@@ -148,7 +158,9 @@ export const encountersModule = {
       context: EncountersContext,
       { encounterId, newRoundIndex }: { encounterId: string, newRoundIndex: number },
     ) {
-      const encounterRef = await db.collection('encounters').doc(encounterId);
+      const userUid = usersModule.readUserUid(context);
+
+      const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
       encounterRef.set({
         round: newRoundIndex,
       }, { merge: true });
@@ -158,7 +170,9 @@ export const encountersModule = {
       context: EncountersContext,
       { encounterId, activeEntityIndex }: { encounterId: string, activeEntityIndex: number },
     ) {
-      const encounterRef = await db.collection('encounters').doc(encounterId);
+      const userUid = usersModule.readUserUid(context);
+
+      const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
       encounterRef.set({
         activeEntityIndex,
       }, { merge: true });
@@ -170,7 +184,7 @@ export const encountersModule = {
       state.encounters = encounters;
     },
 
-    setNpcsForEncounter(state: EncountersState, { id, npcs }: { id: string, npcs: npcModule.NpcEntity[] }) {
+    setNpcsForEncounter(state: EncountersState, { id, npcs }: { id: string, npcs: npcsModule.NpcEntity[] }) {
       const encounterIndex = state.encounters.findIndex((e) => e.id === id);
       if (encounterIndex !== -1) {
         const moddedEncounter = state.encounters[encounterIndex];
@@ -179,7 +193,7 @@ export const encountersModule = {
       }
     },
 
-    setNpcInDetail(state: EncountersState, npc: npcModule.NpcEntity) {
+    setNpcInDetail(state: EncountersState, npc: npcsModule.NpcEntity) {
       state.npcInDetail = npc;
     },
 
