@@ -86,7 +86,6 @@ export const encountersModule = {
 
     fetchEncountersCurrentNpcs(context: EncountersContext, { encounterId }) {
       const userUid = usersModule.readUserUid(context);
-      console.log('encounterId', encounterId);
       db.collection(`users/${userUid}/encounters/${encounterId}/npcs`)
         .orderBy('initiative', 'desc')
         .onSnapshot((data) => {
@@ -241,7 +240,7 @@ export const dispatchFetchEncountersCurrentNpcs = dispatch(encountersModule.acti
 export const dispatchAddNpcToEncounter = dispatch(encountersModule.actions.addNpcToEncounter);
 export const dispatchRemoveNpcFromEncounter = dispatch(encountersModule.actions.removeNpcFromEncounter);
 export const dispatchAddNewEncounter = dispatch(encountersModule.actions.addNewEncounter);
-export const dispatchUpdateRound = dispatch(encountersModule.actions.updateRound);
 export const dispatchUpdateActiveEntityIndex = dispatch(encountersModule.actions.updateActiveEntityIndex);
 export const dispatchRemoveEncounter = dispatch(encountersModule.actions.removeEncounter);
+export const dispatchUpdateRound = dispatch(encountersModule.actions.updateRound);
 export const dispatchUpdateName = dispatch(encountersModule.actions.updateName);

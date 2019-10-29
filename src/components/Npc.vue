@@ -1,14 +1,14 @@
 <template>
   <div
-    class="Npc" v-if="npcData"
+    class="Npc" v-if="npc"
     :class="{ 'is-active': isActive }"
   >
     <p>
-      <span @click="showInDetail"><b>{{ npcData.name }}</b></span>&nbsp;
+      <span @click="showInDetail"><b>{{ npc.name }}</b></span>&nbsp;
       <span @click="showHitPointChangeInput = true" class="Npc-HP">
-         {{ npcData.hit_points_current }}/{{ npcData.hit_points }} HP
-      </span> {{ npcData.armor_class }}AC |
-      <span @click="showInitiativeInput = true"><b>Ini: {{ npcData.initiative }}</b></span> | 
+         {{ npc.hit_points_current }}/{{ npc.hit_points }} HP
+      </span> {{ npc.armor_class }}AC |
+      <span @click="showInitiativeInput = true"><b>Ini: {{ npc.initiative }}</b></span> | 
 
       <select
         v-model="newStatus"
@@ -49,7 +49,7 @@
 
     <div>
       <span
-        v-for="(status, index) in npcData.status"
+        v-for="(status, index) in npc.status"
         @click="removeStatus(status)"
         :key="index"
         class="Npc-status"
@@ -65,7 +65,6 @@ import * as encountersModule from '@/store/encountersModule';
 
 @Component
 export default class Npc extends Vue {
-  @Prop(String) public id!: string;
   @Prop(Boolean) public removable!: boolean;
   @Prop(Object) public npc!: npcsModule.NpcEntity;
   @Prop(Boolean) public isActive!: boolean;
@@ -80,8 +79,8 @@ export default class Npc extends Vue {
   }
 
   public showInDetail() {
-    if (this.npcData) {
-      encountersModule.commitSetNpcInDetail(this.$store, this.npcData);
+    if (this.npc) {
+      encountersModule.commitSetNpcInDetail(this.$store, this.npc);
     }
   }
 
@@ -111,14 +110,6 @@ export default class Npc extends Vue {
     });
   }
 
-  get npcData(): npcsModule.NpcEntity | undefined {
-    if (this.npc) {
-      return this.npc;
-    }
-
-    return npcsModule.readGetNpcById(this.$store)(this.id);
-  }
-
   get npcStates() {
     return npcsModule.readGetNpcStates(this.$store);
   }
@@ -137,11 +128,11 @@ export default class Npc extends Vue {
   }
 
   public increaseHitPoints() {
-    if (!this.npcData) { return; }
+    if (!this.npc) { return; }
     const encounterId = encountersModule.readGetEncountersCurrentId(this.$store);
     if (!encounterId) { return; }
 
-    const newHitPoints = Math.min(this.npcData.hit_points, this.npcData.hit_points_current + this.hitPointChangeAmount);
+    const newHitPoints = Math.min(this.npc.hit_points, this.npc.hit_points_current + this.hitPointChangeAmount);
     npcsModule.dispatchUpdateHitPointCurrent(this.$store, {
       encounterId,
       npcId: this.npc.uuid,
@@ -152,12 +143,12 @@ export default class Npc extends Vue {
   }
 
   public decreaseHitPoints() {
-    if (!this.npcData) { return; }
+    if (!this.npc) { return; }
 
     const encounterId = encountersModule.readGetEncountersCurrentId(this.$store);
     if (!encounterId) { return; }
 
-    const newHitPoints = this.npcData.hit_points_current - this.hitPointChangeAmount;
+    const newHitPoints = this.npc.hit_points_current - this.hitPointChangeAmount;
     npcsModule.dispatchUpdateHitPointCurrent(this.$store, {
       encounterId,
       npcId: this.npc.uuid,

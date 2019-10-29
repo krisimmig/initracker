@@ -106,8 +106,6 @@ export const npcsModule = {
       context: NpcsContext,
       { encounterId, npcId, newStatus }: { encounterId: string, npcId: string, newStatus: StatusTypes }) {
       const userUid = usersModule.readUserUid(context);
-      console.log(userUid, encounterId, npcId);
-
       const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`);
 
       npcRef.set({

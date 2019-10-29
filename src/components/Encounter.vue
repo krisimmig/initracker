@@ -21,10 +21,10 @@
         :key="index"
       >
         <Npc
-          :id="npc.id"
           :npc="npc"
           :isActive="index === currentNpcIndex - 1"
-          :removable="true" @remove="removeNpcFromEncounter(npc.id)"
+          :removable="true"
+          @remove="removeNpcFromEncounter(npc.uuid)"
         />
       </li>
     </ul>
