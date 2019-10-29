@@ -85,11 +85,28 @@ export default class Npc extends Vue {
     }
   }
 
+  public addStatus() {
+    if (this.newStatus === 'default') { return; }
+
+    const encounterId = encountersModule.readGetEncountersCurrentId(this.$store);
+    if (!encounterId) { return; }
+
+    npcsModule.dispatchUpdateStatus(this.$store, {
+      encounterId,
+      npcId: this.npc.uuid,
+      newStatus: this.newStatus,
+    });
+
+    this.newStatus = 'default';
+  }
+
   public removeStatus(statusIndex: npcsModule.StatusTypes) {
-    const encounterId = encountersModule.readGetEncounterId(this.$store);
+    const encounterId = encountersModule.readGetEncountersCurrentId(this.$store);
+    if (!encounterId) { return; }
+
     npcsModule.dispatchRemoveStatusFromNpc(this.$store, {
       encounterId,
-      npcId: this.id,
+      npcId: this.npc.uuid,
       statusIndex,
     });
   }
@@ -106,23 +123,13 @@ export default class Npc extends Vue {
     return npcsModule.readGetNpcStates(this.$store);
   }
 
-  public addStatus() {
-    if (this.newStatus === 'default') { return; }
-    const encounterId = encountersModule.readGetEncounterId(this.$store);
-
-    npcsModule.dispatchUpdateStatus(this.$store, {
-      encounterId,
-      npcId: this.npc.id,
-      newStatus: this.newStatus,
-    });
-
-    this.newStatus = 'default';
-  }
-
   public setInititive() {
+    const encounterId = encountersModule.readGetEncountersCurrentId(this.$store);
+    if (!encounterId) { return; }
+
     npcsModule.dispatchUpdateInitiative(this.$store, {
-      encounterId: encountersModule.readGetEncounterId(this.$store),
-      npcId: this.id,
+      encounterId,
+      npcId: this.npc.uuid,
       newInitiative: this.manuelInititive,
     });
     this.showInitiativeInput = false;
@@ -131,10 +138,13 @@ export default class Npc extends Vue {
 
   public increaseHitPoints() {
     if (!this.npcData) { return; }
+    const encounterId = encountersModule.readGetEncountersCurrentId(this.$store);
+    if (!encounterId) { return; }
+
     const newHitPoints = Math.min(this.npcData.hit_points, this.npcData.hit_points_current + this.hitPointChangeAmount);
     npcsModule.dispatchUpdateHitPointCurrent(this.$store, {
-      encounterId: encountersModule.readGetEncounterId(this.$store),
-      npcId: this.id,
+      encounterId,
+      npcId: this.npc.uuid,
       newHitPoints,
     });
     this.showHitPointChangeInput = false;
@@ -143,10 +153,14 @@ export default class Npc extends Vue {
 
   public decreaseHitPoints() {
     if (!this.npcData) { return; }
+
+    const encounterId = encountersModule.readGetEncountersCurrentId(this.$store);
+    if (!encounterId) { return; }
+
     const newHitPoints = this.npcData.hit_points_current - this.hitPointChangeAmount;
     npcsModule.dispatchUpdateHitPointCurrent(this.$store, {
-      encounterId: encountersModule.readGetEncounterId(this.$store),
-      npcId: this.id,
+      encounterId,
+      npcId: this.npc.uuid,
       newHitPoints,
     });
     this.showHitPointChangeInput = false;

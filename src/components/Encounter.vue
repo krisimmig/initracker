@@ -1,10 +1,10 @@
 <template>
-  <div v-if="encounterData">
-    <h3>{{ encounterData.name }}</h3>
+  <div v-if="currentEncounter">
+    <h3>{{ currentEncounter.name }}</h3>
 
     <div>
       <button
-        @click="rollInitiaitive"
+        @click="rollInitiative"
         class="IT-Button"
       >
         Roll Ini
@@ -17,7 +17,7 @@
 
     <ul>
       <li
-        v-for="(npc, index) in encounterData.npcs"
+        v-for="(npc, index) in npcs"
         :key="index"
       >
         <Npc
@@ -51,19 +51,12 @@ export default class Encounter extends Vue {
 
   public showNpcsInEncounter: boolean = false;
 
-  get encounterData() {
-    return encountersModule.readGetEncounterById(this.$store)(this.id);
-  }
-
   get currentEncounter() {
-    return encountersModule.readGetCurrentEncounter(this.$store);
+    return encountersModule.readGetEncountersCurrent(this.$store);
   }
 
   get currentRound() {
-    if (this.currentEncounter) {
-      return this.currentEncounter.round;
-    }
-    return 1;
+    return this.currentEncounter.round;
   }
 
   get currentNpcIndex() {
@@ -73,9 +66,13 @@ export default class Encounter extends Vue {
     return 1;
   }
 
+  get npcs() {
+    return encountersModule.readGetEncountersCurrentNpcs(this.$store);
+  }
+
   get totalNpcs() {
-    if (this.currentEncounter) {
-      return this.currentEncounter.npcs.length;
+    if (this.currentEncounter && this.npcs) {
+      return this.npcs.length;
     } else {
       return 0;
     }
@@ -88,14 +85,14 @@ export default class Encounter extends Vue {
     });
   }
 
-  public rollInitiaitive(): void {
-    if (this.currentEncounter && this.currentEncounter.npcs) {
-      this.currentEncounter.npcs.forEach((npc) => {
+  public rollInitiative(): void {
+    if (this.currentEncounter && this.npcs) {
+      this.npcs.forEach((npc) => {
         const mod = stringifyModifier(calcModifier(npc.dexterity));
         const newInitiative = new DiceRoll(`1d20${mod}`);
         npcsModule.dispatchUpdateInitiative(this.$store, {
           encounterId: this.id,
-          npcId: npc.id,
+          npcId: npc.uuid,
           newInitiative: newInitiative.total,
         });
       });
@@ -104,9 +101,9 @@ export default class Encounter extends Vue {
 
   public next(): void {
     if (this.currentEncounter) {
-      const npc = this.currentEncounter.npcs[this.currentNpcIndex - 1];
+      const npc = this.npcs[this.currentNpcIndex - 1];
       if (npc) {
-        if (this.currentNpcIndex === this.currentEncounter.npcs.length) {
+        if (this.currentNpcIndex === this.npcs.length) {
           encountersModule.dispatchUpdateRound(this.$store, {
             encounterId: this.id,
             newRoundIndex: this.currentRound + 1,

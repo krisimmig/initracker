@@ -20,6 +20,7 @@ export enum StatusTypes {
 export interface NpcEntity {
   name: string;
   id: string;
+  uuid: string;
   size: string;
   type: string;
   challenge_rating: string;
@@ -51,8 +52,7 @@ export const npcsModule = {
     },
 
     getNpcById: (state: NpcsState) => (npcID: string): NpcEntity | undefined => {
-      const npcIDclean = npcID.replace(/--[0-9]+/, '');
-      return state.npcs.find((npc) => npc.id === npcIDclean);
+      return state.npcs.find((npc) => npc.id === npcID);
     },
 
     getSearchResults: (state: NpcsState) => (query: string): NpcEntity[] => {
@@ -106,8 +106,9 @@ export const npcsModule = {
       context: NpcsContext,
       { encounterId, npcId, newStatus }: { encounterId: string, npcId: string, newStatus: StatusTypes }) {
       const userUid = usersModule.readUserUid(context);
-      const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
-      const npcRef = encounterRef.collection('npcs').doc(npcId);
+      console.log(userUid, encounterId, npcId);
+
+      const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`);
 
       npcRef.set({
         status: arrayUnion(newStatus),
@@ -130,8 +131,7 @@ export const npcsModule = {
       context: NpcsContext,
       { encounterId, npcId, newInitiative }: { encounterId: string, npcId: string, newInitiative: number }) {
       const userUid = usersModule.readUserUid(context);
-      const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
-      const npcRef = encounterRef.collection('npcs').doc(npcId);
+      const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`);
 
       npcRef.set({
         initiative: newInitiative,

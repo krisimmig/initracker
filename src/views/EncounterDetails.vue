@@ -43,8 +43,7 @@ export default class EncounterDetails extends Vue {
   }
 
   public mounted() {
-    encountersModule.dispatchFetchEncounters(this.$store);
-    encountersModule.commitSetEncounterInView(this.$store, this.$route.params.encounterId);
+    encountersModule.dispatchFetchEncounterById(this.$store, { encounterId: this.$route.params.encounterId });
   }
 }
 </script>

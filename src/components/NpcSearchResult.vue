@@ -35,7 +35,7 @@ export default class NpcSearchResult extends Vue {
   }
 
   get encounters() {
-    return encountersModule.readGetEncounters(this.$store);
+    return encountersModule.readGetEncountersAll(this.$store);
   }
 
   public addToEncounter() {

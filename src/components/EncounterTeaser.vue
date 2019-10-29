@@ -4,7 +4,7 @@
       <p
         @click="toEncounterView(id)"
       >
-        {{ name }} -- (Size: {{ encounterSize()  }})
+        {{ name }}
       </p>
 
       <button

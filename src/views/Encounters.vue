@@ -33,7 +33,7 @@ import EncounterTeaser from '../components/EncounterTeaser.vue';
 export default class Encounters extends Vue {
 
   get encounters(): encountersModule.EncounterEntity[] {
-    return encountersModule.readGetEncounters(this.$store);
+    return encountersModule.readGetEncountersAll(this.$store);
   }
 
   public mounted() {
