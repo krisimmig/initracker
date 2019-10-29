@@ -22,12 +22,14 @@
     "vuex-typescript": "^3.0.2"
   },
   "devDependencies": {
+    "@types/uuid": "^3.4.5",
     "@vue/cli-plugin-e2e-cypress": "^3.0.4",
     "@vue/cli-plugin-typescript": "^3.0.4",
     "@vue/cli-service": "^3.0.4",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "typescript": "^3.0.0",
+    "uuid": "^3.3.3",
     "vue-template-compiler": "^2.5.17"
   }
 }
