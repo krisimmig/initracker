@@ -6,6 +6,8 @@ import { RootState } from './index';
 import * as npcsModule from './npcsModule';
 import * as usersModule from './usersModule';
 
+import uuid from 'uuid/v1';
+
 export interface EncountersState {
   encounters: EncounterEntity[];
   npcInDetail?: npcsModule.NpcEntity;
@@ -77,6 +79,7 @@ export const encountersModule = {
       db.collection(`users/${userUid}/encounters`).onSnapshot((data) => {
         const encounters: EncounterEntity[] = [];
         data.forEach((doc) => {
+          console.log(doc.data().id, doc.data().name);
           encounters.push(doc.data());
         });
 
@@ -119,16 +122,20 @@ export const encountersModule = {
       { encounterName }: { encounterName: string },
     ) {
       const userUid = usersModule.readUserUid(context);
+      const id = uuid();
 
       const encountersRef = await db.collection(`users/${userUid}/encounters`);
       const newEncounter: EncounterEntity = {
-        id: '',
+        id,
         name: encounterName,
         npcs: [],
         round: 1,
         activeEntityIndex: 1,
       };
-      encountersRef.add(newEncounter);
+
+      console.log(userUid, newEncounter);
+
+      encountersRef.doc(id).set(newEncounter);
     },
 
     removeEncounter(
@@ -185,6 +192,8 @@ export const encountersModule = {
     },
 
     setNpcsForEncounter(state: EncountersState, { id, npcs }: { id: string, npcs: npcsModule.NpcEntity[] }) {
+      console.log('setNpcsForEncounter');
+
       const encounterIndex = state.encounters.findIndex((e) => e.id === id);
       if (encounterIndex !== -1) {
         const moddedEncounter = state.encounters[encounterIndex];
