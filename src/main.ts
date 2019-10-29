@@ -16,18 +16,19 @@ Vue.use(VTooltip);
 Vue.prototype.$fireLoginUi = null;
 
 // tslint:disable-next-line:no-unused-expression
-new Vue({
-  el: '#app',
-  router,
-  store,
-  created() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        dispatchLoginUser(this.$store, user);
-      } else {
-        this.$router.push('/login');
-      }
-     });
-    },
-  render: (h) => h(App),
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    console.log('logged in');
+    dispatchLoginUser(store, user);
+  } else {
+    console.log('anon');
+    router.push('/login');
+  }
+
+  const vueApp = new Vue({
+    el: '#app',
+    router,
+    store,
+    render: (h) => h(App),
+  });
 });
