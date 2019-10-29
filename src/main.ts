@@ -18,10 +18,8 @@ Vue.prototype.$fireLoginUi = null;
 // tslint:disable-next-line:no-unused-expression
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    console.log('logged in');
     dispatchLoginUser(store, user);
   } else {
-    console.log('anon');
     router.push('/login');
   }
 

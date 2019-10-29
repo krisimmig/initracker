@@ -47,7 +47,7 @@ export const usersModule = {
         commitSetUser(context, response.user);
         router.push({ name: 'home' });
       } catch (error) {
-        console.log('Error', error);
+        console.warn('Error', error);
       }
     },
 
@@ -57,7 +57,7 @@ export const usersModule = {
         commitSetUser(context, null);
         router.push({ name: 'home' });
       } catch (error) {
-        console.log('Error', error);
+        console.warn('Error', error);
       }
     },
 

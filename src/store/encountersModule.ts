@@ -79,7 +79,6 @@ export const encountersModule = {
       db.collection(`users/${userUid}/encounters`).onSnapshot((data) => {
         const encounters: EncounterEntity[] = [];
         data.forEach((doc) => {
-          console.log(doc.data().id, doc.data().name);
           encounters.push(doc.data());
         });
 
@@ -132,8 +131,6 @@ export const encountersModule = {
         round: 1,
         activeEntityIndex: 1,
       };
-
-      console.log(userUid, newEncounter);
 
       encountersRef.doc(id).set(newEncounter);
     },
@@ -192,8 +189,6 @@ export const encountersModule = {
     },
 
     setNpcsForEncounter(state: EncountersState, { id, npcs }: { id: string, npcs: npcsModule.NpcEntity[] }) {
-      console.log('setNpcsForEncounter');
-
       const encounterIndex = state.encounters.findIndex((e) => e.id === id);
       if (encounterIndex !== -1) {
         const moddedEncounter = state.encounters[encounterIndex];
