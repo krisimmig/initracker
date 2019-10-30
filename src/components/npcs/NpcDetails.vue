@@ -157,8 +157,8 @@
 // tslint:disable:variable-name
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import { NpcEntity } from '../store/npcsModule';
-import { stringModifier as cm } from '../utils/dnd';
+import { NpcEntity } from '../../store/npcsModule';
+import { stringModifier as cm } from '../../utils/dnd';
 
 @Component
 export default class NpcDetails extends Vue {

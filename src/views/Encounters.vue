@@ -24,8 +24,8 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import { NpcEntity } from '../store/npcsModule';
 import * as encountersModule from '../store/encountersModule';
-import EncounterNew from '../components/EncounterNew.vue';
-import EncounterTeaser from '../components/EncounterTeaser.vue';
+import EncounterNew from '../components/encounters/EncounterNew.vue';
+import EncounterTeaser from '../components/encounters/EncounterTeaser.vue';
 
 @Component({
   components: { EncounterNew, EncounterTeaser },

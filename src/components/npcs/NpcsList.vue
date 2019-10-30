@@ -39,7 +39,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import NpcSearchResult from './NpcSearchResult.vue';
-import * as npcsModule from '../store/npcsModule';
+import * as npcsModule from '../../store/npcsModule';
 
 @Component({
   components: { NpcSearchResult },

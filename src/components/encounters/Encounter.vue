@@ -35,10 +35,10 @@
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import * as encountersModule from '../store/encountersModule';
-import * as npcsModule from '../store/npcsModule';
-import Npc from './Npc.vue';
-import { calcModifier, stringifyModifier } from '../utils/dnd';
+import * as encountersModule from '../../store/encountersModule';
+import * as npcsModule from '../../store/npcsModule';
+import Npc from '../npcs/Npc.vue';
+import { calcModifier, stringifyModifier } from '../../utils/dnd';
 // require the dice-roller library
 import { DiceRoll } from 'rpg-dice-roller';
 

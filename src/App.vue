@@ -12,7 +12,7 @@ import { readIsLoggedIn, dispatchLogoutUser } from './store/usersModule';
 import * as npcsModule from './store/npcsModule';
 import * as encountersModule from './store/encountersModule';
 
-import MainMenu from './components/MainMenu.vue';
+import MainMenu from './components/layout/MainMenu.vue';
 
 @Component({
   components: { MainMenu },

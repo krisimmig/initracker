@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import CharacterSheet from '../components/CharacterSheet.vue';
+import CharacterSheet from '../components/characters/CharacterSheet.vue';
 
 @Component({
   components: { CharacterSheet },

@@ -60,7 +60,7 @@
 
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import * as npcsModule from '../store/npcsModule';
+import * as npcsModule from '../../store/npcsModule';
 import * as encountersModule from '@/store/encountersModule';
 
 @Component

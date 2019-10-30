@@ -28,9 +28,9 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import { NpcEntity } from '../store/npcsModule';
 import * as encountersModule from '../store/encountersModule';
-import Encounter from '../components/Encounter.vue';
-import NpcsList from '../components/NpcsList.vue';
-import NpcDetails from '../components/NpcDetails.vue';
+import Encounter from '../components/encounters/Encounter.vue';
+import NpcsList from '../components/npcs/NpcsList.vue';
+import NpcDetails from '../components/npcs/NpcDetails.vue';
 
 @Component({
   components: { Encounter, NpcsList, NpcDetails },

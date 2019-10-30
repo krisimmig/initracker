@@ -24,8 +24,8 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import { NpcEntity } from '../store/npcsModule';
 import * as charactersModule from '../store/charactersModule';
-import CharacterNew from '../components/CharacterNew.vue';
-import CharacterTeaser from '../components/CharacterTeaser.vue';
+import CharacterNew from '../components/characters/CharacterNew.vue';
+import CharacterTeaser from '../components/characters/CharacterTeaser.vue';
 
 @Component({
   components: { CharacterNew, CharacterTeaser },

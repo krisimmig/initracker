@@ -21,7 +21,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import { readUserString, readIsLoggedIn, dispatchLogoutUser } from '../store/usersModule';
+import { readUserString, readIsLoggedIn, dispatchLogoutUser } from '../../store/usersModule';
 
 @Component
 export default class MainMenu extends Vue {
@@ -42,9 +42,6 @@ export default class MainMenu extends Vue {
 
 
 <style lang="scss">
-@import '../scss/helper-classes.scss';
-@import '../scss/popover.scss';
-
 ul, li {
   list-style: none;
   margin: 0;
