@@ -26,6 +26,16 @@ export default class App extends Vue {
   get isLoggedIn(): boolean {
     return readIsLoggedIn(this.$store);
   }
+
+  get monsters() {
+    return npcsModule.readGetNpcs(this.$store);
+  }
+
+  public async mounted() {
+    if (this.monsters.length < 1) {
+      await npcsModule.dispatchFetchNpcs(this.$store);
+    }
+  }
 }
 </script>
 

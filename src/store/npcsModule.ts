@@ -76,7 +76,7 @@ export const npcsModule = {
   },
 
   actions: {
-    async fetchMonsters(context: NpcsContext) {
+    async fetchNpcs(context: NpcsContext) {
       const monstersQuerySnapshot = await db.collection('monsters').get();
       const monstersData: NpcEntity[] = monstersQuerySnapshot.docs.reduce(
         (acc: NpcEntity[], current) => {
@@ -173,7 +173,7 @@ export const commitSetNpcs = commit(npcsModule.mutations.setNpcs);
 
 // Actions
 export const dispatchOpenNpcsConnection = dispatch(npcsModule.actions.openNpcsConnection);
-export const dispatchFetchMonsters = dispatch(npcsModule.actions.fetchMonsters);
+export const dispatchFetchNpcs = dispatch(npcsModule.actions.fetchNpcs);
 export const dispatchUpdateStatus = dispatch(npcsModule.actions.updateStatus);
 export const dispatchRemoveStatusFromNpc = dispatch(npcsModule.actions.removeStatusFromNpc);
 export const dispatchUpdateInitiative = dispatch(npcsModule.actions.updateInitiative);
