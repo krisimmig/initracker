@@ -71,7 +71,7 @@ export default class NpcsList extends Vue {
 
 <style scoped lang="scss">
 .NpcsList-results {
-  max-height: calc(100vh - 265px);
+  max-height: calc(100vh - 340px);
   overflow-y: scroll;
   border: 1px solid green;
 }
