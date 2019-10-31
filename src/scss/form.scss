@@ -1,0 +1,10 @@
+.Form-label {
+  min-width: 120px;
+  display: inline-block;
+}
+
+.Form-textarea {
+  display: inline-block;
+  width: calc(100% - 220px);
+  height: 100px;
+}
