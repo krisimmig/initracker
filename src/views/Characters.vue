@@ -14,7 +14,7 @@
     </div>
 
     <div class="IT-Flex-40">
-      <CharacterNew />
+      <router-link :to="{ name: 'newCharacter' }">Create new character</router-link>
     </div>
   </div>
 </template>
@@ -24,13 +24,12 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import { NpcEntity } from '../store/npcsModule';
 import * as charactersModule from '../store/charactersModule';
-import CharacterNew from '../components/characters/CharacterNew.vue';
 import CharacterTeaser from '../components/characters/CharacterTeaser.vue';
 
 @Component({
-  components: { CharacterNew, CharacterTeaser },
+  components: { CharacterTeaser },
 })
-export default class Encounters extends Vue {
+export default class Characters extends Vue {
 
   get characters(): charactersModule.CharacterEntity[] {
     return charactersModule.readGetCharacters(this.$store);
