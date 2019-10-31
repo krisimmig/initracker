@@ -5,6 +5,8 @@ import { Route } from 'vue-router';
 import Home from './views/Home.vue';
 import Dashboard from './views/Dashboard.vue';
 import Characters from './views/Characters.vue';
+import CharacterNew from './views/CharacterNew.vue';
+import CharacterBuilder from './views/CharacterBuilder.vue';
 import Encounters from './views/Encounters.vue';
 import EncounterDetails from './views/EncounterDetails.vue';
 import Login from './views/Login.vue';
@@ -38,6 +40,24 @@ const router = new Router({
       path: '/characters',
       name: 'characters',
       component: Characters,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+
+    {
+      path: '/characters/new',
+      name: 'newCharacter',
+      component: CharacterNew,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+
+    {
+      path: '/character/builder',
+      name: 'characterBuilder',
+      component: CharacterBuilder,
       meta: {
         requiresAuth: true,
       },
