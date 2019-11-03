@@ -1,40 +1,14 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
-import { db } from './firebase';
-import { arrayRemove, arrayUnion } from '../utils/firebaseUtils';
-import { RootState } from './index';
-import * as usersModule from './usersModule';
+
+import { arrayRemove, arrayUnion } from '@/utils/firebaseUtils';
+import { db } from '@/store/firebase';
+import { RootState } from '@/store/index';
+import * as usersModule from '@/store/usersModule';
+import { ICharacter, StatusTypes } from '@/types/characters';
 
 export interface NpcsState {
-  npcs: NpcEntity[];
-}
-
-export enum StatusTypes {
-  Poisened,
-  Stunned,
-  Prone,
-  Blinded,
-  Charmed,
-}
-
-export interface NpcEntity {
-  name: string;
-  id: string;
-  uuid: string;
-  size: string;
-  type: string;
-  challenge_rating: string;
-  hit_points: number;
-  hit_points_current: number;
-  hit_dice: string;
-  strength: number;
-  intelligence: number;
-  wisdom: number;
-  charisma: number;
-  constitution: number;
-  dexterity: number;
-  status: StatusTypes[];
-  initiative: number;
+  npcs: ICharacter[];
 }
 
 type NpcsContext = ActionContext<NpcsState, RootState>;
@@ -51,11 +25,11 @@ export const npcsModule = {
       return state.npcs;
     },
 
-    getNpcById: (state: NpcsState) => (npcID: string): NpcEntity | undefined => {
+    getNpcById: (state: NpcsState) => (npcID: string): ICharacter | undefined => {
       return state.npcs.find((npc) => npc.id === npcID);
     },
 
-    getSearchResults: (state: NpcsState) => (query: string): NpcEntity[] => {
+    getSearchResults: (state: NpcsState) => (query: string): ICharacter[] => {
       return state.npcs.filter((npxIndexEntry) =>
         npxIndexEntry.name.toLowerCase().includes(query),
       );
@@ -78,9 +52,9 @@ export const npcsModule = {
   actions: {
     async fetchNpcs(context: NpcsContext) {
       const monstersQuerySnapshot = await db.collection('monsters').get();
-      const monstersData: NpcEntity[] = monstersQuerySnapshot.docs.reduce(
-        (acc: NpcEntity[], current) => {
-          const newNpc: NpcEntity = current.data() as NpcEntity;
+      const monstersData: ICharacter[] = monstersQuerySnapshot.docs.reduce(
+        (acc: ICharacter[], current) => {
+          const newNpc: ICharacter = current.data() as ICharacter;
           newNpc.id = current.id;
           acc.push(newNpc);
           return acc;
@@ -91,8 +65,8 @@ export const npcsModule = {
 
     openNpcsConnection(context: NpcsContext) {
       db.collection('npcs').onSnapshot((data) => {
-        const npcs: NpcEntity[] = data.docs.reduce((acc: NpcEntity[], current) => {
-          const newNpc: NpcEntity = current.data() as NpcEntity;
+        const npcs: ICharacter[] = data.docs.reduce((acc: ICharacter[], current) => {
+          const newNpc: ICharacter = current.data() as ICharacter;
           newNpc.id = current.id;
           acc.push(newNpc);
           return acc;
@@ -150,7 +124,7 @@ export const npcsModule = {
   },
 
   mutations: {
-    setNpcs(state: NpcsState, npcs: NpcEntity[]) {
+    setNpcs(state: NpcsState, npcs: ICharacter[]) {
       state.npcs = npcs;
     },
   },

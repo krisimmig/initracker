@@ -1,3 +1,11 @@
+export enum StatusTypes {
+  Poisened,
+  Stunned,
+  Prone,
+  Blinded,
+  Charmed,
+}
+
 export enum CharacterAttributes {
   STR = 'Strength',
   DEX = 'Dexterity',
@@ -38,11 +46,13 @@ export interface ICharacterAction extends ICharacterAbility {
   damage_dice: string;
 }
 
+
 export interface ICharacter {
-  actions: ICharacterAction[];
+  status: StatusTypes[];
+  actions: ICharacterAction;
   alignment: string;
   armor_class: number;
-  armor_desc: string;
+  armor_desc: number;
   challenge_rating: number;
   charisma: number;
   charisma_save: number;
@@ -57,6 +67,7 @@ export interface ICharacter {
   group: string;
   hit_dice: string;
   hit_points: number;
+  hit_points_current: number;
   intelligence: number;
   intelligence_save: number;
   languages: string;
@@ -67,17 +78,14 @@ export interface ICharacter {
   senses: string;
   size: CharacterSizes;
   special_abilities: ICharacterAbility[];
-  speed: {
-    burrow: number;
-    fly: number;
-    walk: number
-  };
+  speed: { walk: number, swim: number, fly: number, burrow: number };
   strength: number;
-  strength_save: null;
+  strength_save: number;
   subtype: string;
   type: string;
   wisdom: number;
   wisdom_save: number;
   uuid: string;
   id: string;
+  initiative: number;
 }

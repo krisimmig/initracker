@@ -22,17 +22,17 @@
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
 
-import { NpcEntity } from '../store/npcsModule';
+import { IEncounterEntity } from '@/types/encounters';
 import * as encountersModule from '../store/encountersModule';
-import EncounterNew from '../components/encounters/EncounterNew.vue';
-import EncounterTeaser from '../components/encounters/EncounterTeaser.vue';
+import EncounterNew from '@/components/encounters/EncounterNew.vue';
+import EncounterTeaser from '@/components/encounters/EncounterTeaser.vue';
 
 @Component({
   components: { EncounterNew, EncounterTeaser },
 })
 export default class Encounters extends Vue {
 
-  get encounters(): encountersModule.EncounterEntity[] {
+  get encounters(): IEncounterEntity[] {
     return encountersModule.readGetEncountersAll(this.$store);
   }
 

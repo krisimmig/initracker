@@ -22,7 +22,6 @@
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
 
-import { NpcEntity } from '../store/npcsModule';
 import * as charactersModule from '../store/charactersModule';
 import CharacterTeaser from '../components/characters/CharacterTeaser.vue';
 

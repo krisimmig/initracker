@@ -26,7 +26,6 @@
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
 
-import { NpcEntity } from '../store/npcsModule';
 import * as encountersModule from '../store/encountersModule';
 import Encounter from '../components/encounters/Encounter.vue';
 import NpcsList from '../components/npcs/NpcsList.vue';

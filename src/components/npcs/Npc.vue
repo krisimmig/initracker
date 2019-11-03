@@ -60,22 +60,23 @@
 
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import * as npcsModule from '../../store/npcsModule';
+import * as npcsModule from '@/store/npcsModule';
 import * as encountersModule from '@/store/encountersModule';
+import { ICharacter, StatusTypes } from '@/types/characters';
 
 @Component
 export default class Npc extends Vue {
   @Prop(Boolean) public removable!: boolean;
-  @Prop(Object) public npc!: npcsModule.NpcEntity;
+  @Prop(Object) public npc!: ICharacter;
   @Prop(Boolean) public isActive!: boolean;
-  public newStatus: npcsModule.StatusTypes | 'default' = 'default';
+  public newStatus: StatusTypes | 'default' = 'default';
   public manuelInititive: number = 0;
   public showInitiativeInput: boolean = false;
   public hitPointChangeAmount: number = 0;
   public showHitPointChangeInput: boolean = false;
 
-  public statusString(enumValue: npcsModule.StatusTypes): string {
-    return npcsModule.StatusTypes[enumValue];
+  public statusString(enumValue: StatusTypes): string {
+    return StatusTypes[enumValue];
   }
 
   public showInDetail() {
@@ -99,7 +100,7 @@ export default class Npc extends Vue {
     this.newStatus = 'default';
   }
 
-  public removeStatus(statusIndex: npcsModule.StatusTypes) {
+  public removeStatus(statusIndex: StatusTypes) {
     const encounterId = encountersModule.readGetEncountersCurrentId(this.$store);
     if (!encounterId) { return; }
 

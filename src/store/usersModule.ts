@@ -1,20 +1,12 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
-import { RootState } from './index';
+
+import router from '@/router';
+import { RootState } from '@/store/index';
+import { firebase } from '@/store/firebase';
+import { UserState, LoginCredentials } from '@/types/users';
 
 type UserContext = ActionContext<UserState, RootState>;
-
-import { firebase } from './firebase';
-import router from '../router';
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface UserState {
-  user: firebase.User | null;
-}
 
 export const usersModule = {
   namespaced: true,

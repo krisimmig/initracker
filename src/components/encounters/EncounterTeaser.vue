@@ -37,14 +37,13 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import * as encountersModule from '../../store/encountersModule';
-import * as npcsModule from '../../store/npcsModule';
-
+import { IEncounterEntity } from '@/types/encounters';
 
 @Component
 export default class Encounter extends Vue {
   @Prop(String) public id!: string;
   @Prop(String) public name!: string;
-  @Prop(Array) public npcs!: encountersModule.EncounterEntity[];
+  @Prop(Array) public npcs!: IEncounterEntity[];
 
   private isEditingName: boolean = false;
   private newName: string = '';

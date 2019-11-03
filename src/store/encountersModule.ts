@@ -1,29 +1,21 @@
-import Vue from 'vue';
-import { ActionContext, Store } from 'vuex';
+import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 import uuid from 'uuid/v1';
 
-import { db } from './firebase';
-import store, { RootState } from './index';
-import * as npcsModule from './npcsModule';
-import * as usersModule from './usersModule';
-
-type EncountersContext = ActionContext<EncountersState, RootState>;
-
-export interface EncounterEntity {
-  id: string;
-  name: string;
-  npcs: npcsModule.NpcEntity[];
-  round: number;
-  activeEntityIndex: number;
-}
+import { db } from '@/store/firebase';
+import { RootState } from '@/store/index';
+import * as usersModule from '@/store/usersModule';
+import { ICharacter } from '@/types/characters';
+import { IEncounterEntity } from '@/types/encounters';
 
 export interface EncountersState {
-  encountersAll: EncounterEntity[];
-  encountersCurrent: EncounterEntity;
-  encountersNpcs: npcsModule.NpcEntity[];
-  npcInDetail?: npcsModule.NpcEntity;
+  encountersAll: IEncounterEntity[];
+  encountersCurrent: IEncounterEntity;
+  encountersNpcs: ICharacter[];
+  npcInDetail?: ICharacter;
 }
+
+type EncountersContext = ActionContext<EncountersState, RootState>;
 
 export const encountersModule = {
   namespaced: true,
@@ -40,7 +32,7 @@ export const encountersModule = {
       return state.encountersAll;
     },
 
-    getEncounterById: (state: EncountersState) => (encounterID: string): EncounterEntity | undefined => {
+    getEncounterById: (state: EncountersState) => (encounterID: string): IEncounterEntity | undefined => {
       return state.encountersAll.find((encounter) => encounter.id === encounterID);
     },
 
@@ -65,7 +57,7 @@ export const encountersModule = {
     fetchEncounters(context: EncountersContext) {
       const userUid = usersModule.readUserUid(context);
       db.collection(`users/${userUid}/encounters`).onSnapshot((data) => {
-        const encounters: EncounterEntity[] = [];
+        const encounters: IEncounterEntity[] = [];
         data.forEach((doc) => {
           encounters.push(doc.data());
         });
@@ -89,7 +81,7 @@ export const encountersModule = {
       db.collection(`users/${userUid}/encounters/${encounterId}/npcs`)
         .orderBy('initiative', 'desc')
         .onSnapshot((data) => {
-          const npcs: npcsModule.NpcEntity[] = [];
+          const npcs: ICharacter[] = [];
           data.forEach((doc) => {
             npcs.push(doc.data());
           });
@@ -100,7 +92,7 @@ export const encountersModule = {
 
     async addNpcToEncounter(
       context: EncountersContext,
-      { npcData, encounterId }: { npcData: npcsModule.NpcEntity, encounterId: string },
+      { npcData, encounterId }: { npcData: ICharacter, encounterId: string },
     ) {
       const userUid = usersModule.readUserUid(context);
       const id = uuid();
@@ -135,7 +127,7 @@ export const encountersModule = {
       const id = uuid();
 
       const encountersRef = await db.collection(`users/${userUid}/encounters`);
-      const newEncounter: EncounterEntity = {
+      const newEncounter: IEncounterEntity = {
         id,
         name: encounterName,
         npcs: [],
@@ -195,19 +187,19 @@ export const encountersModule = {
   },
 
   mutations: {
-    setEncounters(state: EncountersState, encounters: EncounterEntity[]) {
+    setEncounters(state: EncountersState, encounters: IEncounterEntity[]) {
       state.encountersAll = encounters;
     },
 
-    setEncounter(state: EncountersState, encounter: EncounterEntity) {
+    setEncounter(state: EncountersState, encounter: IEncounterEntity) {
       state.encountersCurrent = encounter;
     },
 
-    setEncountersCurrentNpcs(state: EncountersState, { npcs }: { npcs: npcsModule.NpcEntity[] }) {
+    setEncountersCurrentNpcs(state: EncountersState, { npcs }: { npcs: ICharacter[] }) {
       state.encountersNpcs = npcs;
     },
 
-    setNpcInDetail(state: EncountersState, npc: npcsModule.NpcEntity) {
+    setNpcInDetail(state: EncountersState, npc: ICharacter) {
       state.npcInDetail = npc;
     },
   },

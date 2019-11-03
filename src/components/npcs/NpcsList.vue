@@ -40,6 +40,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import NpcSearchResult from './NpcSearchResult.vue';
 import * as npcsModule from '../../store/npcsModule';
+import { ICharacter } from './../../types/characters';
 
 @Component({
   components: { NpcSearchResult },
@@ -48,7 +49,7 @@ export default class NpcsList extends Vue {
   @Prop(String) public encounterId!: string;
 
   public searchString: string = '';
-  public searchResults: npcsModule.NpcEntity[] = [];
+  public searchResults: ICharacter[] = [];
   public loading: boolean = false;
   public maxVisible: number = 10;
 

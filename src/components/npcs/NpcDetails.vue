@@ -157,12 +157,12 @@
 // tslint:disable:variable-name
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import { NpcEntity } from '../../store/npcsModule';
+import { ICharacter } from '../../types/characters';
 import { stringModifier as cm } from '../../utils/dnd';
 
 @Component
 export default class NpcDetails extends Vue {
-  @Prop(Object) public npcData!: NpcEntity;
+  @Prop(Object) public npcData!: ICharacter;
   @Prop(Boolean) public isWide!: boolean;
 
   public stringModifier(abilityScore: number): number | string {

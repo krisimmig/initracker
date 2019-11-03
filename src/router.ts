@@ -6,7 +6,7 @@ import Home from './views/Home.vue';
 import Dashboard from './views/Dashboard.vue';
 import Characters from './views/Characters.vue';
 import CharacterNew from './views/CharacterNew.vue';
-import CharacterBuilder from './views/CharacterBuilder.vue';
+import CharacterCreate from './views/CharacterCreate.vue';
 import Encounters from './views/Encounters.vue';
 import EncounterDetails from './views/EncounterDetails.vue';
 import Login from './views/Login.vue';
@@ -57,7 +57,7 @@ const router = new Router({
     {
       path: '/character/builder',
       name: 'characterBuilder',
-      component: CharacterBuilder,
+      component: CharacterCreate,
       meta: {
         requiresAuth: true,
       },
