@@ -21,7 +21,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import { readUserString, readIsLoggedIn, dispatchLogoutUser } from '../../store/usersModule';
+import { readUserString, readIsLoggedIn, dispatchLogoutUser } from '@/store/usersModule';
 
 @Component
 export default class MainMenu extends Vue {

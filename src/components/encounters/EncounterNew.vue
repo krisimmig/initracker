@@ -13,15 +13,14 @@
 
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import * as npcsModule from '../../store/npcsModule';
-import * as encountersModule from '@/store/encountersModule';
+import { dispatchAddNewEncounter } from '@/store/encountersModule';
 
 @Component
 export default class EncounterNew extends Vue {
   public encounterName: string = '';
 
   public submitNewEncounter(): void {
-    encountersModule.dispatchAddNewEncounter(this.$store, {
+    dispatchAddNewEncounter(this.$store, {
       encounterName: this.encounterName,
     });
     this.encounterName = '';

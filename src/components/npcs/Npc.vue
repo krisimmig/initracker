@@ -62,7 +62,8 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import * as npcsModule from '@/store/npcsModule';
 import * as encountersModule from '@/store/encountersModule';
-import { ICharacter, StatusTypes } from '@/types/characters';
+import { StatusTypes } from '@/types/characters';
+import { Character as ICharacter } from '@/classes/Character';
 
 @Component
 export default class Npc extends Vue {

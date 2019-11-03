@@ -39,8 +39,8 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import NpcSearchResult from './NpcSearchResult.vue';
-import * as npcsModule from '../../store/npcsModule';
-import { ICharacter } from './../../types/characters';
+import { readGetNpcs } from '@/store/npcsModule';
+import { Character as ICharacter } from '@/classes/Character';
 
 @Component({
   components: { NpcSearchResult },
@@ -54,7 +54,7 @@ export default class NpcsList extends Vue {
   public maxVisible: number = 10;
 
   get npcs() {
-    return npcsModule.readGetNpcs(this.$store);
+    return readGetNpcs(this.$store);
   }
 
   public onScroll() {

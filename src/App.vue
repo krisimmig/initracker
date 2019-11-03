@@ -9,8 +9,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import { readIsLoggedIn, dispatchLogoutUser } from './store/usersModule';
-import * as npcsModule from './store/npcsModule';
-import * as encountersModule from './store/encountersModule';
+import { readGetNpcs, dispatchFetchNpcs } from './store/npcsModule';
 
 import MainMenu from './components/layout/MainMenu.vue';
 
@@ -28,12 +27,12 @@ export default class App extends Vue {
   }
 
   get monsters() {
-    return npcsModule.readGetNpcs(this.$store);
+    return readGetNpcs(this.$store);
   }
 
   public async mounted() {
     if (this.monsters.length < 1) {
-      await npcsModule.dispatchFetchNpcs(this.$store);
+      await dispatchFetchNpcs(this.$store);
     }
   }
 }

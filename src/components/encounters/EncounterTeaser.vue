@@ -36,7 +36,7 @@
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import * as encountersModule from '../../store/encountersModule';
+import { dispatchRemoveEncounter, dispatchUpdateName } from '@/store/encountersModule';
 import { IEncounterEntity } from '@/types/encounters';
 
 @Component
@@ -57,13 +57,13 @@ export default class Encounter extends Vue {
   }
 
   public deleteEncounter() {
-    encountersModule.dispatchRemoveEncounter(this.$store, {
+    dispatchRemoveEncounter(this.$store, {
       encounterId: this.id,
     });
   }
 
   public saveNewName() {
-    encountersModule.dispatchUpdateName(this.$store, {
+    dispatchUpdateName(this.$store, {
       encounterId: this.id,
       newName: this.newName,
     }).then(() => {

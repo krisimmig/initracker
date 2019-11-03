@@ -1,4 +1,4 @@
-import { ICharacter } from '@/types/characters';
+import { Character as ICharacter } from '@/classes/Character';
 
 export interface IEncounterEntity {
   id: string;

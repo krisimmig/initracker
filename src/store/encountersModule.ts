@@ -5,7 +5,7 @@ import uuid from 'uuid/v1';
 import { db } from '@/store/firebase';
 import { RootState } from '@/store/index';
 import * as usersModule from '@/store/usersModule';
-import { ICharacter } from '@/types/characters';
+import { Character as ICharacter } from '@/classes/Character';
 import { IEncounterEntity } from '@/types/encounters';
 
 export interface EncountersState {

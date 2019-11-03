@@ -17,8 +17,8 @@
 <script lang='ts'>
 // tslint:disable:variable-name
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import * as npcsModule from '../../store/npcsModule';
-import * as encountersModule from '../../store/encountersModule';
+import * as npcsModule from '@/store/npcsModule';
+import * as encountersModule from '@/store/encountersModule';
 import NpcDetails from './NpcDetails.vue';
 
 @Component({

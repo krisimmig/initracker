@@ -35,10 +35,16 @@
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import * as encountersModule from '../../store/encountersModule';
-import * as npcsModule from '../../store/npcsModule';
+import {
+  readGetEncountersCurrent,
+  readGetEncountersCurrentNpcs,
+  dispatchRemoveNpcFromEncounter,
+  dispatchUpdateRound,
+  dispatchUpdateActiveEntityIndex,
+} from '@/store/encountersModule';
+import { dispatchUpdateInitiative } from '@/store/npcsModule';
 import Npc from '../npcs/Npc.vue';
-import { calcModifier, stringifyModifier } from '../../utils/dnd';
+import { calcModifier, stringifyModifier } from '@/utils/dnd';
 // require the dice-roller library
 import { DiceRoll } from 'rpg-dice-roller';
 
@@ -52,7 +58,7 @@ export default class Encounter extends Vue {
   public showNpcsInEncounter: boolean = false;
 
   get currentEncounter() {
-    return encountersModule.readGetEncountersCurrent(this.$store);
+    return readGetEncountersCurrent(this.$store);
   }
 
   get currentRound() {
@@ -67,7 +73,7 @@ export default class Encounter extends Vue {
   }
 
   get npcs() {
-    return encountersModule.readGetEncountersCurrentNpcs(this.$store);
+    return readGetEncountersCurrentNpcs(this.$store);
   }
 
   get totalNpcs() {
@@ -79,7 +85,7 @@ export default class Encounter extends Vue {
   }
 
   public removeNpcFromEncounter(npcID: string) {
-    encountersModule.dispatchRemoveNpcFromEncounter(this.$store, {
+    dispatchRemoveNpcFromEncounter(this.$store, {
       npcID,
       encounterId: this.id,
     });
@@ -90,7 +96,7 @@ export default class Encounter extends Vue {
       this.npcs.forEach((npc) => {
         const mod = stringifyModifier(calcModifier(npc.dexterity));
         const newInitiative = new DiceRoll(`1d20${mod}`);
-        npcsModule.dispatchUpdateInitiative(this.$store, {
+        dispatchUpdateInitiative(this.$store, {
           encounterId: this.id,
           npcId: npc.uuid,
           newInitiative: newInitiative.total,
@@ -104,17 +110,17 @@ export default class Encounter extends Vue {
       const npc = this.npcs[this.currentNpcIndex - 1];
       if (npc) {
         if (this.currentNpcIndex === this.npcs.length) {
-          encountersModule.dispatchUpdateRound(this.$store, {
+          dispatchUpdateRound(this.$store, {
             encounterId: this.id,
             newRoundIndex: this.currentRound + 1,
           });
 
-          encountersModule.dispatchUpdateActiveEntityIndex(this.$store, {
+          dispatchUpdateActiveEntityIndex(this.$store, {
             encounterId: this.id,
             activeEntityIndex: 1,
           });
         } else {
-          encountersModule.dispatchUpdateActiveEntityIndex(this.$store, {
+          dispatchUpdateActiveEntityIndex(this.$store, {
             encounterId: this.id,
             activeEntityIndex: this.currentNpcIndex + 1,
           });
