@@ -1,4 +1,4 @@
-import { CharacterSizes, ICharacter, StatusTypes, ICharacterAction, ICharacterAbility } from '@/types/characters';
+import { CharacterSizes, StatusTypes, ICharacterAction, ICharacterAbility } from '@/types/characters';
 
 export class Character {
   public status!: StatusTypes[];
@@ -42,7 +42,7 @@ export class Character {
   public id!: string;
   public initiative!: number;
 
-  public constructor(data?: ICharacter) {
+  public constructor(data?: Character) {
     if (data) {
       Object.assign(this, data);
     } else {

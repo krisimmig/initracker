@@ -43,17 +43,6 @@ export const charactersModule = {
 
         commitSetCharacters(context, { characters });
       });
-
-      // db.collection('characters').get().then((querySnapshot) => {
-      //   querySnapshot.forEach((doc) => {
-      //     const newChar: CharacterEntity = {
-      //       name: doc.data().name,
-      //       id: doc.id,
-      //     };
-
-      //     commitUpdateCharacters(context, { newChar });
-      //   });
-      // });
     },
   },
 

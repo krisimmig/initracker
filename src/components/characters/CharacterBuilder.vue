@@ -2,8 +2,7 @@
   <div class="IT-Flex">
     <div>
       <h2>Character Builder</h2>
-      <form class="Form" v-if="ready">
-        <p>Edting: <b></b></p>
+      <form class="Form">
         <hr>
       </form>
     </div>
@@ -25,7 +24,7 @@ import FormTextarea from '@/components/form/FormTextarea.vue';
     FormTextarea,
   },
 })
-export default class CharacterEditor extends Vue {
+export default class CharacterBuilder extends Vue {
   // public get optionsSize() {
   //   return $enum(CharacterSizes).map((value, name) => ({ value, name }));
   // }

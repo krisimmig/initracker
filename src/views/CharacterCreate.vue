@@ -1,8 +1,10 @@
 <template>
   <div class="IT-Flex">
-    <div v-if="character1">
+    <div>
       <h1>Character Create</h1>
-      <CharacterEditor />
+      <p>Editing: <b>{{ characterId }}</b></p>
+
+      <CharacterBuilder />
     </div>
   </div>
 </template>
@@ -10,15 +12,19 @@
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import CharacterEditor from '../components/characters/CharacterEditor.vue';
+import CharacterBuilder from '../components/characters/CharacterBuilder.vue';
 import * as npcsModule from './../store/npcsModule';
 
 @Component({
   components: {
-    CharacterEditor,
+    CharacterBuilder,
   },
 })
 export default class CharacterCreate extends Vue {
+
+  public get characterId() {
+    return this.$route.params.characterId || 'New';
+  }
 }
 </script>
 
