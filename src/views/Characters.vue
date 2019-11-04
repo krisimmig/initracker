@@ -8,7 +8,7 @@
           v-for="character in characters"
           :key="character.id"
         >
-          <CharacterTeaser v-bind="character" />
+          <CharacterTeaser v-bind="character" :character="character" />
         </li>
       </ul>
     </div>

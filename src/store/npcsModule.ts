@@ -4,7 +4,7 @@ import { getStoreAccessors } from 'vuex-typescript';
 import { arrayRemove, arrayUnion } from '@/utils/firebaseUtils';
 import { db } from '@/store/firebase';
 import { RootState } from '@/store/index';
-import * as usersModule from '@/store/usersModule';
+import { readUserUid } from '@/store/usersModule';
 import { StatusTypes } from '@/types/characters';
 import { Character as ICharacter } from '@/classes/Character';
 
@@ -80,7 +80,7 @@ export const npcsModule = {
     updateStatus(
       context: NpcsContext,
       { encounterId, npcId, newStatus }: { encounterId: string, npcId: string, newStatus: StatusTypes }) {
-      const userUid = usersModule.readUserUid(context);
+      const userUid = readUserUid(context);
       const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`);
 
       npcRef.set({
@@ -91,7 +91,7 @@ export const npcsModule = {
     async removeStatusFromNpc(
       context: NpcsContext,
       { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: StatusTypes }) {
-      const userUid = usersModule.readUserUid(context);
+      const userUid = readUserUid(context);
       const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
@@ -103,7 +103,7 @@ export const npcsModule = {
     updateInitiative(
       context: NpcsContext,
       { encounterId, npcId, newInitiative }: { encounterId: string, npcId: string, newInitiative: number }) {
-      const userUid = usersModule.readUserUid(context);
+      const userUid = readUserUid(context);
       const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`);
 
       npcRef.set({
@@ -114,7 +114,7 @@ export const npcsModule = {
     updateHitPointCurrent(
       context: NpcsContext,
       { encounterId, npcId, newHitPoints }: { encounterId: string, npcId: string, newHitPoints: number }) {
-      const userUid = usersModule.readUserUid(context);
+      const userUid = readUserUid(context);
       const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 

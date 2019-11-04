@@ -55,6 +55,16 @@ const router = new Router({
     },
 
     {
+      path: '/character/edit/:uuid',
+      name: 'editCharacter',
+      component: CharacterCreate,
+      meta: {
+        requiresAuth: true,
+        edit: true,
+      },
+    },
+
+    {
       path: '/character/builder',
       name: 'characterBuilder',
       component: CharacterCreate,

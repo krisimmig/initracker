@@ -1,9 +1,36 @@
+export enum CreatureTypes {
+  Aberration,
+  Beast,
+  Celestial,
+  Construct,
+  Dragon,
+  Elemental,
+  Fey,
+  Fiend,
+  Giant,
+  Humanoid,
+  Monstrosity,
+  Ooze,
+  Plant,
+  Undead,
+}
+
 export enum StatusTypes {
-  Poisened,
-  Stunned,
-  Prone,
   Blinded,
   Charmed,
+  Deafened,
+  Exhaustion,
+  Frightened,
+  Grappled,
+  Incapacitated,
+  Invisible,
+  Paralyzed,
+  Petrified,
+  Poisoned,
+  Prone,
+  Restrained,
+  Stunned,
+  Unconscious,
 }
 
 export enum CharacterAttributes {
@@ -16,11 +43,12 @@ export enum CharacterAttributes {
 }
 
 export enum CharacterSizes {
+  Tiny = 'Tiny',
   Small = 'Small',
   Medium = 'Medium',
   Large = 'Large',
   Huge = 'Huge',
-  Gargentuan = 'Gargentuan',
+  Gargantuan = 'Gargantuan',
 }
 
 export enum CharacterAlignments {

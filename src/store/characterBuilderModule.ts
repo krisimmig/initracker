@@ -1,12 +1,16 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
+import uuid from 'uuid/v1';
 
 import { db } from '@/store/firebase';
 import { RootState } from '@/store/index';
 import { Character } from '@/classes/Character';
+import { readUserUid } from '@/store/usersModule';
 
 export interface CharacterBuilderState {
   character: Character;
+  characterId: string;
+  isLoading: boolean;
 }
 
 type CharacterBuilderContext = ActionContext<CharacterBuilderState, RootState>;
@@ -17,17 +21,79 @@ export const characterBuilderModule = {
   state: {
     character: new Character(),
     characterId: '',
+    isLoading: false,
   },
 
   getters: {
     getCharacter(state: CharacterBuilderState) {
       return state.character;
     },
+
+    getIsLoading(state: CharacterBuilderState) {
+      return state.isLoading;
+    },
   },
 
   mutations: {
     setCharacter(state: CharacterBuilderState, { character }: { character: Character }) {
       state.character = character;
+    },
+
+    setLoading(state: CharacterBuilderState, { isLoading }: { isLoading: boolean }) {
+      state.isLoading = isLoading;
+    },
+  },
+
+  actions: {
+    async fetchCharacterById(context: CharacterBuilderContext, { id }: { id: string }) {
+      commitSetLoading(context, { isLoading: true });
+      const characterRef = db.collection('monsters').doc(id);
+
+      characterRef.get().then((doc) => {
+        if (doc.exists) {
+          const character = doc.data() as Character;
+          commitSetCharacter(context, { character });
+          commitSetLoading(context, { isLoading: false });
+        } else {
+          console.warn('No such document!');
+          commitSetLoading(context, { isLoading: false });
+        }
+      }).catch((error) => {
+        console.error('Error getting document:', error);
+        commitSetLoading(context, { isLoading: false });
+      });
+    },
+
+    async fetchCharacterByUuid(context: CharacterBuilderContext, { uuid }: { uuid: string }) {
+      commitSetLoading(context, { isLoading: true });
+      const userUid = readUserUid(context);
+      const characterRef = db.doc(`users/${userUid}/characters/${uuid}`);
+
+      characterRef.get().then((doc) => {
+        if (doc.exists) {
+          const character = doc.data() as Character;
+          commitSetCharacter(context, { character });
+          commitSetLoading(context, { isLoading: false });
+        } else {
+          console.warn('No such document!');
+          commitSetLoading(context, { isLoading: false });
+        }
+      }).catch((error) => {
+        console.error('Error getting document:', error);
+        commitSetLoading(context, { isLoading: false });
+      });
+    },
+
+    saveCharacter(context: CharacterBuilderContext, { character }: { character: Character}) {
+      console.log('saveCharacter', character);
+      if (!character.uuid) {
+        character.uuid = uuid();
+      }
+
+      const userUid = readUserUid(context);
+      const characterRef = db.doc(`users/${userUid}/characters/${character.uuid}`);
+
+      characterRef.set({ ...character }, { merge: true });
     },
   },
 
@@ -41,9 +107,13 @@ const {
 
 // Getters
 export const readGetCharacter = read(characterBuilderModule.getters.getCharacter);
+export const readGetIsLoading = read(characterBuilderModule.getters.getIsLoading);
 
 // Mutations
 export const commitSetCharacter = commit(characterBuilderModule.mutations.setCharacter);
+export const commitSetLoading = commit(characterBuilderModule.mutations.setLoading);
 
 // Actions
-// export const dispatchFetchCharacters = dispatch(charactersModule.actions.fetchCharacters);
+export const dispatchFetchCharacterById = dispatch(characterBuilderModule.actions.fetchCharacterById);
+export const dispatchFetchCharacterByUuid = dispatch(characterBuilderModule.actions.fetchCharacterByUuid);
+export const dispatchSaveCharacter = dispatch(characterBuilderModule.actions.saveCharacter);

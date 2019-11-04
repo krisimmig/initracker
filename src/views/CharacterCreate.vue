@@ -1,13 +1,10 @@
 <template>
   <div class="IT-Flex">
-    <div>
+    <div v-if="!isLoading">
       <h1>Character Create</h1>
-      <p>Editing: <b>{{ character.name }}</b></p>
-      <p>HitPoints: <b>{{ character.hit_points }}</b></p>
-      <p>Alignment: <b>{{ character.alignment }}</b></p>
-
-      <CharacterBuilder />
+      <CharacterBuilder :character="character" />
     </div>
+    <div v-else>Loading..</div>
   </div>
 </template>
 
@@ -15,7 +12,13 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import CharacterBuilder from '../components/characters/CharacterBuilder.vue';
-import { readGetCharacter, commitSetCharacter } from '@/store/characterBuilderModule';
+import {
+  readGetIsLoading,
+  dispatchFetchCharacterById,
+  readGetCharacter,
+  commitSetCharacter,
+  dispatchFetchCharacterByUuid,
+} from '@/store/characterBuilderModule';
 import { readGetNpcById  } from '@/store/npcsModule';
 import { charactersModule } from '../store/charactersModule';
 
@@ -26,15 +29,25 @@ import { charactersModule } from '../store/charactersModule';
 })
 export default class CharacterCreate extends Vue {
 
+  public get isLoading() {
+    return readGetIsLoading(this.$store);
+  }
+
   public get characterId() {
     return this.$route.params.characterId || false;
   }
 
   public get character() {
-    if (this.characterId) {
-      return readGetNpcById(this.$store)(this.characterId);
-    }
     return readGetCharacter(this.$store);
+  }
+
+  public mounted() {
+    if (this.$route.meta.edit) {
+      console.log('editing', this.$route.params.id);
+      dispatchFetchCharacterByUuid(this.$store, { uuid: this.$route.params.uuid });
+    } else if (this.characterId) {
+      dispatchFetchCharacterById(this.$store, { id: this.characterId });
+    }
   }
 }
 </script>

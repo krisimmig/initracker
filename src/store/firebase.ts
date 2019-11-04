@@ -1,5 +1,4 @@
-// tslint:disable-next-line:no-var-requires
-const firebase = require('firebase');
+import * as firebase from 'firebase';
 
 import 'firebase/auth';
 import 'firebase/firestore';
