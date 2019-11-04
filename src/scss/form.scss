@@ -1,10 +1,16 @@
 .Form-label {
-  min-width: 120px;
+  min-width: 200px;
   display: inline-block;
 }
 
 .Form-textarea {
   display: inline-block;
-  width: calc(100% - 220px);
+  width: calc(100% - 300px);
   height: 100px;
+}
+
+.Form-input,
+.Form-select {
+  display: inline-block;
+  width: calc(100% - 300px);
 }

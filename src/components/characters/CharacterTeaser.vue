@@ -3,6 +3,7 @@
     <h3>CharacterTeaser</h3>
     <p @click="showDetails = !showDetails">{{ name }}</p>
     <router-link :to="{ name: 'editCharacter', params: { uuid: character.uuid }}">Edit</router-link>
+    <button @click="deleteCharacter">Delete</button>
     <NpcDetails v-if="showDetails" :npcData="character" />
   </div>
 </template>
@@ -12,6 +13,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import { Character as ICharcter } from '@/classes/Character';
 import NpcDetails from '@/components/npcs/NpcDetails.vue';
+import { dispatchDeleteCharacter } from '@/store/characterBuilderModule';
 
 @Component({
   components: {
@@ -21,7 +23,12 @@ import NpcDetails from '@/components/npcs/NpcDetails.vue';
 export default class CharacterTeaser extends Vue {
   @Prop(String) public name!: string;
   @Prop() public character!: ICharcter;
+
   public showDetails: boolean = false;
+
+  public deleteCharacter() {
+    dispatchDeleteCharacter(this.$store, { uuid: this.character.uuid });
+  }
 }
 </script>
 

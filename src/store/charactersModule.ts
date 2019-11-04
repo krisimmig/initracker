@@ -3,14 +3,10 @@ import { getStoreAccessors } from 'vuex-typescript';
 import { db } from './firebase';
 import { RootState } from './index';
 import { readUserUid } from './usersModule';
+import { Character } from '@/classes/Character';
 
 export interface CharactersState {
-  characters: CharacterEntity[];
-}
-
-export interface CharacterEntity {
-  name: string;
-  id: string;
+  characters: Character[];
 }
 
 type CharactersContext = ActionContext<CharactersState, RootState>;
@@ -33,20 +29,14 @@ export const charactersModule = {
       const userUid = readUserUid(context);
 
       db.collection(`users/${userUid}/characters`).onSnapshot((data) => {
-        const characters: CharacterEntity[] = data.docs.reduce((acc: CharacterEntity[], current) => {
-          const newEncounter: CharacterEntity = current.data() as CharacterEntity;
-          newEncounter.id = current.id;
-          acc.push(newEncounter);
-          return acc;
-        }, []);
-
+        const characters: Character[] = data.docs.map((doc) => new Character(doc.data() as Character));
         commitSetCharacters(context, { characters });
       });
     },
   },
 
   mutations: {
-    updateCharacters(state: CharactersState, { newChar }: { newChar: CharacterEntity }) {
+    updateCharacters(state: CharactersState, { newChar }: { newChar: Character }) {
       state.characters.push(newChar);
     },
 

@@ -22,20 +22,21 @@
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
 
-import * as charactersModule from '../store/charactersModule';
+import { readGetCharacters, dispatchFetchCharacters } from '../store/charactersModule';
 import CharacterTeaser from '../components/characters/CharacterTeaser.vue';
+import { Character } from '@/classes/Character';
 
 @Component({
   components: { CharacterTeaser },
 })
 export default class Characters extends Vue {
 
-  get characters(): charactersModule.CharacterEntity[] {
-    return charactersModule.readGetCharacters(this.$store);
+  get characters(): Character[] {
+    return readGetCharacters(this.$store);
   }
 
   public mounted() {
-    charactersModule.dispatchFetchCharacters(this.$store);
+    dispatchFetchCharacters(this.$store);
   }
 }
 </script>

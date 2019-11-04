@@ -16,7 +16,7 @@
         v-for="(option, index) in options"
         v-bind:value="option.value"
         :key="index"
-        :selected="option.selected"
+        :selected="option.value == optionSelected"
       >
         {{ option.name }}
       </option>
@@ -32,6 +32,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class FormSelect extends Vue {
   @Prop(String) public label!: string;
   @Prop(Array) public options!: [];
+  @Prop(String) public optionSelected!: string;
 }
 </script>
 

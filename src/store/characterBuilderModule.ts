@@ -6,6 +6,7 @@ import { db } from '@/store/firebase';
 import { RootState } from '@/store/index';
 import { Character } from '@/classes/Character';
 import { readUserUid } from '@/store/usersModule';
+import router from '@/router';
 
 export interface CharacterBuilderState {
   character: Character;
@@ -85,15 +86,25 @@ export const characterBuilderModule = {
     },
 
     saveCharacter(context: CharacterBuilderContext, { character }: { character: Character}) {
-      console.log('saveCharacter', character);
+      let newCharacter = false;
       if (!character.uuid) {
         character.uuid = uuid();
+        newCharacter = true;
       }
 
       const userUid = readUserUid(context);
       const characterRef = db.doc(`users/${userUid}/characters/${character.uuid}`);
 
       characterRef.set({ ...character }, { merge: true });
+
+      if (newCharacter) {
+        router.push({ name: 'editCharacter', params: { uuid: character.uuid }});
+      }
+    },
+
+    async deleteCharacter(context: CharacterBuilderContext, { uuid }: { uuid: string }) {
+      const userUid = readUserUid(context);
+      return db.doc(`users/${userUid}/characters/${uuid}`).delete();
     },
   },
 
@@ -117,3 +128,4 @@ export const commitSetLoading = commit(characterBuilderModule.mutations.setLoadi
 export const dispatchFetchCharacterById = dispatch(characterBuilderModule.actions.fetchCharacterById);
 export const dispatchFetchCharacterByUuid = dispatch(characterBuilderModule.actions.fetchCharacterByUuid);
 export const dispatchSaveCharacter = dispatch(characterBuilderModule.actions.saveCharacter);
+export const dispatchDeleteCharacter = dispatch(characterBuilderModule.actions.deleteCharacter);

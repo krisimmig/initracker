@@ -1,18 +1,18 @@
 export enum CreatureTypes {
-  Aberration,
-  Beast,
-  Celestial,
-  Construct,
-  Dragon,
-  Elemental,
-  Fey,
-  Fiend,
-  Giant,
-  Humanoid,
-  Monstrosity,
-  Ooze,
-  Plant,
-  Undead,
+  aberration = 'aberration',
+  beast = 'beast',
+  celestial = 'celestial',
+  construct = 'construct',
+  dragon = 'dragon',
+  elemental = 'elemental',
+  fey = 'fey',
+  fiend = 'fiend',
+  giant = 'giant',
+  humanoid = 'humanoid',
+  monstrosity = 'monstrosity',
+  ooze = 'ooze',
+  plant = 'plant',
+  undead = 'undead',
 }
 
 export enum StatusTypes {
@@ -52,15 +52,15 @@ export enum CharacterSizes {
 }
 
 export enum CharacterAlignments {
-  LawfulGood = 'Lawful good',
-  NeutralGood = 'Neutral good',
-  ChaoticGood = 'Chaotic good',
-  LawfulNeutral = 'Lawful neutral',
-  Neutral = 'Neutral',
-  ChaoticNeutral = 'Chaotic neutral',
-  LawfulEvil = 'Lawful evil',
-  NeutralEvil = 'Neutral evil',
-  ChaoticEvil = 'Chaotic evil',
+  LawfulGood = 'lawful good',
+  NeutralGood = 'neutral good',
+  ChaoticGood = 'chaotic good',
+  LawfulNeutral = 'lawful neutral',
+  Neutral = 'neutral',
+  ChaoticNeutral = 'chaotic neutral',
+  LawfulEvil = 'lawful evil',
+  NeutralEvil = 'neutral evil',
+  ChaoticEvil = 'chaotic evil',
 }
 
 export interface ICharacterAbility {
