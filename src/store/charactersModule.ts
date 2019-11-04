@@ -1,9 +1,8 @@
-import Vue from 'vue';
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 import { db } from './firebase';
 import { RootState } from './index';
-import * as usersModule from './usersModule';
+import { readUserUid } from './usersModule';
 
 export interface CharactersState {
   characters: CharacterEntity[];
@@ -31,7 +30,7 @@ export const charactersModule = {
 
   actions: {
     fetchCharacters(context: CharactersContext) {
-      const userUid = usersModule.readUserUid(context);
+      const userUid = readUserUid(context);
 
       db.collection(`users/${userUid}/characters`).onSnapshot((data) => {
         const characters: CharacterEntity[] = data.docs.reduce((acc: CharacterEntity[], current) => {

@@ -5,6 +5,7 @@ import { usersModule } from './usersModule';
 import { npcsModule } from './npcsModule';
 import { encountersModule } from './encountersModule';
 import { charactersModule } from './charactersModule';
+import { characterBuilderModule } from './characterBuilderModule';
 
 export interface RootState {
   version: string;
@@ -23,6 +24,7 @@ const store: StoreOptions<RootState> = {
     npcsModule,
     encountersModule,
     charactersModule,
+    characterBuilderModule,
   },
 };
 

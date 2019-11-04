@@ -1,9 +1,17 @@
-import { CharacterSizes, StatusTypes, ICharacterAction, ICharacterAbility } from '@/types/characters';
+import uuid from 'uuid/v1';
+
+import {
+  CharacterSizes,
+  StatusTypes,
+  ICharacterAction,
+  ICharacterAbility,
+  CharacterAlignments,
+} from '@/types/characters';
 
 export class Character {
-  public status!: StatusTypes[];
-  public actions!: ICharacterAction;
-  public alignment!: string;
+  public status: StatusTypes[] = [];
+  public actions: ICharacterAction[] = [];
+  public alignment: string = CharacterAlignments.NeutralGood;
   public armor_class!: number;
   public armor_desc!: number;
   public challenge_rating!: number;
@@ -19,13 +27,13 @@ export class Character {
   public dexterity_save!: number;
   public group!: string;
   public hit_dice!: string;
-  public hit_points!: number;
+  public hit_points: number = 23;
   public hit_points_current!: number;
   public intelligence!: number;
   public intelligence_save!: number;
   public languages!: string;
   public legendary_actions!: ICharacterAbility[];
-  public name!: string;
+  public name: string = 'New Character';
   public perception!: number;
   public reactions!: string;
   public senses!: string;
@@ -48,6 +56,7 @@ export class Character {
     } else {
       this.id = this.name;
       this.hit_points_current = this.hit_points;
+      this.uuid = uuid();
     }
   }
 

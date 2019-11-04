@@ -12,7 +12,7 @@ export interface NpcsState {
   npcs: ICharacter[];
 }
 
-type NpcsContext = ActionContext<NpcsState, RootState>;
+type NpcsContext = ActionContext<NpcsState, RootState> | any;
 
 export const npcsModule = {
   namespaced: true,
