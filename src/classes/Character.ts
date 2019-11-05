@@ -4,14 +4,13 @@ import {
   CreatureTypes,
   CharacterSizes,
   StatusTypes,
-  ICharacterAction,
   ICharacterAbility,
   CharacterAlignments,
 } from '@/types/characters';
 
 export class Character {
   public status: StatusTypes[] = [];
-  public actions: ICharacterAction[] = [];
+  public actions: ICharacterAbility[] = [];
   public alignment: string = CharacterAlignments.NeutralGood;
   public armor_class: number = 17;
   public armor_desc: string = 'Natural armor';
@@ -44,7 +43,7 @@ export class Character {
   public strength: number = 10;
   public strength_save: number = 2;
   public subtype: string = '';
-  public type: CreatureTypes = CreatureTypes.Humanoid;
+  public type: CreatureTypes = CreatureTypes.humanoid;
   public wisdom: number = 10;
   public wisdom_save: number = 0;
   public uuid!: string;
@@ -58,38 +57,13 @@ export class Character {
       this.id = this.name;
       this.hit_points_current = this.hit_points;
       this.uuid = uuid();
+      this.speed = {
+        walk: 30,
+        swim: 10,
+        fly: 0,
+        burrow: 0,
+        climb: 10,
+      };
     }
-  }
-
-  public get speedWalk() {
-    return this.speed.walk || 30;
-  }
-
-  public set speedWalk(v) {
-    this.speed.walk = v;
-  }
-
-  public get speedSwim() {
-    return this.speed.swim || 10;
-  }
-
-  public set speedSwim(v) {
-    this.speed.swim = v;
-  }
-
-  public get speedFly() {
-    return this.speed.fly || 0;
-  }
-
-  public set speedFly(v) {
-    this.speed.fly = v;
-  }
-
-  public get speedBurrow() {
-    return this.speed.burrow || 0;
-  }
-
-  public set speedBurrow(v) {
-    this.speed.burrow = v;
   }
 }

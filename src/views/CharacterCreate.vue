@@ -21,6 +21,7 @@ import {
 } from '@/store/characterBuilderModule';
 import { readGetNpcById  } from '@/store/npcsModule';
 import { charactersModule } from '../store/charactersModule';
+import { Character } from '@/classes/Character';
 
 @Component({
   components: {
@@ -47,6 +48,10 @@ export default class CharacterCreate extends Vue {
       dispatchFetchCharacterByUuid(this.$store, { uuid: this.$route.params.uuid });
     } else if (this.characterId) {
       dispatchFetchCharacterById(this.$store, { id: this.characterId });
+    } else {
+      commitSetCharacter(this.$store, {
+        character: new Character(),
+      });
     }
   }
 }

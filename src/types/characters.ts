@@ -67,9 +67,3 @@ export interface ICharacterAbility {
   desc: string;
   name: string;
 }
-
-export interface ICharacterAction extends ICharacterAbility {
-  attack_bonus: number;
-  damage_bonus: number;
-  damage_dice: string;
-}

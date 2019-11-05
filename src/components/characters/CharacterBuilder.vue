@@ -13,6 +13,13 @@
 
         <FormInput v-model.number="character.armor_class" label="Armor Class" />
         <FormInput v-model="character.armor_desc" label="Armor Description" />
+        <FormInput v-model.number="character.hit_points" label="Hit points" />
+        <FormInput v-model="character.hit_dice" label="Hit dice" />
+        <FormInput v-model.number="character.speed.walk" label="Speed (walk)" />
+        <FormInput v-model.number="character.speed.swim" label="Speed (swim)" />
+        <FormInput v-model.number="character.speed.climb" label="Speed (climb)" />
+        <FormInput v-model.number="character.speed.fly" label="Speed (fly)" />
+        <FormInput v-model.number="character.speed.burrow" label="Speed (burrow)" />
 
         <hr>
 
@@ -32,19 +39,39 @@
 
         <hr>
 
-        <div>
-          <h3>Legendary Actions</h3>
+        <h3>Special Abilites</h3>
+        <div v-for="(specialAbility, index) in character.special_abilities" :key="`special-${index}`">
+          <FormInput v-model="specialAbility.name" label="Name" />
+          <FormTextarea v-model="specialAbility.desc" label="Description" />
+          <button @click.prevent="removeSpecialAbility(index)">- Remove ability</button>
         </div>
-        <div v-for="(legendaryAction, index) in character.legendary_actions" :key="index">
-          <FormInput
-            v-model="legendaryAction.name"
-            label="Name"
-          />
-          <FormInput
-            v-model="legendaryAction.desc"
-            label="Description"
-          />
+        <button @click.prevent="addSpecialAbility">+ Add ability</button>
+
+        <hr>
+
+
+        <h3>Actions</h3>
+        <div v-for="(action, index) in character.actions" :key="`action${index}`">
+          <FormInput v-model="action.name" label="Name" />
+          <FormTextarea v-model="action.desc" label="Description" />
+          <button @click.prevent="removeAction(index)">- Remove action</button>
         </div>
+        <button @click.prevent="addAction">+ Add action</button>
+
+        <hr>
+
+        <h3>Legendary Actions</h3>
+        <div
+          v-for="(legendaryAction, index) in character.legendary_actions"
+          :key="`legendary-${index}`"
+          style="margin-bottom: 5px; border-bottom: 1px solid lightgrey;"
+        >
+          <FormInput v-model="legendaryAction.name" label="Name" />
+          <FormTextarea v-model="legendaryAction.desc" label="Description" />
+          <button @click.prevent="removeLegendaryAction(index)">- Remove action</button>
+        </div>
+        <button @click.prevent="addLegendaryAction">+ Add action</button>
+        
         <hr>
 
         <button @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
@@ -114,6 +141,39 @@ export default class CharacterBuilder extends Vue {
   public async deleteCharacter() {
     await dispatchDeleteCharacter(this.$store, { uuid: this.character.uuid });
     this.$router.push({ name: 'characters' });
+  }
+
+  public addLegendaryAction() {
+    this.character.legendary_actions.push({
+      name: 'Name',
+      desc: 'Description',
+    });
+  }
+
+  public removeLegendaryAction(index) {
+    this.character.legendary_actions.splice(index, 1);
+  }
+
+  public addSpecialAbility() {
+    this.character.special_abilities.push({
+      name: 'Name',
+      desc: 'Description',
+    });
+  }
+
+  public removeSpecialAbility(index) {
+    this.character.special_abilities.splice(index, 1);
+  }
+
+  public addAction() {
+    this.character.actions.push({
+      name: 'Name',
+      desc: 'Description',
+    });
+  }
+
+  public removeAction(index) {
+    this.character.actions.splice(index, 1);
   }
 
   public mounted() {

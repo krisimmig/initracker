@@ -26,9 +26,11 @@
           <h4>Speed</h4>
           <p>
             <span
-              v-for="(speed, key) in npcData.speed"
-              :key="key"
-            >{{ speed }}ft ({{ key}})</span>
+              v-for="(value, name, index) in npcData.speed"
+              :key="index"
+            >
+              {{ value }}ft ({{ name }})<template v-if="index + 1 < Object.keys(npcData.speed).length">, </template>
+            </span>
           </p>
         </div>
 
@@ -112,7 +114,7 @@
           :key="specialAbilty.name"
         >
           <h4>{{ specialAbilty.name }}.</h4>
-          <p>{{ specialAbilty.desc }}</p>
+          <p v-html="specialAbilty.desc"></p>
         </div>
       </div>
 
@@ -125,7 +127,7 @@
             :key="npcData.name + action.name"
           >
             <h4>{{ action.name }}.</h4>
-            <p>{{ action.desc }}</p>
+            <p v-html="action.desc"></p><br>
           </div>
         </div>
 
@@ -336,6 +338,7 @@ export default class NpcDetails extends Vue {
 
 .property-block p {
   margin-bottom: 1em;
+  white-space: pre-line;
 }
 
 .property-block h4 {

@@ -59,7 +59,7 @@ export const encountersModule = {
       db.collection(`users/${userUid}/encounters`).onSnapshot((data) => {
         const encounters: IEncounterEntity[] = [];
         data.forEach((doc) => {
-          encounters.push(doc.data());
+          encounters.push(doc.data() as IEncounterEntity);
         });
 
         commitSetEncounters(context, encounters);
@@ -71,7 +71,7 @@ export const encountersModule = {
       db.doc(`users/${userUid}/encounters/${encounterId}`).onSnapshot((doc) => {
         const encounter = doc.data();
 
-        commitSetEncounter(context, encounter);
+        commitSetEncounter(context, encounter as IEncounterEntity);
         dispatchFetchEncountersCurrentNpcs(context, { encounterId });
       });
     },
@@ -83,7 +83,7 @@ export const encountersModule = {
         .onSnapshot((data) => {
           const npcs: ICharacter[] = [];
           data.forEach((doc) => {
-            npcs.push(doc.data());
+            npcs.push(doc.data() as ICharacter);
           });
 
           commitSetEncountersCurrentNpcs(context, { npcs });
