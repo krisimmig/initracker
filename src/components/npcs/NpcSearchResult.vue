@@ -5,10 +5,7 @@
       <NpcDetails slot="popover" :npcData="npcData" :isWide="true" />
     </v-popover>
 
-     <span
-      @click="addToEncounter"
-      class="IT-Button"
-    >+</span>
+     <span @click="addToEncounter" class="IT-Button">+</span>
     {{ npcData.hit_points }} HP | {{ npcData.size }} | {{ npcData.type }}
 
   </div>
@@ -20,31 +17,27 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import * as npcsModule from '@/store/npcsModule';
 import * as encountersModule from '@/store/encountersModule';
 import NpcDetails from './NpcDetails.vue';
+import { Character } from '../../classes/Character';
 
 @Component({
   components: { NpcDetails },
 })
 export default class NpcSearchResult extends Vue {
   @Prop(String) public id!: string;
-  @Prop(String) public encounterId!: string;
+  @Prop(String) public name!: string;
+  @Prop(Number) public hit_points!: number;
+  @Prop(String) public size!: string;
+  @Prop(String) public type!: string;
+  @Prop() public npcData!: Character;
 
-  public showEncounterList: boolean = false;
-
-  get npcData() {
-    return npcsModule.readGetNpcById(this.$store)(this.id);
-  }
-
-  get encounters() {
-    return encountersModule.readGetEncountersAll(this.$store);
+  public get encounterId() {
+    return encountersModule.readGetEncountersCurrentId(this.$store);
   }
 
   public addToEncounter() {
-    if (!this.npcData) {
-      return;
-    }
-
+    if (!this.encounterId) { return; }
     encountersModule.dispatchAddNpcToEncounter(this.$store, {
-      npcData: this.npcData,
+      npcData: Object.assign({}, this.npcData),
       encounterId: this.encounterId,
     });
   }

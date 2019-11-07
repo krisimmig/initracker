@@ -1,7 +1,8 @@
 <template>
   <div class="NpcsList">
-    <div v-if="!loading">
-      <p>Search index count: <strong>{{ npcs.length }}</strong></p>
+    <div>
+      <button @click="switchTab('monsters')">Monsters</button>
+      <button @click="switchTab('characters')">Characters</button>
 
       <input
         type="text"
@@ -16,22 +17,15 @@
         @scroll="onScroll"
       >
         <ul v-if="npcs.length > 0">
-          <li
-            v-for="(npc, index) in npcs"
-            :key="npc.id"
-          >
+          <li v-for="(npc, index) in npcs" :key="npc.id">
             <div v-if="index < maxVisible">
-              <NpcSearchResult v-if="npc.name.toLowerCase().includes(searchString.toLowerCase())"
-                :id="npc.id"
-                :encounterId="encounterId"
-              />
+              <NpcSearchResult v-bind="npc" :npcData="npc" />
             </div>
           </li>
         </ul>
+
       </div>
     </div>
-
-    <div v-else><p>Loading...</p></div>
   </div>
 </template>
 
@@ -41,20 +35,22 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import NpcSearchResult from './NpcSearchResult.vue';
 import { readGetNpcs } from '@/store/npcsModule';
 import { Character as ICharacter } from '@/classes/Character';
+import { readGetCharacters } from '@/store/charactersModule';
 
 @Component({
   components: { NpcSearchResult },
 })
 export default class NpcsList extends Vue {
-  @Prop(String) public encounterId!: string;
-
   public searchString: string = '';
   public searchResults: ICharacter[] = [];
-  public loading: boolean = false;
   public maxVisible: number = 10;
+  public showType: string = 'monsters';
 
   get npcs() {
-    return readGetNpcs(this.$store);
+    if (this.showType === 'monsters') {
+      return readGetNpcs(this.$store);
+    }
+    return readGetCharacters(this.$store);
   }
 
   public onScroll() {
@@ -66,6 +62,10 @@ export default class NpcsList extends Vue {
     if (scrollPos < maxScroll + offset) {
       this.maxVisible += 10;
     }
+  }
+
+  public switchTab(type) {
+    this.showType = type;
   }
 }
 </script>

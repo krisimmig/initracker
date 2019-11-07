@@ -8,10 +8,10 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import { readIsLoggedIn, dispatchLogoutUser } from './store/usersModule';
-import { readGetNpcs, dispatchFetchNpcs } from './store/npcsModule';
-
-import MainMenu from './components/layout/MainMenu.vue';
+import { readIsLoggedIn, dispatchLogoutUser } from '@/store/usersModule';
+import { readGetNpcs, dispatchFetchNpcs } from '@/store/npcsModule';
+import { dispatchFetchCharacters } from '@/store/charactersModule';
+import MainMenu from '@/components/layout/MainMenu.vue';
 
 @Component({
   components: { MainMenu },
@@ -34,6 +34,8 @@ export default class App extends Vue {
     if (this.monsters.length < 1) {
       await dispatchFetchNpcs(this.$store);
     }
+
+    dispatchFetchCharacters(this.$store);
   }
 }
 </script>
