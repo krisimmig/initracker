@@ -19,6 +19,8 @@ Vue.use(Router);
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+  linkExactActiveClass: 'is-activeExact',
+  linkActiveClass: 'is-active',
 
   routes: [
     {
@@ -55,7 +57,7 @@ const router = new Router({
     },
 
     {
-      path: '/character/edit/:uuid',
+      path: '/characters/edit/:uuid',
       name: 'editCharacter',
       component: CharacterCreate,
       meta: {
@@ -65,7 +67,7 @@ const router = new Router({
     },
 
     {
-      path: '/character/builder',
+      path: '/characters/builder',
       name: 'characterBuilder',
       component: CharacterCreate,
       meta: {
@@ -74,7 +76,7 @@ const router = new Router({
     },
 
     {
-      path: '/character/builder/:characterId',
+      path: '/characters/builder/:characterId',
       name: 'characterBuilderEdit',
       component: CharacterCreate,
       meta: {
@@ -92,7 +94,7 @@ const router = new Router({
     },
 
     {
-      path: '/encounter/:encounterId',
+      path: '/encounters/:encounterId',
       name: 'encounterDetails',
       component: EncounterDetails,
       meta: {
