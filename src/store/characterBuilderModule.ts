@@ -65,10 +65,10 @@ export const characterBuilderModule = {
       });
     },
 
-    async fetchCharacterByUuid(context: CharacterBuilderContext, { uuid }: { uuid: string }) {
+    async fetchCharacterByUuid(context: CharacterBuilderContext, { characterUuid }: { characterUuid: string }) {
       commitSetLoading(context, { isLoading: true });
       const userUid = readUserUid(context);
-      const characterRef = db.doc(`users/${userUid}/characters/${uuid}`);
+      const characterRef = db.doc(`users/${userUid}/characters/${characterUuid}`);
 
       characterRef.get().then((doc) => {
         if (doc.exists) {
@@ -102,9 +102,9 @@ export const characterBuilderModule = {
       }
     },
 
-    async deleteCharacter(context: CharacterBuilderContext, { uuid }: { uuid: string }) {
+    async deleteCharacter(context: CharacterBuilderContext, { characterUuid }: { characterUuid: string }) {
       const userUid = readUserUid(context);
-      return db.doc(`users/${userUid}/characters/${uuid}`).delete();
+      return db.doc(`users/${userUid}/characters/${characterUuid}`).delete();
     },
   },
 

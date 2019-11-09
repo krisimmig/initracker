@@ -1,20 +1,22 @@
 <template>
-  <div class="IT-Flex">
-    <div>
+  <div class="u-maxWidth">
 
-      <h1>Encounter Overview</h1>
-      <ul>
-        <li
-          v-for="encounter in encounters"
-          :key="encounter.id"
-        >
-          <EncounterTeaser v-bind="encounter" />
-        </li>
-      </ul>
-    </div>
+    <h1>Encounter Overview</h1>
+    <div class="u-flex">
+      <div>
+        <ul>
+          <li
+            v-for="encounter in encounters"
+            :key="encounter.id"
+          >
+            <EncounterTeaser v-bind="encounter" />
+          </li>
+        </ul>
+      </div>
 
-    <div class="IT-Flex-40">
-      <EncounterNew />
+      <div class="u-flex-40">
+        <EncounterNew />
+      </div>
     </div>
   </div>
 </template>

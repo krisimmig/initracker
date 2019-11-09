@@ -1,7 +1,7 @@
 <template>
-  <div class="IT-Flex">
+  <div class="u-maxWidth">
+    <h1>Character Create</h1>
     <div v-if="!isLoading">
-      <h1>Character Create</h1>
       <CharacterBuilder :character="character" />
     </div>
     <div v-else>Loading..</div>
@@ -45,7 +45,7 @@ export default class CharacterCreate extends Vue {
   public mounted() {
     if (this.$route.meta.edit) {
       console.log('editing', this.$route.params.id);
-      dispatchFetchCharacterByUuid(this.$store, { uuid: this.$route.params.uuid });
+      dispatchFetchCharacterByUuid(this.$store, { characterUuid: this.$route.params.uuid });
     } else if (this.characterId) {
       dispatchFetchCharacterById(this.$store, { id: this.characterId });
     } else {

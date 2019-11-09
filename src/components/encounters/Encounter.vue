@@ -3,10 +3,7 @@
     <h3>{{ currentEncounter.name }}</h3>
 
     <div>
-      <button
-        @click="rollInitiative"
-        class="IT-Button"
-      >
+      <button @click="rollInitiative">
         Roll Ini
       </button>
       <button @click="next">Next</button>

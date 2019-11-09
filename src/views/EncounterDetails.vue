@@ -1,21 +1,21 @@
 <template>
   <div>
     <h1>Encounter Details</h1>
-    <p class="IT-Button" @click="showSearch = !showSearch">Monster List</p>
-    <div class="IT-Flex">
+    <p @click="showSearch = !showSearch">Monster List</p>
+    <div class="u-flex">
 
-      <div class="IT-Flex-20" v-if="showSearch">
+      <div class="u-flex-20" v-if="showSearch">
         <NpcsList :encounterId="$route.params.encounterId"  />
       </div>
 
-      <div class="IT-Flex-grow">
+      <div class="u-flex-grow">
         <Encounter
           :id="$route.params.encounterId"
           @npcSelected="npcSelected(npcData)"
         />
       </div>
 
-      <div class="IT-Flex-30">
+      <div class="u-flex-30">
         <NpcDetails v-if="selectedNpc" :npcData="selectedNpc" />
         <p v-else>Click on a character name to see details here.</p>
       </div>

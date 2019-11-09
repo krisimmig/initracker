@@ -5,7 +5,7 @@
       <NpcDetails slot="popover" :npcData="npcData" :isWide="true" />
     </v-popover>
 
-     <span @click="addToEncounter" class="IT-Button">+</span>
+     <span @click="addToEncounter">+</span>
     {{ npcData.hit_points }} HP | {{ npcData.size }} | {{ npcData.type }}
 
   </div>

@@ -1,20 +1,35 @@
 <template>
-  <div id="nav">
-    <router-link :to="{ name: 'home' }">Home</router-link> |
-    <template v-if="isLoggedIn">
-      <router-link :to="{ name: 'dashboard' }">Dashboard</router-link> |
-      <router-link :to="{ name: 'characters' }">Characters</router-link> |
-      <router-link :to="{ name: 'encounters' }">Encounters</router-link> |
-      <a href="#" @click="logoutUser">Logout</a> | 
-    </template>
-    <template v-else>
-      <router-link :to="{ name: 'login' }">Login</router-link> |
-      <router-link :to="{ name: 'register' }">Register</router-link> |
-    </template>
-    <router-link :to="{ name: 'about' }">About</router-link> | 
-    <span v-if="currentUserString">
-      Logged in as: <strong>{{ currentUserString }}</strong>
-    </span>
+  <div class="MainMenu-wrapper">
+
+    <div class="u-maxWidth">
+      <div class="MainMenu">
+        <template v-if="isLoggedIn">
+          <div class="MainMenu-left">
+            <router-link class="MainMenu-link MainMenu-link--icon" :to="{ name: 'home' }">
+              <SvgIcon name="test" />
+            </router-link>
+            <router-link class="MainMenu-link" :to="{ name: 'characters' }">Characters</router-link>
+            <router-link class="MainMenu-link" :to="{ name: 'encounters' }">Encounters</router-link>
+          </div>
+
+          <div class="MainMenu-right">
+            <router-link class="MainMenu-link" :to="{ name: 'home' }">{{ currentUserString }}</router-link>
+            <a class="MainMenu-link" href="#" @click="logoutUser">Logout</a>
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="MainMenu-left">
+            <router-link class="MainMenu-link" :to="{ name: 'home' }">Home</router-link>
+            <router-link class="MainMenu-link" :to="{ name: 'register' }">Register</router-link>
+          </div>
+          <div class="MainMenu-right">
+            <router-link class="MainMenu-link" :to="{ name: 'login' }">Login</router-link>
+          </div>
+        </template>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -22,8 +37,11 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import { readUserString, readIsLoggedIn, dispatchLogoutUser } from '@/store/usersModule';
+import SvgIcon from '@/components/SvgIcon.vue';
 
-@Component
+@Component({
+  components: { SvgIcon },
+})
 export default class MainMenu extends Vue {
 
   public logoutUser() {
@@ -34,17 +52,33 @@ export default class MainMenu extends Vue {
     return readIsLoggedIn(this.$store);
   }
 
-  get currentUserString(): string|boolean {
-    return readUserString(this.$store);
+  get currentUserString(): string|null {
+    return readUserString(this.$store) || 'ERROR getting username';
   }
 }
 </script>
 
 
 <style lang="scss">
-ul, li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+@import '@/scss/variables.scss';
+
+.MainMenu-wrapper {
+  background-color: $color-black;
 }
+
+.MainMenu {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.MainMenu-left .MainMenu-link {
+  margin-right: 1rem;
+}
+
+.MainMenu-right .MainMenu-link {
+  margin-left: 1rem;
+}
+
 </style>

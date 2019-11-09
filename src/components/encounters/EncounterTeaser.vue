@@ -7,16 +7,10 @@
         {{ name }}
       </p>
 
-      <button
-        class="IT-Button IT-Button--secondary"
-        @click.prevent="deleteEncounter()"
-      >
+      <button @click.prevent="deleteEncounter()">
         Delete
       </button>
-      <button
-        class="IT-Button"
-        @click.prevent="renameEncounter()"
-      >
+      <button @click.prevent="renameEncounter()">
         Rename
       </button>
     </div>
@@ -28,7 +22,7 @@
         :placeholder="this.name"
         @keyup.enter="saveNewName"
       >
-      <button class="IT-Button" @click="saveNewName">Save</button>
+      <button @click="saveNewName">Save</button>
     </div>
   </div>
 </template>

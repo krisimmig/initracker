@@ -21,7 +21,8 @@ export const usersModule = {
     },
 
     getUserString(state: UserState) {
-      return state.user ? `${state.user.displayName} <${state.user.email}> (${state.user.uid})` : false;
+      if (!state.user) { return null; }
+      return state.user.displayName ? state.user.displayName : state.user.email;
     },
 
     getUserUid(state: UserState) {

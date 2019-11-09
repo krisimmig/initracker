@@ -42,13 +42,9 @@ export default class App extends Vue {
 
 
 <style lang="scss">
-@import './scss/helper-classes.scss';
-@import './scss/popover.scss';
-@import './scss/form.scss';
-
-ul, li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+@import '@/scss/variables.scss';
+@import '@/scss/typography.scss';
+@import '@/scss/utilities.scss';
+@import '@/scss/popover.scss';
+@import '@/scss/form.scss';
 </style>

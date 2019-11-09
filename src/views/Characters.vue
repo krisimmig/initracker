@@ -1,20 +1,21 @@
 <template>
-  <div class="IT-Flex">
-    <div>
+  <div class="u-maxWidth">
+    <h1>Character Overview</h1>
+    <div class="u-flex">
+      <div>
+        <ul>
+          <li
+            v-for="character in characters"
+            :key="character.id"
+          >
+            <CharacterTeaser v-bind="character" :character="character" />
+          </li>
+        </ul>
+      </div>
 
-      <h1>Character Overview</h1>
-      <ul>
-        <li
-          v-for="character in characters"
-          :key="character.id"
-        >
-          <CharacterTeaser v-bind="character" :character="character" />
-        </li>
-      </ul>
-    </div>
-
-    <div class="IT-Flex-40">
-      <router-link :to="{ name: 'newCharacter' }">Create new character</router-link>
+      <div class="u-flex-40">
+        <router-link :to="{ name: 'newCharacter' }">Create new character</router-link>
+      </div>
     </div>
   </div>
 </template>

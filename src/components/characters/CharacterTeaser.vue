@@ -27,7 +27,7 @@ export default class CharacterTeaser extends Vue {
   public showDetails: boolean = false;
 
   public deleteCharacter() {
-    dispatchDeleteCharacter(this.$store, { uuid: this.character.uuid });
+    dispatchDeleteCharacter(this.$store, { characterUuid: this.character.uuid });
   }
 }
 </script>

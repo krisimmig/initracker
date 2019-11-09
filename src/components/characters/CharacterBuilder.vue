@@ -1,6 +1,6 @@
 <template>
-  <div class="IT-Flex">
-    <div class="IT-Flex-50">
+  <div class="u-flex">
+    <div class="u-flex-50">
       <h2>Character Builder</h2>
       <form class="Form">
 
@@ -79,7 +79,7 @@
       </form>
     </div>
 
-    <div class="IT-Flex-50">
+    <div class="u-flex-50">
       <h2>Preview</h2>
       <NpcDetails :npcData="character" />
     </div>
@@ -139,7 +139,7 @@ export default class CharacterBuilder extends Vue {
   }
 
   public async deleteCharacter() {
-    await dispatchDeleteCharacter(this.$store, { uuid: this.character.uuid });
+    await dispatchDeleteCharacter(this.$store, { characterUuid: this.character.uuid });
     this.$router.push({ name: 'characters' });
   }
 
