@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="Main">
     <MainMenu />
     <router-view/>
   </div>
@@ -45,6 +45,8 @@ export default class App extends Vue {
 @import '@/scss/variables.scss';
 @import '@/scss/typography.scss';
 @import '@/scss/utilities.scss';
-@import '@/scss/popover.scss';
+@import '@/scss/base.scss';
 @import '@/scss/form.scss';
+
+@import '@/scss/popover.scss';
 </style>

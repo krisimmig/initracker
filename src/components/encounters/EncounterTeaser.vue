@@ -1,18 +1,10 @@
 <template>
   <div class="EncounterOverview-item">
     <div v-if="!isEditingName">
-      <p
-        @click="toEncounterView(id)"
-      >
-        {{ name }}
-      </p>
+      <p @click="toEncounterView(id)">{{ name }}</p>
 
-      <button @click.prevent="deleteEncounter()">
-        Delete
-      </button>
-      <button @click.prevent="renameEncounter()">
-        Rename
-      </button>
+      <button @click.prevent="deleteEncounter()">Delete</button>
+      <button @click.prevent="renameEncounter()">Rename</button>
     </div>
 
     <div v-else>

@@ -40,6 +40,12 @@ export const encountersModule = {
       return state.encountersCurrent;
     },
 
+    getEncountersActiveNpc(state: EncountersState) {
+      if (state.encountersCurrent) {
+        return state.encountersNpcs[state.encountersCurrent.activeEntityIndex - 1];
+      }
+    },
+
     getEncountersCurrentId(state: EncountersState) {
       return state.encountersCurrent ? state.encountersCurrent.id : null;
     },
@@ -216,6 +222,7 @@ export const readGetEncountersAll = read(encountersModule.getters.getEncountersA
 export const readGetEncounterById = read(encountersModule.getters.getEncounterById);
 export const readGetNpcInDetail = read(encountersModule.getters.getNpcInDetail);
 export const readGetEncountersCurrent = read(encountersModule.getters.getEncountersCurrent);
+export const readGetEncountersActiveNpc = read(encountersModule.getters.getEncountersActiveNpc);
 export const readGetEncountersCurrentId = read(encountersModule.getters.getEncountersCurrentId);
 export const readGetEncountersCurrentNpcs = read(encountersModule.getters.getEncountersCurrentNpcs);
 

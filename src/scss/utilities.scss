@@ -1,4 +1,4 @@
-$maxWidth: 1200px;
+// Layout helpers
 
 .u-maxWidth {
   padding: 0 20px;
@@ -7,16 +7,13 @@ $maxWidth: 1200px;
   margin-right: auto;
 }
 
-$buttonColor: rgb(90, 231, 34);
-$buttonColorSecondary: rgb(231, 64, 34);
-
-body {
-  font-family: 'Roboto', sans-serif;
-}
-
 .u-flex {
   display: flex;
   justify-content: space-between;
+}
+
+.u-direction-colum {
+  flex-direction: column;
 }
 
 .u-flex-50 {
@@ -37,4 +34,32 @@ body {
 
 .u-flex-grow {
   flex-grow: 1;
+}
+
+// Scrollbox helpers
+
+.u-scrollBoxParent {
+  width: 100%;
+  height: calc(100vh - 200px); // Overwrite this to fit correct height
+  overflow: hidden;
+  position: relative;
+}
+
+.u-scrollBoxChild {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: -11px; /* Increase/Decrease this value for cross-browser compatibility */
+  overflow-y: scroll;
+}
+
+// Typography helpers
+
+.u-bold {
+  font-weight: 700;
+}
+
+.u-light {
+  font-weight: 100;
 }

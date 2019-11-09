@@ -1,158 +1,161 @@
 <template>
-  <div class="stat-block" :class="{ wide: isWide }">
-    <hr class="orange-border">
-    <div class="column-container">
-      <div class="creature-heading">
-        <h1>{{ npcData.name }}</h1>
-        <h2>{{ npcData.size }} {{ npcData.type }}, {{ npcData.alignment }}</h2>
-      </div>
+  <div class="NpcDetails u-scrollBoxParent NpcDetails-wrapper">
+    <div class="u-scrollBoxChild">
+      <div class="stat-block" :class="{ wide: isWide }">
+        <hr class="orange-border">
+        <div class="column-container">
+          <div class="creature-heading">
+            <h1>{{ npcData.name }}</h1>
+            <h2>{{ npcData.size }} {{ npcData.type }}, {{ npcData.alignment }}</h2>
+          </div>
 
-      <svg height="5" width="100%" class="tapered-rule">
-        <polyline points="0,0 400,2.5 0,5"></polyline>
-      </svg>
+          <svg height="5" width="100%" class="tapered-rule">
+            <polyline points="0,0 400,2.5 0,5"></polyline>
+          </svg>
 
-      <div class="top-stats">
-        <div class="property-line first">
-          <h4>Armor Class</h4>
-          <p>{{ npcData.armor_class }} ({{ npcData.armor_desc }})</p>
-        </div>
+          <div class="top-stats">
+            <div class="property-line first">
+              <h4>Armor Class</h4>
+              <p>{{ npcData.armor_class }} ({{ npcData.armor_desc }})</p>
+            </div>
 
-        <div class="property-line">
-          <h4>Hit Points</h4>
-          <p>{{ npcData.hit_points }} ({{ npcData.hit_dice }})</p>
-        </div>
+            <div class="property-line">
+              <h4>Hit Points</h4>
+              <p>{{ npcData.hit_points }} ({{ npcData.hit_dice }})</p>
+            </div>
 
-        <div class="property-line last">
-          <h4>Speed</h4>
-          <p>
-            <span
-              v-for="(value, name, index) in npcData.speed"
-              :key="index"
+            <div class="property-line last">
+              <h4>Speed</h4>
+              <p>
+                <span
+                  v-for="(value, name, index) in npcData.speed"
+                  :key="index"
+                >
+                  {{ value }}ft ({{ name }})<template v-if="index + 1 < Object.keys(npcData.speed).length">, </template>
+                </span>
+              </p>
+            </div>
+
+            <svg height="5" width="100%" class="tapered-rule">
+              <polyline points="0,0 400,2.5 0,5"></polyline>
+            </svg>
+            <div class="abilities">
+              <div class="ability-strength">
+                <h4>STR</h4>
+                <p>{{ npcData.strength }} ({{ stringModifier(npcData.strength) }})</p>
+              </div>
+
+              <div class="ability-dexterity">
+                <h4>DEX</h4>
+                <p>{{ npcData.dexterity }} ({{ stringModifier(npcData.dexterity) }})</p>
+              </div>
+
+              <div class="ability-constitution">
+                <h4>CON</h4>
+                <p>{{ npcData.constitution }} ({{ stringModifier(npcData.constitution) }})</p>
+              </div>
+
+              <div class="ability-intelligence">
+                <h4>INT</h4>
+                <p>{{ npcData.intelligence }} ({{ stringModifier(npcData.intelligence) }})</p>
+              </div>
+
+              <div class="ability-wisdom">
+                <h4>WIS</h4>
+                <p>{{ npcData.wisdom }} ({{ stringModifier(npcData.wisdom) }})</p>
+              </div>
+
+              <div class="ability-charisma">
+                <h4>CHA</h4>
+                <p>{{ npcData.charisma }} ({{ stringModifier(npcData.charisma) }})</p>
+              </div>
+
+            </div>
+
+            <svg height="5" width="100%" class="tapered-rule">
+              <polyline points="0,0 400,2.5 0,5"></polyline>
+            </svg>
+
+            <div class="property-line first" v-if="npcData.damage_immunities">
+              <h4>Damage Immunities</h4>
+              <p>{{ npcData.damage_immunities }}</p>
+            </div>
+
+            <div class="property-line" v-if="npcData.condition_immunities">
+              <h4>Condition Immunities</h4>
+              <p>
+                {{ npcData.condition_immunities }}
+              </p>
+            </div>
+
+            <div class="property-line" v-if="npcData.senses">
+              <h4>Senses</h4>
+              <p>{{ npcData.senses }}</p>
+            </div>
+
+            <div class="property-line" v-if="npcData.languages">
+              <h4>Languages</h4>
+              <p>{{ npcData.languages }}</p>
+            </div>
+
+            <div class="property-line last">
+              <h4>Challenge</h4>
+              <p>{{ npcData.challenge_rating }}</p>
+            </div>
+
+          </div>
+
+          <svg height="5" width="100%" class="tapered-rule">
+            <polyline points="0,0 400,2.5 0,5"></polyline>
+          </svg>
+
+          <div class="property-block" v-if="npcData.special_abilities">
+            <div
+              class="special-ability"
+              v-for="specialAbilty in npcData.special_abilities"
+              :key="specialAbilty.name"
             >
-              {{ value }}ft ({{ name }})<template v-if="index + 1 < Object.keys(npcData.speed).length">, </template>
-            </span>
-          </p>
-        </div>
-
-        <svg height="5" width="100%" class="tapered-rule">
-          <polyline points="0,0 400,2.5 0,5"></polyline>
-        </svg>
-        <div class="abilities">
-          <div class="ability-strength">
-            <h4>STR</h4>
-            <p>{{ npcData.strength }} ({{ stringModifier(npcData.strength) }})</p>
+              <h4>{{ specialAbilty.name }}.</h4>
+              <p v-html="specialAbilty.desc"></p>
+            </div>
           </div>
 
-          <div class="ability-dexterity">
-            <h4>DEX</h4>
-            <p>{{ npcData.dexterity }} ({{ stringModifier(npcData.dexterity) }})</p>
+          <div class="actions" v-if="npcData.actions">
+            <h3>Actions</h3>
+            <div class="property-block">
+              <div
+                class="special-ability"
+                v-for="action in npcData.actions"
+                :key="npcData.name + action.name"
+              >
+                <h4>{{ action.name }}.</h4>
+                <p v-html="action.desc"></p><br>
+              </div>
+            </div>
+
           </div>
 
-          <div class="ability-constitution">
-            <h4>CON</h4>
-            <p>{{ npcData.constitution }} ({{ stringModifier(npcData.constitution) }})</p>
-          </div>
+          <div class="actions" v-if="npcData.legendary_actions">
+            <h3>Legendary Actions</h3>
+            <div class="property-block">
+              <div
+                class="special-ability"
+                v-for="legendaryAction in npcData.legendary_actions"
+                :key="legendaryAction.name"
+              >
+                <h4>{{ legendaryAction.name }}.</h4>
+                <p>{{ legendaryAction.desc }}</p>
+              </div>
+            </div>
 
-          <div class="ability-intelligence">
-            <h4>INT</h4>
-            <p>{{ npcData.intelligence }} ({{ stringModifier(npcData.intelligence) }})</p>
-          </div>
-
-          <div class="ability-wisdom">
-            <h4>WIS</h4>
-            <p>{{ npcData.wisdom }} ({{ stringModifier(npcData.wisdom) }})</p>
-          </div>
-
-          <div class="ability-charisma">
-            <h4>CHA</h4>
-            <p>{{ npcData.charisma }} ({{ stringModifier(npcData.charisma) }})</p>
-          </div>
-
-        </div>
-
-        <svg height="5" width="100%" class="tapered-rule">
-          <polyline points="0,0 400,2.5 0,5"></polyline>
-        </svg>
-
-        <div class="property-line first" v-if="npcData.damage_immunities">
-          <h4>Damage Immunities</h4>
-          <p>{{ npcData.damage_immunities }}</p>
-        </div>
-
-        <div class="property-line" v-if="npcData.condition_immunities">
-          <h4>Condition Immunities</h4>
-          <p>
-            {{ npcData.condition_immunities }}
-          </p>
-        </div>
-
-        <div class="property-line" v-if="npcData.senses">
-          <h4>Senses</h4>
-          <p>{{ npcData.senses }}</p>
-        </div>
-
-        <div class="property-line" v-if="npcData.languages">
-          <h4>Languages</h4>
-          <p>{{ npcData.languages }}</p>
-        </div>
-
-        <div class="property-line last">
-          <h4>Challenge</h4>
-          <p>{{ npcData.challenge_rating }}</p>
-        </div>
-
-      </div>
-
-      <svg height="5" width="100%" class="tapered-rule">
-        <polyline points="0,0 400,2.5 0,5"></polyline>
-      </svg>
-
-      <div class="property-block" v-if="npcData.special_abilities">
-        <div
-          class="special-ability"
-          v-for="specialAbilty in npcData.special_abilities"
-          :key="specialAbilty.name"
-        >
-          <h4>{{ specialAbilty.name }}.</h4>
-          <p v-html="specialAbilty.desc"></p>
-        </div>
-      </div>
-
-      <div class="actions" v-if="npcData.actions">
-        <h3>Actions</h3>
-        <div class="property-block">
-          <div
-            class="special-ability"
-            v-for="action in npcData.actions"
-            :key="npcData.name + action.name"
-          >
-            <h4>{{ action.name }}.</h4>
-            <p v-html="action.desc"></p><br>
           </div>
         </div>
 
-      </div>
-
-      <div class="actions" v-if="npcData.legendary_actions">
-        <h3>Legendary Actions</h3>
-        <div class="property-block">
-          <div
-            class="special-ability"
-            v-for="legendaryAction in npcData.legendary_actions"
-            :key="legendaryAction.name"
-          >
-            <h4>{{ legendaryAction.name }}.</h4>
-            <p>{{ legendaryAction.desc }}</p>
-          </div>
-        </div>
+        <hr class="orange-border bottom">
 
       </div>
     </div>
-
-    <hr class="orange-border bottom">
-
   </div>
-  <!-- stat block -->
 </template>
 
 <script lang='ts'>
@@ -174,6 +177,10 @@ export default class NpcDetails extends Vue {
 </script>
 
 <style>
+.NpcDetails.NpcDetails-wrapper {
+  height: calc(100vh - 138px);
+}
+
 .column-container {
   margin: 15px 0;
 }
@@ -188,7 +195,6 @@ export default class NpcDetails extends Vue {
   vertical-align: top;
   background: #FDF1DC;
   padding: 5px 10px 20px;
-  box-shadow: 0 0 1.5em #867453;
 }
 
 .stat-block.wide {

@@ -1,30 +1,30 @@
 <template>
   <div v-if="currentEncounter">
-    <h3>{{ currentEncounter.name }}</h3>
+    <h1>{{ currentEncounter.name }}</h1>
+    <p>Current round: <b>{{ currentRound }}</b> | Total npcs: <b>{{ totalNpcs }}</b> | Time elapsed: <b>00:02:13</b></p>
 
     <div>
-      <button @click="rollInitiative">
-        Roll Ini
-      </button>
+      <button @click="rollInitiative">Roll Ini</button>
       <button @click="next">Next</button>
-      <p>Current round: {{ currentRound }}</p>
-      <p>Current npcIndex: {{ currentNpcIndex }}</p>
-      <p>Total npcs: {{ totalNpcs }}</p>
     </div>
 
-    <ul>
-      <li
-        v-for="(npc, index) in npcs"
-        :key="index"
-      >
-        <Npc
-          :npc="npc"
-          :isActive="index === currentNpcIndex - 1"
-          :removable="true"
-          @remove="removeNpcFromEncounter(npc.uuid)"
-        />
-      </li>
-    </ul>
+    <div class="Encounter-npcsListWrapper u-scrollBoxParent">
+      <div class="Encounter-npcsListScrollBox u-scrollBoxChild">
+        <ul class="Encounter-npcsList">
+          <li
+            v-for="(npc, index) in npcs"
+            :key="index"
+          >
+            <Npc
+              :npc="npc"
+              :isActive="index === currentNpcIndex - 1"
+              :removable="true"
+              @remove="removeNpcFromEncounter(npc.uuid)"
+            />
+          </li>
+        </ul>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -130,5 +130,13 @@ export default class Encounter extends Vue {
 }
 </script>
 
-<style>
+<style lang="scss">
+Encounter-npcsListWrapper {
+  max-height: calc(100vh - 200px);
+  overflow-y: scroll;
+}
+
+.Encounter-npcsListWrapper {
+  height: calc(100vh - 200px);
+}
 </style>
