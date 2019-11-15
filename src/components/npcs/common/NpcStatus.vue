@@ -4,7 +4,7 @@
       v-for="(status, index) in statuses"
       @click="removeStatus(status)"
       :key="index"
-      class="NpcListItem-status"
+      class="NpcStatus-status"
     >
       {{ statusString(status) }}
     </span>
@@ -23,7 +23,7 @@
         <select
           v-model="newStatus"
           @change="addStatus"
-          class="NpcListItem-statusSelect"
+          class="NpcStatus-select"
         >
           <option disabled value="default">Select new state</option>
           <option
@@ -95,4 +95,19 @@ export default class NpcStatus extends Vue {
 </script>
 
 <style>
+.NpcStatus-status {
+  display: inline-block;
+  color: #ffffff;
+  border: 1px solid blue;
+  padding: 2px 7px;
+  margin-right: 5px;
+  border-radius: 12px;
+  background-color: #6162fe;
+}
+
+.NpcStatus-select {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 </style>
