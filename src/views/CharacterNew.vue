@@ -2,7 +2,7 @@
   <div class="u-maxWidth">
     <div class="u-flex">
       <div>
-        <h1>Create a new character</h1>
+        <VueTitle/>
         <p>You can create a new character</p>
         <router-link :to="{ name: 'characterBuilder' }">from scratch</router-link>
         <p>or start with a monster from the Basic Rules. Please choose one from the list:</p>
@@ -23,14 +23,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import { readGetNpcs } from '@/store/npcsModule';
+import { Character } from '@/classes/Character';
 
-@Component({})
+@Component
 export default class CharacterNew extends Vue {
-  public get npcs() {
+  public get npcs(): Character[] {
     return readGetNpcs(this.$store);
   }
 }
 </script>
 
-<style>
-</style>
