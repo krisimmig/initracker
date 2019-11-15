@@ -11,13 +11,10 @@
     <div class="Encounter-npcsListWrapper u-scrollBoxParent">
       <div class="Encounter-npcsListScrollBox u-scrollBoxChild">
         <ul class="Encounter-npcsList">
-          <li
-            v-for="(npc, index) in npcs"
-            :key="index"
-          >
-            <Npc
+          <li v-for="(npc, index) in npcs" :key="index">
+            <NpcListItem
               :npc="npc"
-              :isActive="index === currentNpcIndex - 1"
+              :isActive="currentNpcIndex - 1 === index"
               :removable="true"
               @remove="removeNpcFromEncounter(npc.uuid)"
             />
@@ -31,6 +28,7 @@
 
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { DiceRoll } from 'rpg-dice-roller';
 
 import {
   readGetEncountersCurrent,
@@ -40,19 +38,14 @@ import {
   dispatchUpdateActiveEntityIndex,
 } from '@/store/encountersModule';
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
-import Npc from '../npcs/Npc.vue';
+import NpcListItem from '../npcs/NpcListItem.vue';
 import { calcModifier, stringifyModifier } from '@/utils/dnd';
-// require the dice-roller library
-import { DiceRoll } from 'rpg-dice-roller';
-
 
 @Component({
-  components: { Npc, Encounter },
+  components: { NpcListItem, Encounter },
 })
 export default class Encounter extends Vue {
   @Prop(String) public id!: string;
-
-  public showNpcsInEncounter: boolean = false;
 
   get currentEncounter() {
     return readGetEncountersCurrent(this.$store);
