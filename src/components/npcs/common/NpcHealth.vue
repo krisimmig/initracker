@@ -1,7 +1,9 @@
 <template>
   <div class="NpcHealth">
-
-    <p @click="showHealthDialogue = true">Health: {{ hp }}/{{ maxHp }}</p>
+    <div class="NpcHealth-wrapper" @click="showHealthDialogue = true">
+      <SvgIcon name="heart" class="NpcHealth-icon" />
+      <div class="NpcHealth-hp">{{ hp }}</div>
+    </div>
 
     <DialogueBox
       v-if="showHealthDialogue"
@@ -27,13 +29,16 @@
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
+
 import DialogueBox from '@/components/common/DialogueBox.vue';
+import SvgIcon from '@/components/common/SvgIcon.vue';
 import { readGetEncountersCurrentId } from '@/store/encountersModule';
 import { dispatchUpdateHitPointCurrent } from '@/store/npcsModule';
 
 @Component({
   components: {
     DialogueBox,
+    SvgIcon,
   },
 })
 export default class NpcHealth extends Vue {
@@ -65,6 +70,33 @@ export default class NpcHealth extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+@import '@/scss/variables.scss';
 
+$width: 2.5em;
+
+.NpcHealth-wrapper {
+  position: relative;
+  width: $width;
+  height: $width;
+  cursor: pointer;
+}
+
+.NpcHealth-wrapper:hover {
+  background-color: #fff;
+}
+
+.NpcHealth-hp {
+  font-weight: 700;
+  position: absolute;
+  top: .6em;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.NpcHealth-icon {
+  color: $color-2;
+  font-size: $width;
+}
 </style>

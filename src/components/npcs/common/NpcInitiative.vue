@@ -1,7 +1,9 @@
 <template>
   <div class="NpcInitiative">
 
-    <span @click="showInitiativeInput = true"><b>Ini: {{ initiative }}</b></span>
+    <span @click="showInitiativeInput = true" class="NpcInitiative-wrapper">
+      <span class="NpcInitiative-title">Initiative </span><b>{{ initiative }}</b>
+    </span>
 
     <DialogueBox
       v-if="showInitiativeInput"
@@ -58,6 +60,19 @@ export default class NpcInitiative extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+@import '@/scss/variables.scss';
 
+.NpcInitiative-wrapper {
+  font-size: .8em;
+  cursor: pointer;
+}
+
+.NpcInitiative-title {
+  color: $color-6;
+}
+
+.NpcInitiative-wrapper:hover .NpcInitiative-title {
+  color: $color-black;
+}
 </style>

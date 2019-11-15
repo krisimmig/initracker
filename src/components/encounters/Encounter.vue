@@ -1,11 +1,13 @@
 <template>
   <div v-if="currentEncounter">
     <h1>{{ currentEncounter.name }}</h1>
-    <p>Current round: <b>{{ currentRound }}</b> | Total npcs: <b>{{ totalNpcs }}</b> | Time elapsed: <b>00:02:13</b></p>
+    <div class="u-flex">
 
-    <div>
-      <button @click="rollInitiative">Roll Ini</button>
-      <button @click="next">Next</button>
+      <div>Round <b>{{ currentRound }}</b></div>
+      <div>
+        <button @click="rollInitiative">Roll Ini</button>
+        <button @click="next">Next</button>
+      </div>
     </div>
 
     <div class="Encounter-npcsListWrapper u-scrollBoxParent">
@@ -79,6 +81,14 @@ export default class Encounter extends Vue {
       npcID,
       encounterId: this.id,
     });
+
+    // Correct active entity index when removing single entity
+    if (this.currentNpcIndex > this.npcs.length - 1) {
+      dispatchUpdateActiveEntityIndex(this.$store, {
+        encounterId: this.id,
+        activeEntityIndex: (this.npcs.length - 1) || 1,
+      });
+    }
   }
 
   public rollInitiative(): void {
@@ -91,6 +101,18 @@ export default class Encounter extends Vue {
           npcId: npc.uuid,
           newInitiative: newInitiative.total,
         });
+      });
+
+      // Reset active entity index
+      dispatchUpdateActiveEntityIndex(this.$store, {
+        encounterId: this.id,
+        activeEntityIndex: 1,
+      });
+
+      // Reset round counter
+      dispatchUpdateRound(this.$store, {
+        encounterId: this.id,
+        newRoundIndex: 1,
       });
     }
   }
@@ -124,7 +146,14 @@ export default class Encounter extends Vue {
 </script>
 
 <style lang="scss">
-Encounter-npcsListWrapper {
+@import '@/scss/variables.scss';
+
+.Encounter-npcsListWrapper {
+  box-shadow: 0px 0px 19px 1px #00000026;
+  background-color: $color-4;
+}
+
+.Encounter-npcsListWrapper {
   max-height: calc(100vh - 200px);
   overflow-y: scroll;
 }

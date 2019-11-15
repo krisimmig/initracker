@@ -8,11 +8,9 @@
     >
       {{ statusString(status) }}
     </span>
-    <span @click="showStatusSelect = !showStatusSelect">
+    <span @click.prevent="showStatusSelect = !showStatusSelect" class="NpcStatus-add">
       +
-      <template v-if="statuses.length < 4">
-        add condition
-      </template>
+      <template v-if="statuses.length < 4"> add condition</template>
     </span>
 
     <DialogueBox
@@ -94,20 +92,42 @@ export default class NpcStatus extends Vue {
 }
 </script>
 
-<style>
-.NpcStatus-status {
-  display: inline-block;
-  color: #ffffff;
-  border: 1px solid blue;
-  padding: 2px 7px;
-  margin-right: 5px;
-  border-radius: 12px;
-  background-color: #6162fe;
+<style lang="scss">
+@import '@/scss/variables.scss';
+
+.NpcStatus-status,
+.NpcStatus-add {
+  font-size: .8em;
+  color: $color-6;
+  cursor: pointer;
 }
 
-.NpcStatus-select {
-  position: absolute;
-  top: 0;
-  left: 0;
+.NpcStatus-add {
+  margin-right: .7em;
+  border: 1px solid $color-6;
+  border-radius: 1em;
+  height: 1em;
+  display: inline-block;
+  text-align: center;
+  padding: 0px 7px 3px 7px;
+}
+
+.NpcStatus-add:hover {
+  color: $color-black;
+}
+
+.NpcStatus-addText {
+  display: inline-block;
+}
+
+.NpcStatus-status {
+  margin-right: .7em;
+  border-bottom: 1px solid $color-6;
+  cursor: pointer;
+}
+
+.NpcStatus-status:hover {
+  color: $color-2;
+  border-color: $color-2;
 }
 </style>

@@ -1,40 +1,40 @@
 <template>
   <div
     class="NpcListItem" v-if="npc"
-    :class="{ 'is-active': isActive }"
+    :class="{ 'is-active': isActive, 'is-selected': isSelected }"
+    @click="showInDetail"
   >
-    <div>
-      <h4 class="NpcListItem-name" @click="showInDetail">
+
+    <div class="NpcListItem-main">
+      <NpcInitiative class="NpcListItem-initiative" :initiative="npc.initiative" :uuid="npc.uuid" />
+      <h4 class="NpcListItem-name">
         {{ npc.name }}
         <span v-if="removable" @click="$emit('remove')" style="color: red;"><b>X</b></span>
       </h4>
-
-      AC: {{ npc.armor_class }}
-      <NpcHealth :uuid="npc.uuid" :hp="npc.hit_points_current" :maxHp="npc.hit_points" />
+      <NpcStatus class="NpcListItem-status" :statuses="npc.status" :uuid="npc.uuid" />
     </div>
 
-    <div>
-      <NpcInitiative :initiative="npc.initiative" :uuid="npc.uuid" />
-      <NpcStatus :statuses="npc.status" :uuid="npc.uuid" />
-    </div>
+    <NpcArmorClass :armorClass="npc.armor_class" />
+    <NpcHealth :uuid="npc.uuid" :hp="npc.hit_points_current" :maxHp="npc.hit_points" />
+
   </div>
 </template>
 
 <script lang='ts'>
-import {Component, Prop, Vue} from 'vue-property-decorator';
-import * as npcsModule from '@/store/npcsModule';
-import * as encountersModule from '@/store/encountersModule';
-import {StatusTypes} from '@/types/characters';
-import {Character as ICharacter} from '@/classes/Character';
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { commitSetNpcInDetail, readGetNpcUuidInDetail } from '@/store/encountersModule';
+import { Character as ICharacter } from '@/classes/Character';
 import NpcHealth from '@/components/npcs/common/NpcHealth.vue';
 import NpcInitiative from '@/components/npcs/common/NpcInitiative.vue';
 import NpcStatus from '@/components/npcs/common/NpcStatus.vue';
+import NpcArmorClass from '@/components/npcs/common/NpcArmorClass.vue';
 
 @Component({
   components: {
     NpcHealth,
     NpcInitiative,
     NpcStatus,
+    NpcArmorClass,
   },
 })
 export default class NpcListItem extends Vue {
@@ -42,36 +42,54 @@ export default class NpcListItem extends Vue {
   @Prop({ type: Object, required: true }) public npc!: ICharacter;
   @Prop({ type: Boolean, required: true }) public isActive!: boolean;
 
-  public newStatus: StatusTypes | 'default' = 'default';
-  public showStatusSelect: boolean = false;
+  get selectedNpcUuis() {
+    return readGetNpcUuidInDetail(this.$store);
+  }
 
-  public statusString(enumValue: StatusTypes): string {
-    return StatusTypes[enumValue];
+  get isSelected() {
+    return this.npc.uuid === this.selectedNpcUuis;
   }
 
   public showInDetail() {
     if (this.npc) {
-      encountersModule.commitSetNpcInDetail(this.$store, this.npc);
+      commitSetNpcInDetail(this.$store, this.npc);
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+@import '@/scss/variables.scss';
+
 .NpcListItem {
-  border: 1px solid gainsboro;
-  background-color: ghostwhite;
-  padding: 0 20px 10px 19px;
-  margin-bottom: 15px;
   position: relative;
+  border-left: 7px solid $color-7;
+  border-bottom: 1px solid $color-5;
+  padding: .8em;
+  background-color: $color-white;
+  display: flex;
+  align-items: center;
+}
+
+.NpcListItem-main {
+  flex-grow: 1;
 }
 
 .NpcListItem-name {
   font-weight: 600;
+  margin: .4em 0;
 }
 
 .NpcListItem.is-active {
-  border-color: green;
-  background-color: rgb(189, 255, 214);
+  border-left-color: $color-1;
+}
+
+.NpcListItem.is-selected {
+  border-left-color: $color-2;
+}
+
+.NpcListItem-initiative,
+.NpcListItem-status {
+  display: inline-block;
 }
 </style>
