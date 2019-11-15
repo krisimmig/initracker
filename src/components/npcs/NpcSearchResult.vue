@@ -23,12 +23,12 @@ import { Character } from '../../classes/Character';
   components: { NpcDetails },
 })
 export default class NpcSearchResult extends Vue {
-  @Prop(String) public id!: string;
-  @Prop(String) public name!: string;
-  @Prop(Number) public hit_points!: number;
-  @Prop(String) public size!: string;
-  @Prop(String) public type!: string;
-  @Prop() public npcData!: Character;
+  @Prop({ type: String, required: true }) public id!: string;
+  @Prop({ type: String, required: true }) public name!: string;
+  @Prop({ type: Number, required: true }) public hit_points!: number;
+  @Prop({ type: String, required: true }) public size!: string;
+  @Prop({ type: String, required: true }) public type!: string;
+  @Prop({ type: Object, required: true }) public npcData!: Character;
 
   public get encounterId() {
     return encountersModule.readGetEncountersCurrentId(this.$store);

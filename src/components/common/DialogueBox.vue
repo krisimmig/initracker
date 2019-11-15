@@ -19,7 +19,7 @@
 
   @Component
   export default class DialogueBox extends Vue {
-    @Prop({ default: true }) private cancel!: boolean;
+    @Prop({ type: Boolean, required: true, default: true }) private cancel!: boolean;
   }
 </script>
 

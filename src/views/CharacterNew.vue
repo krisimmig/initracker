@@ -2,7 +2,6 @@
   <div class="u-maxWidth">
     <div class="u-flex">
       <div>
-        <VueTitle/>
         <p>You can create a new character</p>
         <router-link :to="{ name: 'characterBuilder' }">from scratch</router-link>
         <p>or start with a monster from the Basic Rules. Please choose one from the list:</p>

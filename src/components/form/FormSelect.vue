@@ -30,9 +30,9 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class FormSelect extends Vue {
-  @Prop(String) public label!: string;
-  @Prop(Array) public options!: [];
-  @Prop(String) public optionSelected!: string;
+  @Prop({ type: String, required: true }) public label!: string;
+  @Prop({ type: Array, required: true }) public options!: [];
+  @Prop({ type: String, required: true }) public optionSelected!: string;
 }
 </script>
 

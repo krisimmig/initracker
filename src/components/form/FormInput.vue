@@ -21,8 +21,8 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class FormInput extends Vue {
-  @Prop(String) public label!: string;
-  @Prop() public value!: string | number;
+  @Prop({ type: String, required: true }) public label!: string;
+  @Prop({ type: [Number, String], required: true }) public value!: string | number;
 
   public get isNumberField() {
     return typeof(this.value) === 'number';

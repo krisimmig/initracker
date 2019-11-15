@@ -167,8 +167,8 @@ import { stringModifier as cm } from '@/utils/dnd';
 
 @Component
 export default class NpcDetails extends Vue {
-  @Prop(Object) public npcData!: ICharacter;
-  @Prop(Boolean) public isWide!: boolean;
+  @Prop({ type: Object, required: true }) public npcData!: ICharacter;
+  @Prop({ type: Boolean, default: false }) public isWide!: boolean;
 
   public stringModifier(abilityScore: number): number | string {
     return cm(abilityScore);

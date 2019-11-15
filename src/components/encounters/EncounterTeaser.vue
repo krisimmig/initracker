@@ -27,9 +27,9 @@ import { IEncounterEntity } from '@/types/encounters';
 
 @Component
 export default class Encounter extends Vue {
-  @Prop(String) public id!: string;
-  @Prop(String) public name!: string;
-  @Prop(Array) public npcs!: IEncounterEntity[];
+  @Prop({ type: String, required: true }) public id!: string;
+  @Prop({ type: String, required: true }) public name!: string;
+  @Prop({ type: Array, required: true }) public npcs!: IEncounterEntity[];
 
   private isEditingName: boolean = false;
   private newName: string = '';

@@ -40,9 +40,9 @@ export default class NpcHealth extends Vue {
   public showHealthDialogue: boolean = false;
   public hitPointChangeAmount: number = 0;
 
-  @Prop(String) private uuid!: string;
-  @Prop(Number) private hp!: number;
-  @Prop(Number) private maxHp!: number;
+  @Prop({ type: String, required: true }) private uuid!: string;
+  @Prop({ type: Number, required: true }) private hp!: number;
+  @Prop({ type: Number, required: true }) private maxHp!: number;
 
   public changeHitPoints({ subtract } = { subtract: true }) {
     const encounterId = readGetEncountersCurrentId(this.$store);

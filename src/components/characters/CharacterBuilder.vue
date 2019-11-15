@@ -107,7 +107,7 @@ import FormTextarea from '@/components/form/FormTextarea.vue';
   },
 })
 export default class CharacterBuilder extends Vue {
-  @Prop() public character!: ICharacter;
+  @Prop({ type: Object, required: true }) public character!: ICharacter;
   private originalCharacter!: ICharacter;
 
   public get hasChanged() {

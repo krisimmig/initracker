@@ -21,8 +21,8 @@ import { dispatchDeleteCharacter } from '@/store/characterBuilderModule';
   },
 })
 export default class CharacterTeaser extends Vue {
-  @Prop(String) public name!: string;
-  @Prop() public character!: ICharacter;
+  @Prop({ type: String, required: true }) public name!: string;
+  @Prop({ type: Object, required: true }) public character!: ICharacter;
 
   public showDetails: boolean = false;
 

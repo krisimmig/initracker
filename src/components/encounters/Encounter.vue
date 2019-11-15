@@ -45,7 +45,7 @@ import { calcModifier, stringifyModifier } from '@/utils/dnd';
   components: { NpcListItem, Encounter },
 })
 export default class Encounter extends Vue {
-  @Prop(String) public id!: string;
+  @Prop({ type: String, required: true }) public id!: string;
 
   get currentEncounter() {
     return readGetEncountersCurrent(this.$store);

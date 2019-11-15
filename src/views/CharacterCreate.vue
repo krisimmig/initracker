@@ -44,7 +44,6 @@ export default class CharacterCreate extends Vue {
 
   public mounted() {
     if (this.$route.meta.edit) {
-      console.log('editing', this.$route.params.id);
       dispatchFetchCharacterByUuid(this.$store, { characterUuid: this.$route.params.uuid });
     } else if (this.characterId) {
       dispatchFetchCharacterById(this.$store, { id: this.characterId });
