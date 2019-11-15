@@ -14,7 +14,7 @@
     "firebaseui": "^4.2.0",
     "rpg-dice-roller": "^3.1.5",
     "v-tooltip": "^2.0.0-rc.33",
-    "vue": "^2.5.17",
+    "vue": "^2.6.0",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
     "vue-router": "^3.0.1",
