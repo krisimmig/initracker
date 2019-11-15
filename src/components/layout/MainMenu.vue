@@ -37,7 +37,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import { readUserString, readIsLoggedIn, dispatchLogoutUser } from '@/store/usersModule';
-import SvgIcon from '@/components/SvgIcon.vue';
+import SvgIcon from '@/components/common/SvgIcon.vue';
 
 @Component({
   components: { SvgIcon },
