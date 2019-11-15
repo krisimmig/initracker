@@ -11,7 +11,7 @@
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import { Character as ICharcter } from '@/classes/Character';
+import { Character as ICharacter } from '@/classes/Character';
 import NpcDetails from '@/components/npcs/NpcDetails.vue';
 import { dispatchDeleteCharacter } from '@/store/characterBuilderModule';
 
@@ -22,7 +22,7 @@ import { dispatchDeleteCharacter } from '@/store/characterBuilderModule';
 })
 export default class CharacterTeaser extends Vue {
   @Prop(String) public name!: string;
-  @Prop() public character!: ICharcter;
+  @Prop() public character!: ICharacter;
 
   public showDetails: boolean = false;
 
