@@ -10,3 +10,4 @@ export function stringifyModifier(abilityScore: number): string {
 export function stringModifier(abilityScore: number): string {
   return stringifyModifier(calcModifier(abilityScore));
 }
+

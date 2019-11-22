@@ -35,7 +35,7 @@ export default class App extends Vue {
       await dispatchFetchNpcs(this.$store);
     }
 
-    dispatchFetchCharacters(this.$store);
+    // dispatchFetchCharacters(this.$store);
   }
 }
 </script>

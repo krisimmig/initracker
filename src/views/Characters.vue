@@ -6,7 +6,7 @@
         <ul>
           <li
             v-for="character in characters"
-            :key="character.id"
+            :key="character.uuid"
           >
             <CharacterTeaser v-bind="character" :character="character" />
           </li>
@@ -33,10 +33,13 @@ import { Character } from '@/classes/Character';
 export default class Characters extends Vue {
 
   get characters(): Character[] {
+    console.log('characters');
+    
     return readGetCharacters(this.$store);
   }
 
   public mounted() {
+    console.log('Characters dispatchFetchCharacters');
     dispatchFetchCharacters(this.$store);
   }
 }

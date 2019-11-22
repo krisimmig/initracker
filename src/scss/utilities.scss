@@ -2,6 +2,7 @@
 
 .u-maxWidth {
   padding: 0 20px;
+  width: 100%;
   max-width: calc(#{$maxWidth} - 40px);
   margin-left: auto;
   margin-right: auto;
@@ -58,6 +59,10 @@
 
 .u-bold {
   font-weight: 700;
+}
+
+.u-semiBold {
+  font-weight: 600;
 }
 
 .u-light {

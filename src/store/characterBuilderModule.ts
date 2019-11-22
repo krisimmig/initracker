@@ -47,12 +47,14 @@ export const characterBuilderModule = {
 
   actions: {
     async fetchCharacterById(context: CharacterBuilderContext, { id }: { id: string }) {
+      console.log('fetchCharacterById', id);
       commitSetLoading(context, { isLoading: true });
       const characterRef = db.collection('monsters').doc(id);
 
       characterRef.get().then((doc) => {
         if (doc.exists) {
-          const character = doc.data() as Character;
+          const characterData = doc.data() as Character;
+          const character = new Character(characterData);
           commitSetCharacter(context, { character });
           commitSetLoading(context, { isLoading: false });
         } else {
@@ -66,6 +68,7 @@ export const characterBuilderModule = {
     },
 
     async fetchCharacterByUuid(context: CharacterBuilderContext, { characterUuid }: { characterUuid: string }) {
+      console.log('fetchCharacterByUuid', characterUuid);
       commitSetLoading(context, { isLoading: true });
       const userUid = readUserUid(context);
       const characterRef = db.doc(`users/${userUid}/characters/${characterUuid}`);
