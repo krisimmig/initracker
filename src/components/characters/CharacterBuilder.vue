@@ -35,10 +35,12 @@
 
             <hr>
 
-            <FormInput v-model="character.damage_immunities" label="Damage Immunities" />
+            <FormInput v-model="character.challenge_rating" label="Challenge rating" />
             <FormInput v-model="character.senses" label="Senses" />
             <FormInput v-model="character.languages" label="Languages" />
-            <FormInput v-model="character.challenge_rating" label="Challenge rating" />
+            <FormInput v-model="character.damage_immunities" label="Damage Immunities" />
+            <FormInput v-model="character.damage_resistances" label="Damage Resistances" />
+            <FormInput v-model="character.damage_vulnerabilities" label="Damage Vulnerabilities" />
 
             <hr>
 
@@ -87,7 +89,11 @@
 
     <div class="u-flex-50">
       <h2>Preview</h2>
-      <NpcDetails :npcData="character" />
+      <div class="u-scrollBoxParent">
+        <div class="u-scrollBoxChild">
+          <NpcDetails :npcData="character" />
+        </div>
+      </div>
     </div>
   </div>
 </template>

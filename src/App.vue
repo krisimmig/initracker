@@ -1,7 +1,9 @@
 <template>
   <div class="Main">
     <MainMenu />
-    <router-view/>
+    <div class="Content">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -49,4 +51,8 @@ export default class App extends Vue {
 @import '@/scss/form.scss';
 
 @import '@/scss/popover.scss';
+
+.Content {
+  margin: 0 0.5rem;
+}
 </style>

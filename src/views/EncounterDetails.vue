@@ -6,12 +6,20 @@
         <p @click="showSearch = true">Library</p>
       </div>
 
-      <div class="EncounterDetails-npcsList" v-if="showSearch">
-        <NpcsList :encounterId="$route.params.encounterId"  />
-      </div>
-      <div class="EncounterDetails-activeCharacterWrapper" v-else>
-        <NpcDetails v-if="selectedNpc" :npcData="selectedNpc" />
-        <p v-else>Click on a character name to see details here.</p>
+      <div class="EncounterDetails-npcsList"> 
+        <template v-if="showSearch">
+          <NpcsList :encounterId="$route.params.encounterId" />
+        </template>
+        <template v-else>
+          <div class="u-scrollBoxParent">
+            <div class="u-scrollBoxChild">
+              <div class="EncounterDetails-activeCharacterWrapper">
+                <NpcDetails v-if="selectedNpc" :npcData="selectedNpc" />
+                <p v-else>Click on a character name to see details here.</p>
+              </div>
+            </div>
+          </div>
+        </template>
       </div>
     </div>
 
@@ -25,9 +33,13 @@
     <div class="EncounterDetails-sideBar EncounterDetails-sideBar--right">
       <div class="EncounterDetails-sideBarTitles">
         <p>Active character</p>
-        <NpcDetails v-if="activeNpc" :npcData="activeNpc" />
+        <div class="u-scrollBoxParent">
+          <div class="u-scrollBoxChild">
+            <NpcDetails v-if="activeNpc" :npcData="activeNpc" />
+          </div>
+        </div>
       </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -60,7 +72,7 @@ export default class EncounterDetails extends Vue {
 </script>
 
 <style lang="scss">
-$sideContentWidth: 25%;
+$sideContentWidth: 27%;
 
 .EncounterDetails {
   display: flex;

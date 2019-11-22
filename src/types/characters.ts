@@ -36,7 +36,7 @@ export enum StatusTypes {
 export enum CharacterAttributes {
   STR = 'Strength',
   DEX = 'Dexterity',
-  CON = 'Consitution',
+  CON = 'Constitution',
   INT = 'Intelligence',
   WIS = 'Wisdom',
   CHA = 'Charisma',

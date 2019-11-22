@@ -4,7 +4,7 @@ export function calcModifier(abilityScore: number): number {
 
 export function stringifyModifier(abilityScore: number): string {
   if (abilityScore === 0) { return ''; }
-  return (abilityScore >= 0) ? `+${abilityScore}` : `${abilityScore}`;
+  return (abilityScore >= 0) ? `(+${abilityScore})` : `(${abilityScore})`;
 }
 
 export function stringModifier(abilityScore: number): string {

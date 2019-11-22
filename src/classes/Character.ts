@@ -32,9 +32,9 @@ export class Character {
   public hit_points_current!: number;
   public intelligence: number = 10;
   public intelligence_save: number = 0;
-  public languages: string = '';
+  public languages: string = 'Common';
   public legendary_actions: ICharacterAbility[] = [];
-  public name: string = '';
+  public name: string = 'My new character';
   public perception: number = 10;
   public reactions: string = '';
   public senses: string = '';
@@ -67,8 +67,8 @@ export class Character {
       this.hit_points_current = this.hit_points;
       this.uuid = uuid();
       this.speed = {
-        walk: 0,
-        swim: 0,
+        walk: 30,
+        swim: 10,
         fly: 0,
         burrow: 0,
         climb: 0,
@@ -76,6 +76,7 @@ export class Character {
     }
   }
 
+  // @Todo: check if still needed? Done in npcDetails now
   get stats(): Array<{ name: string; value: number; }> {
     return [
       { name: 'str', value: this.strength },
@@ -87,8 +88,15 @@ export class Character {
     ];
   }
 
+  // @Todo: check if still needed? Done in npcDetails now
   get speedString(): string {
     const keys = Object.keys(this.speed);
-    return keys.map((value) => `${this.speed[value]}ft (${value})`).join(', ');
+    return keys.reduce((acc, current)  => {
+      const value = this.speed[current];
+      if (value > 0) {
+        return acc !== '' ? `${value}ft (${current}), ${acc}` : `${value}ft (${current})`;
+      }
+      return acc;
+    }, '');
   }
 }
