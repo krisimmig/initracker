@@ -1,12 +1,13 @@
 <template>
-  <div v-if="currentEncounter">
-    <h1>{{ currentEncounter.name }}</h1>
-    <div class="u-flex">
-
-      <div>Round <b>{{ currentRound }}</b></div>
-      <div>
-        <button @click="rollInitiative">Roll Ini</button>
-        <button @click="next">Next</button>
+  <div v-if="currentEncounter" class="Encounter">
+    <div class="Encounter-top">
+      <h1>{{ currentEncounter.name }}</h1>
+      <div class="u-flex">
+        <div>Round <b>{{ currentRound }}</b></div>
+        <div>
+          <button @click="rollInitiative">Roll Ini</button>
+          <button @click="next">Next</button>
+        </div>
       </div>
     </div>
 
@@ -147,6 +148,10 @@ export default class Encounter extends Vue {
 
 <style lang="scss">
 @import '@/scss/variables.scss';
+
+.Encounter-top {
+  margin-bottom: 1rem;
+}
 
 .Encounter-npcsListWrapper {
   box-shadow: 0px 0px 19px 1px #00000026;

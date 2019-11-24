@@ -2,11 +2,11 @@
   <div class="EncounterDetails">
     <div class="EncounterDetails-sideBar EncounterDetails-sideBar--left">
       <div class="EncounterDetails-sideBarTitles">
-        <p @click="showSearch = false">Selected character</p>
-        <p @click="showSearch = true">Library</p>
+        <p class="EncounterDetails-tab" :class="{ 'is-active': !showSearch }" @click="showSearch = false">Selected character</p>
+        <p class="EncounterDetails-tab" :class="{ 'is-active': showSearch }" @click="showSearch = true">Library</p>
       </div>
 
-      <div class="EncounterDetails-npcsList"> 
+      <div class="EncounterDetails-npcsList">
         <template v-if="showSearch">
           <NpcsList :encounterId="$route.params.encounterId" />
         </template>
@@ -32,7 +32,9 @@
 
     <div class="EncounterDetails-sideBar EncounterDetails-sideBar--right">
       <div class="EncounterDetails-sideBarTitles">
-        <p>Active character</p>
+        <p class="EncounterDetails-tab is-active is-disabled">Active character</p>
+      </div>
+      <div>
         <div class="u-scrollBoxParent">
           <div class="u-scrollBoxChild">
             <NpcDetails v-if="activeNpc" :npcData="activeNpc" />
@@ -87,5 +89,27 @@ $sideContentWidth: 27%;
   display: flex;
   flex-basis: $sideContentWidth;
   flex-direction: column;
+}
+
+.EncounterDetails-sideBarTitles {
+  margin-top: 2.9rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+}
+
+.EncounterDetails-tab {
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid transparent;
+  margin-right: 1.3rem;
+  cursor: pointer;
+}
+
+.EncounterDetails-tab.is-active {
+  border-bottom-color: currentColor;
+  font-weight: 700;
+}
+
+.EncounterDetails-tab.is-disabled {
+  cursor: initial;
 }
 </style>
