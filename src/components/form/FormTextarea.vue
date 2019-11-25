@@ -7,7 +7,7 @@
       {{ label }}:
     </label>
     <textarea
-      class="Form-textarea"
+      class="Form-element Form-element--textArea"
       :id="label"
       v-bind:value="value"
       v-on:input="$emit('input', $event.target.value)"

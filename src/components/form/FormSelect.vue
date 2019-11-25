@@ -5,11 +5,11 @@
       :for="label"
       class="Form-label"
     >
-      {{ label }}:
+      {{ label }}
     </label>
 
     <select
-      class="Form-select"
+      class="Form-element Form-element--select"
       v-on:change="$emit('input', $event.target.value)"
     >
       <option

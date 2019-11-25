@@ -4,10 +4,10 @@
       :for="label"
       class="Form-label"
     >
-      {{ label }}:
+      {{ label }}
     </label>
     <input
-      class="Form-input"
+      class="Form-element Form-element--input"
       :id="label"
       v-bind:value="value"
       v-on:input="$emit('input', $event.target.value)"
@@ -31,5 +31,7 @@ export default class FormInput extends Vue {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import '@/scss/variables.scss';
+
 </style>
