@@ -48,13 +48,17 @@
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
 
-import * as encountersModule from '../store/encountersModule';
-import Encounter from '../components/encounters/Encounter.vue';
-import NpcsList from '../components/npcs/NpcsList.vue';
-import NpcDetails from '../components/npcs/NpcDetails.vue';
+import * as encountersModule from '@/store/encountersModule';
+import Encounter from '@/components/encounters/Encounter.vue';
+import NpcsList from '@/components/npcs/NpcsList.vue';
+import NpcDetails from '@/components/npcs/NpcDetails.vue';
 
 @Component({
-  components: { Encounter, NpcsList, NpcDetails },
+  components: {
+    Encounter,
+    NpcsList,
+    NpcDetails,
+  },
 })
 export default class EncounterDetails extends Vue {
   public showSearch: boolean = false;

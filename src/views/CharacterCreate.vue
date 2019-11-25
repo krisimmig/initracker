@@ -1,6 +1,10 @@
 <template>
   <div class="u-maxWidth">
-    <h1>Character Create</h1>
+    <PageTitle
+      title="Character editor"
+      subtitle="Here you can create or edit an existing character."
+    />
+
     <div v-if="!isLoading">
       <CharacterBuilder :character="character" />
     </div>
@@ -12,6 +16,8 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import CharacterBuilder from '../components/characters/CharacterBuilder.vue';
+import PageTitle from '../components/common/PageTitle.vue';
+
 import {
   readGetIsLoading,
   dispatchFetchCharacterById,
@@ -26,6 +32,7 @@ import { Character } from '@/classes/Character';
 @Component({
   components: {
     CharacterBuilder,
+    PageTitle,
   },
 })
 export default class CharacterCreate extends Vue {

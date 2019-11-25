@@ -1,6 +1,10 @@
 <template>
   <div class="u-maxWidth">
-    <h1>Character Overview</h1>
+    <PageTitle
+      title="Characters list"
+      subtitle="Here you see a list of all your characters."
+    />
+
     <div class="u-flex">
       <div>
         <ul>
@@ -26,15 +30,17 @@ import { Component, Vue } from 'vue-property-decorator';
 import { readGetCharacters, dispatchFetchCharacters } from '../store/charactersModule';
 import CharacterTeaser from '../components/characters/CharacterTeaser.vue';
 import { Character } from '@/classes/Character';
+import PageTitle from '@/components/common/PageTitle.vue';
 
 @Component({
-  components: { CharacterTeaser },
+  components: {
+    CharacterTeaser,
+    PageTitle,
+  },
 })
 export default class Characters extends Vue {
 
   get characters(): Character[] {
-    console.log('characters');
-    
     return readGetCharacters(this.$store);
   }
 

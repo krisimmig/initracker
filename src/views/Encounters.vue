@@ -1,7 +1,6 @@
 <template>
   <div class="u-maxWidth">
-
-    <h1>Encounter Overview</h1>
+    <PageTitle title="Ecounters list" subtitle="These are all oyur encounters." />
     <div class="u-flex">
       <div>
         <ul>
@@ -25,21 +24,26 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import { IEncounterEntity } from '@/types/encounters';
-import * as encountersModule from '../store/encountersModule';
+import { readGetEncountersAll, dispatchFetchEncounters } from '@/store/encountersModule';
 import EncounterNew from '@/components/encounters/EncounterNew.vue';
 import EncounterTeaser from '@/components/encounters/EncounterTeaser.vue';
+import PageTitle from '@/components/common/PageTitle.vue';
 
 @Component({
-  components: { EncounterNew, EncounterTeaser },
+  components: {
+    EncounterNew,
+    EncounterTeaser,
+    PageTitle,
+  },
 })
 export default class Encounters extends Vue {
 
   get encounters(): IEncounterEntity[] {
-    return encountersModule.readGetEncountersAll(this.$store);
+    return readGetEncountersAll(this.$store);
   }
 
   public mounted() {
-    encountersModule.dispatchFetchEncounters(this.$store);
+    dispatchFetchEncounters(this.$store);
   }
 }
 </script>
