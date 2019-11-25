@@ -2,7 +2,7 @@
   <div class="CharacterTeaser">
     <h3>CharacterTeaser</h3>
     <p @click="showDetails = !showDetails">{{ name }}</p>
-    <router-link :to="{ name: 'editCharacter', params: { uuid: character.uuid }}">Edit</router-link>
+      <router-link tag="button" :to="{ name: 'editCharacter', params: { uuid: character.uuid }}">Edit</router-link>
     <button @click="deleteCharacter">Delete</button>
     <NpcDetails v-if="showDetails" :npcData="character" />
   </div>

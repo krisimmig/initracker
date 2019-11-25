@@ -17,7 +17,7 @@
         @scroll="onScroll"
       >
         <ul v-if="npcs.length > 0">
-          <li v-for="(npc, index) in npcs" :key="npc.id">
+          <li v-for="(npc, index) in npcs" :key="npc.uuid">
             <div v-if="index < maxVisible">
               <NpcSearchResult v-bind="npc" :npcData="npc" />
             </div>

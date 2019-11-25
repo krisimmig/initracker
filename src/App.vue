@@ -49,6 +49,7 @@ export default class App extends Vue {
 @import '@/scss/utilities.scss';
 @import '@/scss/base.scss';
 @import '@/scss/form.scss';
+@import '@/scss/buttons.scss';
 
 @import '@/scss/popover.scss';
 

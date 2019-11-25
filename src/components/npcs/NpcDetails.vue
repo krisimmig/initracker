@@ -2,7 +2,7 @@
   <div class="NpcDetails NpcDetails-wrapper">
     <div class="NpcDetails-title">
       <h2 class="NpcDetails-name">{{ npcData.name }}</h2>
-      <p class="NpcDetails-subtitle">{{ npcData.size }}, {{ npcData.alignment }}</p>
+      <p class="NpcDetails-subtitle">{{ npcData.size }}, {{ npcData.alignment }} {{ npcData.type }} with a CR of {{ npcData.challenge_rating }}</p>
     </div>
 
     <div class="NpcDetails-top NpcDetails-contentPadding">
@@ -183,11 +183,6 @@ $padding: 1em;
 .NpcDetails-bottom h3 {
   margin-top: 2em;
   margin-bottom: 0.7em;
-}
-
-.NpcDetails-bottom hr {
-  border: 1px solid black;
-  opacity: 0.1;
 }
 
 .NpcDetails-top .NpcArmorClass-icon {
