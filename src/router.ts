@@ -3,14 +3,12 @@ import Router from 'vue-router';
 import { Route } from 'vue-router';
 
 import Home from './views/Home.vue';
-import Dashboard from './views/Dashboard.vue';
 import Characters from './views/Characters.vue';
 import CharacterNew from './views/CharacterNew.vue';
 import CharacterCreate from './views/CharacterCreate.vue';
 import Encounters from './views/Encounters.vue';
 import EncounterDetails from './views/EncounterDetails.vue';
 import Login from './views/Login.vue';
-import About from './views/About.vue';
 import Register from './views/Register.vue';
 import { isLoggedIn } from './store/firebase';
 
@@ -27,15 +25,6 @@ const router = new Router({
       path: '/home',
       name: 'home',
       component: Home,
-    },
-
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: Dashboard,
-      meta: {
-        requiresAuth: true,
-      },
     },
 
     {
@@ -112,12 +101,6 @@ const router = new Router({
       path: '/register',
       name: 'register',
       component: Register,
-    },
-
-    {
-      path: '/about',
-      name: 'about',
-      component: About,
     },
   ],
 });
