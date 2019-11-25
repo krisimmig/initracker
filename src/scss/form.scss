@@ -1,17 +1,62 @@
+textarea, select, input, button {
+  outline: none;
+}
+
+// Fixes safari select element styling
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEuNDEgNC42NyAyLjQ4IDMuMTggMy41NCA0LjY3IDEuNDEgNC42NyIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzLjU0IDUuMzMgMi40OCA2LjgyIDEuNDEgNS4zMyAzLjU0IDUuMzMiLz48L3N2Zz4=) no-repeat 95% 50%;
+}
+
+.Form-item {
+  margin-bottom: 1.5em;
+}
+
+// Fixes safari rendering issues with block elements.
+div[class^="u-columns-"] .Form-item,
+div[class*=" u-columns-"] .Form-item {
+  display: inline;
+}
+
 .Form-label {
   min-width: 200px;
   display: inline-block;
   vertical-align: top;
+  color: $color-6;
+  margin-bottom: 0.2em;
+  font-size: 0.8em;
 }
 
-.Form-textarea {
-  display: inline-block;
-  width: calc(100% - 300px);
-  height: 100px;
+.Form-element {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid $color-3;
+  border-radius: 4px;
+  background-color: $color-8;
+  color: #2b3036;
+  transition: border-color 100ms ease-in-out;
+  padding: 0.5em;
 }
 
-.Form-input,
-.Form-select {
-  display: inline-block;
-  width: calc(100% - 300px);
+.Form-element:focus {
+  border-color: #62aaff;
+}
+
+.Form-element--input {
+  padding-left: 0.5em;
+}
+
+.Form-element--input,
+.Form-element--select {
+  height: 2.5em;
+}
+
+.Form-element--textArea {
+  height: 150px;
+  line-height: 1.4em;
+  padding: 0.5em;
+  max-width: 100%;
 }
