@@ -15,8 +15,8 @@
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import CharacterBuilder from '../components/characters/CharacterBuilder.vue';
-import PageTitle from '../components/common/PageTitle.vue';
+import CharacterBuilder from '@/components/characters/CharacterBuilder.vue';
+import PageTitle from '@/components/common/PageTitle.vue';
 
 import {
   readGetIsLoading,
@@ -26,7 +26,7 @@ import {
   dispatchFetchCharacterByUuid,
 } from '@/store/characterBuilderModule';
 import { readGetNpcById  } from '@/store/npcsModule';
-import { charactersModule } from '../store/charactersModule';
+import { charactersModule } from '@/store/charactersModule';
 import { Character } from '@/classes/Character';
 
 @Component({

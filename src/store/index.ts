@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
 
-import { usersModule } from './usersModule';
-import { npcsModule } from './npcsModule';
-import { encountersModule } from './encountersModule';
-import { charactersModule } from './charactersModule';
-import { characterBuilderModule } from './characterBuilderModule';
+import { usersModule } from '@/store/usersModule';
+import { npcsModule } from '@/store/npcsModule';
+import { encountersModule } from '@/store/encountersModule';
+import { charactersModule } from '@/store/charactersModule';
+import { characterBuilderModule } from '@/store/characterBuilderModule';
 
 export interface RootState {
   version: string;

@@ -2,7 +2,7 @@
   <div class="Npc" v-if="npcData">
     <v-popover placement="right-end" :autoHide="true" trigger="click">
       <h4>{{ npcData.name }}</h4>
-      <NpcDetails slot="popover" :npcData="npcData" :isWide="true" />
+      <CharacterDetails slot="popover" :npcData="npcData" :isWide="true" />
     </v-popover>
 
      <span @click="addToEncounter">+</span>
@@ -16,11 +16,11 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import * as npcsModule from '@/store/npcsModule';
 import * as encountersModule from '@/store/encountersModule';
-import NpcDetails from './NpcDetails.vue';
-import { Character } from '../../classes/Character';
+import CharacterDetails from '@/components/characters/CharacterDetails.vue';
+import { Character } from '@/classes/Character';
 
 @Component({
-  components: { NpcDetails },
+  components: { CharacterDetails },
 })
 export default class NpcSearchResult extends Vue {
   @Prop({ type: String, required: true }) public id!: string;

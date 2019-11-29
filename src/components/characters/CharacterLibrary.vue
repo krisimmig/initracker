@@ -32,7 +32,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import NpcSearchResult from './NpcSearchResult.vue';
+import NpcSearchResult from '@/components/npcs/NpcSearchResult.vue';
 import { readGetNpcs } from '@/store/npcsModule';
 import { Character as ICharacter } from '@/classes/Character';
 import { readGetCharacters } from '@/store/charactersModule';
@@ -40,7 +40,7 @@ import { readGetCharacters } from '@/store/charactersModule';
 @Component({
   components: { NpcSearchResult },
 })
-export default class NpcsList extends Vue {
+export default class CharacterLibrary extends Vue {
   public searchString: string = '';
   public searchResults: ICharacter[] = [];
   public maxVisible: number = 10;
@@ -72,8 +72,8 @@ export default class NpcsList extends Vue {
 
 <style scoped lang="scss">
 .NpcsList-results {
-  max-height: calc(100vh - 252px);
-  overflow-y: scroll;
+  // max-height: calc(100vh - 252px);
+  // overflow-y: scroll;
   border: 1px solid green;
 }
 </style>

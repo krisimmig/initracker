@@ -26,7 +26,7 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import { readGetNpcs } from '@/store/npcsModule';
 import { Character } from '@/classes/Character';
-import PageTitle from '../components/common/PageTitle.vue';
+import PageTitle from '@/components/common/PageTitle.vue';
 
 
 @Component({

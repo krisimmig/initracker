@@ -2,19 +2,31 @@
   <div class="EncounterDetails">
     <div class="EncounterDetails-sideBar EncounterDetails-sideBar--left">
       <div class="EncounterDetails-sideBarTitles">
-        <p class="EncounterDetails-tab" :class="{ 'is-active': !showSearch }" @click="showSearch = false">Selected character</p>
-        <p class="EncounterDetails-tab" :class="{ 'is-active': showSearch }" @click="showSearch = true">Library</p>
+        <p
+          class="EncounterDetails-tab"
+          :class="{ 'is-active': !showSearch }"
+          @click="showSearch = false"
+        >
+          Selected character
+        </p>
+        <p
+          class="EncounterDetails-tab"
+          :class="{ 'is-active': showSearch }"
+          @click="showSearch = true"
+        >
+          Library
+        </p>
       </div>
 
       <div class="EncounterDetails-npcsList">
         <template v-if="showSearch">
-          <NpcsList :encounterId="$route.params.encounterId" />
+          <CharacterLibrary :encounterId="$route.params.encounterId" />
         </template>
         <template v-else>
           <div class="u-scrollBoxParent">
             <div class="u-scrollBoxChild">
               <div class="EncounterDetails-activeCharacterWrapper">
-                <NpcDetails v-if="selectedNpc" :npcData="selectedNpc" />
+                <CharacterDetails v-if="selectedNpc" :npcData="selectedNpc" />
                 <p v-else>Click on a character name to see details here.</p>
               </div>
             </div>
@@ -37,7 +49,7 @@
       <div>
         <div class="u-scrollBoxParent">
           <div class="u-scrollBoxChild">
-            <NpcDetails v-if="activeNpc" :npcData="activeNpc" />
+            <CharacterDetails v-if="activeNpc" :npcData="activeNpc" />
           </div>
         </div>
       </div>
@@ -48,31 +60,35 @@
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
 
-import * as encountersModule from '@/store/encountersModule';
+import {
+  readGetNpcInDetail,
+  readGetEncountersActiveNpc,
+  dispatchFetchEncounterById,
+} from '@/store/encountersModule';
 import Encounter from '@/components/encounters/Encounter.vue';
-import NpcsList from '@/components/npcs/NpcsList.vue';
-import NpcDetails from '@/components/npcs/NpcDetails.vue';
+import CharacterLibrary from '@/components/characters/CharacterLibrary.vue';
+import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 
 @Component({
   components: {
     Encounter,
-    NpcsList,
-    NpcDetails,
+    CharacterLibrary,
+    CharacterDetails,
   },
 })
 export default class EncounterDetails extends Vue {
   public showSearch: boolean = false;
 
   get selectedNpc() {
-    return encountersModule.readGetNpcInDetail(this.$store);
+    return readGetNpcInDetail(this.$store);
   }
 
   get activeNpc() {
-    return encountersModule.readGetEncountersActiveNpc(this.$store);
+    return readGetEncountersActiveNpc(this.$store);
   }
 
   public mounted() {
-    encountersModule.dispatchFetchEncounterById(this.$store, { encounterId: this.$route.params.encounterId });
+    dispatchFetchEncounterById(this.$store, { encounterId: this.$route.params.encounterId });
   }
 }
 </script>

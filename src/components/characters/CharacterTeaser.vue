@@ -4,7 +4,7 @@
     <p @click="showDetails = !showDetails">{{ name }}</p>
       <router-link tag="button" :to="{ name: 'editCharacter', params: { uuid: character.uuid }}">Edit</router-link>
     <button @click="deleteCharacter">Delete</button>
-    <NpcDetails v-if="showDetails" :npcData="character" />
+    <CharacterDetails v-if="showDetails" :npcData="character" />
   </div>
 </template>
 
@@ -12,12 +12,12 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import { Character as ICharacter } from '@/classes/Character';
-import NpcDetails from '@/components/npcs/NpcDetails.vue';
+import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 import { dispatchDeleteCharacter } from '@/store/characterBuilderModule';
 
 @Component({
   components: {
-    NpcDetails,
+    CharacterDetails,
   },
 })
 export default class CharacterTeaser extends Vue {

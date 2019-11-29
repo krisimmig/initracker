@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-// import { firebase } from './../store/firebase';
+// import { firebase } from '@/store/firebase';
 
 @Component
 export default class Register extends Vue {

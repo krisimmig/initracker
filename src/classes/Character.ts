@@ -76,7 +76,7 @@ export class Character {
     }
   }
 
-  // @Todo: check if still needed? Done in npcDetails now
+  // @Todo: check if still needed? Done in CharacterDetails now
   get stats(): Array<{ name: string; value: number; }> {
     return [
       { name: 'str', value: this.strength },
@@ -88,7 +88,7 @@ export class Character {
     ];
   }
 
-  // @Todo: check if still needed? Done in npcDetails now
+  // @Todo: check if still needed? Done in CharacterDetails now
   get speedString(): string {
     const keys = Object.keys(this.speed);
     return keys.reduce((acc, current)  => {

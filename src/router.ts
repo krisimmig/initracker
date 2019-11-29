@@ -2,15 +2,15 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import { Route } from 'vue-router';
 
-import Home from './views/Home.vue';
-import Characters from './views/Characters.vue';
-import CharacterNew from './views/CharacterNew.vue';
-import CharacterCreate from './views/CharacterCreate.vue';
-import Encounters from './views/Encounters.vue';
-import EncounterDetails from './views/EncounterDetails.vue';
-import Login from './views/Login.vue';
-import Register from './views/Register.vue';
-import { isLoggedIn } from './store/firebase';
+import Home from '@/views/Home.vue';
+import Characters from '@/views/Characters.vue';
+import CharacterNew from '@/views/CharacterNew.vue';
+import CharacterCreate from '@/views/CharacterCreate.vue';
+import Encounters from '@/views/Encounters.vue';
+import EncounterDetails from '@/views/EncounterDetails.vue';
+import Login from '@/views/Login.vue';
+import Register from '@/views/Register.vue';
+import { isLoggedIn } from '@/store/firebase';
 
 Vue.use(Router);
 

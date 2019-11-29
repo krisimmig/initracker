@@ -27,8 +27,8 @@
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
 
-import { readGetCharacters, dispatchFetchCharacters } from '../store/charactersModule';
-import CharacterTeaser from '../components/characters/CharacterTeaser.vue';
+import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersModule';
+import CharacterTeaser from '@/components/characters/CharacterTeaser.vue';
 import { Character } from '@/classes/Character';
 import PageTitle from '@/components/common/PageTitle.vue';
 

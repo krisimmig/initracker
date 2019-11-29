@@ -1,56 +1,56 @@
 <template>
-  <div class="NpcDetails NpcDetails-wrapper">
-    <div class="NpcDetails-title">
-      <h2 class="NpcDetails-name">{{ npcData.name }}</h2>
-      <p class="NpcDetails-subtitle">{{ npcData.size }}, {{ npcData.alignment }} {{ npcData.type }} with a CR of {{ npcData.challenge_rating }}</p>
+  <div class="CharacterDetails CharacterDetails-wrapper">
+    <div class="CharacterDetails-title">
+      <h2 class="CharacterDetails-name">{{ npcData.name }}</h2>
+      <p class="CharacterDetails-subtitle">{{ npcData.size }}, {{ npcData.alignment }} {{ npcData.type }} with a CR of {{ npcData.challenge_rating }}</p>
     </div>
 
-    <div class="NpcDetails-top NpcDetails-contentPadding">
-      <div class="NpcDetails-armorAndHealth">
-        <div class="NpcDetails-column">
+    <div class="CharacterDetails-top CharacterDetails-contentPadding">
+      <div class="CharacterDetails-armorAndHealth">
+        <div class="CharacterDetails-column">
           <NpcArmorClass :armorClass="npcData.armor_class" />
           <p v-if="npcData.armor_desc">{{ npcData.armor_desc }}</p>
           <p v-else>Armor Class</p>
         </div>
-        <div class="NpcDetails-column">
+        <div class="CharacterDetails-column">
           <NpcHealth :uuid="npcData.uuid" :hp="npcData.hit_points" :maxHp="npcData.hit_points" />
           <p>{{ npcData.hit_dice }}</p>
         </div>
       </div>
 
-      <div class="NpcDetails-stats">
-        <div class="NpcDetails-stat" v-for="(statName, statValue, index) in statsArray" :key="index">
-          <p class="NpcDetails-statTitle">{{ statValue }}</p>
-          <p class="NpcDetails-statValue">
-            {{ npcData[statName.toLowerCase()] }} <span class="NpcDetails-statModifier">{{ stringModifier(npcData[statName.toLowerCase()]) }}</span>
+      <div class="CharacterDetails-stats">
+        <div class="CharacterDetails-stat" v-for="(statName, statValue, index) in statsArray" :key="index">
+          <p class="CharacterDetails-statTitle">{{ statValue }}</p>
+          <p class="CharacterDetails-statValue">
+            {{ npcData[statName.toLowerCase()] }} <span class="CharacterDetails-statModifier">{{ stringModifier(npcData[statName.toLowerCase()]) }}</span>
           </p>
         </div>
       </div>
 
-      <p class="NpcDetails-textLine NpcDetails-textLine--speed">
+      <p class="CharacterDetails-textLine CharacterDetails-textLine--speed">
         <span class="u-bold">Speed</span> {{ speedString }}
       </p>
-      <p class="NpcDetails-textLine" v-if="npcData.senses">
+      <p class="CharacterDetails-textLine" v-if="npcData.senses">
         <span class="u-bold">Senses</span> {{ npcData.senses }}
       </p>
-      <p class="NpcDetails-textLine" v-if="npcData.languages">
+      <p class="CharacterDetails-textLine" v-if="npcData.languages">
         <span class="u-bold">Languages</span> {{ npcData.languages }}
       </p>
-      <p class="NpcDetails-textLine" v-if="npcData.challenge_rating">
+      <p class="CharacterDetails-textLine" v-if="npcData.challenge_rating">
         <span class="u-bold">Challenge Rating</span> {{ npcData.challenge_rating }}
       </p>
-      <p class="NpcDetails-textLine" v-if="npcData.damage_immunities">
+      <p class="CharacterDetails-textLine" v-if="npcData.damage_immunities">
         <span class="u-bold">Damage Immunities</span> {{ npcData.damage_immunities }}
       </p>
-      <p class="NpcDetails-textLine" v-if="npcData.damage_resistances">
+      <p class="CharacterDetails-textLine" v-if="npcData.damage_resistances">
         <span class="u-bold">Damage Resistances</span> {{ npcData.damage_resistances }}
       </p>
-      <p class="NpcDetails-textLine" v-if="npcData.damage_vulnerabilities">
+      <p class="CharacterDetails-textLine" v-if="npcData.damage_vulnerabilities">
         <span class="u-bold">Damage Vulnerabilities</span> {{ npcData.damage_vulnerabilities }}
       </p>
     </div>
 
-    <div class="NpcDetails-bottom NpcDetails-contentPadding">
+    <div class="CharacterDetails-bottom CharacterDetails-contentPadding">
       <template v-if="npcData.special_abilities">
         <p v-for="(specialAbility, index) in npcData.special_abilities" :key="`special-${index}`">
           <span class="u-bold">{{ specialAbility.name }}.</span> {{ specialAbility.desc }}
@@ -93,7 +93,7 @@ import { CharacterAttributes } from '@/types/characters';
     NpcHealth,
   },
 })
-export default class NpcDetails extends Vue {
+export default class CharacterDetails extends Vue {
   @Prop({ type: Object, required: true }) public npcData!: ICharacter;
   @Prop({ type: Boolean, default: false }) public isWide!: boolean;
 
@@ -131,11 +131,11 @@ export default class NpcDetails extends Vue {
 
 $padding: 1em;
 
-.NpcDetails {
+.CharacterDetails {
   font-size: 14px;
 }
 
-.NpcDetails-title {
+.CharacterDetails-title {
   background-color: $color-black;
   color: $color-3;
   padding: $padding;
@@ -143,81 +143,81 @@ $padding: 1em;
   border-top-right-radius: 4px;
 }
 
-.NpcDetails-name,
-.NpcDetails-subtitle {
+.CharacterDetails-name,
+.CharacterDetails-subtitle {
   margin: 0;
 }
 
-.NpcDetails-subtitle {
+.CharacterDetails-subtitle {
   margin-top: 0.5em;
   font-style: italic;
 }
 
-.NpcDetails-contentPadding {
+.CharacterDetails-contentPadding {
   padding: $padding;
   padding-bottom: 1.8em;
 }
 
-.NpcDetails-top {
+.CharacterDetails-top {
   background-color: $color-3;
 }
 
-.NpcDetails-textLine {
+.CharacterDetails-textLine {
   margin-bottom: 0em;
   margin-top: .3em;
 }
 
-.NpcDetails-textLine--speed {
+.CharacterDetails-textLine--speed {
   margin-top: 1.5em;
   margin-bottom: 1.5em;
 }
 
-.NpcDetails-bottom {
+.CharacterDetails-bottom {
   background-color: $color-8;
 }
 
-.NpcDetails-bottom p {
+.CharacterDetails-bottom p {
   line-height: 1.5em;
 }
 
-.NpcDetails-bottom h3 {
+.CharacterDetails-bottom h3 {
   margin-top: 2em;
   margin-bottom: 0.7em;
 }
 
-.NpcDetails-top .NpcArmorClass-icon {
+.CharacterDetails-top .NpcArmorClass-icon {
   color: $color-white;
 }
 
-.NpcDetails-armorAndHealth {
+.CharacterDetails-armorAndHealth {
   display: flex;
 }
 
-.NpcDetails-column {
+.CharacterDetails-column {
   flex-basis: 50%;
   display: flex;
   align-items: center;
 }
 
-.NpcDetails-stats {
+.CharacterDetails-stats {
   display: flex;
   margin-top: 1em;
   justify-content: space-between;
 }
 
-.NpcDetails-statTitle {
+.CharacterDetails-statTitle {
   text-transform: uppercase;
   font-weight: 700;
   margin: 0;
 }
 
-.NpcDetails-statValue {
+.CharacterDetails-statValue {
   color: $color-6;
   margin: 0;
   margin-top: 0.5em;
 }
 
-.NpcDetails-statModifier {
+.CharacterDetails-statModifier {
   font-weight: 100;
 }
 </style>

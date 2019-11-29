@@ -113,7 +113,7 @@
     <div class="u-flex-50">
       <div class="u-scrollBoxParent">
         <div class="u-scrollBoxChild">
-          <NpcDetails :npcData="character" />
+          <CharacterDetails :npcData="character" />
         </div>
       </div>
     </div>
@@ -127,14 +127,14 @@ import { $enum } from 'ts-enum-util';
 import { Character as ICharacter } from '@/classes/Character';
 import { CharacterSizes, CreatureTypes, CharacterAlignments } from '@/types/characters';
 import { dispatchSaveCharacter, dispatchDeleteCharacter } from '@/store/characterBuilderModule';
-import NpcDetails from '@/components/npcs/NpcDetails.vue';
+import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 import FormInput from '@/components/form/FormInput.vue';
 import FormSelect from '@/components/form/FormSelect.vue';
 import FormTextarea from '@/components/form/FormTextarea.vue';
 
 @Component({
   components: {
-    NpcDetails,
+    CharacterDetails,
     FormInput,
     FormSelect,
     FormTextarea,

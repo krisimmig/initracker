@@ -41,7 +41,7 @@ import {
   dispatchUpdateActiveEntityIndex,
 } from '@/store/encountersModule';
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
-import NpcListItem from '../npcs/NpcListItem.vue';
+import NpcListItem from '@/components/npcs/NpcListItem.vue';
 import { calcModifier, stringifyModifier } from '@/utils/dnd';
 
 @Component({
