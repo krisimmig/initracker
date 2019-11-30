@@ -36,8 +36,6 @@ export default class App extends Vue {
     if (this.monsters.length < 1) {
       await dispatchFetchNpcs(this.$store);
     }
-
-    // dispatchFetchCharacters(this.$store);
   }
 }
 </script>
@@ -52,7 +50,7 @@ export default class App extends Vue {
 @import '@/scss/buttons.scss';
 
 @import '@/scss/popover.scss';
-
+<style lang="postcss">
 .Content {
   margin: 0 0.5rem;
 }
