@@ -4,7 +4,7 @@
     <p @click="showDetails = !showDetails">{{ name }}</p>
       <router-link tag="button" :to="{ name: 'editCharacter', params: { uuid: character.uuid }}">Edit</router-link>
     <button @click="deleteCharacter">Delete</button>
-    <CharacterDetails v-if="showDetails" :npcData="character" />
+    <CharacterDetails v-if="showDetails" characterData="character"/>
   </div>
 </template>
 

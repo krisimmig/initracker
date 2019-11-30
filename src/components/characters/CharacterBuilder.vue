@@ -112,7 +112,7 @@
     <div class="u-flex-50">
       <div class="u-scrollBoxParent">
         <div class="u-scrollBoxChild">
-          <CharacterDetails :npcData="character" />
+          <CharacterDetails characterData="character"/>
         </div>
       </div>
     </div>

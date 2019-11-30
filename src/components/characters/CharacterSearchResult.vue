@@ -1,8 +1,8 @@
 <template>
   <div class="CharacterSearchResult" v-if="npcData" @click="selectCharacter">
-    <h4>{{ npcData.name }}</h4>
+    <h4>{{ characterData.name }}</h4>
      <span @click="addToEncounter">+</span>
-    {{ npcData.hit_points }} HP | {{ npcData.size }} | {{ npcData.type }}
+    {{ characterData.hit_points }} HP | {{ characterData.size }} | {{ characterData.type }}
 
   </div>
 </template>
@@ -22,7 +22,7 @@ export default class CharacterSearchResult extends Vue {
   @Prop({ type: Number, required: true }) public hit_points!: number;
   @Prop({ type: String, required: true }) public size!: string;
   @Prop({ type: String, required: true }) public type!: string;
-  @Prop({ type: Object, required: true }) public npcData!: Character;
+  @Prop({ type: Object, required: true }) public characterData!: Character;
 
   public get encounterId() {
     return readGetEncountersCurrentId(this.$store);

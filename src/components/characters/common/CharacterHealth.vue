@@ -1,8 +1,8 @@
 <template>
-  <div class="NpcHealth">
-    <div class="NpcHealth-wrapper" @click="showHealthDialogue = true">
-      <SvgIcon name="heart" class="NpcHealth-icon" />
-      <div class="NpcHealth-hp">{{ hp }}</div>
+  <div class="CharacterHealth">
+    <div class="CharacterHealth-wrapper" @click="showHealthDialogue = true">
+      <SvgIcon name="heart" class="CharacterHealth-icon" />
+      <div class="CharacterHealth-hp">{{ hp }}</div>
     </div>
 
     <DialogueBox
@@ -41,7 +41,7 @@ import { dispatchUpdateHitPointCurrent } from '@/store/npcsModule';
     SvgIcon,
   },
 })
-export default class NpcHealth extends Vue {
+export default class CharacterHealth extends Vue {
   public showHealthDialogue: boolean = false;
   public hitPointChangeAmount: number = 0;
 
@@ -71,22 +71,22 @@ export default class NpcHealth extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/scss/variables.scss';
+@import '../../../scss/variables.scss';
 
 $width: 2.5em;
 
-.NpcHealth-wrapper {
+.CharacterHealth-wrapper {
   position: relative;
   width: $width;
   height: $width;
   cursor: pointer;
 }
 
-.NpcHealth-wrapper:hover {
+.CharacterHealth-wrapper:hover {
   background-color: #fff;
 }
 
-.NpcHealth-hp {
+.CharacterHealth-hp {
   font-weight: 700;
   position: absolute;
   top: .6em;
@@ -95,7 +95,7 @@ $width: 2.5em;
   text-align: center;
 }
 
-.NpcHealth-icon {
+.CharacterHealth-icon {
   color: $color-2;
   font-size: $width;
 }

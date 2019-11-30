@@ -26,7 +26,7 @@
           <div class="u-scrollBoxParent">
             <div class="u-scrollBoxChild">
               <div class="EncounterDetails-activeCharacterWrapper">
-                <CharacterDetails v-if="activeNpc" :npcData="activeNpc" />
+                <CharacterDetails v-if="activeNpc" :characterData="activeNpc"/>
               </div>
             </div>
           </div>
@@ -45,7 +45,7 @@
       <div>
         <div class="u-scrollBoxParent">
           <div class="u-scrollBoxChild">
-            <CharacterDetails v-if="selectedNpc" :npcData="selectedNpc" />
+            <CharacterDetails v-if="selectedNpc" :characterData="selectedNpc"/>
             <p v-else>Click on a character name to see details here.</p>
           </div>
         </div>
