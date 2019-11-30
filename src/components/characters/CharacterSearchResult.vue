@@ -1,5 +1,5 @@
 <template>
-  <div class="CharacterSearchResult" v-if="npcData" @click="selectCharacter">
+  <div class="CharacterSearchResult" v-if="characterData" @click="selectCharacter">
     <h4>{{ characterData.name }}</h4>
      <span @click="addToEncounter">+</span>
     {{ characterData.hit_points }} HP | {{ characterData.size }} | {{ characterData.type }}
@@ -31,14 +31,13 @@ export default class CharacterSearchResult extends Vue {
   public addToEncounter() {
     if (!this.encounterId) { return; }
     dispatchAddNpcToEncounter(this.$store, {
-      npcData: Object.assign({}, this.npcData),
+      npcData: Object.assign({}, this.characterData),
       encounterId: this.encounterId,
     });
   }
 
   public selectCharacter() {
-    console.log('selectCharacter');
-    commitSetNpcInDetail(this.$store, this.npcData);
+    commitSetNpcInDetail(this.$store, this.characterData);
   }
 }
 </script>

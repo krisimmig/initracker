@@ -26,7 +26,7 @@
           <div class="u-scrollBoxParent">
             <div class="u-scrollBoxChild">
               <div class="EncounterDetails-activeCharacterWrapper">
-                <CharacterDetails v-if="activeNpc" :characterData="activeNpc"/>
+                <CharacterDetails v-if="activeCharacter" :characterData="activeCharacter"/>
               </div>
             </div>
           </div>
@@ -45,7 +45,7 @@
       <div>
         <div class="u-scrollBoxParent">
           <div class="u-scrollBoxChild">
-            <CharacterDetails v-if="selectedNpc" :characterData="selectedNpc"/>
+            <CharacterDetails v-if="selectedCharacter" :characterData="selectedCharacter"/>
             <p v-else>Click on a character name to see details here.</p>
           </div>
         </div>
@@ -76,11 +76,11 @@ import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 export default class EncounterDetails extends Vue {
   public showSearch: boolean = false;
 
-  get selectedNpc() {
+  get selectedCharacter() {
     return readGetNpcInDetail(this.$store);
   }
 
-  get activeNpc() {
+  get activeCharacter() {
     return readGetEncountersActiveNpc(this.$store);
   }
 

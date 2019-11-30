@@ -16,7 +16,7 @@
           <ul v-if="npcs.length > 0">
             <li v-for="(npc, index) in npcs" :key="npc.uuid">
               <div v-if="index < maxVisible">
-                <CharacterSearchResult v-bind="npc" :npcData="npc" />
+                <CharacterSearchResult v-bind="npc" :characterData="npc" />
               </div>
             </li>
           </ul>
@@ -31,7 +31,7 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import CharacterSearchResult from '@/components/characters/CharacterSearchResult.vue';
 import { readGetNpcs } from '@/store/npcsModule';
-import { Character as ICharacter, Character } from '@/classes/Character';
+import { Character } from '@/classes/Character';
 import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersModule';
 
 @Component({
