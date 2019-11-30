@@ -42,12 +42,12 @@ export default class CharacterListItem extends Vue {
   @Prop({ type: Object, required: true }) public npc!: ICharacter;
   @Prop({ type: Boolean, required: true }) public isActive!: boolean;
 
-  get selectedNpcUuis() {
+  get selectedNpcUuid() {
     return readGetNpcUuidInDetail(this.$store);
   }
 
   get isSelected() {
-    return this.npc.uuid === this.selectedNpcUuis;
+    return this.npc.uuid === this.selectedNpcUuid;
   }
 
   public showInDetail() {
@@ -59,7 +59,7 @@ export default class CharacterListItem extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/scss/variables.scss';
+@import '../../scss/variables.scss';
 
 .CharacterListItem {
   position: relative;
