@@ -7,7 +7,7 @@
           <form class="Form">
             <div class="u-columns-2">
               <FormInput v-model="character.name" label="Name" />
-              <FormInput v-model="character.challenge_rating" label="Challenge rating"/>
+              <FormInput v-model="character.challenge_rating" label="Challenge rating" />
             </div>
 
             <div class="u-columns-3">
@@ -52,7 +52,7 @@
 
             <hr>
 
-            <h3>Special Abilites</h3>
+            <h3>Special Abilities</h3>
             <div
               class="CharacterBuilder-removable"
               v-for="(specialAbility, index) in character.special_abilities"
@@ -112,7 +112,7 @@
     <div class="u-flex-50">
       <div class="u-scrollBoxParent">
         <div class="u-scrollBoxChild">
-          <CharacterDetails characterData="character"/>
+          <CharacterDetails :characterData="character"/>
         </div>
       </div>
     </div>
@@ -155,17 +155,9 @@ export default class CharacterBuilder extends Vue {
     return $enum(CreatureTypes).map((value, name) => ({ value, name }));
   }
 
-  public get characterSize() {
-    return this.character.size;
-  }
-
   public get optionsAlignment() {
-    return $enum(CharacterAlignments).map((value, name) => ({ value, name: value }));
+    return $enum(CharacterAlignments).map((value) => ({ value, name: value }));
   }
-
-  // public get attributes() {
-  //   return $enum(CharacterAttributes).map((value, name) => ({ value, name }));
-  // }
 
   public saveCharacter(): void {
     dispatchSaveCharacter(this.$store, { character: this.character });
@@ -173,7 +165,7 @@ export default class CharacterBuilder extends Vue {
 
   public async deleteCharacter() {
     await dispatchDeleteCharacter(this.$store, { characterUuid: this.character.uuid });
-    this.$router.push({ name: 'characters' });
+    await this.$router.push({name: 'characters'});
   }
 
   public addLegendaryAction() {
