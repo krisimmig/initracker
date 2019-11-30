@@ -42,7 +42,7 @@ import {
 } from '@/store/encountersModule';
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
 import CharacterListItem from '@/components/characters/CharacterListItem.vue';
-import { calcModifier, stringifyModifier } from '@/utils/dnd';
+import { calcModifier, modifierWithSign } from '@/utils/dnd';
 
 @Component({
   components: { CharacterListItem, Encounter },
@@ -69,14 +69,6 @@ export default class Encounter extends Vue {
     return readGetEncountersCurrentNpcs(this.$store);
   }
 
-  get totalNpcs() {
-    if (this.currentEncounter && this.npcs) {
-      return this.npcs.length;
-    } else {
-      return 0;
-    }
-  }
-
   public removeNpcFromEncounter(npcID: string) {
     dispatchRemoveNpcFromEncounter(this.$store, {
       npcID,
@@ -95,7 +87,7 @@ export default class Encounter extends Vue {
   public rollInitiative(): void {
     if (this.currentEncounter && this.npcs) {
       this.npcs.forEach((npc) => {
-        const mod = stringifyModifier(calcModifier(npc.dexterity));
+        const mod = modifierWithSign(npc.dexterity);
         const newInitiative = new DiceRoll(`1d20${mod}`);
         dispatchUpdateInitiative(this.$store, {
           encounterId: this.id,
