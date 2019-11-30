@@ -1,8 +1,11 @@
 <template>
   <div class="CharacterHealth">
-    <div class="CharacterHealth-wrapper" @click="showHealthDialogue = true">
+    <div class="CharacterHealth-wrapper" :class="{ 'has-maxHp' : maxHp }" @click="showHealthDialogue = true">
       <SvgIcon name="heart" class="CharacterHealth-icon" />
-      <div class="CharacterHealth-hp">{{ hp }}</div>
+      <div class="CharacterHealth-hpWrapper">
+        <p class="CharacterHealth-hp">{{ hp }}</p>
+        <p class="CharacterHealth-maxHp" v-if="maxHp">of {{ maxHp }}</p>
+      </div>
     </div>
 
     <DialogueBox
@@ -47,7 +50,7 @@ export default class CharacterHealth extends Vue {
 
   @Prop({ type: String }) private uuid!: string;
   @Prop({ type: Number, required: true }) private hp!: number;
-  @Prop({ type: Number, required: true }) private maxHp!: number;
+  @Prop({ type: Number, required: false }) private maxHp!: number;
 
   public changeHitPoints({ subtract } = { subtract: true }) {
     const encounterId = readGetEncountersCurrentId(this.$store);
@@ -82,17 +85,37 @@ $width: 2.5em;
   cursor: pointer;
 }
 
+.CharacterHealth-wrapper.has-maxHp {
+  position: relative;
+  width: 6em;
+  height: $width;
+  cursor: pointer;
+}
+
 .CharacterHealth-wrapper:hover {
   background-color: #fff;
 }
 
+.CharacterHealth-hpWrapper {
+  position: absolute;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+}
+
 .CharacterHealth-hp {
   font-weight: 700;
-  position: absolute;
-  top: .6em;
-  left: 0;
-  width: 100%;
   text-align: center;
+  width: 2.5em;
+}
+
+.CharacterHealth-maxHp {
+  opacity: 0.6;
+  font-size: 0.8em;
+  margin-left: 0.5em;
 }
 
 .CharacterHealth-icon {

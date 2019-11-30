@@ -14,8 +14,8 @@
           <p v-else>Armor Class</p>
         </div>
         <div class="CharacterDetails-column">
-          <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" :maxHp="characterData.hit_points" />
-          <p>{{ characterData.hit_dice }}</p>
+          <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
+          <p class="CharacterDetails-hitDicePool"><b>Dice:</b> {{ characterData.hit_dice }}</p>
         </div>
       </div>
 
@@ -189,6 +189,10 @@ $padding: 1em;
 
 .CharacterDetails-armorAndHealth {
   display: flex;
+}
+
+.CharacterDetails-hitDicePool {
+  margin-left: .5em;
 }
 
 .CharacterDetails-column {
