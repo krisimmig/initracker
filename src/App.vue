@@ -50,7 +50,7 @@ export default class App extends Vue {
 @import '@/scss/buttons.scss';
 
 @import '@/scss/popover.scss';
-<style lang="postcss">
+
 .Content {
   margin: 0 0.5rem;
 }
