@@ -16,7 +16,6 @@ Vue.use(VTooltip);
 
 Vue.prototype.$fireLoginUi = null;
 
-// tslint:disable-next-line:no-unused-expression
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     dispatchLoginUser(store, user);
