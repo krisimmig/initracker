@@ -17,6 +17,7 @@
     "firebaseui": "^4.2.0",
     "lodash": "^4.17.15",
     "rpg-dice-roller": "^3.1.5",
+    "typescript-tslint-plugin": "^0.5.5",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.6.0",
     "vue-class-component": "^6.0.0",
