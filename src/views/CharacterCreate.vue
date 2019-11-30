@@ -25,8 +25,6 @@ import {
   commitSetCharacter,
   dispatchFetchCharacterByUuid,
 } from '@/store/characterBuilderModule';
-import { readGetNpcById  } from '@/store/npcsModule';
-import { charactersModule } from '@/store/charactersModule';
 import { Character } from '@/classes/Character';
 
 @Component({

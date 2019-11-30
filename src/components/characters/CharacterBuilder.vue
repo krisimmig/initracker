@@ -5,7 +5,6 @@
         <div class="u-scrollBoxChild">
 
           <form class="Form">
-
             <div class="u-columns-2">
               <FormInput v-model="character.name" label="Name" />
               <FormInput v-model="character.challenge_rating" label="Challenge rating"/>

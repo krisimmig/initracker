@@ -1,17 +1,17 @@
 <template>
   <div
-    class="NpcListItem" v-if="npc"
+    class="CharacterListItem" v-if="npc"
     :class="{ 'is-active': isActive, 'is-selected': isSelected }"
     @click="showInDetail"
   >
 
-    <div class="NpcListItem-main">
-      <NpcInitiative class="NpcListItem-initiative" :initiative="npc.initiative" :uuid="npc.uuid" />
-      <h4 class="NpcListItem-name">
+    <div class="CharacterListItem-main">
+      <NpcInitiative class="CharacterListItem-initiative" :initiative="npc.initiative" :uuid="npc.uuid" />
+      <h4 class="CharacterListItem-name">
         {{ npc.name }}
         <span v-if="removable" @click="$emit('remove')" style="color: red;"><b>X</b></span>
       </h4>
-      <NpcStatus class="NpcListItem-status" :statuses="npc.status" :uuid="npc.uuid" />
+      <NpcStatus class="CharacterListItem-status" :statuses="npc.status" :uuid="npc.uuid" />
     </div>
 
     <NpcArmorClass :armorClass="npc.armor_class" />
@@ -20,14 +20,14 @@
   </div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { commitSetNpcInDetail, readGetNpcUuidInDetail } from '@/store/encountersModule';
 import { Character as ICharacter } from '@/classes/Character';
-import NpcHealth from '@/components/npcs/common/NpcHealth.vue';
-import NpcInitiative from '@/components/npcs/common/NpcInitiative.vue';
-import NpcStatus from '@/components/npcs/common/NpcStatus.vue';
-import NpcArmorClass from '@/components/npcs/common/NpcArmorClass.vue';
+import NpcHealth from '@/components/characters/common/CharacterHealth.vue';
+import NpcInitiative from '@/components/characters/common/CharacterInitiative.vue';
+import NpcStatus from '@/components/characters/common/CharacterStatus.vue';
+import NpcArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
 
 @Component({
   components: {
@@ -37,7 +37,7 @@ import NpcArmorClass from '@/components/npcs/common/NpcArmorClass.vue';
     NpcArmorClass,
   },
 })
-export default class NpcListItem extends Vue {
+export default class CharacterListItem extends Vue {
   @Prop({ type: Boolean, required: true }) public removable!: boolean;
   @Prop({ type: Object, required: true }) public npc!: ICharacter;
   @Prop({ type: Boolean, required: true }) public isActive!: boolean;
@@ -61,7 +61,7 @@ export default class NpcListItem extends Vue {
 <style lang="scss">
 @import '@/scss/variables.scss';
 
-.NpcListItem {
+.CharacterListItem {
   position: relative;
   border-left: 7px solid $color-7;
   border-bottom: 1px solid $color-5;
@@ -71,25 +71,25 @@ export default class NpcListItem extends Vue {
   align-items: center;
 }
 
-.NpcListItem-main {
+.CharacterListItem-main {
   flex-grow: 1;
 }
 
-.NpcListItem-name {
+.CharacterListItem-name {
   font-weight: 600;
   margin: .4em 0;
 }
 
-.NpcListItem.is-active {
+.CharacterListItem.is-active {
   border-left-color: $color-1;
 }
 
-.NpcListItem.is-selected {
+.CharacterListItem.is-selected {
   border-left-color: $color-2;
 }
 
-.NpcListItem-initiative,
-.NpcListItem-status {
+.CharacterListItem-initiative,
+.CharacterListItem-status {
   display: inline-block;
 }
 </style>

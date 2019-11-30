@@ -1,5 +1,5 @@
 <template>
-  <div class="NpcsList">
+  <div class="CharactersLibrary">
     <div>
       <button @click="switchTab('monsters')">Monsters</button>
       <button @click="switchTab('characters')">Characters</button>
@@ -11,38 +11,34 @@
       >
 
       <h3>Results:</h3>
-      <div
-        class="NpcsList-results"
-        ref="monsterList"
-        @scroll="onScroll"
-      >
-        <ul v-if="npcs.length > 0">
-          <li v-for="(npc, index) in npcs" :key="npc.uuid">
-            <div v-if="index < maxVisible">
-              <NpcSearchResult v-bind="npc" :npcData="npc" />
-            </div>
-          </li>
-        </ul>
-
+      <div class="CharactersLibrary-scrollBox u-scrollBoxParent" >
+        <div class="u-scrollBoxChild" ref="monsterList" @scroll="onScroll">
+          <ul v-if="npcs.length > 0">
+            <li v-for="(npc, index) in npcs" :key="npc.uuid">
+              <div v-if="index < maxVisible">
+                <CharacterSearchResult v-bind="npc" :npcData="npc" />
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 
-import NpcSearchResult from '@/components/npcs/NpcSearchResult.vue';
+import CharacterSearchResult from '@/components/characters/CharacterSearchResult.vue';
 import { readGetNpcs } from '@/store/npcsModule';
-import { Character as ICharacter } from '@/classes/Character';
-import { readGetCharacters } from '@/store/charactersModule';
+import { Character as ICharacter, Character } from '@/classes/Character';
+import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersModule';
 
 @Component({
-  components: { NpcSearchResult },
+  components: { CharacterSearchResult },
 })
 export default class CharacterLibrary extends Vue {
   public searchString: string = '';
-  public searchResults: ICharacter[] = [];
   public maxVisible: number = 10;
   public showType: string = 'monsters';
 
@@ -67,13 +63,20 @@ export default class CharacterLibrary extends Vue {
   public switchTab(type) {
     this.showType = type;
   }
+
+  get characters(): Character[] {
+    return readGetCharacters(this.$store);
+  }
+
+  public mounted() {
+    dispatchFetchCharacters(this.$store);
+  }
 }
 </script>
 
 <style scoped lang="scss">
-.NpcsList-results {
-  // max-height: calc(100vh - 252px);
-  // overflow-y: scroll;
-  border: 1px solid green;
+.CharactersLibrary-scrollBox {
+  border: 1px solid grey;
+  height: calc(100vh - 310px);
 }
 </style>

@@ -78,13 +78,12 @@
 </template>
 
 <script lang='ts'>
-// tslint:disable:variable-name
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
-import { Character as ICharacter, Character } from '@/classes/Character';
+import { Character as ICharacter} from '@/classes/Character';
 import { stringModifier as calculateStringModifier } from '@/utils/dnd';
-import NpcArmorClass from '@/components/npcs/common/NpcArmorClass.vue';
-import NpcHealth from '@/components/npcs/common/NpcHealth.vue';
+import NpcArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
+import NpcHealth from '@/components/characters/common/CharacterHealth.vue';
 import { CharacterAttributes } from '@/types/characters';
 
 @Component({
@@ -97,12 +96,8 @@ export default class CharacterDetails extends Vue {
   @Prop({ type: Object, required: true }) public npcData!: ICharacter;
   @Prop({ type: Boolean, default: false }) public isWide!: boolean;
 
-  public speedString: string = '';
-  // public npc: Character = new Character();
 
-  // public created() {
-  //   this.npc = new Character(this.npcData);
-  // }
+  public speedString: string = '';
 
   public stringModifier(abilityScore: number): number | string {
     return calculateStringModifier(abilityScore);

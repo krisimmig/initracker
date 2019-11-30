@@ -15,7 +15,7 @@
       <div class="Encounter-npcsListScrollBox u-scrollBoxChild">
         <ul class="Encounter-npcsList">
           <li v-for="(npc, index) in npcs" :key="index">
-            <NpcListItem
+            <CharacterListItem
               :npc="npc"
               :isActive="currentNpcIndex - 1 === index"
               :removable="true"
@@ -41,11 +41,11 @@ import {
   dispatchUpdateActiveEntityIndex,
 } from '@/store/encountersModule';
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
-import NpcListItem from '@/components/npcs/NpcListItem.vue';
+import CharacterListItem from '@/components/characters/CharacterListItem.vue';
 import { calcModifier, stringifyModifier } from '@/utils/dnd';
 
 @Component({
-  components: { NpcListItem, Encounter },
+  components: { CharacterListItem, Encounter },
 })
 export default class Encounter extends Vue {
   @Prop({ type: String, required: true }) public id!: string;

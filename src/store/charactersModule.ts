@@ -27,8 +27,6 @@ export const charactersModule = {
 
   actions: {
     fetchCharacters(context: CharactersContext) {
-      console.log('fetchCharacters');
-
       const userUid = readUserUid(context);
 
       db.collection(`users/${userUid}/characters`).onSnapshot((data) => {

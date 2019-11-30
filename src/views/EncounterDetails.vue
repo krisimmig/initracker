@@ -7,7 +7,7 @@
           :class="{ 'is-active': !showSearch }"
           @click="showSearch = false"
         >
-          Selected character
+          Active character
         </p>
         <p
           class="EncounterDetails-tab"
@@ -26,8 +26,7 @@
           <div class="u-scrollBoxParent">
             <div class="u-scrollBoxChild">
               <div class="EncounterDetails-activeCharacterWrapper">
-                <CharacterDetails v-if="selectedNpc" :npcData="selectedNpc" />
-                <p v-else>Click on a character name to see details here.</p>
+                <CharacterDetails v-if="activeNpc" :npcData="activeNpc" />
               </div>
             </div>
           </div>
@@ -36,20 +35,18 @@
     </div>
 
     <div class="EncounterDetails-mainContent">
-      <Encounter
-        :id="$route.params.encounterId"
-        @npcSelected="npcSelected(npcData)"
-      />
+      <Encounter :id="$route.params.encounterId" />
     </div>
 
     <div class="EncounterDetails-sideBar EncounterDetails-sideBar--right">
       <div class="EncounterDetails-sideBarTitles">
-        <p class="EncounterDetails-tab is-active is-disabled">Active character</p>
+        <p class="EncounterDetails-tab is-active is-disabled">Selected character</p>
       </div>
       <div>
         <div class="u-scrollBoxParent">
           <div class="u-scrollBoxChild">
-            <CharacterDetails v-if="activeNpc" :npcData="activeNpc" />
+            <CharacterDetails v-if="selectedNpc" :npcData="selectedNpc" />
+            <p v-else>Click on a character name to see details here.</p>
           </div>
         </div>
       </div>

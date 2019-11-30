@@ -45,7 +45,6 @@ export default class Characters extends Vue {
   }
 
   public mounted() {
-    console.log('Characters dispatchFetchCharacters');
     dispatchFetchCharacters(this.$store);
   }
 }

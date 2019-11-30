@@ -1,7 +1,7 @@
 <template>
-  <div class="NpcArmorClass">
-    <SvgIcon name="shield" class="NpcArmorClass-icon" />
-    <div class="NpcArmorClass-amount">{{ armorClass }}</div>
+  <div class="CharacterArmorClass">
+    <SvgIcon name="shield" class="CharacterArmorClass-icon" />
+    <div class="CharacterArmorClass-amount">{{ armorClass }}</div>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ import SvgIcon from '@/components/common/SvgIcon.vue';
     SvgIcon,
   },
 })
-export default class NpcArmorClass extends Vue {
+export default class CharacterArmorClass extends Vue {
   @Prop({ required: true, type: Number }) private armorClass!: number;
 }
 </script>
@@ -25,14 +25,14 @@ export default class NpcArmorClass extends Vue {
 
 $width: 2.5em;
 
-.NpcArmorClass {
+.CharacterArmorClass {
   position: relative;
   width: $width;
   height: $width;
   margin-right: .5em;
 }
 
-.NpcArmorClass-amount {
+.CharacterArmorClass-amount {
   font-weight: 700;
   position: absolute;
   top: .6em;
@@ -41,7 +41,7 @@ $width: 2.5em;
   text-align: center;
 }
 
-.NpcArmorClass-icon {
+.CharacterArmorClass-icon {
   color: $color-3;
   font-size: $width;
 }
