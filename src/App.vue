@@ -42,14 +42,12 @@ export default class App extends Vue {
 
 
 <style lang="scss">
-@import '@/scss/variables.scss';
-@import '@/scss/typography.scss';
-@import '@/scss/utilities.scss';
-@import '@/scss/base.scss';
-@import '@/scss/form.scss';
-@import '@/scss/buttons.scss';
-
-@import '@/scss/popover.scss';
+@import 'scss/variables.scss';
+@import 'scss/typography.scss';
+@import 'scss/utilities.scss';
+@import 'scss/base.scss';
+@import 'scss/form.scss';
+@import 'scss/buttons.scss';
 
 .Content {
   margin: 0 0.5rem;
