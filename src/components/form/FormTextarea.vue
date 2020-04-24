@@ -21,7 +21,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 @Component({})
 export default class FormTextarea extends Vue {
   @Prop({ type: String, required: true }) public label!: string;
-  @Prop({ type: String, required: true }) public value!: string;
+  @Prop({ type: String, required: false }) public value!: string;
 }
 </script>
 

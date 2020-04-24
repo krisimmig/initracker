@@ -1,8 +1,15 @@
 <template>
   <div class="CharacterSearchResult" v-if="characterData" @click="selectCharacter">
-    <h4>{{ characterData.name }}</h4>
-     <span @click="addToEncounter">+</span>
-    {{ characterData.hit_points }} HP | {{ characterData.size }} | {{ characterData.type }}
+    <div class="u-flex">
+      <h4 class="CharacterSearchResult-name">{{ characterData.name }}</h4>
+      <button @click="addToEncounter">+</button>
+    </div>
+
+    <div class="u-flex">
+      <CharacterArmorClass :armor-class="characterData.armor_class" />
+      <CharacterHealth :hp="characterData.hit_points" />
+      <p class="CharacterSearchResult-meta">{{ characterData.size }} | {{ characterData.type }}</p>
+    </div>
 
   </div>
 </template>
@@ -12,16 +19,13 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 import { Character } from '@/classes/Character';
 import { dispatchAddNpcToEncounter, readGetEncountersCurrentId, commitSetNpcInDetail } from '@/store/encountersModule';
+import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
+import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
 
 @Component({
-  components: { CharacterDetails },
+  components: { CharacterDetails, CharacterArmorClass, CharacterHealth },
 })
 export default class CharacterSearchResult extends Vue {
-  @Prop({ type: String, required: true }) public id!: string;
-  @Prop({ type: String, required: true }) public name!: string;
-  @Prop({ type: Number, required: true }) public hit_points!: number;
-  @Prop({ type: String, required: true }) public size!: string;
-  @Prop({ type: String, required: true }) public type!: string;
   @Prop({ type: Object, required: true }) public characterData!: Character;
 
   public get encounterId() {

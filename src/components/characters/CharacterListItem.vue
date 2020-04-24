@@ -76,7 +76,6 @@ export default class CharacterListItem extends Vue {
 }
 
 .CharacterListItem-name {
-  font-weight: 600;
   margin: .4em 0;
 }
 

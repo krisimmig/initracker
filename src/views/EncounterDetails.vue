@@ -74,7 +74,7 @@ import CharacterDetails from '@/components/characters/CharacterDetails.vue';
   },
 })
 export default class EncounterDetails extends Vue {
-  public showSearch: boolean = false;
+  public showSearch: boolean = true;
 
   get selectedCharacter() {
     return readGetNpcInDetail(this.$store);

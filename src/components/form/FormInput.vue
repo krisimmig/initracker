@@ -12,7 +12,9 @@
       v-bind:value="value"
       v-on:input="$emit('input', $event.target.value)"
       :type="isNumberField ? 'number' : ''"
+      :placeholder="placeholder"
     >
+
   </div>
 </template>
 
@@ -21,8 +23,9 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class FormInput extends Vue {
-  @Prop({ type: String, required: true }) public label!: string;
-  @Prop({ type: [Number, String], required: true }) public value!: string | number;
+  @Prop({ type: String, required: false }) public label!: string;
+  @Prop({ type: [Number, String], required: false }) public value!: string | number;
+  @Prop({ type: [Number, String], required: false, default: '' }) public placeholder!: string | number;
 
   public get isNumberField() {
     return typeof(this.value) === 'number';
