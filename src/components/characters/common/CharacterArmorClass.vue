@@ -21,8 +21,6 @@ export default class CharacterArmorClass extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/scss/variables.scss';
-
 $width: 2.5em;
 
 .CharacterArmorClass {
