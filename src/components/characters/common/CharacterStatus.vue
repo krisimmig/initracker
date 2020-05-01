@@ -100,13 +100,10 @@ export default class NpcStatus extends Vue {
   font-size: .8em;
   color: $color-6;
   cursor: pointer;
-}
-
-.NpcStatus-add {
   margin-right: .7em;
   border: 1px solid $color-6;
   border-radius: 1em;
-  height: 1em;
+  height: 1.4rem;
   display: inline-block;
   text-align: center;
   padding: 0px 7px 3px 7px;

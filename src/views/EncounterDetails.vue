@@ -1,6 +1,6 @@
 <template>
-  <div class="EncounterDetails">
-    <div class="EncounterDetails-sideBar EncounterDetails-sideBar--left">
+  <div class="flex">
+    <div class="flex flex-col w-3/12">
       <div class="EncounterDetails-sideBarTitles">
         <p
           class="EncounterDetails-tab"
@@ -34,11 +34,11 @@
       </div>
     </div>
 
-    <div class="EncounterDetails-mainContent">
+    <div class="flex flex-col flex-grow mx-6">
       <Encounter :id="$route.params.encounterId" />
     </div>
 
-    <div class="EncounterDetails-sideBar EncounterDetails-sideBar--right">
+    <div class="flex flex-col w-3/12">
       <div class="EncounterDetails-sideBarTitles">
         <p class="EncounterDetails-tab is-active is-disabled">Selected character</p>
       </div>
@@ -93,40 +93,22 @@ export default class EncounterDetails extends Vue {
 <style lang="scss">
 $sideContentWidth: 27%;
 
-.EncounterDetails {
-  display: flex;
-}
-
-.EncounterDetails-mainContent {
-  flex-grow: 1;
-  margin: 0 1rem;
-}
-
-.EncounterDetails-sideBar {
-  display: flex;
-  flex-basis: $sideContentWidth;
-  flex-direction: column;
-}
-
 .EncounterDetails-sideBarTitles {
-  margin-top: 2.9rem;
-  margin-bottom: 0.8rem;
-  display: flex;
+  @apply mt-8 mb-1 flex;
 }
 
 .EncounterDetails-tab {
-  margin-bottom: 0.5rem;
+  @apply mb-2 mr-4 cursor-pointer text-gray-600;
   border-bottom: 1px solid transparent;
-  margin-right: 1.3rem;
-  cursor: pointer;
+}
+
+.EncounterDetails-tab:hover {
+  @apply text-black;
+  border-bottom: 1px solid transparent;
 }
 
 .EncounterDetails-tab.is-active {
+  @apply text-black;
   border-bottom-color: currentColor;
-  font-weight: 700;
-}
-
-.EncounterDetails-tab.is-disabled {
-  cursor: initial;
 }
 </style>

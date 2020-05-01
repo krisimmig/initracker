@@ -2,7 +2,7 @@
   <div v-if="currentEncounter" class="Encounter">
     <div class="Encounter-top">
       <h1>{{ currentEncounter.name }}</h1>
-      <div class="u-flex">
+      <div class="flex">
         <div>Round <b>{{ currentRound }}</b></div>
         <div>
           <button @click="rollInitiative">Roll Ini</button>

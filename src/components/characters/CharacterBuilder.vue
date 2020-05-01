@@ -1,6 +1,6 @@
 <template>
-  <div class="CharacterBuilder u-flex">
-    <div class="u-flex-50">
+  <div class="CharacterBuilder flex">
+    <div class="w-1/2 mr-3">
       <div class="u-scrollBoxParent">
         <div class="u-scrollBoxChild">
 
@@ -49,67 +49,87 @@
             <FormInput v-model="character.damage_immunities" label="Damage Immunities" />
             <FormInput v-model="character.damage_resistances" label="Damage Resistances" />
             <FormInput v-model="character.damage_vulnerabilities" label="Damage Vulnerabilities" />
+          </form>
 
-            <hr>
-
+          <form class="Form">
             <h3>Special Abilities</h3>
             <div
               class="CharacterBuilder-removable"
               v-for="(specialAbility, index) in character.special_abilities"
               :key="`special-${index}`"
             >
-              <FormInput v-model="specialAbility.name" label="Name" />
-              <FormTextarea v-model="specialAbility.desc" label="Description" />
-              <button class="Button--danger" @click.prevent="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</button>
+              <Collapsable>
+                <template v-slot:title>
+                  <p class="CharacterBuilder-actionTitle">{{ specialAbility.name }}</p>
+                </template>
+
+                <template v-slot:content>
+                  <FormInput v-model="specialAbility.name" label="Name" />
+                  <FormTextarea v-model="specialAbility.desc" label="Description" />
+                  <button class="Button--danger" @click.prevent="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</button>
+                </template>
+              </Collapsable>
             </div>
             <div>
               <button @click.prevent="addSpecialAbility">+ Add ability</button>
             </div>
+          </form>
 
-            <hr>
-
+          <form class="Form">
             <h3>Actions</h3>
             <div
               class="CharacterBuilder-removable"
               v-for="(action, index) in character.actions"
               :key="`action${index}`"
             >
-              <FormInput v-model="action.name" label="Name" />
-              <FormTextarea v-model="action.desc" label="Description" />
-              <button class="Button--danger" @click.prevent="removeAction(index)">- Remove {{ action.name }}</button>
+              <Collapsable>
+                <template v-slot:title>
+                  <p class="CharacterBuilder-actionTitle">{{ action.name }}</p>
+                </template>
+
+                <template v-slot:content>
+                  <FormInput v-model="action.name" label="Name" />
+                  <FormTextarea v-model="action.desc" label="Description" />
+                  <button class="Button--danger" @click.prevent="removeAction(index)">- Remove {{ action.name }}</button>
+                </template>
+              </Collapsable>
             </div>
             <div>
               <button @click.prevent="addAction">+ Add action</button>
             </div>
+          </form>
 
-            <hr>
-
+          <form class="Form">
             <h3>Legendary Actions</h3>
             <div
               class="CharacterBuilder-removable"
               v-for="(legendaryAction, index) in character.legendary_actions"
               :key="`legendary-${index}`"
-              style="margin-bottom: 5px; border-bottom: 1px solid lightgrey;"
             >
-              <FormInput v-model="legendaryAction.name" label="Name" />
-              <FormTextarea v-model="legendaryAction.desc" label="Description" />
-              <button class="Button--danger" @click.prevent="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</button>
+              <Collapsable>
+                <template v-slot:title>
+                  <p class="CharacterBuilder-actionTitle">{{ legendaryAction.name }}</p>
+                </template>
+
+                <template v-slot:content>
+                  <FormInput v-model="legendaryAction.name" label="Name" />
+                  <FormTextarea v-model="legendaryAction.desc" label="Description" />
+                  <button class="Button--danger" @click.prevent="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</button>
+                </template>
+              </Collapsable>
             </div>
             <button @click.prevent="addLegendaryAction">+ Add legendary action</button>
-
-            <hr>
-
-            <div>
-              <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
-              <button class="Button--danger" @click.prevent="deleteCharacter">Delete</button>
-            </div>
           </form>
 
+          <div>
+            <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
+            <button class="Button--danger" @click.prevent="deleteCharacter">Delete</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="u-flex-50">
+    <div class="w-1/2">
       <div class="u-scrollBoxParent">
         <div class="u-scrollBoxChild">
           <CharacterDetails :characterData="character"/>
@@ -130,6 +150,7 @@ import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 import FormInput from '@/components/form/FormInput.vue';
 import FormSelect from '@/components/form/FormSelect.vue';
 import FormTextarea from '@/components/form/FormTextarea.vue';
+import Collapsable from '@/components/characters/common/Collapsable.vue';
 
 @Component({
   components: {
@@ -137,6 +158,7 @@ import FormTextarea from '@/components/form/FormTextarea.vue';
     FormInput,
     FormSelect,
     FormTextarea,
+    Collapsable,
   },
 })
 export default class CharacterBuilder extends Vue {
@@ -208,7 +230,15 @@ export default class CharacterBuilder extends Vue {
 </script>
 
 <style lang="scss">
-.CharacterBuilder-removable {
-  margin-bottom: 1em;
+.CharacterBuilder .Form {
+  @apply mb-8;
+}
+
+.CharacterBuilder-actionTitle {
+  @apply text-gray-400 text-lg cursor-pointer;
+}
+
+.CharacterBuilder-actionTitle:hover {
+  @apply text-black;
 }
 </style>

@@ -21,28 +21,30 @@ div[class*=" u-columns-"] .Form-item {
 }
 
 .Form-label {
-  min-width: 200px;
-  display: inline-block;
-  vertical-align: top;
-  color: $color-6;
-  margin-bottom: 0.2em;
-  font-size: 0.8em;
+  @apply inline text-sm text-gray-300;
 }
 
 .Form-element {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid $color-3;
-  border-radius: 4px;
-  background-color: $color-8;
-  color: #2b3036;
-  transition: border-color 100ms ease-in-out;
-  padding: 0.5em;
+  @apply
+    block
+    w-full
+    box-border
+    border
+    rounded
+    text-black
+    border-gray-300
+    bg-blue-100
+    transition
+    px-2
+    py-1;
 }
 
 .Form-element:focus {
-  border-color: #62aaff;
+  @apply border-gray-600;
+}
+
+.Form-element::placeholder {
+  @apply text-blue-200;
 }
 
 .Form-element--input {

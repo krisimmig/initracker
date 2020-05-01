@@ -1,26 +1,25 @@
 <template>
-  <div class="u-maxWidth">
+  <div>
     <PageTitle
       title="Characters list"
       subtitle="Here you see a list of all your characters."
     />
 
-    <div class="u-flex">
-      <div>
-        <ul>
-          <li
-            v-for="character in characters"
-            :key="character.uuid"
-          >
-            <CharacterTeaser v-bind="character" :character="character" />
-          </li>
-        </ul>
-      </div>
+    <router-link :to="{ name: 'newCharacter' }" class="Button">Create new character</router-link>
 
-      <div class="u-flex-40">
-        <router-link :to="{ name: 'newCharacter' }">Create new character</router-link>
-      </div>
-    </div>
+    <ul>
+      <li
+        v-for="character in characters"
+        :key="character.uuid"
+      >
+        <CharacterTeaser
+          :character-data="character"
+          @click.native ="handleTeaserActioned(character)"
+        >
+          <button>Edit</button>
+        </CharacterTeaser>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -46,6 +45,10 @@ export default class Characters extends Vue {
 
   public mounted() {
     dispatchFetchCharacters(this.$store);
+  }
+
+  public handleTeaserActioned(characterData) {
+    this.$router.push({ name: 'editCharacter', params: { uuid: characterData.uuid }});
   }
 }
 </script>

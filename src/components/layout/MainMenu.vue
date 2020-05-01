@@ -1,15 +1,15 @@
 <template>
-  <div class="MainMenu-wrapper">
 
-    <div class="u-maxWidth">
-      <div class="MainMenu">
+  <div class="bg-black">
+    <div class="u-container-fluid">
+      <div class="MainMenu text-gray-100">
         <template v-if="isLoggedIn">
           <div class="MainMenu-left">
             <router-link class="MainMenu-link MainMenu-link--iconWrapper" :to="{ name: 'home' }">
               <SvgIcon name="logo" class="MainMenu-link--icon" /><b>BETTER INITIATIVE</b>
             </router-link>
-            <router-link class="MainMenu-link" :to="{ name: 'characters' }">Characters</router-link>
             <router-link class="MainMenu-link" :to="{ name: 'encounters' }">Encounters</router-link>
+            <router-link class="MainMenu-link" :to="{ name: 'characters' }">Characters</router-link>
           </div>
 
           <div class="MainMenu-right">

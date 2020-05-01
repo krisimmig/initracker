@@ -29,32 +29,32 @@
       </div>
 
       <p class="CharacterDetails-textLine CharacterDetails-textLine--speed">
-        <span class="u-bold">Speed</span> {{ speedString }}
+        <span class="font-bold">Speed</span> {{ speedString }}
       </p>
       <p class="CharacterDetails-textLine" v-if="characterData.senses">
-        <span class="u-bold">Senses</span> {{ characterData.senses }}
+        <span class="font-bold">Senses</span> {{ characterData.senses }}
       </p>
       <p class="CharacterDetails-textLine" v-if="characterData.languages">
-        <span class="u-bold">Languages</span> {{ characterData.languages }}
+        <span class="font-bold">Languages</span> {{ characterData.languages }}
       </p>
       <p class="CharacterDetails-textLine" v-if="characterData.challenge_rating">
-        <span class="u-bold">Challenge Rating</span> {{ characterData.challenge_rating }}
+        <span class="font-bold">Challenge Rating</span> {{ characterData.challenge_rating }}
       </p>
       <p class="CharacterDetails-textLine" v-if="characterData.damage_immunities">
-        <span class="u-bold">Damage Immunities</span> {{ characterData.damage_immunities }}
+        <span class="font-bold">Damage Immunities</span> {{ characterData.damage_immunities }}
       </p>
       <p class="CharacterDetails-textLine" v-if="characterData.damage_resistances">
-        <span class="u-bold">Damage Resistances</span> {{ characterData.damage_resistances }}
+        <span class="font-bold">Damage Resistances</span> {{ characterData.damage_resistances }}
       </p>
       <p class="CharacterDetails-textLine" v-if="characterData.damage_vulnerabilities">
-        <span class="u-bold">Damage Vulnerabilities</span> {{ characterData.damage_vulnerabilities }}
+        <span class="font-bold">Damage Vulnerabilities</span> {{ characterData.damage_vulnerabilities }}
       </p>
     </div>
 
     <div class="CharacterDetails-bottom CharacterDetails-contentPadding">
       <template v-if="characterData.special_abilities">
         <p v-for="(specialAbility, index) in characterData.special_abilities" :key="`special-${index}`">
-          <span class="u-bold">{{ specialAbility.name }}.</span> {{ specialAbility.desc }}
+          <span class="font-bold">{{ specialAbility.name }}.</span> {{ specialAbility.desc }}
         </p>
       </template>
 
@@ -62,7 +62,7 @@
         <h3>Actions</h3>
         <hr>
         <p v-for="(action, index) in characterData.actions" :key="index">
-          <span class="u-bold">{{ action.name }}.</span> {{ action.desc }}
+          <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
         </p>
       </template>
 
@@ -73,7 +73,7 @@
           legendary action option can be used at a time and only at the end of another creature's turn. The {{
           characterData.name }} regains spent legendary actions at the start of its turn.</p>
         <p v-for="(action, index) in characterData.legendary_actions" :key="`legendary-${index}`">
-          <span class="u-bold">{{ action.name }}.</span> {{ action.desc }}
+          <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
         </p>
       </template>
     </div>
@@ -180,7 +180,6 @@ $padding: 1em;
 
 .CharacterDetails-bottom h3 {
   margin-top: 2em;
-  margin-bottom: 0.7em;
 }
 
 .CharacterDetails-top .CharacterArmorClass-icon {

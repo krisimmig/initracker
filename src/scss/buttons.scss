@@ -1,50 +1,44 @@
 button,
 .Button {
-  background-color: #dde3ea;
-  border: 1px solid #b1c0d2;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  color: rgb(0, 38, 82);
-  padding: 0.3em 0.8em;
-  cursor: pointer;
-  transition: all 120ms ease-in-out;
-  margin-bottom: 0.5em;
-  text-transform: uppercase;
-  font-weight: 600;
-  margin-left: 0.5em;
-  display: inline-block;
+  @apply
+    inline-block
+    text-xs
+    text-blue-400
+    border
+    cursor-pointer
+    bg-gray-200
+    rounded
+    transition
+    duration-200
+    ease-in-out
+    mb-1 uppercase
+    font-semibold
+    px-3
+    py-1 ml-2;
 }
 
 button:first-of-type,
 .Button:first-of-type {
-  margin-left: 0;
+  @apply ml-0;
 }
 
 button:hover,
 .Button:hover {
-  background-color: #a9cdf0;
+  @apply bg-blue-400 text-gray-200;
 }
 
 .Button--danger {
-  background-color: #ffaaaa;
-  color: #950000;
-  border-color: #c84545;
+  @apply bg-red-100 text-red-300 border-red-400;
 }
 
 .Button--danger:hover {
-  background-color: #c90909;
-  color: #f7caca;
-  border-color: #6d0909;
+  @apply bg-red-300 text-red-100 border-red-400;
 }
 
 .Button--success {
-  background-color: #cfff78;
-  color: #046904;
-  border-color: #309430;
+  @apply bg-green-300 text-green-500 border-green-500;
 }
 
 .Button--success:hover {
-  background-color: #cfff78;
-  color: #046904;
-  border-color: #309430;
+  @apply bg-green-500 text-green-300 border-green-300;
 }

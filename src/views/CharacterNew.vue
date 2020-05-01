@@ -1,13 +1,16 @@
 <template>
-  <div class="u-maxWidth">
-    <div class="u-flex">
+  <div class="">
+    <div class="flex">
       <div>
         <PageTitle
           title="Create something new"
           subtitle="Create a new character by using an existing one as a template or create one from scratch."
         />
+
         <router-link :to="{ name: 'characterBuilder' }">from scratch</router-link>
+
         <p>or start with a monster from the Basic Rules. Please choose one from the list:</p>
+
         <ul>
           <li v-for="npc in npcs" :key="npc.id">
             <router-link :to="{

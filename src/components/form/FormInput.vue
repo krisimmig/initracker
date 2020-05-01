@@ -1,14 +1,14 @@
 <template>
   <div class="Form-item Form-item--input">
     <label
-      :for="label"
+      :for="random"
       class="Form-label"
     >
       {{ label }}
     </label>
     <input
       class="Form-element Form-element--input"
-      :id="label"
+      :id="random"
       v-bind:value="value"
       v-on:input="$emit('input', $event.target.value)"
       :type="isNumberField ? 'number' : ''"
@@ -31,6 +31,9 @@ export default class FormInput extends Vue {
     return typeof(this.value) === 'number';
   }
 
+  public get random() {
+    return Math.random();
+  }
 }
 </script>
 

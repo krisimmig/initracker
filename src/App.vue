@@ -1,7 +1,7 @@
 <template>
-  <div class="Main">
+  <div class="flex flex-col h-screen">
     <MainMenu />
-    <div class="Content">
+    <div class="u-container-fluid">
       <router-view />
     </div>
   </div>
@@ -12,7 +12,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import { readIsLoggedIn, dispatchLogoutUser } from '@/store/usersModule';
 import { readGetNpcs, dispatchFetchNpcs } from '@/store/npcsModule';
-import { dispatchFetchCharacters } from '@/store/charactersModule';
 import MainMenu from '@/components/layout/MainMenu.vue';
 
 @Component({
@@ -42,10 +41,16 @@ export default class App extends Vue {
 
 
 <style lang="scss">
-@import 'scss/variables.scss';
-@import 'scss/typography.scss';
-@import 'scss/utilities.scss';
+/* purgecss start ignore */
+@tailwind  base;
+@tailwind  components;
+/* purgecss end ignore */
 @import 'scss/base.scss';
+
+@tailwind  utilities;
+
+@import 'scss/variables.scss';
+@import 'scss/utilities.scss';
 @import 'scss/form.scss';
 @import 'scss/buttons.scss';
 

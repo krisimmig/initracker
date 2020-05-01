@@ -1,7 +1,7 @@
 <template>
-  <div class="u-maxWidth">
+  <div class="">
     <PageTitle title="Ecounters list" subtitle="These are all oyur encounters." />
-    <div class="u-flex">
+    <div class="flex">
       <div>
         <ul>
           <li
@@ -13,7 +13,7 @@
         </ul>
       </div>
 
-      <div class="u-flex-40">
+      <div class="w-5/12">
         <EncounterNew />
       </div>
     </div>

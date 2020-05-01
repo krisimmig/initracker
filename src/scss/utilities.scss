@@ -1,68 +1,26 @@
-// Layout helpers
-
-.u-maxWidth {
-  padding: 0 20px;
-  width: 100%;
-  max-width: calc(#{$maxWidth} - 40px);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.u-flex {
-  display: flex;
-  justify-content: space-between;
-}
-
-.u-direction-colum {
-  flex-direction: column;
-}
-
-.u-flex-50 {
-  width: 48%;
-}
-
-.u-flex-40 {
-  width: 38%;
-}
-
-.u-flex-30 {
-  width: 28%;
-}
-
-.u-flex-20 {
-  width: 18%;
-}
-
-.u-flex-grow {
-  flex-grow: 1;
-}
-
 .u-columns-2 {
-  columns: 2;
-  margin-bottom: 1.5em;
+  @apply grid grid-cols-2 gap-4 mb-2;
 }
 
 .u-columns-3 {
-  columns: 3;
-  margin-bottom: 1.5em;
+  @apply grid grid-cols-3 gap-4 mb-2;
 }
 
 .u-columns-4 {
-  columns: 4;
-  margin-bottom: 1.5em;
+  @apply grid grid-cols-4 gap-4 mb-2;
 }
 
 .u-columns-5 {
-  columns: 5;
-  margin-bottom: 1.5em;
+  @apply grid grid-cols-5 gap-4 mb-2;
 }
 
 .u-columns-6 {
-  columns: 6;
-  margin-bottom: 1.5em;
+  @apply grid grid-cols-6 gap-4 mb-2;
 }
 
-// Scrollbox helpers
+.u-container-fluid {
+  @apply w-full px-4 mx-auto max-w-screen-xl;
+}
 
 .u-scrollBoxParent {
   width: 100%;
@@ -76,21 +34,7 @@
   top: 0;
   bottom: 0;
   left: 0;
-  right: -15px; /* Increase/Decrease this value for cross-browser compatibility */
+  right: 0px; /* Increase/Decrease this value for cross-browser compatibility */
   overflow-y: scroll;
   padding-bottom: 20px;
-}
-
-// Typography helpers
-
-.u-bold {
-  font-weight: 700;
-}
-
-.u-semiBold {
-  font-weight: 600;
-}
-
-.u-light {
-  font-weight: 100;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="u-maxWidth">
+  <div class="">
     <PageTitle
       title="Character editor"
       subtitle="Here you can create or edit an existing character."

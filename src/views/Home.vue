@@ -1,6 +1,6 @@
 <template>
   <div class="Home">
-    <div class="u-maxWidth">
+    <div class="">
       <PageTitle
         title="Welcome home"
       />
