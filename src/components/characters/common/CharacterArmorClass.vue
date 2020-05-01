@@ -1,6 +1,6 @@
 <template>
   <div class="CharacterArmorClass">
-    <SvgIcon name="shield" class="CharacterArmorClass-icon" />
+    <SvgIcon name="shield" class="CharacterArmorClass-icon text-gray-300" />
     <div class="CharacterArmorClass-amount">{{ armorClass }}</div>
   </div>
 </template>
@@ -42,7 +42,6 @@ $width: 2.5em;
 }
 
 .CharacterArmorClass-icon {
-  color: $color-3;
   font-size: $width;
 }
 </style>

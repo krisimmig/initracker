@@ -49,7 +49,7 @@ export default class App extends Vue {
 
 @tailwind  utilities;
 
-@import 'scss/variables.scss';
+// @import 'scss/variables.scss';
 @import 'scss/utilities.scss';
 @import 'scss/form.scss';
 @import 'scss/buttons.scss';
