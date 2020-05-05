@@ -1,12 +1,11 @@
 <template>
-  <div class="text-sm rounded overflow-hidden">
-    <div class="text-blue-200 bg-black p-4">
-      <h2 class="mb-0">{{ characterData.name }}</h2>
-      <p class="mb-0">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type
-        }} with a CR of {{ characterData.challenge_rating }}</p>
+  <div class="text-sm rounded overflow-hidden bg-white">
+    <div class="p-4">
+      <h4 class="mb-0 text-base font-semibold">{{ characterData.name }}</h4>
+      <p class="mb-0">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with a CR of {{ characterData.challenge_rating }}</p>
     </div>
 
-    <div class="bg-blue-200 p-4">
+    <div class="p-4">
       <div class="flex">
         <div class="w-1/2 flex items-center">
           <CharacterArmorClass :armorClass="characterData.armor_class" />
@@ -22,7 +21,7 @@
       <div class="flex mt-2">
         <div v-for="(statName, statValue, index) in statsArray" :key="index">
           <p class="uppercase mb-0 font-bold">{{ statValue }}</p>
-          <p class="m-0 mt-1 text-gray-600">
+          <p class="m-0 mt-1">
             {{ characterData[statName.toLowerCase()] }} <span class="CharacterDetails-statModifier">{{ stringModifier(characterData[statName.toLowerCase()]) }}</span>
           </p>
         </div>
