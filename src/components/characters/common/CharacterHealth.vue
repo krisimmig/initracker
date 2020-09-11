@@ -54,7 +54,7 @@ $width: 2.5em;
 }
 
 .CharacterHealth-icon {
-  color: deeppink;
+  color: theme('colors.red.600');
   font-size: $width;
 }
 </style>
