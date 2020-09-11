@@ -45,13 +45,14 @@ export default class App extends Vue {
 @tailwind  base;
 @tailwind  components;
 /* purgecss end ignore */
-@import 'scss/base.scss';
 
 @tailwind  utilities;
 
+@import 'scss/base.scss';
 @import 'scss/utilities.scss';
 @import 'scss/form.scss';
 @import 'scss/buttons.scss';
+@import 'scss/card.scss';
 
 .Content {
   margin: 0 0.5rem;

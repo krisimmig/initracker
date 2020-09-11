@@ -37,3 +37,7 @@
   right: -15px; /* Increase/Decrease this value for cross-browser compatibility */
   overflow-y: scroll;
 }
+
+.u-tip {
+  @apply font-light inline-block p-4 text-gray-400;
+}
