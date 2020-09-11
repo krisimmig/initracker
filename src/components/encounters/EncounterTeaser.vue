@@ -1,6 +1,6 @@
 <template>
   <div
-    class="card-interactive w-full"
+    class="card card--interactive w-full"
   >
     <div @click="toEncounterView(id)" v-if="!isEditingName">
       <p class="mb-2 font-semibold">{{ name }}</p>
