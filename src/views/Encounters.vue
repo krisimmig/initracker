@@ -4,7 +4,10 @@
 
     <div class="flex">
       <div class="w-1/2 mt-3 mr-4 bg-white shadow">
-        <ul class="divide-y divide-gray-300">
+        <ul
+            v-if="encounters.length > 0"
+            class="divide-y divide-gray-300"
+        >
           <li
             v-for="encounter in encounters"
             :key="encounter.id"
@@ -12,6 +15,7 @@
             <EncounterTeaser v-bind="encounter" />
           </li>
         </ul>
+        <p v-else class="u-tip">Nothing here yet, please create a new encounter on the right</p>
       </div>
 
       <div class="w-5/12">
