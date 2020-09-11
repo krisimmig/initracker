@@ -55,11 +55,18 @@ export class Character {
     if (data) {
 
       const defaultCharacter = new Character();
-      mergeWith(defaultCharacter, data, (objValue, sourceValue) => {
-        if (isNull(sourceValue)) {
-          return objValue;
+      mergeWith(defaultCharacter, data, (defaultCharacterValue, existingCharacterValue) => {
+        if (isNull(existingCharacterValue)) {
+          return defaultCharacterValue;
         }
       });
+
+      // If a monster has no legendary actions the variable is just an empty string, the next lines fix that.
+      // @ts-ignore
+      if (defaultCharacter.legendary_actions === '') {
+        defaultCharacter.legendary_actions = [];
+      }
+
       Object.assign(this, defaultCharacter);
 
     } else {
@@ -77,26 +84,26 @@ export class Character {
   }
 
   // @Todo: check if still needed? Done in CharacterDetails now
-  get stats(): Array<{ name: string; value: number; }> {
-    return [
-      { name: 'str', value: this.strength },
-      { name: 'dex', value: this.dexterity },
-      { name: 'con', value: this.constitution },
-      { name: 'int', value: this.intelligence },
-      { name: 'wis', value: this.wisdom },
-      { name: 'cha', value: this.charisma },
-    ];
-  }
+  // get stats(): Array<{ name: string; value: number; }> {
+  //   return [
+  //     { name: 'str', value: this.strength },
+  //     { name: 'dex', value: this.dexterity },
+  //     { name: 'con', value: this.constitution },
+  //     { name: 'int', value: this.intelligence },
+  //     { name: 'wis', value: this.wisdom },
+  //     { name: 'cha', value: this.charisma },
+  //   ];
+  // }
 
   // @Todo: check if still needed? Done in CharacterDetails now
-  get speedString(): string {
-    const keys = Object.keys(this.speed);
-    return keys.reduce((acc, current)  => {
-      const value = this.speed[current];
-      if (value > 0) {
-        return acc !== '' ? `${value}ft (${current}), ${acc}` : `${value}ft (${current})`;
-      }
-      return acc;
-    }, '');
-  }
+  // get speedString(): string {
+  //   const keys = Object.keys(this.speed);
+  //   return keys.reduce((acc, current)  => {
+  //     const value = this.speed[current];
+  //     if (value > 0) {
+  //       return acc !== '' ? `${value}ft (${current}), ${acc}` : `${value}ft (${current})`;
+  //     }
+  //     return acc;
+  //   }, '');
+  // }
 }
