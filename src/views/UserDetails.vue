@@ -6,10 +6,14 @@
       />
 
       <div class="card w-3/12">
-        <img :src="photoUrl" alt="User Avatar" class="mb-4">
+        <img
+            v-if="photoUrl"
+            :src="photoUrl"
+            alt="User Avatar"
+            class="mb-4"
+        >
         <p><span class="font-bold">Name:</span> {{ displayName }}</p>
-        <p><span class="font-bold">Created:</span> {{ displayName }}</p>
-        <p><span class="font-bold">Created:</span> {{ email }}</p>
+        <p><span class="font-bold">Email:</span> {{ email }}</p>
       </div>
     </div>
   </div>

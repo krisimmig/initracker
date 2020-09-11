@@ -1,6 +1,5 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
-import avatarDefault from '@/assets/avatar.jpg';
 
 import router from '@/router';
 import { RootState } from '@/store/index';
@@ -32,12 +31,12 @@ export const usersModule = {
 
     getUserPhotoUrl(state: UserState) {
       if (!state.user) { return null; }
-      return state.user.photoURL ? state.user.photoURL : avatarDefault;
+      return state.user.photoURL ? state.user.photoURL : false;
     },
 
     getUserEmail(state: UserState) {
       if (!state.user) { return null; }
-      return state.user.email ? state.user.photoURL : 'No email provided';
+      return state.user.email ? state.user.email : 'No email provided';
     },
 
     getUserUid(state: UserState) {
