@@ -29,8 +29,6 @@ export default class CharacterHealth extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../scss/variables.scss';
-
 $width: 2.5em;
 
 .CharacterHealth-wrapper {
@@ -56,7 +54,7 @@ $width: 2.5em;
 }
 
 .CharacterHealth-icon {
-  color: $color-2;
+  color: deeppink;
   font-size: $width;
 }
 </style>

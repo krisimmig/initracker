@@ -93,15 +93,13 @@ export default class NpcStatus extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/scss/variables.scss';
-
 .NpcStatus-status,
 .NpcStatus-add {
   font-size: .8em;
-  color: $color-6;
+  color: deeppink;
   cursor: pointer;
   margin-right: .7em;
-  border: 1px solid $color-6;
+  border: 1px solid deeppink;
   border-radius: 1em;
   height: 1.4rem;
   display: inline-block;
@@ -110,7 +108,7 @@ export default class NpcStatus extends Vue {
 }
 
 .NpcStatus-add:hover {
-  color: $color-black;
+  color: deeppink;
 }
 
 .NpcStatus-addText {
@@ -119,12 +117,12 @@ export default class NpcStatus extends Vue {
 
 .NpcStatus-status {
   margin-right: .7em;
-  border-bottom: 1px solid $color-6;
+  border-bottom: 1px solid deeppink;
   cursor: pointer;
 }
 
 .NpcStatus-status:hover {
-  color: $color-2;
-  border-color: $color-2;
+  color: deeppink;
+  border-color: deeppink;
 }
 </style>

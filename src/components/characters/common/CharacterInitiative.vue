@@ -61,18 +61,16 @@ export default class NpcInitiative extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/scss/variables.scss';
-
 .NpcInitiative-wrapper {
   font-size: .8em;
   cursor: pointer;
 }
 
 .NpcInitiative-title {
-  color: $color-6;
+  color: theme('colors.gray.600');
 }
 
 .NpcInitiative-wrapper:hover .NpcInitiative-title {
-  color: $color-black;
+  color: deeppink;
 }
 </style>

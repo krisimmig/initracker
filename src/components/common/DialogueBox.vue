@@ -24,16 +24,14 @@
 </script>
 
 <style lang="scss">
-@import '@/scss/variables.scss';
-
 .DialogueBox {
   position: fixed;
   top: 50%;
   left: 50%;
   width: 50%;
   height: 50%;
-  background: $color-3;
-  border: 1px solid $color-1;
+  background: grey;
+  border: 1px solid black;
   transform: translate(-50%, -50%);
   z-index: 1000;
   border-radius: 4px;

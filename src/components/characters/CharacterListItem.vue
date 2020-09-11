@@ -1,6 +1,6 @@
 <template>
   <div
-    class="CharacterListItem card-interactive" v-if="npc"
+    class="CharacterListItem card--interactive" v-if="npc"
     :class="{ 'is-active': isActive, 'is-selected': isSelected }"
     @click.stop="showInDetail"
   >
@@ -59,8 +59,6 @@ export default class CharacterListItem extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../scss/variables.scss';
-
 .CharacterListItem {
   border-left: 7px solid theme('colors.gray.300');
 }

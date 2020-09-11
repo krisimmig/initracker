@@ -21,8 +21,6 @@ export default class  extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/scss/variables.scss';
-
 .PageTitle {
   margin-bottom: 3rem;
   margin-top: 3rem;
@@ -35,7 +33,7 @@ export default class  extends Vue {
 .PageTitle-subtitle {
   margin-top: 0;
   font-style: italic;
-  color: $color-6;
+  color: theme('colors.gray.500');
 }
 
 </style>
