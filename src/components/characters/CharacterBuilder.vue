@@ -237,8 +237,8 @@ export default class CharacterBuilder extends Vue {
 </script>
 
 <style lang="scss">
-.CharacterBuilder-wrapper {
-  height: calc(100vh - 260px);
+.CharacterBuilder-wrapper.u-scrollBoxParent {
+  height: calc(100vh - 290px);
 }
 
 .CharacterBuilder .Form {
@@ -246,10 +246,21 @@ export default class CharacterBuilder extends Vue {
 }
 
 .CharacterBuilder-actionTitle {
-  @apply text-gray-400 text-lg cursor-pointer;
+  @apply
+    transition
+    duration-200
+    ease-in-out
+    text-gray-600
+    bg-gray-400
+    px-4
+    py-2
+    rounded
+    mb-2
+    text-lg
+    cursor-pointer;
 }
 
 .CharacterBuilder-actionTitle:hover {
-  @apply text-black;
+  @apply bg-gray-300;
 }
 </style>
