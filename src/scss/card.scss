@@ -1,0 +1,11 @@
+.card {
+  @apply p-4 bg-white;
+}
+
+.card--interactive {
+  @apply card transition duration-100 cursor-pointer;
+}
+
+.card--interactive:hover {
+  @apply bg-gray-100;
+}
