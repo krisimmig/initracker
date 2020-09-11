@@ -47,7 +47,6 @@ export const characterBuilderModule = {
 
   actions: {
     async fetchCharacterById(context: CharacterBuilderContext, { id }: { id: string }) {
-      console.log('fetchCharacterById', id);
       commitSetLoading(context, { isLoading: true });
       const characterRef = db.collection('monsters').doc(id);
 
