@@ -6,7 +6,7 @@
       <p class="mb-2 font-semibold">{{ name }}</p>
 
       <div>
-        <button @click.stop="deleteEncounter()" class="Button--secondary">Delete</button>
+        <button @click.stop="deleteEncounter()" class="Button Button--danger">Delete</button>
         <button @click.stop="renameEncounter()">Rename</button>
       </div>
     </div>
