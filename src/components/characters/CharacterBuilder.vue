@@ -157,7 +157,7 @@ import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 import FormInput from '@/components/form/FormInput.vue';
 import FormSelect from '@/components/form/FormSelect.vue';
 import FormTextarea from '@/components/form/FormTextarea.vue';
-import Collapsable from '@/components/characters/common/Collapsable.vue';
+import Collapsable from '@/components/common/Collapsable.vue';
 
 @Component({
   components: {
