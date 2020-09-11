@@ -44,7 +44,7 @@
         <div class="u-scrollBoxParent bg-white shadow">
           <div class="u-scrollBoxChild">
             <CharacterDetails v-if="selectedCharacter" :characterData="selectedCharacter"/>
-            <p v-else>Click on a character name to see details here.</p>
+            <p class="u-tip" v-else>Click on a character name to see details here.</p>
           </div>
         </div>
       </div>
