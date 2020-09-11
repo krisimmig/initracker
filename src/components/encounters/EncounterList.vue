@@ -13,7 +13,10 @@
 
     <div class="Encounter-npcsListWrapper u-scrollBoxParent shadow-lg">
       <div class="Encounter-npcsListScrollBox u-scrollBoxChild bg-white ">
-        <ul class="Encounter-npcsList divide-y divide-gray-300">
+        <ul
+            v-if="npcs.length > 0"
+            class="Encounter-npcsList divide-y divide-gray-300"
+        >
           <li v-for="(npc, index) in npcs" :key="index">
             <CharacterListItem
               :npc="npc"
@@ -23,6 +26,7 @@
             />
           </li>
         </ul>
+        <p v-else class="u-tip text-gray-600">Nobody is participating in this battle yet. Choose some combatans from the <b>Monsters</b> and <b>Player Characters</b> on the left.</p>
       </div>
     </div>
 
