@@ -7,7 +7,7 @@
 
     <router-link :to="{ name: 'newCharacter' }" class="Button">Create new character</router-link>
 
-    <ul>
+    <ul class="divide-y divide-gray-300 w-1/2 mt-3 bg-white shadow">
       <li
         v-for="character in characters"
         :key="character.uuid"

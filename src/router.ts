@@ -11,6 +11,7 @@ import EncounterDetails from '@/views/EncounterDetails.vue';
 import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
 import { isLoggedIn } from '@/store/firebase';
+import UserDetails from '@/views/UserDetails.vue';
 
 Vue.use(Router);
 
@@ -25,6 +26,12 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
+    },
+
+    {
+      path: '/user',
+      name: 'userdetails',
+      component: UserDetails,
     },
 
     {

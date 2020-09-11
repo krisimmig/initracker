@@ -12,11 +12,11 @@
         />
       </div>
 
-      <h3 class="text-sm text-gray-300">Results</h3>
-      <div class="CharactersLibrary-scrollBox u-scrollBoxParent" >
+      <h3 class="text-sm text-gray-500">Results</h3>
+      <div class="CharactersLibrary-scrollBox u-scrollBoxParent bg-white shadow" >
         <div class="u-scrollBoxChild" ref="monsterList" @scroll="onScroll">
-          <ul v-if="filteredNpcs.length > 0">
-            <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid">
+          <ul v-if="filteredNpcs.length > 0" class="divide-y divide-gray-300">
+            <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
               <div v-if="index < maxVisible">
                 <CharacterTeaser :characterData="npc" @click.native="selectCharacter(npc)">
                   <button @click="addToEncounter(npc)">Add</button>
@@ -108,6 +108,10 @@ export default class CharacterLibrary extends Vue {
 
 <style scoped lang="scss">
 .CharactersLibrary-scrollBox {
-  height: calc(100vh - 310px);
+  height: calc(100vh - 327px);
+}
+
+.CharactersLibrary-listItem:last-child {
+  border-bottom: 1px solid theme('colors.gray.300');
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-screen">
+  <div class="flex flex-col h-screen bg-gray-200">
     <MainMenu />
     <div class="u-container-fluid">
       <router-view />
@@ -49,7 +49,6 @@ export default class App extends Vue {
 
 @tailwind  utilities;
 
-// @import 'scss/variables.scss';
 @import 'scss/utilities.scss';
 @import 'scss/form.scss';
 @import 'scss/buttons.scss';

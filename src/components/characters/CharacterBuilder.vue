@@ -1,138 +1,145 @@
 <template>
-  <div class="CharacterBuilder flex">
-    <div class="w-1/2 mr-3">
-      <div class="u-scrollBoxParent">
-        <div class="u-scrollBoxChild">
+  <div>
+    <div>
+      <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
+      <button class="Button--danger" @click.prevent="deleteCharacter">Delete</button>
+    </div>
 
-          <form class="Form">
-            <div class="u-columns-2">
-              <FormInput v-model="character.name" label="Name" />
-              <FormInput v-model="character.challenge_rating" label="Challenge rating" />
-            </div>
+    <div class="CharacterBuilder flex">
+      <div class="w-1/2 mr-3">
+        <div class="CharacterBuilder-wrapper u-scrollBoxParent">
+          <div class="u-scrollBoxChild">
 
-            <div class="u-columns-3">
-              <FormSelect v-model="character.size" :options="optionsSize" label="Size" :optionSelected="character.size" />
-              <FormSelect v-model="character.type" :options="optionsTypes" label="Type" :optionSelected="character.type" />
-              <FormSelect v-model="character.alignment" :options="optionsAlignment" label="Alignment" :optionSelected="character.alignment" />
-            </div>
+            <form class="Form">
+              <div class="u-columns-2">
+                <FormInput v-model="character.name" label="Name" />
+                <FormInput v-model="character.challenge_rating" label="Challenge rating" />
+              </div>
 
-            <div class="u-columns-2">
-              <FormInput v-model.number="character.armor_class" label="Armor Class" />
-              <FormInput v-model="character.armor_desc" label="Armor Description" />
-            </div>
+              <div class="u-columns-3">
+                <FormSelect v-model="character.size" :options="optionsSize" label="Size" :optionSelected="character.size" />
+                <FormSelect v-model="character.type" :options="optionsTypes" label="Type" :optionSelected="character.type" />
+                <FormSelect v-model="character.alignment" :options="optionsAlignment" label="Alignment" :optionSelected="character.alignment" />
+              </div>
 
-            <div class="u-columns-2">
-              <FormInput v-model.number="character.hit_points" label="Hit points" />
-              <FormInput v-model="character.hit_dice" label="Hit dice" />
-            </div>
+              <div class="u-columns-2">
+                <FormInput v-model.number="character.armor_class" label="Armor Class" />
+                <FormInput v-model="character.armor_desc" label="Armor Description" />
+              </div>
 
-            <div class="u-columns-6">
-              <FormInput v-model.number="character.strength" label="STR" />
-              <FormInput v-model.number="character.dexterity" label="DEX" />
-              <FormInput v-model.number="character.constitution" label="CON" />
-              <FormInput v-model.number="character.intelligence" label="INT" />
-              <FormInput v-model.number="character.wisdom" label="WIS" />
-              <FormInput v-model.number="character.charisma" label="CHR" />
-            </div>
+              <div class="u-columns-2">
+                <FormInput v-model.number="character.hit_points" label="Hit points" />
+                <FormInput v-model="character.hit_dice" label="Hit dice" />
+              </div>
 
-            <p><b>Speed:</b></p>
-            <div class="u-columns-5">
-              <FormInput v-model.number="character.speed.walk" label="Walk" />
-              <FormInput v-model.number="character.speed.swim" label="Swim" />
-              <FormInput v-model.number="character.speed.climb" label="Climb" />
-              <FormInput v-model.number="character.speed.fly" label="Fly" />
-              <FormInput v-model.number="character.speed.burrow" label="Burrow" />
-            </div>
+              <div class="u-columns-6">
+                <FormInput v-model.number="character.strength" label="STR" />
+                <FormInput v-model.number="character.dexterity" label="DEX" />
+                <FormInput v-model.number="character.constitution" label="CON" />
+                <FormInput v-model.number="character.intelligence" label="INT" />
+                <FormInput v-model.number="character.wisdom" label="WIS" />
+                <FormInput v-model.number="character.charisma" label="CHR" />
+              </div>
 
-            <FormInput v-model="character.senses" label="Senses" />
-            <FormInput v-model="character.languages" label="Languages" />
-            <FormInput v-model="character.damage_immunities" label="Damage Immunities" />
-            <FormInput v-model="character.damage_resistances" label="Damage Resistances" />
-            <FormInput v-model="character.damage_vulnerabilities" label="Damage Vulnerabilities" />
-          </form>
+              <p><b>Speed:</b></p>
+              <div class="u-columns-5">
+                <FormInput v-model.number="character.speed.walk" label="Walk" />
+                <FormInput v-model.number="character.speed.swim" label="Swim" />
+                <FormInput v-model.number="character.speed.climb" label="Climb" />
+                <FormInput v-model.number="character.speed.fly" label="Fly" />
+                <FormInput v-model.number="character.speed.burrow" label="Burrow" />
+              </div>
 
-          <form class="Form">
-            <h3>Special Abilities</h3>
-            <div
-              class="CharacterBuilder-removable"
-              v-for="(specialAbility, index) in character.special_abilities"
-              :key="`special-${index}`"
-            >
-              <Collapsable>
-                <template v-slot:title>
-                  <p class="CharacterBuilder-actionTitle">{{ specialAbility.name }}</p>
-                </template>
+              <FormInput v-model="character.senses" label="Senses" />
+              <FormInput v-model="character.languages" label="Languages" />
+              <FormInput v-model="character.damage_immunities" label="Damage Immunities" />
+              <FormInput v-model="character.damage_resistances" label="Damage Resistances" />
+              <FormInput v-model="character.damage_vulnerabilities" label="Damage Vulnerabilities" />
+            </form>
 
-                <template v-slot:content>
-                  <FormInput v-model="specialAbility.name" label="Name" />
-                  <FormTextarea v-model="specialAbility.desc" label="Description" />
-                  <button class="Button--danger" @click.prevent="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</button>
-                </template>
-              </Collapsable>
-            </div>
+            <form class="Form">
+              <h3>Special Abilities</h3>
+              <div
+                class="CharacterBuilder-removable"
+                v-for="(specialAbility, index) in character.special_abilities"
+                :key="`special-${index}`"
+              >
+                <Collapsable>
+                  <template v-slot:title>
+                    <p class="CharacterBuilder-actionTitle">{{ specialAbility.name }}</p>
+                  </template>
+
+                  <template v-slot:content>
+                    <FormInput v-model="specialAbility.name" label="Name" />
+                    <FormTextarea v-model="specialAbility.desc" label="Description" />
+                    <button class="Button--danger" @click.prevent="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</button>
+                  </template>
+                </Collapsable>
+              </div>
+              <div>
+                <button @click.prevent="addSpecialAbility">+ Add ability</button>
+              </div>
+            </form>
+
+            <form class="Form">
+              <h3>Actions</h3>
+              <div
+                class="CharacterBuilder-removable"
+                v-for="(action, index) in character.actions"
+                :key="`action${index}`"
+              >
+                <Collapsable>
+                  <template v-slot:title>
+                    <p class="CharacterBuilder-actionTitle">{{ action.name }}</p>
+                  </template>
+
+                  <template v-slot:content>
+                    <FormInput v-model="action.name" label="Name" />
+                    <FormTextarea v-model="action.desc" label="Description" />
+                    <button class="Button--danger" @click.prevent="removeAction(index)">- Remove {{ action.name }}</button>
+                  </template>
+                </Collapsable>
+              </div>
+              <div>
+                <button @click.prevent="addAction">+ Add action</button>
+              </div>
+            </form>
+
+            <form class="Form">
+              <h3>Legendary Actions</h3>
+              <div
+                class="CharacterBuilder-removable"
+                v-for="(legendaryAction, index) in character.legendary_actions"
+                :key="`legendary-${index}`"
+              >
+                <Collapsable>
+                  <template v-slot:title>
+                    <p class="CharacterBuilder-actionTitle">{{ legendaryAction.name }}</p>
+                  </template>
+
+                  <template v-slot:content>
+                    <FormInput v-model="legendaryAction.name" label="Name" />
+                    <FormTextarea v-model="legendaryAction.desc" label="Description" />
+                    <button class="Button--danger" @click.prevent="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</button>
+                  </template>
+                </Collapsable>
+              </div>
+              <button @click.prevent="addLegendaryAction">+ Add legendary action</button>
+            </form>
+
             <div>
-              <button @click.prevent="addSpecialAbility">+ Add ability</button>
+              <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
+              <button class="Button--danger" @click.prevent="deleteCharacter">Delete</button>
             </div>
-          </form>
-
-          <form class="Form">
-            <h3>Actions</h3>
-            <div
-              class="CharacterBuilder-removable"
-              v-for="(action, index) in character.actions"
-              :key="`action${index}`"
-            >
-              <Collapsable>
-                <template v-slot:title>
-                  <p class="CharacterBuilder-actionTitle">{{ action.name }}</p>
-                </template>
-
-                <template v-slot:content>
-                  <FormInput v-model="action.name" label="Name" />
-                  <FormTextarea v-model="action.desc" label="Description" />
-                  <button class="Button--danger" @click.prevent="removeAction(index)">- Remove {{ action.name }}</button>
-                </template>
-              </Collapsable>
-            </div>
-            <div>
-              <button @click.prevent="addAction">+ Add action</button>
-            </div>
-          </form>
-
-          <form class="Form">
-            <h3>Legendary Actions</h3>
-            <div
-              class="CharacterBuilder-removable"
-              v-for="(legendaryAction, index) in character.legendary_actions"
-              :key="`legendary-${index}`"
-            >
-              <Collapsable>
-                <template v-slot:title>
-                  <p class="CharacterBuilder-actionTitle">{{ legendaryAction.name }}</p>
-                </template>
-
-                <template v-slot:content>
-                  <FormInput v-model="legendaryAction.name" label="Name" />
-                  <FormTextarea v-model="legendaryAction.desc" label="Description" />
-                  <button class="Button--danger" @click.prevent="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</button>
-                </template>
-              </Collapsable>
-            </div>
-            <button @click.prevent="addLegendaryAction">+ Add legendary action</button>
-          </form>
-
-          <div>
-            <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
-            <button class="Button--danger" @click.prevent="deleteCharacter">Delete</button>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="w-1/2">
-      <div class="u-scrollBoxParent">
-        <div class="u-scrollBoxChild">
-          <CharacterDetails :characterData="character"/>
+      <div class="w-1/2">
+        <div class="u-scrollBoxParent">
+          <div class="u-scrollBoxChild">
+            <CharacterDetails :characterData="character"/>
+          </div>
         </div>
       </div>
     </div>
@@ -230,6 +237,10 @@ export default class CharacterBuilder extends Vue {
 </script>
 
 <style lang="scss">
+.CharacterBuilder-wrapper {
+  height: calc(100vh - 260px);
+}
+
 .CharacterBuilder .Form {
   @apply mb-8;
 }

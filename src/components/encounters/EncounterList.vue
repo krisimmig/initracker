@@ -1,19 +1,19 @@
 <template>
   <div v-if="currentEncounter" class="Encounter">
-    <div class="Encounter-top">
-      <h1>{{ currentEncounter.name }}</h1>
+    <div class="mt-4 mb-2">
+      <h1 class="text-xl font-bold">{{ currentEncounter.name }}</h1>
       <div class="flex">
         <div>Round <b>{{ currentRound }}</b></div>
-        <div>
+        <div class="ml-auto">
           <button @click="rollInitiative">Roll Ini</button>
           <button @click="next">Next</button>
         </div>
       </div>
     </div>
 
-    <div class="Encounter-npcsListWrapper u-scrollBoxParent">
-      <div class="Encounter-npcsListScrollBox u-scrollBoxChild">
-        <ul class="Encounter-npcsList">
+    <div class="Encounter-npcsListWrapper u-scrollBoxParent shadow-lg">
+      <div class="Encounter-npcsListScrollBox u-scrollBoxChild bg-white ">
+        <ul class="Encounter-npcsList divide-y divide-gray-300">
           <li v-for="(npc, index) in npcs" :key="index">
             <CharacterListItem
               :npc="npc"
@@ -45,9 +45,9 @@ import CharacterListItem from '@/components/characters/CharacterListItem.vue';
 import { calcModifier, modifierWithSign } from '@/utils/dnd';
 
 @Component({
-  components: { CharacterListItem, Encounter },
+  components: { CharacterListItem, Encounter: EncounterList },
 })
-export default class Encounter extends Vue {
+export default class EncounterList extends Vue {
   @Prop({ type: String, required: true }) public id!: string;
 
   get currentEncounter() {
@@ -139,23 +139,11 @@ export default class Encounter extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/scss/variables.scss';
-
-.Encounter-top {
-  margin-bottom: 1rem;
+.Encounter-npcsListWrapper {
+  height: calc(100vh - 180px) !important;
 }
 
-.Encounter-npcsListWrapper {
-  box-shadow: 0px 0px 19px 1px #00000026;
-  background-color: $color-4;
-}
-
-.Encounter-npcsListWrapper {
-  max-height: calc(100vh - 200px);
-  overflow-y: scroll;
-}
-
-.Encounter-npcsListWrapper {
-  height: calc(100vh - 200px);
+.Encounter-npcsList > li:last-child {
+  border-bottom: 1px solid theme('colors.gray.300');
 }
 </style>

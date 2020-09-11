@@ -1,19 +1,19 @@
 <template>
-  <div class="EncounterOverview-item">
-    <div v-if="!isEditingName">
-      <p @click="toEncounterView(id)">{{ name }}</p>
+  <div
+    class="card-interactive w-full"
+  >
+    <div @click="toEncounterView(id)" v-if="!isEditingName">
+      <p class="mb-2 font-semibold">{{ name }}</p>
 
-      <button @click.prevent="deleteEncounter()">Delete</button>
-      <button @click.prevent="renameEncounter()">Rename</button>
+      <div>
+        <button @click.stop="deleteEncounter()" class="Button--secondary">Delete</button>
+        <button @click.stop="renameEncounter()">Rename</button>
+      </div>
     </div>
 
-    <div v-else>
-      <input
-        type="text"
-        v-model="newName"
-        :placeholder="this.name"
-        @keyup.enter="saveNewName"
-      >
+    <div v-if="isEditingName" class="Form">
+      <FormInput label="Edit encounter name" v-model="newName" :placeholder="this.name" @keyup.enter="saveNewName" />
+      <button @click="isEditingName = false" class="Button--secondary">Cancel</button>
       <button @click="saveNewName">Save</button>
     </div>
   </div>
@@ -24,15 +24,20 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import { dispatchRemoveEncounter, dispatchUpdateName } from '@/store/encountersModule';
 import { IEncounterEntity } from '@/types/encounters';
+import FormInput from '@/components/form/FormInput.vue';
 
-@Component
-export default class Encounter extends Vue {
+@Component({
+  components: {
+    FormInput,
+  },
+})
+export default class EncounterTeaser extends Vue {
   @Prop({ type: String, required: true }) public id!: string;
   @Prop({ type: String, required: true }) public name!: string;
   @Prop({ type: Array, required: true }) public npcs!: IEncounterEntity[];
 
   private isEditingName: boolean = false;
-  private newName: string = '';
+  private newName: string = this.name;
 
   public encounterSize(): number {
     return this.npcs ? this.npcs.length : 0;
@@ -53,7 +58,6 @@ export default class Encounter extends Vue {
       encounterId: this.id,
       newName: this.newName,
     }).then(() => {
-      this.newName = '';
       this.isEditingName = false;
     });
   }
@@ -65,14 +69,4 @@ export default class Encounter extends Vue {
 </script>
 
 <style>
-.EncounterOverview-item {
-  border: 1px solid grey;
-  margin-bottom: 20px;
-  padding: 20px;
-}
-
-.EncounterOverview-item:hover {
-  cursor: pointer;
-  background-color: rgb(219, 219, 219);
-}
 </style>

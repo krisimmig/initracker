@@ -1,11 +1,11 @@
 <template>
   <div class="text-sm rounded overflow-hidden bg-white">
-    <div class="p-4">
+    <div class="p-4 bg-gray-400">
       <h4 class="mb-0 text-base font-semibold">{{ characterData.name }}</h4>
-      <p class="mb-0">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with a CR of {{ characterData.challenge_rating }}</p>
+      <p class="mb-0 italic text-gray-600">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with a CR of {{ characterData.challenge_rating }}</p>
     </div>
 
-    <div class="p-4">
+    <div class="p-4 bg-gray-300">
       <div class="flex">
         <div class="w-1/2 flex items-center">
           <CharacterArmorClass :armorClass="characterData.armor_class" />
@@ -18,11 +18,12 @@
         </div>
       </div>
 
-      <div class="flex mt-2">
-        <div v-for="(statName, statValue, index) in statsArray" :key="index">
+      <div class="flex mt-2 justify-between divide-x divide-gray-400">
+        <div v-for="(statName, statValue, index) in statsArray" :key="index" class="text-center w-full">
           <p class="uppercase mb-0 font-bold">{{ statValue }}</p>
           <p class="m-0 mt-1">
-            {{ characterData[statName.toLowerCase()] }} <span class="CharacterDetails-statModifier">{{ stringModifier(characterData[statName.toLowerCase()]) }}</span>
+            {{ characterData[statName.toLowerCase()] }}
+            <span class="text-gray-600 text-xs">{{ stringModifier(characterData[statName.toLowerCase()]) }}</span>
           </p>
         </div>
       </div>
@@ -58,14 +59,14 @@
       </template>
 
       <template v-if="characterData.actions">
-        <h3 class="mt-8">Actions</h3>
+        <h3 class="CharacterDetails-sectionHeadline">Actions</h3>
         <p v-for="(action, index) in characterData.actions" :key="index">
           <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
         </p>
       </template>
 
       <template v-if="characterData.legendary_actions">
-        <h3 class="mt-8">Legendary Actions</h3>
+        <h3 class="CharacterDetails-sectionHeadline">Legendary Actions</h3>
         <p>The {{ characterData.name }} can take 3 legendary actions, choosing from the options below. Only one
           legendary action option can be used at a time and only at the end of another creature's turn. The {{
           characterData.name }} regains spent legendary actions at the start of its turn.</p>
@@ -121,4 +122,8 @@ export default class CharacterDetails extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+  .CharacterDetails-sectionHeadline {
+    @apply mt-8 text-gray-500 text-base;
+  }
+</style>

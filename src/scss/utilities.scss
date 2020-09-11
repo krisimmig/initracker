@@ -24,7 +24,7 @@
 
 .u-scrollBoxParent {
   width: 100%;
-  height: calc(100vh - 200px); // Overwrite this to fit correct height
+  height: calc(100vh - 180px); // Overwrite this to fit correct height
   overflow: hidden;
   position: relative;
 }
@@ -36,5 +36,4 @@
   left: 0;
   right: 0px; /* Increase/Decrease this value for cross-browser compatibility */
   overflow-y: scroll;
-  padding-bottom: 20px;
 }

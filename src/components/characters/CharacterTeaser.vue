@@ -1,27 +1,27 @@
 <template>
   <div
-    class="bg-blue-200 cursor-pointer hover:shadow-lg ease-in-out duration-200 pointer transition mb-4 rounded overflow-hidden"
+    class="bg-white cursor-pointer hover:bg-gray-100 transition duration-100"
     v-if="characterData"
   >
-    <div class="flex w-full justify-between bg-black text-blue-200 p-2 items-end">
-      <h4 class="CharacterSearchResult-name m-0 font-semibold">{{ characterData.name }}</h4>
-      <p class="CharacterSearchResult-meta ml-auto text-xs italic">{{ characterData.size }} {{ characterData.type }}</p>
+    <div class="flex w-full justify-between items-start p-2 pb-1">
+      <h4 class="CharacterSearchResult-name m-0 font-semibold mr-1">{{ characterData.name }}</h4>
+      <p class="CharacterSearchResult-meta ml-auto text-xs italic text-gray-600 text-right">{{ characterData.size }}</p>
     </div>
 
-    <div class="flex items-end w-full p-2 justify-between items-center">
-      <div class="flex">
+    <div class="flex items-end w-full p-2 pt-0 justify-between items-center">
+      <div class="flex text-gray-600 font-light text-sm">
         <div class="mr-4 flex items-center">
-          <SvgIcon name="shield" class="text-gray-100 mr-1" />
+          <SvgIcon name="shield" class="mr-1 text-gray-300" />
           {{ characterData.armor_class }}
         </div>
 
         <div class="mr-4 flex items-center">
-          <SvgIcon name="heart" class="text-red-200 mr-1" />
+          <SvgIcon name="heart" class="mr-1 text-red-600" />
           {{ characterData.hit_points }}
         </div>
 
         <div class="flex items-center">
-          <p class="font-bold">CR</p>
+          <p class="font-semibold">CR</p>
           <p class="ml-1">{{ characterData.challenge_rating }}</p>
         </div>
       </div>

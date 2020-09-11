@@ -1,29 +1,31 @@
 <template>
 
-  <div class="bg-black">
+  <div class="MainMenu bg-gray-600">
     <div class="u-container-fluid">
-      <div class="MainMenu text-gray-100">
+      <div class="justify-between items-center flex h-12 text-gray-100">
         <template v-if="isLoggedIn">
-          <div class="MainMenu-left">
-            <router-link class="MainMenu-link MainMenu-link--iconWrapper" :to="{ name: 'home' }">
-              <SvgIcon name="logo" class="MainMenu-link--icon" /><b>BETTER INITIATIVE</b>
+          <div class="flex items-center">
+            <router-link class="" :to="{ name: 'home' }">
+              <div class="flex items-center mr-3">
+                <SvgIcon name="logo" class="text-red-600" /><p class="ml-2 font-bold MainMenu-link">BETTER INITIATIVE</p>
+              </div>
             </router-link>
             <router-link class="MainMenu-link" :to="{ name: 'encounters' }">Encounters</router-link>
             <router-link class="MainMenu-link" :to="{ name: 'characters' }">Characters</router-link>
           </div>
 
-          <div class="MainMenu-right">
-            <router-link class="MainMenu-link" :to="{ name: 'home' }">{{ currentUserString }}</router-link>
+          <div class="ml-auto">
+            <router-link class="MainMenu-link" :to="{ name: 'userdetails' }">{{ currentUserString }}</router-link>
             <a class="MainMenu-link" href="#" @click="logoutUser">Logout</a>
           </div>
         </template>
 
         <template v-else>
-          <div class="MainMenu-left">
+          <div class="flex items-center">
             <router-link class="MainMenu-link" :to="{ name: 'home' }">Home</router-link>
             <router-link class="MainMenu-link" :to="{ name: 'register' }">Register</router-link>
           </div>
-          <div class="MainMenu-right">
+          <div>
             <router-link class="MainMenu-link" :to="{ name: 'login' }">Login</router-link>
           </div>
         </template>
@@ -58,56 +60,12 @@ export default class MainMenu extends Vue {
 }
 </script>
 
-
 <style lang="scss">
-@import '@/scss/variables.scss';
+  .MainMenu-link {
+    @apply ml-2;
+  }
 
-.MainMenu-wrapper {
-  background-color: $color-black;
-}
-
-.MainMenu {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.MainMenu-left {
-  display: flex;
-  align-items: center;
-}
-
-.MainMenu-link {
-  border-bottom: 1px solid transparent;
-  padding: 3px 0 2px;
-}
-
-.MainMenu-link.is-active:not(.MainMenu-link--iconWrapper) {
-  border-bottom: 1px solid currentColor;
-}
-
-.MainMenu-link--iconWrapper {
-  display: inline-flex;
-  align-items: center;
-}
-
-.MainMenu-link--icon {
-  color: $color-2;
-  font-size: 1.5em;
-  margin-right: 0.4em;
-}
-
-.MainMenu-left .MainMenu-link {
-  margin-right: 1rem;
-}
-
-.MainMenu-left .MainMenu-link--iconWrapper {
-  margin-right: 2em;
-}
-
-.MainMenu-right .MainMenu-link {
-  margin-left: 1rem;
-}
-
+  .MainMenu-link:hover {
+    @apply underline;
+  }
 </style>

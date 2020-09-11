@@ -1,7 +1,9 @@
 <template>
-  <div class="CharacterArmorClass">
-    <SvgIcon name="shield" class="CharacterArmorClass-icon text-gray-300" />
-    <div class="CharacterArmorClass-amount">{{ armorClass }}</div>
+  <div>
+    <div class="CharacterArmorClass">
+      <SvgIcon name="shield" class="CharacterArmorClass-icon text-gray-200" />
+      <p class="CharacterArmorClass-amount text-gray-600">{{ armorClass }}</p>
+    </div>
   </div>
 </template>
 

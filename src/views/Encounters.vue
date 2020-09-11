@@ -1,9 +1,10 @@
 <template>
   <div class="">
-    <PageTitle title="Ecounters list" subtitle="These are all oyur encounters." />
+    <PageTitle title="Ecounters list" subtitle="These are all your encounters." />
+
     <div class="flex">
-      <div>
-        <ul>
+      <div class="w-1/2 mt-3 mr-4 bg-white shadow">
+        <ul class="divide-y divide-gray-300">
           <li
             v-for="encounter in encounters"
             :key="encounter.id"

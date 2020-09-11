@@ -18,3 +18,16 @@ h3 {
 h1, h2, h3, h4 {
   margin-bottom: .5em;
 }
+
+.card {
+  @apply p-4 bg-white;
+}
+
+.card-interactive {
+  @apply card transition duration-100 cursor-pointer;
+}
+
+.card-interactive:hover {
+  @apply bg-gray-100;
+}
+

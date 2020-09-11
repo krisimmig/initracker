@@ -1,5 +1,6 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
+import avatarDefault from '@/assets/avatar.jpg';
 
 import router from '@/router';
 import { RootState } from '@/store/index';
@@ -20,9 +21,23 @@ export const usersModule = {
       return state.user !== null;
     },
 
+    getUserObj(state: UserState): firebase.User | null {
+      return state.user;
+    },
+
     getUserString(state: UserState) {
       if (!state.user) { return null; }
       return state.user.displayName ? state.user.displayName : state.user.email;
+    },
+
+    getUserPhotoUrl(state: UserState) {
+      if (!state.user) { return null; }
+      return state.user.photoURL ? state.user.photoURL : avatarDefault;
+    },
+
+    getUserEmail(state: UserState) {
+      if (!state.user) { return null; }
+      return state.user.email ? state.user.photoURL : 'No email provided';
     },
 
     getUserUid(state: UserState) {
@@ -72,6 +87,8 @@ const { commit, read, dispatch } = getStoreAccessors<UserState | any, RootState>
 export const readIsLoggedIn = read(usersModule.getters.isLoggedIn);
 export const readUserString = read(usersModule.getters.getUserString);
 export const readUserUid = read(usersModule.getters.getUserUid);
+export const readUserPhotoUrl = read(usersModule.getters.getUserPhotoUrl);
+export const readUserEmail = read(usersModule.getters.getUserEmail);
 
 // Actions
 export const dispatchValidateUser = dispatch(usersModule.actions.validateUser);

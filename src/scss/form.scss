@@ -21,7 +21,7 @@ div[class*=" u-columns-"] .Form-item {
 }
 
 .Form-label {
-  @apply inline text-sm text-gray-300;
+  @apply inline text-sm text-gray-500;
 }
 
 .Form-element {
@@ -32,8 +32,8 @@ div[class*=" u-columns-"] .Form-item {
     border
     rounded
     text-black
-    border-gray-300
-    bg-blue-100
+    border-gray-400
+    bg-white
     transition
     px-2
     py-1;
@@ -44,7 +44,7 @@ div[class*=" u-columns-"] .Form-item {
 }
 
 .Form-element::placeholder {
-  @apply text-blue-200;
+  @apply text-gray-300;
 }
 
 .Form-element--input {
