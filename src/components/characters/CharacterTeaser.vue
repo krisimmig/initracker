@@ -51,7 +51,7 @@
       SvgIcon,
     },
   })
-  export default class CharacterSearchResult extends Vue {
+  export default class CharacterTeaser extends Vue {
     @Prop({ type: Object, required: true }) public characterData!: Character;
 
     public get encounterId() {
