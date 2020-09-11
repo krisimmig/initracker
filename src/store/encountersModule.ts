@@ -68,7 +68,9 @@ export const encountersModule = {
   actions: {
     fetchEncounters(context: EncountersContext) {
       const userUid = usersModule.readUserUid(context);
-      db.collection(`users/${userUid}/encounters`).onSnapshot((data) => {
+      db.collection(`users/${userUid}/encounters`)
+        .orderBy('createdAt', 'desc')
+        .onSnapshot((data) => {
         const encounters: IEncounterEntity[] = [];
         data.forEach((doc) => {
           encounters.push(doc.data() as IEncounterEntity);
@@ -145,6 +147,7 @@ export const encountersModule = {
         npcs: [],
         round: 1,
         activeEntityIndex: 1,
+        createdAt: Date.now(),
       };
 
       encountersRef.doc(id).set(newEncounter);
