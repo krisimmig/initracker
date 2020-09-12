@@ -73,7 +73,7 @@ const router = new Router({
 
     {
       path: '/characters/builder/:characterId',
-      name: 'characterBuilderEdit',
+      name: 'characterCreate',
       component: CharacterCreate,
       meta: {
         requiresAuth: true,

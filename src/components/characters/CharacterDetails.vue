@@ -81,7 +81,7 @@
 <script lang='ts'>
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
-import { Character as ICharacter} from '@/classes/Character';
+import { Character } from '@/classes/Character';
 import { stringModifier as calculateStringModifier } from '@/utils/dnd';
 import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
 import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
@@ -94,7 +94,7 @@ import { CharacterAttributes } from '@/types/characters';
   },
 })
 export default class CharacterDetails extends Vue {
-  @Prop({ type: Object, required: true }) public characterData!: ICharacter;
+  @Prop({ type: Object, required: true }) public characterData!: Character;
   @Prop({ type: Boolean, default: false }) public isWide!: boolean;
 
 

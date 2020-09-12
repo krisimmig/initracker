@@ -5,8 +5,20 @@
       <div class="flex">
         <div>Round <b>{{ currentRound }}</b></div>
         <div class="ml-auto">
-          <button @click="rollInitiative">Roll Ini</button>
-          <button @click="next">Next</button>
+          <button
+              @click="rollInitiative"
+              :disabled="npcs.length === 0"
+              v-if="currentRound === 1"
+          >
+            Roll Initiative
+          </button>
+          <button
+              @click="reset"
+              v-if="currentRound > 1"
+          >
+            Reset
+          </button>
+          <button @click="next" :disabled="npcs.length < 2">Next</button>
         </div>
       </div>
     </div>
@@ -46,10 +58,13 @@ import {
 } from '@/store/encountersModule';
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
 import CharacterListItem from '@/components/characters/CharacterListItem.vue';
-import { calcModifier, modifierWithSign } from '@/utils/dnd';
+import { modifierWithSign } from '@/utils/dnd';
 
 @Component({
-  components: { CharacterListItem, Encounter: EncounterList },
+  components: {
+    CharacterListItem,
+    Encounter: EncounterList,
+  },
 })
 export default class EncounterList extends Vue {
   @Prop({ type: String, required: true }) public id!: string;
@@ -112,6 +127,13 @@ export default class EncounterList extends Vue {
         newRoundIndex: 1,
       });
     }
+  }
+
+  public reset(): void {
+    dispatchUpdateRound(this.$store, {
+      encounterId: this.id,
+      newRoundIndex: 1,
+    });
   }
 
   public next(): void {

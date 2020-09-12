@@ -2,7 +2,7 @@
   <div>
     <div>
       <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
-      <button class="Button--danger" @click.prevent="deleteCharacter">Delete</button>
+      <button class="Button--danger" v-if="!isNewCharacter" @click.prevent="deleteCharacter">Delete</button>
     </div>
 
     <div class="CharacterBuilder flex">
@@ -129,7 +129,7 @@
 
             <div>
               <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
-              <button class="Button--danger" @click.prevent="deleteCharacter">Delete</button>
+              <button class="Button--danger" v-if="!isNewCharacter" @click.prevent="deleteCharacter">Delete</button>
             </div>
           </div>
         </div>
@@ -147,10 +147,11 @@
 </template>
 
 <script lang='ts'>
+import { isEqual, clone } from 'lodash';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { $enum } from 'ts-enum-util';
 
-import { Character as ICharacter } from '@/classes/Character';
+import { Character } from '@/classes/Character';
 import { CharacterSizes, CreatureTypes, CharacterAlignments } from '@/types/characters';
 import { dispatchSaveCharacter, dispatchDeleteCharacter } from '@/store/characterBuilderModule';
 import CharacterDetails from '@/components/characters/CharacterDetails.vue';
@@ -169,11 +170,13 @@ import Collapsable from '@/components/common/Collapsable.vue';
   },
 })
 export default class CharacterBuilder extends Vue {
-  @Prop({ type: Object, required: true }) public character!: ICharacter;
-  private originalCharacter!: ICharacter;
+  @Prop({ type: Object, required: true }) public character!: Character;
+
+  public originalCharacter: Character | null = null;
+  public isNewCharacter = false;
 
   public get hasChanged() {
-    return JSON.stringify(this.originalCharacter) === JSON.stringify(this.character) ;
+    return !isEqual(this.originalCharacter, this.character);
   }
 
   public get optionsSize() {
@@ -189,7 +192,9 @@ export default class CharacterBuilder extends Vue {
   }
 
   public saveCharacter(): void {
-    dispatchSaveCharacter(this.$store, { character: this.character });
+    dispatchSaveCharacter(this.$store, { character: this.character }).then(() => {
+      this.originalCharacter = { ...this.character };
+    });
   }
 
   public async deleteCharacter() {
@@ -231,7 +236,8 @@ export default class CharacterBuilder extends Vue {
   }
 
   public mounted() {
-    this.originalCharacter = this.character;
+    this.originalCharacter = clone(this.character);
+    this.isNewCharacter = !!this.$route.query.new;
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="EncounterNew">
-    <h1>New Encounter</h1>
+    <h2 class="h3">New Encounter</h2>
     <FormInput
       placeholder="name"
       label="New encounter name"

@@ -2,8 +2,9 @@
   <div class="">
     <PageTitle title="Ecounters list" subtitle="These are all your encounters." />
 
-    <div class="flex">
-      <div class="w-1/2 mt-3 mr-4 bg-white shadow">
+    <div class="u-container-fluid">
+      <div class="flex">
+      <div class="w-1/2 mr-4 bg-white shadow">
         <ul
             v-if="encounters.length > 0"
             class="divide-y divide-gray-300"
@@ -21,6 +22,7 @@
       <div class="w-5/12">
         <EncounterNew />
       </div>
+    </div>
     </div>
   </div>
 </template>

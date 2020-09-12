@@ -5,10 +5,12 @@
       subtitle="Here you can create or edit an existing character."
     />
 
-    <div v-if="!isLoading">
-      <CharacterBuilder :character="character" />
+    <div class="u-container-fluid">
+      <div v-if="!isLoading">
+        <CharacterBuilder :character="character" />
+      </div>
+      <div v-else class="u-tip">Loading..</div>
     </div>
-    <div v-else>Loading..</div>
   </div>
 </template>
 
@@ -52,10 +54,6 @@ export default class CharacterCreate extends Vue {
       dispatchFetchCharacterByUuid(this.$store, { characterUuid: this.$route.params.uuid });
     } else if (this.characterId) {
       dispatchFetchCharacterById(this.$store, { id: this.characterId });
-    } else {
-      commitSetCharacter(this.$store, {
-        character: new Character(),
-      });
     }
   }
 }

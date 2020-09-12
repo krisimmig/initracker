@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex mx-4">
     <div class="EncounterDetails-sideColumn flex flex-col">
       <div class="EncounterDetails-sideBarTitles">
         <p
@@ -20,7 +20,11 @@
 
       <div class="EncounterDetails-npcsList">
         <template v-if="showSearch">
-          <CharacterLibrary :encounterId="$route.params.encounterId" />
+          <CharacterLibrary
+              :encounterId="$route.params.encounterId"
+              @characterClicked="handleCharClicked"
+              buttonText="Add"
+          />
         </template>
         <template v-else>
           <div class="u-scrollBoxParent shadow bg-white">
@@ -43,7 +47,7 @@
       <div>
         <div class="u-scrollBoxParent bg-white shadow">
           <div class="u-scrollBoxChild">
-            <CharacterDetails v-if="selectedCharacter" :characterData="selectedCharacter"/>
+            <CharacterDetails v-if="selectedCharacter" :characterData="selectedCharacter" />
             <p class="u-tip" v-else>Click on a character name to see details here.</p>
           </div>
         </div>
@@ -58,7 +62,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import {
   readGetNpcInDetail,
   readGetEncountersActiveNpc,
-  dispatchFetchEncounterById,
+  dispatchFetchEncounterById, dispatchAddNpcToEncounter,
 } from '@/store/encountersModule';
 import EncounterList from '@/components/encounters/EncounterList.vue';
 import CharacterLibrary from '@/components/characters/CharacterLibrary.vue';
@@ -80,6 +84,15 @@ export default class EncounterDetails extends Vue {
 
   get activeCharacter() {
     return readGetEncountersActiveNpc(this.$store);
+  }
+
+  public handleCharClicked(npcData) {
+    console.log('handleCharClicked', npcData);
+    if (!this.$route.params.encounterId) { return; }
+    dispatchAddNpcToEncounter(this.$store, {
+      npcData: Object.assign({}, npcData),
+      encounterId: this.$route.params.encounterId,
+    });
   }
 
   public mounted() {

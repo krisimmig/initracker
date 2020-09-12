@@ -7,15 +7,15 @@
           subtitle="Create a new character by using an existing one as a template or create one from scratch."
         />
 
-        <router-link :to="{ name: 'characterBuilder' }">from scratch</router-link>
+        <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}">from scratch</router-link>
 
         <p>or start with a monster from the Basic Rules. Please choose one from the list:</p>
 
         <ul>
           <li v-for="npc in npcs" :key="npc.id">
             <router-link :to="{
-                name: 'characterBuilderEdit',
-                params: { characterId: npc.id} }"
+                name: 'characterCreate',
+                params: { characterId: npc.id } }"
             >{{ npc.name }}</router-link>
           </li>
         </ul>

@@ -1,7 +1,11 @@
 <template>
-  <div class="PageTitle">
-    <h1 class="PageTitle-title">{{ title }}</h1>
-    <p class="PageTitle-subtitle" v-if="subtitle">{{ subtitle }}</p>
+  <div class="bg-gray-300 mb-6">
+    <div class="u-container-fluid">
+      <div class="PageTitle py-3">
+        <h1 class="h3 inline-block mr-4 mb-0">{{ title }}</h1>
+        <p class="inline italic text-gray-600" v-if="subtitle">{{ subtitle }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,19 +25,4 @@ export default class  extends Vue {
 </script>
 
 <style lang="scss">
-.PageTitle {
-  margin-bottom: 3rem;
-  margin-top: 3rem;
-}
-
-.PageTitle-title {
-  margin-bottom: 0.3em;
-}
-
-.PageTitle-subtitle {
-  margin-top: 0;
-  font-style: italic;
-  color: theme('colors.gray.500');
-}
-
 </style>

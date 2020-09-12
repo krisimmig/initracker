@@ -19,11 +19,14 @@
             <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
               <div v-if="index < maxVisible">
                 <CharacterTeaser :characterData="npc" @click.native="selectCharacter(npc)">
-                  <button @click="addToEncounter(npc)">Add</button>
+                  <button @click="$emit('characterClicked', npc)">{{ buttonText }}</button>
                 </CharacterTeaser>
               </div>
             </li>
           </ul>
+
+          <p v-else class="u-tip" v-html="noResultsText"></p>
+
         </div>
       </div>
     </div>
@@ -31,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import CharacterTeaser from '@/components/characters/CharacterTeaser.vue';
 import { readGetNpcs } from '@/store/npcsModule';
@@ -40,6 +43,11 @@ import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersMo
 import FormInput from '@/components/form/FormInput.vue';
 import { commitSetNpcInDetail, dispatchAddNpcToEncounter, readGetEncountersCurrentId } from '@/store/encountersModule';
 
+const searchTypes = {
+  MONSTERS: 'monsters',
+  CHARACTERS: 'characters',
+};
+
 @Component({
   components: {
     CharacterTeaser,
@@ -47,21 +55,33 @@ import { commitSetNpcInDetail, dispatchAddNpcToEncounter, readGetEncountersCurre
   },
 })
 export default class CharacterLibrary extends Vue {
+  @Prop({ type: String, default: 'Add' }) public buttonText!: string;
+
   public searchString: string = '';
   public maxVisible: number = 10;
-  public showType: string = 'monsters';
+  public showType: string = searchTypes.MONSTERS;
 
   get npcs() {
-    if (this.showType === 'monsters') {
+    if (this.showType === searchTypes.MONSTERS) {
       return readGetNpcs(this.$store);
     }
+
     return readGetCharacters(this.$store);
+  }
+
+  get noResultsText() {
+    if (this.showType === searchTypes.MONSTERS) {
+      return 'No monsters found, please add some here <a href="/characters">here</a>';
+    } else if (this.showType === searchTypes.CHARACTERS) {
+      return 'No characters found, you can create your own monsters and player-characters <a href="/characters">here</a>';
+    }
   }
 
   get filteredNpcs() {
     if (this.searchString === '') {
       return this.npcs;
     }
+
     return this.npcs.filter((npc) => npc.name.toLowerCase().includes(this.searchString.toLowerCase()));
   }
 
@@ -86,14 +106,6 @@ export default class CharacterLibrary extends Vue {
 
   public get encounterId() {
     return readGetEncountersCurrentId(this.$store);
-  }
-
-  public addToEncounter(characterData) {
-    if (!this.encounterId) { return; }
-    dispatchAddNpcToEncounter(this.$store, {
-      npcData: Object.assign({}, characterData),
-      encounterId: this.encounterId,
-    });
   }
 
   public selectCharacter(characterData) {

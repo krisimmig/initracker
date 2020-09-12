@@ -67,7 +67,6 @@ export const characterBuilderModule = {
     },
 
     async fetchCharacterByUuid(context: CharacterBuilderContext, { characterUuid }: { characterUuid: string }) {
-      console.log('fetchCharacterByUuid', characterUuid);
       commitSetLoading(context, { isLoading: true });
       const userUid = readUserUid(context);
       const characterRef = db.doc(`users/${userUid}/characters/${characterUuid}`);

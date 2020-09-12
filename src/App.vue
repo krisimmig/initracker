@@ -1,9 +1,7 @@
 <template>
   <div class="flex flex-col h-screen bg-gray-200">
     <MainMenu />
-    <div class="u-container-fluid">
-      <router-view />
-    </div>
+    <router-view />
   </div>
 </template>
 

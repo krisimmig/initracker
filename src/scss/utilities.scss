@@ -41,3 +41,11 @@
 .u-tip {
   @apply font-light inline-block p-4 text-gray-500;
 }
+
+.u-tip > a {
+  text-decoration: underline;
+}
+
+.u-tip > a:hover {
+  color: theme('colors.gray.600');
+}
