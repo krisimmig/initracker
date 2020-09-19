@@ -1,9 +1,9 @@
-import { Character as ICharacter } from '@/classes/Character';
+import { Character } from '@/classes/Character';
 
 export interface IEncounterEntity {
   id: string;
   name: string;
-  npcs: ICharacter[];
+  npcs: Character[];
   round: number;
   activeEntityIndex: number;
   createdAt: number;

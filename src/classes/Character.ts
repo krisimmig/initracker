@@ -1,13 +1,18 @@
 import uuid from 'uuid/v1';
 import { mergeWith, isNull } from 'lodash';
 
-import {
-  CreatureTypes,
-  CharacterSizes,
-  StatusTypes,
-  ICharacterAbility,
-  CharacterAlignments,
-} from '@/types/characters';
+import CreatureTypes from '@/types/creatureTypes';
+import StatusTypes from '@/types/statusTypes';
+import CharacterAlignments from '@/types/characterAlignments';
+import CharacterSizes from '@/types/characterSizes';
+import { CharacterRaces } from '@/types/characterRaces';
+
+type CharacterType = CreatureTypes | CharacterRaces;
+
+interface ICharacterAbility {
+  desc: string;
+  name: string;
+}
 
 export class Character {
   public status: StatusTypes[] = [];
@@ -44,7 +49,7 @@ export class Character {
   public strength: number = 10;
   public strength_save: number = 0;
   public subtype: string = '';
-  public type: CreatureTypes = CreatureTypes.humanoid;
+  public type: CharacterType = CreatureTypes.humanoid;
   public wisdom: number = 10;
   public wisdom_save: number = 0;
   public uuid!: string;
@@ -82,28 +87,4 @@ export class Character {
       };
     }
   }
-
-  // @Todo: check if still needed? Done in CharacterDetails now
-  // get stats(): Array<{ name: string; value: number; }> {
-  //   return [
-  //     { name: 'str', value: this.strength },
-  //     { name: 'dex', value: this.dexterity },
-  //     { name: 'con', value: this.constitution },
-  //     { name: 'int', value: this.intelligence },
-  //     { name: 'wis', value: this.wisdom },
-  //     { name: 'cha', value: this.charisma },
-  //   ];
-  // }
-
-  // @Todo: check if still needed? Done in CharacterDetails now
-  // get speedString(): string {
-  //   const keys = Object.keys(this.speed);
-  //   return keys.reduce((acc, current)  => {
-  //     const value = this.speed[current];
-  //     if (value > 0) {
-  //       return acc !== '' ? `${value}ft (${current}), ${acc}` : `${value}ft (${current})`;
-  //     }
-  //     return acc;
-  //   }, '');
-  // }
 }

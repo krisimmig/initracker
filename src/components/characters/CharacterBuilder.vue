@@ -152,13 +152,16 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { $enum } from 'ts-enum-util';
 
 import { Character } from '@/classes/Character';
-import { CharacterSizes, CreatureTypes, CharacterAlignments, CharacterRaces } from '@/types/characters';
+import CreatureTypes from '@/types/creatureTypes';
 import { dispatchSaveCharacter, dispatchDeleteCharacter } from '@/store/characterBuilderModule';
 import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 import FormInput from '@/components/form/FormInput.vue';
 import FormSelect from '@/components/form/FormSelect.vue';
 import FormTextarea from '@/components/form/FormTextarea.vue';
 import Collapsable from '@/components/common/Collapsable.vue';
+import { CharacterRaces } from '@/types/characterRaces';
+import CharacterAlignments from '@/types/characterAlignments';
+import CharacterSizes from '@/types/characterSizes';
 
 @Component({
   components: {

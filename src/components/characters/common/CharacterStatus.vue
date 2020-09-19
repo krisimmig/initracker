@@ -38,10 +38,10 @@
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { StatusTypes } from '@/types/characters';
 import DialogueBox from '@/components/common/DialogueBox.vue';
 import { readGetEncountersCurrentId } from '@/store/encountersModule';
 import { dispatchRemoveStatusFromNpc, dispatchUpdateStatus, readGetNpcStates } from '@/store/npcsModule';
+import StatusTypes from '@/types/statusTypes';
 
 @Component({
   components: {

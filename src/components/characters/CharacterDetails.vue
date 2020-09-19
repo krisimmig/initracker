@@ -92,7 +92,7 @@ import { Character } from '@/classes/Character';
 import { stringModifier as calculateStringModifier } from '@/utils/dnd';
 import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
 import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
-import { CharacterAttributes } from '@/types/characters';
+import { CharacterAttributes } from '@/types/characterAttributes';
 
 @Component({
   components: {

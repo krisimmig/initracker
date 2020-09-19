@@ -181,7 +181,7 @@ export default class EncounterList extends Vue {
 }
 
 .Encounter-npcsListWrapper {
-  height: calc(100vh - 144px) !important;
+  height: calc(100vh - 152px) !important;
 }
 
 .Encounter-npcsList > li:last-child {

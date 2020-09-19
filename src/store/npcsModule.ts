@@ -5,8 +5,8 @@ import { arrayRemove, arrayUnion } from '@/utils/firebaseUtils';
 import { db } from '@/store/firebase';
 import { RootState } from '@/store/index';
 import { readUserUid } from '@/store/usersModule';
-import { StatusTypes } from '@/types/characters';
 import { Character as ICharacter } from '@/classes/Character';
+import StatusTypes from '@/types/statusTypes';
 
 export interface NpcsState {
   npcs: ICharacter[];
