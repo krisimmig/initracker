@@ -1,9 +1,11 @@
 <template>
-  <div class="EncounterNew">
-    <h2 class="h3">New Encounter</h2>
+  <div class="EncounterNew card shadow">
+    <h4>Create a new encounter</h4>
+    <p>An encounter is a battle that your party has to survive to reach there goals in your campaign. You can prepare as many encounters here as you want and stat them whenever it fits into your narrative. </p>
     <FormInput
-      placeholder="name"
-      label="New encounter name"
+      class="mb-3"
+      placeholder="enter a name here..."
+      label="Encounter name"
       v-model="encounterName"
       @keyup.enter="submitNewEncounter"
     />

@@ -2,6 +2,14 @@
   @apply p-4 bg-white;
 }
 
+.card--rounded {
+  @apply rounded;
+}
+
+.card--shadow {
+  @apply shadow;
+}
+
 .card--interactive {
   @apply card transition duration-100 cursor-pointer;
 }

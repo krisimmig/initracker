@@ -1,21 +1,23 @@
 <template>
   <div class="CharactersLibrary">
     <div>
-      <button @click="switchTab('monsters')">Monsters</button>
-      <button @click="switchTab('characters')">Characters</button>
 
-      <div class="Form">
-        <FormInput
-          label="Search"
-          v-model="searchString"
-          placeholder="Search monsters & characters"
-        />
+      <div class="bg-white p-4 border-b">
+        <button @click="switchTab('monsters')">Monsters</button>
+        <button @click="switchTab('characters')">Characters</button>
+
+        <div class="Form">
+          <FormInput
+            label="Filter"
+            v-model="searchString"
+            placeholder="Search monsters & characters"
+          />
+        </div>
       </div>
 
-      <h3 class="text-sm text-gray-500">Results</h3>
       <div class="CharactersLibrary-scrollBox u-scrollBoxParent bg-white shadow" >
         <div class="u-scrollBoxChild" ref="monsterList" @scroll="onScroll">
-          <ul v-if="filteredNpcs.length > 0" class="divide-y divide-gray-300">
+          <ul v-if="filteredNpcs.length > 0" class="divide-y divide-gray-300 border-b">
             <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
               <div v-if="index < maxVisible">
                 <CharacterTeaser :characterData="npc" @click.native="selectCharacter(npc)">
@@ -58,7 +60,7 @@ export default class CharacterLibrary extends Vue {
   @Prop({ type: String, default: 'Add' }) public buttonText!: string;
 
   public searchString: string = '';
-  public maxVisible: number = 10;
+  public maxVisible: number = 15;
   public showType: string = searchTypes.MONSTERS;
 
   get npcs() {
@@ -120,10 +122,14 @@ export default class CharacterLibrary extends Vue {
 
 <style scoped lang="scss">
 .CharactersLibrary-scrollBox {
-  height: calc(100vh - 327px);
+  height: calc(100vh - 235px);
 }
 
 .CharactersLibrary-listItem:last-child {
   border-bottom: 1px solid theme('colors.gray.300');
+}
+
+.Characters-library .CharactersLibrary-scrollBox {
+  height: calc(100vh - 383px);
 }
 </style>

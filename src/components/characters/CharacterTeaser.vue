@@ -11,13 +11,13 @@
     <div class="flex items-end w-full p-2 pt-0 justify-between items-center">
       <div class="flex text-gray-600 font-light text-sm">
         <div class="mr-4 flex items-center">
-          <SvgIcon name="shield" class="mr-1 text-gray-300" />
-          {{ characterData.armor_class }}
+          <SvgIcon name="heart" class="mr-1 text-red-600" />
+          {{ characterData.hit_points }}
         </div>
 
         <div class="mr-4 flex items-center">
-          <SvgIcon name="heart" class="mr-1 text-red-600" />
-          {{ characterData.hit_points }}
+          <SvgIcon name="shield" class="mr-1 text-gray-300" />
+          {{ characterData.armor_class }}
         </div>
 
         <div class="flex items-center">

@@ -1,33 +1,39 @@
 <template>
-  <div v-if="currentEncounter" class="Encounter">
-    <div class="mt-4 mb-2">
-      <h1 class="text-xl font-bold">{{ currentEncounter.name }}</h1>
+  <div v-if="currentEncounter" class="Encounter bg-white shadow-lg">
+    <div class="border-b">
+      <div class="Encounter-titleArea pt-4 pb-2 pl-4 relative">
+      <h4 class="uppercase">{{ currentEncounter.name }}</h4>
       <div class="flex">
-        <div>Round <b>{{ currentRound }}</b></div>
+        <div class="font-light">
+          Round <span class="Encounter-roundIndicator font-bold">{{ currentRound }}</span></div>
         <div class="ml-auto">
           <button
               @click="rollInitiative"
               :disabled="npcs.length === 0"
-              v-if="currentRound === 1"
+              v-if="currentRound === 1 && currentNpcIndex === 1"
           >
             Roll Initiative
           </button>
           <button
               @click="reset"
-              v-if="currentRound > 1"
+              v-else
           >
             Reset
           </button>
-          <button @click="next" :disabled="npcs.length < 2">Next</button>
+          <button class="Encounter-nextButton pb-3" @click="next" :disabled="npcs.length < 2">
+           <span class="text-lg">»</span><br>
+            Next turn
+          </button>
         </div>
       </div>
     </div>
+    </div>
 
-    <div class="Encounter-npcsListWrapper u-scrollBoxParent shadow-lg">
-      <div class="Encounter-npcsListScrollBox u-scrollBoxChild bg-white ">
+    <div class="Encounter-npcsListWrapper u-scrollBoxParent">
+      <div class="Encounter-npcsListScrollBox u-scrollBoxChild">
         <ul
             v-if="npcs.length > 0"
-            class="Encounter-npcsList divide-y divide-gray-300"
+            class="Encounter-npcsList divide-y divide-gray-300 border-b"
         >
           <li v-for="(npc, index) in npcs" :key="index">
             <CharacterListItem
@@ -134,42 +140,68 @@ export default class EncounterList extends Vue {
       encounterId: this.id,
       newRoundIndex: 1,
     });
+
+    dispatchUpdateActiveEntityIndex(this.$store, {
+      encounterId: this.id,
+      activeEntityIndex: 1,
+    });
   }
 
   public next(): void {
-    if (this.currentEncounter) {
-      const npc = this.npcs[this.currentNpcIndex - 1];
-      if (npc) {
-        if (this.currentNpcIndex === this.npcs.length) {
-          dispatchUpdateRound(this.$store, {
-            encounterId: this.id,
-            newRoundIndex: this.currentRound + 1,
-          });
+    const npc = this.npcs[this.currentNpcIndex - 1];
 
-          dispatchUpdateActiveEntityIndex(this.$store, {
-            encounterId: this.id,
-            activeEntityIndex: 1,
-          });
-        } else {
-          dispatchUpdateActiveEntityIndex(this.$store, {
-            encounterId: this.id,
-            activeEntityIndex: this.currentNpcIndex + 1,
-          });
-        }
-      } else {
-        console.warn('No npc for next round found.');
-      }
+    if (!npc) {
+      console.warn('No npc for next round found.');
+      return;
+    }
+
+    if (this.currentNpcIndex === this.npcs.length) {
+      dispatchUpdateRound(this.$store, {
+        encounterId: this.id,
+        newRoundIndex: this.currentRound + 1,
+      });
+
+      dispatchUpdateActiveEntityIndex(this.$store, {
+        encounterId: this.id,
+        activeEntityIndex: 1,
+      });
+    } else {
+      dispatchUpdateActiveEntityIndex(this.$store, {
+        encounterId: this.id,
+        activeEntityIndex: this.currentNpcIndex + 1,
+      });
     }
   }
 }
 </script>
 
 <style lang="scss">
+.Encounter-titleArea {
+  padding-right: 116px !important;
+}
+
 .Encounter-npcsListWrapper {
-  height: calc(100vh - 180px) !important;
+  height: calc(100vh - 144px) !important;
 }
 
 .Encounter-npcsList > li:last-child {
   border-bottom: 1px solid theme('colors.gray.300');
+}
+
+.Encounter-roundIndicator {
+  padding: 1px 7px;
+  border-radius: 30%;
+  background: theme('colors.blue.200');
+  border: 1px solid theme('colors.blue.600');
+}
+
+.Encounter-nextButton {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  border-radius: 0;
+  width: 100px;
+  margin-bottom: 0;
 }
 </style>

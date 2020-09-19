@@ -7,7 +7,7 @@
       <div class="w-1/2 mr-4 bg-white shadow">
         <ul
             v-if="encounters.length > 0"
-            class="divide-y divide-gray-300"
+            class="divide-y divide-gray-300 border-b"
         >
           <li
             v-for="encounter in encounters"

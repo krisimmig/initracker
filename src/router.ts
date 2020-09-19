@@ -4,7 +4,6 @@ import { Route } from 'vue-router';
 
 import Home from '@/views/Home.vue';
 import Characters from '@/views/Characters.vue';
-import CharacterNew from '@/views/CharacterNew.vue';
 import CharacterCreate from '@/views/CharacterCreate.vue';
 import Encounters from '@/views/Encounters.vue';
 import EncounterDetails from '@/views/EncounterDetails.vue';
@@ -44,15 +43,6 @@ const router = new Router({
     },
 
     {
-      path: '/characters/new',
-      name: 'newCharacter',
-      component: CharacterNew,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-
-    {
       path: '/characters/edit/:uuid',
       name: 'editCharacter',
       component: CharacterCreate,
@@ -68,6 +58,7 @@ const router = new Router({
       component: CharacterCreate,
       meta: {
         requiresAuth: true,
+        new: true,
       },
     },
 

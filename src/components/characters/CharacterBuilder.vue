@@ -6,7 +6,7 @@
     </div>
 
     <div class="CharacterBuilder flex">
-      <div class="w-1/2 mr-3">
+      <div class="w-1/2 mr-3 card card--rounded card--shadow">
         <div class="CharacterBuilder-wrapper u-scrollBoxParent">
           <div class="u-scrollBoxChild">
 
@@ -136,7 +136,7 @@
       </div>
 
       <div class="w-1/2">
-        <div class="u-scrollBoxParent">
+        <div class="CharacterBuild-preview u-scrollBoxParent">
           <div class="u-scrollBoxChild">
             <CharacterDetails :characterData="character"/>
           </div>
@@ -152,7 +152,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { $enum } from 'ts-enum-util';
 
 import { Character } from '@/classes/Character';
-import { CharacterSizes, CreatureTypes, CharacterAlignments } from '@/types/characters';
+import { CharacterSizes, CreatureTypes, CharacterAlignments, CharacterRaces } from '@/types/characters';
 import { dispatchSaveCharacter, dispatchDeleteCharacter } from '@/store/characterBuilderModule';
 import CharacterDetails from '@/components/characters/CharacterDetails.vue';
 import FormInput from '@/components/form/FormInput.vue';
@@ -184,7 +184,8 @@ export default class CharacterBuilder extends Vue {
   }
 
   public get optionsTypes() {
-    return $enum(CreatureTypes).map((value, name) => ({ value, name }));
+    const types = { ...CreatureTypes, ...CharacterRaces };
+    return $enum(types).map((value, name) => ({ name: value, value: name }));
   }
 
   public get optionsAlignment() {
@@ -244,7 +245,11 @@ export default class CharacterBuilder extends Vue {
 
 <style lang="scss">
 .CharacterBuilder-wrapper.u-scrollBoxParent {
-  height: calc(100vh - 290px);
+  height: calc(100vh - 212px);
+}
+
+.CharacterBuild-preview.u-scrollBoxParent {
+  height: calc(100vh - 180px);
 }
 
 .CharacterBuilder .Form {

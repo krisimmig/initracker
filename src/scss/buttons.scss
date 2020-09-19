@@ -5,16 +5,18 @@ button,
     text-blue-100
     border-blue-300
     inline-block
-    text-xs
     cursor-pointer
     rounded
     transition
     duration-200
     ease-in-out
-    mb-1 uppercase
+    mb-1
+    uppercase
+    text-xs
     font-semibold
     px-3
     py-1 ml-2;
+  text-decoration: none;
 }
 
 button:disabled,
@@ -55,4 +57,9 @@ button:not([disabled]):hover,
 
 .Button--secondary:not([disabled]):hover {
   @apply bg-gray-300 text-gray-600;
+}
+
+.Button--big {
+  width: 100%;
+  @apply text-lg text-center mt-3;
 }

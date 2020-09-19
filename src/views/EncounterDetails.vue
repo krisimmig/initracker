@@ -41,10 +41,7 @@
     </div>
 
     <div class="EncounterDetails-sideColumn flex flex-col">
-      <div class="EncounterDetails-sideBarTitles">
-        <p class="EncounterDetails-tab">Selected character</p>
-      </div>
-      <div>
+      <div class="mt-4">
         <div class="u-scrollBoxParent bg-white shadow">
           <div class="u-scrollBoxChild">
             <CharacterDetails v-if="selectedCharacter" :characterData="selectedCharacter" />
@@ -87,7 +84,6 @@ export default class EncounterDetails extends Vue {
   }
 
   public handleCharClicked(npcData) {
-    console.log('handleCharClicked', npcData);
     if (!this.$route.params.encounterId) { return; }
     dispatchAddNpcToEncounter(this.$store, {
       npcData: Object.assign({}, npcData),
@@ -107,16 +103,31 @@ export default class EncounterDetails extends Vue {
 }
 
 .EncounterDetails-sideBarTitles {
-  @apply mb-1 flex;
-  margin-top: 3.6rem;
+  @apply flex mt-4;
 }
 
 .EncounterDetails-tab {
-  @apply mb-2 mr-4 cursor-pointer text-gray-600 border-b border-transparent transition duration-200;
+  @apply
+    bg-blue-300
+    text-blue-600
+    cursor-pointer
+    transition
+    duration-200
+    mr-1
+    mb-0
+    text-xs
+    uppercase
+    font-semibold
+    inline-block;
+  border: 1px solid theme('colors.blue.400');
+  border-bottom: 0;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  padding: 4px 16px;
 }
 
 .EncounterDetails-tab:hover,
 .EncounterDetails-tab.is-active {
-  @apply text-black border-current;
+  @apply text-blue-100 bg-blue-600;
 }
 </style>

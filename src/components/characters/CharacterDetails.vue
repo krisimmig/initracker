@@ -1,30 +1,37 @@
 <template>
-  <div class="text-sm rounded overflow-hidden bg-white">
-    <div class="p-4 bg-gray-400">
+  <div class="text-sm overflow-hidden bg-white">
+    <div class="p-4 bg-gray-500">
       <h4 class="mb-0 text-base font-semibold">{{ characterData.name }}</h4>
-      <p class="mb-0 italic text-gray-600">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with a CR of {{ characterData.challenge_rating }}</p>
+      <p class="mb-0 italic">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with a CR of {{ characterData.challenge_rating }}</p>
     </div>
 
-    <div class="p-4 bg-gray-300">
-      <div class="flex">
-        <div class="w-1/2 flex items-center">
-          <CharacterArmorClass :armorClass="characterData.armor_class" />
-          <p v-if="characterData.armor_desc">{{ characterData.armor_desc }}</p>
-          <p v-else>Armor Class</p>
-        </div>
-        <div class="w-1/2 flex items-center">
-          <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
-          <p class="ml-2"><b>Dice:</b> {{ characterData.hit_dice }}</p>
-        </div>
-      </div>
+    <div class="bg-gray-400">
 
-      <div class="flex mt-2 justify-between divide-x divide-gray-400">
-        <div v-for="(statName, statValue, index) in statsArray" :key="index" class="text-center w-full">
+      <div class="flex justify-between px-4 py-3">
+        <div
+            class="w-full"
+            v-for="(statName, statValue, index) in statsArray"
+            :key="index"
+        >
           <p class="uppercase mb-0 font-bold">{{ statValue }}</p>
           <p class="m-0 mt-1">
             {{ characterData[statName.toLowerCase()] }}
             <span class="text-gray-600 text-xs">{{ stringModifier(characterData[statName.toLowerCase()]) }}</span>
           </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-4 bg-gray-300">
+      <div class="flex">
+        <div class="w-1/2 flex items-center">
+          <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
+          <p class="ml-2 mb-0"><b>Dice:</b> {{ characterData.hit_dice }}</p>
+        </div>
+        <div class="w-1/2 flex items-center">
+          <CharacterArmorClass :armorClass="characterData.armor_class" />
+          <p v-if="characterData.armor_desc">{{ characterData.armor_desc }}</p>
+          <p class="mb-0" v-else>Armor Class</p>
         </div>
       </div>
 

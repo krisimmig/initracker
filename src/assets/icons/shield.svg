@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 60 (88103) - https://sketch.com -->
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>shield</title>
-    <desc>Created with Sketch.</desc>
-    <g id="shield" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M48,2 L47.9977425,3.64436603 L47.9799451,5.39453011 C47.5445366,33.694966 40.0152967,48 25,48 C9.83303367,48 2.30412135,33.4045159 2.00903164,4.5326576 L2,2 L48,2 Z" id="Combined-Shape" fill="#DDE3EA"></path>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="shield" transform="translate(1.000000, 1.000000)" fill="#DDE3EA" fill-rule="nonzero" stroke="#979797">
+            <path d="M46,0 L45.9977425,1.64436603 L45.9799451,3.39453011 C45.5445366,31.694966 38.0152967,46 23,46 C7.83303367,46 0.30412135,31.4045159 0.00903164,2.5326576 L0,0 L46,0 Z" id="Combined-Shape"></path>
+        </g>
     </g>
 </svg>
