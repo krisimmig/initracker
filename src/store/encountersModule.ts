@@ -144,7 +144,6 @@ export const encountersModule = {
       const newEncounter: IEncounterEntity = {
         id,
         name: encounterName,
-        npcs: [],
         round: 1,
         activeEntityIndex: 1,
         createdAt: Date.now(),

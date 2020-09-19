@@ -2,13 +2,13 @@
   <div>
     <div class="DialogueBox-bg" @click="$emit('cancel')"></div>
 
-    <div class="DialogueBox">
-      <div class="DialogueBox-content">
+    <div class="DialogueBox flex flex-col">
+      <div class="DialogueBox-content flex-grow">
         <slot name="content"></slot>
       </div>
-      <div class="DialogueBox-content">
+      <div class="DialogueBox-content flex justify-end">
         <slot name="actions"></slot>
-        <button v-if="cancel" @click="$emit('cancel')">Cancel</button>
+        <button class="Button Button--secondary" v-if="cancel" @click="$emit('cancel')">Cancel</button>
       </div>
     </div>
   </div>
@@ -30,12 +30,13 @@
   left: 50%;
   width: 50%;
   height: 50%;
-  background: grey;
-  border: 1px solid black;
+  background: white;
+  border: 1px solid theme('colors.gray.600');
   transform: translate(-50%, -50%);
   z-index: 1000;
   border-radius: 4px;
   padding: 20px;
+  @apply shadow-lg;
 }
 
 .DialogueBox-bg {

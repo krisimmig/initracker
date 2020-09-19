@@ -21,17 +21,19 @@
         @cancel="showDialog = false"
       >
         <template v-slot:content>
+          <h4>Change this characters health</h4>
+
+          <button class="Button Button--big Button--success" @click="changeHitPoints({ subtract: false })">Heal</button>
+
           <input
             type="number"
             v-model.number="hitPointChangeAmount"
             placeholder="Enter HP healed or damaged"
+            class="CharacterHealth-numberInput"
           >
-        </template>
 
-        <template v-slot:actions>
-          <button @click="changeHitPoints({ subtract: false })">Heal</button>
-          <button @click="changeHitPoints()">Damage</button>
-          <button @click="resetHitPoints()">Reset</button>
+          <button class="Button Button--big Button--danger ml-0 mt-0" @click="changeHitPoints()">Damage</button>
+          <button class="Button Button--big Button--secondary ml-0" @click="resetHitPoints()">Reset to full health</button>
         </template>
       </DialogueBox>
 
@@ -98,4 +100,12 @@
   }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.CharacterHealth-numberInput {
+  font-size: 80px;
+  width: 100%;
+  text-align: center;
+  background: theme('colors.gray.100');
+  @apply my-3;
+}
+</style>
