@@ -30,7 +30,7 @@
         </div>
         <div class="w-1/2 flex items-center">
           <CharacterArmorClass :armorClass="characterData.armor_class" />
-          <p v-if="characterData.armor_desc">{{ characterData.armor_desc }}</p>
+          <p class="mb-0" v-if="characterData.armor_desc">{{ characterData.armor_desc }}</p>
           <p class="mb-0" v-else>Armor Class</p>
         </div>
       </div>
@@ -65,14 +65,14 @@
         </p>
       </template>
 
-      <template v-if="characterData.actions">
+      <template v-if="characterData.actions.length > 0">
         <h3 class="CharacterDetails-sectionHeadline">Actions</h3>
         <p v-for="(action, index) in characterData.actions" :key="index">
           <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
         </p>
       </template>
 
-      <template v-if="characterData.legendary_actions">
+      <template v-if="characterData.legendary_actions.length > 0">
         <h3 class="CharacterDetails-sectionHeadline">Legendary Actions</h3>
         <p>The {{ characterData.name }} can take 3 legendary actions, choosing from the options below. Only one
           legendary action option can be used at a time and only at the end of another creature's turn. The {{

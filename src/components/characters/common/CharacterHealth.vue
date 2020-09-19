@@ -3,7 +3,7 @@
     <div class="CharacterHealth-wrapper">
       <SvgIcon name="heart" class="CharacterHealth-icon" />
       <div class="CharacterHealth-hpWrapper">
-        <p class="CharacterHealth-hp">{{ hp }}</p>
+        <p class="CharacterHealth-hp mb-0">{{ hp }}</p>
       </div>
     </div>
   </div>
