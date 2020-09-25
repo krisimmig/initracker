@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="Characters">
     <PageTitle
       title="My monsters and characters."
       subtitle="create or edit your own monsters and characters."
     />
 
-    <div class="Characters u-container-fluid">
+    <div class="u-container-fluid">
       <div class="flex">
-        <div class="w-1/2 mt-3 mr-3">
+        <div class="Characters-myCharacters w-1/2 mt-3 mr-3">
           <div class="card border-b">
             <h4>Create a new monster or character</h4>
             <p>Create a character from scratch starting with a basic <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}">character sheet</router-link>.</p>
@@ -39,8 +39,8 @@
           </div>
         </div>
 
-        <div class="w-1/2 mt-3 mr-4 bg-white">
-          <div class="card">
+        <div class="Characters-library w-1/2 mt-3 mr-4 bg-white">
+          <div class="card pb-0">
             <h4>Existing characters</h4>
             <p>You can choose an existing character from the list below as your base.</p>
           </div>
@@ -97,7 +97,11 @@ export default class Characters extends Vue {
   @apply   text-gray-600 block;
 }
 
-.Characters .u-scrollBoxChild {
-  height: calc(100vh - 307px);
+.Characters-myCharacters .CharactersLibrary-scrollBox {
+  height: calc(100vh - 310px);
+}
+
+.Characters-library .CharactersLibrary-scrollBox {
+  height: calc(100vh - 412px);
 }
 </style>

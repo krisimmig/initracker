@@ -8,6 +8,7 @@
     <DialogueBox
       v-if="showInitiativeInput"
       @cancel="showInitiativeInput = false"
+      title="Change this characters initiative"
     >
       <template v-slot:content>
         <input
@@ -15,11 +16,9 @@
           type="number"
           v-model.number="manuelInitiative"
           @keyup.enter="setInititive"
+          class="Form-bigInput"
         >
-      </template>
-
-      <template v-slot:actions>
-        <button @click="setInititive">Set initiative</button>
+        <button class="Button Button--big " @click="setInititive">Set initiative</button>
       </template>
     </DialogueBox>
 

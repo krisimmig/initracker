@@ -4,6 +4,7 @@
 
     <div class="DialogueBox flex flex-col">
       <div class="DialogueBox-content flex-grow">
+        <h4 v-if="title">{{ title }}</h4>
         <slot name="content"></slot>
       </div>
       <div class="DialogueBox-content flex justify-end">
@@ -20,6 +21,7 @@
   @Component
   export default class DialogueBox extends Vue {
     @Prop({ type: Boolean, default: true }) private cancel!: boolean;
+    @Prop({ type: String, default: '' }) private title!: string;
   }
 </script>
 

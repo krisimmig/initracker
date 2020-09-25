@@ -3,14 +3,24 @@
     <div>
 
       <div class="bg-white p-4 border-b">
-        <button @click="switchTab('monsters')">Monsters</button>
-        <button @click="switchTab('characters')">Characters</button>
+        <label class="Form-label block mb-1">Search category</label>
+        <button
+            @click="switchTab('monsters')"
+            :class="{ 'Button--secondary': showType !== 'monsters' }">
+          Monsters
+        </button>
+        <button
+            :class="{ 'Button--secondary': showType !== 'characters' }"
+            @click="switchTab('characters')"
+        >
+          Characters
+        </button>
 
-        <div class="Form">
+        <div class="Form mt-2">
           <FormInput
-            label="Filter"
+            label="Name"
             v-model="searchString"
-            placeholder="Search monsters & characters"
+            placeholder="Search monsters & characters by name"
           />
         </div>
       </div>
@@ -122,7 +132,7 @@ export default class CharacterLibrary extends Vue {
 
 <style scoped lang="scss">
 .CharactersLibrary-scrollBox {
-  height: calc(100vh - 235px);
+  height: calc(100vh - 300px); // Adjust this value in the parent component
 }
 
 .CharactersLibrary-listItem:last-child {
@@ -130,6 +140,6 @@ export default class CharacterLibrary extends Vue {
 }
 
 .Characters-library .CharactersLibrary-scrollBox {
-  height: calc(100vh - 383px);
+  height: calc(100vh - 412px);
 }
 </style>

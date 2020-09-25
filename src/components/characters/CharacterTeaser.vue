@@ -21,8 +21,8 @@
         </div>
 
         <div class="flex items-center">
-          <p class="font-semibold">CR</p>
-          <p class="ml-1">{{ characterData.challenge_rating }}</p>
+          <p class="font-semibold mb-0">CR</p>
+          <p class="ml-1 mb-0">{{ characterData.challenge_rating }}</p>
         </div>
       </div>
 

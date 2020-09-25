@@ -130,4 +130,8 @@ export default class EncounterDetails extends Vue {
 .EncounterDetails-tab.is-active {
   @apply text-blue-100 bg-blue-600;
 }
+
+.EncounterDetails-npcsList .CharactersLibrary-scrollBox {
+  height: calc(100vh - 276px);
+}
 </style>

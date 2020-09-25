@@ -16,6 +16,10 @@ div[class*=" u-columns-"] .Form-item {
   display: inline;
 }
 
+.Form-item {
+  margin-bottom: .5em;
+}
+
 .Form-label {
   @apply inline text-sm text-gray-500;
 }
@@ -57,4 +61,12 @@ div[class*=" u-columns-"] .Form-item {
   line-height: 1.4em;
   padding: 0.5em;
   max-width: 100%;
+}
+
+.Form-bigInput {
+  font-size: 80px;
+  width: 100%;
+  text-align: center;
+  background: theme('colors.gray.100');
+  @apply my-3;
 }

@@ -6,5 +6,4 @@ export interface IEncounterEntity {
   round: number;
   activeEntityIndex: number;
   createdAt: number;
-  npcs?: Character[];
 }

@@ -3,7 +3,10 @@
     class="card card--interactive w-full"
   >
     <div @click="toEncounterView(id)" v-if="!isEditingName">
-      <p class="mb-2 font-semibold">{{ name }}</p>
+      <div class="flex justify-between">
+        <p class="mb-2 font-semibold">{{ name }}</p>
+        <p v-if="createdAt" class="text-sm mb-2 italic font-light text-gray-600">created {{ getReadableCreatedAt() }}</p>
+      </div>
 
       <div>
         <button @click.stop="deleteEncounter()" class="Button Button--danger">Delete</button>
@@ -34,14 +37,10 @@ import FormInput from '@/components/form/FormInput.vue';
 export default class EncounterTeaser extends Vue {
   @Prop({ type: String, required: true }) public id!: string;
   @Prop({ type: String, required: true }) public name!: string;
-  @Prop({ type: Array, required: true }) public npcs!: IEncounterEntity[];
+  @Prop({ type: Number, required: false }) public createdAt!: number;
 
   private isEditingName: boolean = false;
   private newName: string = this.name;
-
-  public encounterSize(): number {
-    return this.npcs ? this.npcs.length : 0;
-  }
 
   public toEncounterView(encounterId: string) {
     this.$router.push({ name: 'encounterDetails', params: { encounterId: this.id } });
@@ -64,6 +63,12 @@ export default class EncounterTeaser extends Vue {
 
   public renameEncounter() {
     this.isEditingName = !this.isEditingName;
+  }
+
+  public getReadableCreatedAt() {
+    if (!this.createdAt) return false;
+    const date = new Date(this.createdAt);
+    return `${ date.toLocaleDateString() } ${ date.toLocaleTimeString() }`;
   }
 }
 </script>
