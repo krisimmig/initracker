@@ -18,7 +18,7 @@
           @keyup.enter="setInititive"
           class="Form-bigInput"
         >
-        <button class="Button Button--big " @click="setInititive">Set initiative</button>
+        <Button :is-big="true" @click="setInititive">Set initiative</Button>
       </template>
     </DialogueBox>
 
@@ -31,9 +31,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import DialogueBox from '@/components/common/DialogueBox.vue';
 import { readGetEncountersCurrentId } from '@/store/encountersModule';
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
+import Button from '@/components/common/Button.vue';
 
 @Component({
   components: {
+    Button,
     DialogueBox,
   },
 })

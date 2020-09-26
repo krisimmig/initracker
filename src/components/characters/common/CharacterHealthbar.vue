@@ -22,7 +22,7 @@
         title="Change this characters health"
       >
         <template v-slot:content>
-          <button class="Button Button--big Button--success" @click="changeHitPoints({ subtract: false })">Heal</button>
+          <Button :is-big="true" :is-success="true" @click="changeHitPoints({ subtract: false })">Heal</Button>
           <input
             type="number"
             v-model.number="hitPointChangeAmount"
@@ -30,8 +30,8 @@
             class="Form-bigInput"
           >
 
-          <button class="Button Button--big Button--danger ml-0 mt-0" @click="changeHitPoints()">Damage</button>
-          <button class="Button Button--big Button--secondary ml-0" @click="resetHitPoints()">Reset to full health</button>
+          <Button :is-danger="true" :is-big="true" @click="changeHitPoints()">Damage</Button>
+          <Button  :is-big="true" :is-secondary="true" @click="resetHitPoints()">Reset to full health</Button>
         </template>
       </DialogueBox>
 
@@ -45,9 +45,11 @@
   import DialogueBox from '@/components/common/DialogueBox.vue';
   import { readGetEncountersCurrentId } from '@/store/encountersModule';
   import { dispatchUpdateHitPointCurrent } from '@/store/npcsModule';
+  import Button from '@/components/common/Button.vue';
 
   @Component({
     components: {
+      Button,
       DialogueBox,
     },
   })

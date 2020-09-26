@@ -77,13 +77,13 @@ export const npcsModule = {
 
     async removeConditionFromNpc(
       context: NpcsContext,
-      { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: number }) {
+      { encounterId, npcId, conditionId }: { encounterId: string, npcId: string, conditionId: string }) {
       const userUid = readUserUid(context);
       const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({
-        status: arrayRemove(statusIndex),
+        conditions: arrayRemove(conditionId),
       }, { merge: true });
     },
 

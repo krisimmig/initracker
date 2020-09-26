@@ -106,8 +106,11 @@ button:first-of-type,
 }
 
 .Button--big {
-  width: 100%;
-  @apply text-lg text-center mt-3;
+  @apply w-full mt-3;
+}
+
+.Button--big .Button-content {
+  @apply w-full text-lg text-center ;
 }
 
 .Button--danger .Button-content {

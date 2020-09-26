@@ -1,15 +1,27 @@
 <template>
   <div>
-    <div class="DialogueBox-bg" @click="$emit('cancel')"></div>
+    <div class="DialogueBox-bg" @click.prevent="$emit('cancel')"></div>
 
     <div class="DialogueBox flex flex-col">
       <div class="DialogueBox-content flex-grow">
-        <h4 v-if="title">{{ title }}</h4>
-        <slot name="content"></slot>
+        <div class="bg-gray-200 text-center p-4" v-if="title">
+          <h3 class="mb-0 text-light">{{ title }}</h3>
+        </div>
+
+        <div class="p-4">
+          <slot name="content"></slot>
+        </div>
+
       </div>
-      <div class="DialogueBox-content flex justify-end">
+
+      <div class="DialogueBox-content flex justify-end p-4">
         <slot name="actions"></slot>
-        <button class="Button Button--secondary" v-if="cancel" @click="$emit('cancel')">Cancel</button>
+        <Button
+          :is-secondary="true"
+          v-if="cancel" @click="$emit('cancel')"
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   </div>
@@ -17,8 +29,11 @@
 
 <script lang='ts'>
   import { Component, Prop, Vue } from 'vue-property-decorator';
+  import Button from '@/components/common/Button.vue';
 
-  @Component
+  @Component({
+    components: {Button},
+  })
   export default class DialogueBox extends Vue {
     @Prop({ type: Boolean, default: true }) private cancel!: boolean;
     @Prop({ type: String, default: '' }) private title!: string;
@@ -31,17 +46,17 @@
   top: 50%;
   left: 50%;
   width: 50%;
-  height: 50%;
-  background: white;
-  border: 1px solid theme('colors.gray.600');
+  min-height: 50%;
+  border: 1px solid theme('colors.gray.200');
   transform: translate(-50%, -50%);
   z-index: 1000;
   border-radius: 4px;
-  padding: 20px;
-  @apply shadow-lg;
+  cursor: default;
+  @apply shadow-lg bg-white;
 }
 
 .DialogueBox-bg {
+  cursor: default;
   z-index: 900;
   position: fixed;
   top: 0;

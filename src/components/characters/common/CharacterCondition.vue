@@ -3,21 +3,20 @@
     <Button
       v-for="(conditionId, index) in condition"
       @click="setSelectedCondition(conditionId)"
-      @clickPostfix="removeStatus(conditionId)"
+      @clickPostfix="removeCondition(conditionId)"
       v-if="getConditionName(conditionId)"
       :key="index"
       :is-small="true"
     >
-      <template #default>
-        {{ getConditionName(conditionId) }}
-      </template>
-
-      <template #postfix>
-        -
-      </template>
+      <template #default>{{ getConditionName(conditionId) }}</template>
+      <template #postfix>-</template>
     </Button>
 
-    <Button :is-small="true" :is-secondary="true" @click="showConditionSelect = !showConditionSelect">
+    <Button
+        :is-small="true"
+        :is-secondary="true"
+        @click="showConditionSelect = !showConditionSelect"
+    >
       +
       <template v-if="[].length < 4"> condition</template>
     </Button>
@@ -27,24 +26,24 @@
       @cancel="showConditionSelect = false"
       title="Add a status effect to this character"
     >
-      <template v-slot:content>
+      <template #content>
         <Button
           v-for="(condition, index) in npcConditions"
-          @click="addStatus(condition.id)"
-          @clickPrefix="conditionEffects = condition.effects"
+          @click="addCondition(condition.id)"
+          @clickPrefix="selectedCondition = condition"
+          class="ml-0 mr-2 mt-1"
           :key="index"
         >
           <template #prefix><em>i</em></template>
-
-          <template #default>
-            {{ condition.name }}
-          </template>
+          {{ condition.name }}
         </Button>
 
-        <p v-if="conditionEffects.length > 0"></p>
-        <ul class="u-list">
-          <li v-for="(conditionEffect, index) in conditionEffects">{{ conditionEffect }}</li>
-        </ul>
+        <template v-if="selectedCondition">
+          <h4 class="mt-4">{{ selectedCondition.name }}</h4>
+          <ul class="u-list">
+            <li v-for="(effect, index) in selectedCondition.effects" :key="index">{{ effect }}</li>
+          </ul>
+        </template>
 
       </template>
     </DialogueBox>
@@ -52,9 +51,12 @@
     <DialogueBox
       v-if="showConditionDescription"
       @cancel="showConditionDescription = false"
-      title="Condition explained"
+      :title='`The ${ selectedCondition.name } condition`'
     >
       <template #content>
+        <p>
+          <em>These are the effects of the {{ selectedCondition.name }} condition:</em>
+        </p>
         <ul class="u-list">
           <li v-for="(effect, index) in selectedCondition.effects" :key="index">{{ effect }}</li>
         </ul>
@@ -82,13 +84,13 @@ export default class NpcConditions extends Vue {
   public showConditionSelect: boolean = false;
   public showConditionDescription: boolean = false;
   public npcConditions: ICondition[] = conditionList;
-  public selectedCondition!: ICondition;
-  public conditionEffects: string[] = [];
+  public selectedCondition: ICondition | null = null;
 
   @Prop({ required: true, type: String }) private uuid!: string;
   @Prop({ required: true, type: Array }) private condition!: string[];
 
-  public addStatus(conditionId) {
+  public addCondition(conditionId) {
+    this.selectedCondition = null;
     const encounterId = readGetEncountersCurrentId(this.$store);
     if (!encounterId) { return; }
 
@@ -109,22 +111,22 @@ export default class NpcConditions extends Vue {
     return false;
   }
 
-  public setSelectedCondition(conditionId: number) {
-    const condition =  this.npcConditions.find((s) => s.id === conditionId);
+  public setSelectedCondition(conditionId: string) {
+    const condition =  this.npcConditions.find((c) => c.id === conditionId);
     if (condition) {
       this.selectedCondition = condition;
       this.showConditionDescription = true;
     }
   }
 
-  public removeStatus(statusIndex: number) {
+  public removeCondition(conditionId: string) {
     const encounterId = readGetEncountersCurrentId(this.$store);
     if (!encounterId) { return; }
 
     dispatchRemoveConditionFromNpc(this.$store, {
       encounterId,
       npcId: this.uuid,
-      statusIndex,
+      conditionId,
     });
   }
 }
