@@ -17,6 +17,8 @@
     </div>
 
     <NpcHealthBar :uuid="npc.uuid" :hp="npc.hit_points_current" :maxHp="npc.hit_points" class="pt-2"/>
+
+    <NpcConditions :uuid="npc.uuid" :condition="npcConditions" />
   </div>
 </template>
 
@@ -26,14 +28,14 @@ import { commitSetNpcInDetail, readGetNpcUuidInDetail } from '@/store/encounters
 import { Character as ICharacter } from '@/classes/Character';
 import NpcHealthBar from '@/components/characters/common/CharacterHealthbar.vue';
 import NpcInitiative from '@/components/characters/common/CharacterInitiative.vue';
-import NpcStatus from '@/components/characters/common/CharacterStatus.vue';
+import NpcConditions from '@/components/characters/common/CharacterCondition.vue';
 import NpcArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
 
 @Component({
   components: {
     NpcHealthBar,
     NpcInitiative,
-    NpcStatus,
+    NpcConditions,
     NpcArmorClass,
   },
 })
@@ -48,6 +50,10 @@ export default class CharacterListItem extends Vue {
 
   get isSelected() {
     return this.npc.uuid === this.selectedNpcUuid;
+  }
+
+  get npcConditions() {
+    return this.npc.conditions || [];
   }
 
   public showInDetail() {

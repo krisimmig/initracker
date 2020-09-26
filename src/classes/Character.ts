@@ -2,9 +2,9 @@ import uuid from 'uuid/v1';
 import { mergeWith, isNull } from 'lodash';
 
 import CreatureTypes from '@/types/creatureTypes';
-import StatusTypes from '@/types/statusTypes';
 import CharacterAlignments from '@/types/characterAlignments';
 import CharacterSizes from '@/types/characterSizes';
+import { ICondition } from '@/types/conditionTypes';
 import { CharacterRaces } from '@/types/characterRaces';
 
 type CharacterType = CreatureTypes | CharacterRaces;
@@ -15,7 +15,7 @@ interface ICharacterAbility {
 }
 
 export class Character {
-  public status: StatusTypes[] = [];
+  public conditions: ICondition[] = [];
   public actions: ICharacterAbility[] = [];
   public alignment: string = CharacterAlignments.NeutralGood;
   public armor_class: number = 10;

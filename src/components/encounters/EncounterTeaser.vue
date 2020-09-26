@@ -66,7 +66,9 @@ export default class EncounterTeaser extends Vue {
   }
 
   public getReadableCreatedAt() {
-    if (!this.createdAt) return false;
+    if (!this.createdAt) {
+      return false;
+    }
     const date = new Date(this.createdAt);
     return `${ date.toLocaleDateString() } ${ date.toLocaleTimeString() }`;
   }

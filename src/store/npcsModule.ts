@@ -6,7 +6,7 @@ import { db } from '@/store/firebase';
 import { RootState } from '@/store/index';
 import { readUserUid } from '@/store/usersModule';
 import { Character as ICharacter } from '@/classes/Character';
-import StatusTypes from '@/types/statusTypes';
+import { ICondition } from '@/types/conditionTypes';
 
 export interface NpcsState {
   npcs: ICharacter[];
@@ -34,19 +34,6 @@ export const npcsModule = {
       return state.npcs.filter((npxIndexEntry) =>
         npxIndexEntry.name.toLowerCase().includes(query),
       );
-    },
-
-    getNpcStates() {
-      // const map = Array<object>();
-      const map: Array<{ id: string, name: string }> = [];
-
-      for (const n in StatusTypes) {
-          if (typeof StatusTypes[n] === 'number') {
-              map.push({ id: StatusTypes[n], name: n});
-          }
-      }
-
-      return map;
     },
   },
 
@@ -77,20 +64,20 @@ export const npcsModule = {
       });
     },
 
-    updateStatus(
+    updateCondition(
       context: NpcsContext,
-      { encounterId, npcId, newStatus }: { encounterId: string, npcId: string, newStatus: StatusTypes }) {
+      { encounterId, npcId, newCondition }: { encounterId: string, npcId: string, newCondition: ICondition }) {
       const userUid = readUserUid(context);
       const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`);
 
       npcRef.set({
-        status: arrayUnion(newStatus),
+        conditions: arrayUnion(newCondition),
       }, { merge: true });
     },
 
-    async removeStatusFromNpc(
+    async removeConditionFromNpc(
       context: NpcsContext,
-      { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: StatusTypes }) {
+      { encounterId, npcId, statusIndex }: { encounterId: string, npcId: string, statusIndex: number }) {
       const userUid = readUserUid(context);
       const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
@@ -141,7 +128,6 @@ const {
 export const readGetNpcs = read(npcsModule.getters.getNpcs);
 export const readGetNpcById = read(npcsModule.getters.getNpcById);
 export const readGetSearchResults = read(npcsModule.getters.getSearchResults);
-export const readGetNpcStates = read(npcsModule.getters.getNpcStates);
 
 // Mutations
 export const commitSetNpcs = commit(npcsModule.mutations.setNpcs);
@@ -149,7 +135,7 @@ export const commitSetNpcs = commit(npcsModule.mutations.setNpcs);
 // Actions
 export const dispatchOpenNpcsConnection = dispatch(npcsModule.actions.openNpcsConnection);
 export const dispatchFetchNpcs = dispatch(npcsModule.actions.fetchNpcs);
-export const dispatchUpdateStatus = dispatch(npcsModule.actions.updateStatus);
-export const dispatchRemoveStatusFromNpc = dispatch(npcsModule.actions.removeStatusFromNpc);
+export const dispatchUpdateCondition = dispatch(npcsModule.actions.updateCondition);
+export const dispatchRemoveConditionFromNpc = dispatch(npcsModule.actions.removeConditionFromNpc);
 export const dispatchUpdateInitiative = dispatch(npcsModule.actions.updateInitiative);
 export const dispatchUpdateHitPointCurrent = dispatch(npcsModule.actions.updateHitPointCurrent);
