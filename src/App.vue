@@ -38,7 +38,7 @@ export default class App extends Vue {
 </script>
 
 
-<style lang="scss">
+<style>
 /* purgecss start ignore */
 @tailwind  base;
 @tailwind  components;
@@ -46,13 +46,8 @@ export default class App extends Vue {
 
 @tailwind  utilities;
 
-@import 'scss/base.scss';
-@import 'scss/utilities.scss';
-@import 'scss/form.scss';
-@import 'scss/buttons.scss';
-@import 'scss/card.scss';
-
-.Content {
-  margin: 0 0.5rem;
-}
+@import 'css/base.css';
+@import 'css/utilities.css';
+@import 'css/form.css';
+@import 'css/card.css';
 </style>

@@ -24,7 +24,7 @@
 
 .u-scrollBoxParent {
   width: 100%;
-  height: calc(100vh - 80px); // Overwrite this to fit correct height
+  height: calc(100vh - 80px); /* Overwrite this to fit correct height */
   overflow: hidden;
   position: relative;
 }
