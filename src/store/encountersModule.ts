@@ -111,13 +111,12 @@ export const encountersModule = {
       const userUid = usersModule.readUserUid(context);
       const id = uuid();
 
-      const moddedNpcData = npcData;
-      moddedNpcData.uuid = id;
-      moddedNpcData.status = [];
-      moddedNpcData.initiative = 0;
-      moddedNpcData.hit_points_current = moddedNpcData.hit_points;
+      npcData.uuid = id;
+      npcData.conditions = [];
+      npcData.initiative = 0;
+      npcData.hit_points_current = npcData.hit_points;
       const npcsRef = await db.collection(`users/${userUid}/encounters/${encounterId}/npcs`);
-      npcsRef.doc(id).set(moddedNpcData);
+      npcsRef.doc(id).set(npcData);
     },
 
     removeNpcFromEncounter(

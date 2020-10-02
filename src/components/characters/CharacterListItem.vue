@@ -5,14 +5,14 @@
     @click.stop="showInDetail"
   >
     <div class="flex flex-col items-center">
+      <span v-if="removable" @click="$emit('remove')" class="CharacterListItem-removeButton">&times;</span>
 
       <div class="CharacterListItem-main flex justify-between items-center w-full">
         <NpcArmorClass :armorClass="npc.armor_class" class="text-xs" />
         <h4 class="font-semibold mb-0" :class="{ 'font-bold' : isActive }">
           {{ npc.name }}
-          <span v-if="removable" @click="$emit('remove')" class="text-red-600 font-bold">&times;</span>
         </h4>
-        <NpcInitiative class="CharacterListItem-initiative ml-auto self-start" :initiative="npc.initiative" :uuid="npc.uuid" />
+        <NpcInitiative class="CharacterListItem-initiative ml-auto self-start mr-5" :initiative="npc.initiative" :uuid="npc.uuid" />
       </div>
     </div>
 
@@ -66,11 +66,28 @@ export default class CharacterListItem extends Vue {
 
 <style lang="scss">
 .CharacterListItem {
+  position: relative;
   border-left: 7px solid theme('colors.gray.300');
 }
 
 .CharacterListItem-name {
   margin: .4em 0;
+}
+
+.CharacterListItem-removeButton {
+  @apply
+    bg-gray-200
+    text-gray-600
+    font-bold;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-bottom-left-radius: 6px;
+  padding: 0.1em 0.4em;
+}
+
+.CharacterListItem-removeButton:hover {
+  @apply bg-red-600 text-white;
 }
 
 .CharacterListItem.is-active {

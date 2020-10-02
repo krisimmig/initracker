@@ -4,17 +4,18 @@
 
       <div class="bg-white p-4 border-b">
         <label class="Form-label block mb-1">Search category</label>
-        <button
-            @click="switchTab('monsters')"
-            :class="{ 'Button--secondary': showType !== 'monsters' }">
+        <Button
+          @click="switchTab('monsters')"
+          :is-secondary="showType !== 'monsters'"
+        >
           Monsters
-        </button>
-        <button
-            :class="{ 'Button--secondary': showType !== 'characters' }"
-            @click="switchTab('characters')"
+        </Button>
+        <Button
+          :is-secondary="showType !== 'characters'"
+          @click="switchTab('characters')"
         >
           Characters
-        </button>
+        </Button>
 
         <div class="Form mt-2">
           <FormInput
@@ -31,7 +32,7 @@
             <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
               <div v-if="index < maxVisible">
                 <CharacterTeaser :characterData="npc" @click.native="selectCharacter(npc)">
-                  <button @click="$emit('characterClicked', npc)">{{ buttonText }}</button>
+                  <Button @click="$emit('characterClicked', npc)">{{ buttonText }}</Button>
                 </CharacterTeaser>
               </div>
             </li>
@@ -54,6 +55,7 @@ import { Character } from '@/classes/Character';
 import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersModule';
 import FormInput from '@/components/form/FormInput.vue';
 import { commitSetNpcInDetail, dispatchAddNpcToEncounter, readGetEncountersCurrentId } from '@/store/encountersModule';
+import Button from '@/components/common/Button.vue';
 
 const searchTypes = {
   MONSTERS: 'monsters',
@@ -62,6 +64,7 @@ const searchTypes = {
 
 @Component({
   components: {
+    Button,
     CharacterTeaser,
     FormInput,
   },

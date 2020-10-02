@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
-      <button class="Button--danger" v-if="!isNewCharacter" @click.prevent="deleteCharacter">Delete</button>
+      <Button :is-success="true" @click="saveCharacter" :disabled="!hasChanged">Save</Button>
+      <Button :is-danger="true" v-if="!isNewCharacter" @click="deleteCharacter">Delete</Button>
     </div>
 
     <div class="CharacterBuilder flex">
@@ -72,12 +72,12 @@
                   <template v-slot:content>
                     <FormInput v-model="specialAbility.name" label="Name" />
                     <FormTextarea v-model="specialAbility.desc" label="Description" />
-                    <button class="Button--danger" @click.prevent="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</button>
+                    <Button :is-danger="true" @click="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</Button>
                   </template>
                 </Collapsable>
               </div>
               <div>
-                <button @click.prevent="addSpecialAbility">+ Add ability</button>
+                <Button @click="addSpecialAbility">+ Add ability</Button>
               </div>
             </form>
 
@@ -96,12 +96,12 @@
                   <template v-slot:content>
                     <FormInput v-model="action.name" label="Name" />
                     <FormTextarea v-model="action.desc" label="Description" />
-                    <button class="Button--danger" @click.prevent="removeAction(index)">- Remove {{ action.name }}</button>
+                    <Button :is-danger="true" @click="removeAction(index)">- Remove {{ action.name }}</Button>
                   </template>
                 </Collapsable>
               </div>
               <div>
-                <button @click.prevent="addAction">+ Add action</button>
+                <Button @click="addAction">+ Add action</Button>
               </div>
             </form>
 
@@ -120,16 +120,16 @@
                   <template v-slot:content>
                     <FormInput v-model="legendaryAction.name" label="Name" />
                     <FormTextarea v-model="legendaryAction.desc" label="Description" />
-                    <button class="Button--danger" @click.prevent="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</button>
+                    <Button :is-danger="true" @click="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</Button>
                   </template>
                 </Collapsable>
               </div>
-              <button @click.prevent="addLegendaryAction">+ Add legendary action</button>
+              <Button @click="addLegendaryAction">+ Add legendary action</Button>
             </form>
 
             <div>
-              <button class="Button--success" @click.prevent="saveCharacter" :disabled="!hasChanged">Save</button>
-              <button class="Button--danger" v-if="!isNewCharacter" @click.prevent="deleteCharacter">Delete</button>
+              <Button :is-success="true" @click="saveCharacter" :disabled="!hasChanged">Save</Button>
+              <Button :is-danger="true" v-if="!isNewCharacter" @click="deleteCharacter">Delete</Button>
             </div>
           </div>
         </div>
@@ -162,9 +162,11 @@ import Collapsable from '@/components/common/Collapsable.vue';
 import { CharacterRaces } from '@/types/characterRaces';
 import CharacterAlignments from '@/types/characterAlignments';
 import CharacterSizes from '@/types/characterSizes';
+import Button from '@/components/common/Button.vue';
 
 @Component({
   components: {
+    Button,
     CharacterDetails,
     FormInput,
     FormSelect,

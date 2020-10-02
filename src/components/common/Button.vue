@@ -136,4 +136,8 @@ button:first-of-type,
 .Button--secondary:not([disabled]):hover .Button-content {
   @apply bg-gray-300 text-gray-600;
 }
+
+.Button a {
+  text-decoration: none;
+}
 </style>

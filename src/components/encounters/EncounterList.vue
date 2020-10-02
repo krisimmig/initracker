@@ -7,23 +7,23 @@
         <div class="font-light">
           Round <span class="Encounter-roundIndicator font-bold">{{ currentRound }}</span></div>
         <div class="ml-auto">
-          <button
+          <Button
               @click="rollInitiative"
               :disabled="npcs.length === 0"
               v-if="currentRound === 1 && currentNpcIndex === 1"
           >
             Roll Initiative
-          </button>
-          <button
-              @click="reset"
-              v-else
+          </Button>
+          <Button
+            @click="reset"
+            v-else
           >
             Reset
-          </button>
-          <button class="Encounter-nextButton pb-3" @click="next" :disabled="npcs.length < 2">
-           <span class="text-lg">»</span><br>
-            Next turn
-          </button>
+          </Button>
+          <div class="Encounter-nextButton" @click="nextTurn" :disabled="npcs.length < 2">
+            <div class="text-3xl">»</div>
+            <div class="pb-4 text-sm italic">Next turn</div>
+          </div>
         </div>
       </div>
     </div>
@@ -65,9 +65,11 @@ import {
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
 import CharacterListItem from '@/components/characters/CharacterListItem.vue';
 import { modifierWithSign } from '@/utils/dnd';
+import Button from '@/components/common/Button.vue';
 
 @Component({
   components: {
+    Button,
     CharacterListItem,
     Encounter: EncounterList,
   },
@@ -147,7 +149,7 @@ export default class EncounterList extends Vue {
     });
   }
 
-  public next(): void {
+  public nextTurn(): void {
     const npc = this.npcs[this.currentNpcIndex - 1];
 
     if (!npc) {
@@ -203,5 +205,22 @@ export default class EncounterList extends Vue {
   border-radius: 0;
   width: 100px;
   margin-bottom: 0;
+  @apply
+  text-blue-100
+  border-blue-300
+  transition
+  duration-200
+  ease-in-out
+  bg-blue-600
+  cursor-pointer
+  text-center
+  flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Encounter-nextButton:hover {
+  @apply bg-blue-300 text-blue-600 shadow-md;
 }
 </style>

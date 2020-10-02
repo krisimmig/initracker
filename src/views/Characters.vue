@@ -12,12 +12,11 @@
             <h4>Create a new monster or character</h4>
             <p>Create a character from scratch starting with a basic <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}">character sheet</router-link>.</p>
             <div class="w-1/2">
-              <router-link
-                :to="{ name: 'characterBuilder', query: { new: 1 }}"
-                class="Button Button--success Button--big"
-              >
-                start new character
-              </router-link>
+              <Button :is-big="true" :is-success="true">
+                <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}">
+                  start new character
+                </router-link>
+              </Button>
             </div>
           </div>
           <div class="u-scrollBoxParent">
@@ -31,7 +30,7 @@
                 :character-data="character"
                 @click.native ="handleTeaserActioned(character)"
               >
-                <button>Edit</button>
+                <Button>Edit</Button>
               </CharacterTeaser>
             </li>
           </ul>
@@ -60,9 +59,11 @@ import { Character } from '@/classes/Character';
 import PageTitle from '@/components/common/PageTitle.vue';
 import { readGetNpcs } from '@/store/npcsModule';
 import CharacterLibrary from '@/components/characters/CharacterLibrary.vue';
+import Button from '@/components/common/Button.vue';
 
 @Component({
   components: {
+    Button,
     CharacterTeaser,
     PageTitle,
     CharacterLibrary,

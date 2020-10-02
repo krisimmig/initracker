@@ -9,15 +9,15 @@
       </div>
 
       <div>
-        <button @click.stop="deleteEncounter()" class="Button Button--danger">Delete</button>
-        <button @click.stop="renameEncounter()">Rename</button>
+        <Button @click.stop="deleteEncounter()" :is-danger="true">Delete</Button>
+        <Button @click.stop="renameEncounter()">Rename</Button>
       </div>
     </div>
 
     <div v-if="isEditingName" class="Form">
       <FormInput label="Edit encounter name" v-model="newName" :placeholder="this.name" @keyup.enter="saveNewName" />
-      <button @click="isEditingName = false" class="Button--secondary">Cancel</button>
-      <button @click="saveNewName">Save</button>
+      <Button @click="isEditingName = false" :is-secondary="true">Cancel</Button>
+      <Button @click="saveNewName">Save</Button>
     </div>
   </div>
 </template>
@@ -28,9 +28,11 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { dispatchRemoveEncounter, dispatchUpdateName } from '@/store/encountersModule';
 import { IEncounterEntity } from '@/types/encounters';
 import FormInput from '@/components/form/FormInput.vue';
+import Button from '@/components/common/Button.vue';
 
 @Component({
   components: {
+    Button,
     FormInput,
   },
 })
