@@ -190,15 +190,16 @@ export const encountersModule = {
     async updateActiveEntityIndex(
       context: EncountersContext,
       { encounterId, activeEntityIndex, currentTurn }:
-      { encounterId: string, activeEntityIndex: number, currentTurn: number },
+      { encounterId: string, activeEntityIndex: number, currentTurn?: number },
     ) {
       const userUid = usersModule.readUserUid(context);
+      let newData = { activeEntityIndex };
+      if (currentTurn) {
+        newData = { ...newData, ...{ currentTurn} };
+      }
 
       const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
-      encounterRef.set({
-        activeEntityIndex,
-        currentTurn,
-      }, { merge: true });
+      encounterRef.set(newData, { merge: true });
     },
   },
 
