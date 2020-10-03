@@ -18,7 +18,7 @@
           @keyup.enter="setInititive"
           class="Form-bigInput"
         >
-        <Button :is-big="true" @click="setInititive">Set initiative</Button>
+        <Button is-big @click="setInititive">Set initiative</Button>
       </template>
     </DialogueBox>
 

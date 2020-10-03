@@ -145,6 +145,7 @@ export const encountersModule = {
         name: encounterName,
         round: 1,
         activeEntityIndex: 1,
+        currentTurn: 1,
         createdAt: Date.now(),
       };
 
@@ -188,13 +189,15 @@ export const encountersModule = {
 
     async updateActiveEntityIndex(
       context: EncountersContext,
-      { encounterId, activeEntityIndex }: { encounterId: string, activeEntityIndex: number },
+      { encounterId, activeEntityIndex, currentTurn }:
+      { encounterId: string, activeEntityIndex: number, currentTurn: number },
     ) {
       const userUid = usersModule.readUserUid(context);
 
       const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
       encounterRef.set({
         activeEntityIndex,
+        currentTurn,
       }, { merge: true });
     },
   },

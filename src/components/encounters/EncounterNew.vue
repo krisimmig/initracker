@@ -9,7 +9,7 @@
       v-model="encounterName"
       @keyup.enter="submitNewEncounter"
     />
-    <button @click="submitNewEncounter">Save</button>
+    <Button is-success @click="submitNewEncounter">Save</Button>
   </div>
 </template>
 
@@ -17,9 +17,11 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { dispatchAddNewEncounter } from '@/store/encountersModule';
 import FormInput from '@/components/form/FormInput.vue';
+import Button from '@/components/common/Button.vue';
 
 @Component({
   components: {
+    Button,
     FormInput,
   },
 })

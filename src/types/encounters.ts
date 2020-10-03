@@ -5,5 +5,6 @@ export interface IEncounterEntity {
   name: string;
   round: number;
   activeEntityIndex: number;
+  currentTurn: number;
   createdAt: number;
 }

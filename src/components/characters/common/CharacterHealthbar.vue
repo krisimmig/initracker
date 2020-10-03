@@ -19,10 +19,10 @@
         v-if="showDialog"
         @close="showDialog = false"
         @cancel="showDialog = false"
-        title="Change this characters health"
+        :title="`Change ${name}´s health`"
       >
         <template v-slot:content>
-          <Button :is-big="true" :is-success="true" @click="changeHitPoints({ subtract: false })">Heal</Button>
+          <Button is-big is-success @click="changeHitPoints({ subtract: false })">Heal</Button>
           <input
             type="number"
             v-model.number="hitPointChangeAmount"
@@ -30,8 +30,8 @@
             class="Form-bigInput"
           >
 
-          <Button :is-danger="true" :is-big="true" @click="changeHitPoints()">Damage</Button>
-          <Button  :is-big="true" :is-secondary="true" @click="resetHitPoints()">Reset to full health</Button>
+          <Button is-danger is-big @click="changeHitPoints()">Damage</Button>
+          <Button  is-big is-secondary @click="resetHitPoints()">Reset to full health</Button>
         </template>
       </DialogueBox>
 
@@ -58,6 +58,7 @@
     public hitPointChangeAmount: number = 0;
 
     @Prop({ type: String }) private uuid!: string;
+    @Prop({ type: String }) private name!: string;
     @Prop({ type: Number, required: true }) private hp!: number;
     @Prop({ type: Number, required: false }) private maxHp!: number;
 
@@ -96,6 +97,7 @@
       });
 
       this.showDialog = false;
+      this.hitPointChangeAmount = 0;
     }
   }
 </script>

@@ -4,8 +4,11 @@
       <div class="Encounter-titleArea pt-4 pb-2 pl-4 relative">
       <h4 class="uppercase">{{ currentEncounter.name }}</h4>
       <div class="flex">
-        <div class="font-light">
-          Round <span class="Encounter-roundIndicator font-bold">{{ currentRound }}</span></div>
+        <div class="font-light text-gray-500 text-sm pt-2">
+          Round <span class="font-bold">{{ currentRound }}</span>
+          Turn <span class="font-bold">{{ currentEncounter.currentTurn }}</span>
+          Elapsed time <span class="font-bold">{{ elapsedTimeGame }}</span>
+        </div>
         <div class="ml-auto">
           <Button
               @click="rollInitiative"
@@ -15,6 +18,7 @@
             Roll Initiative
           </Button>
           <Button
+            is-danger
             @click="reset"
             v-else
           >
@@ -77,6 +81,8 @@ import Button from '@/components/common/Button.vue';
 export default class EncounterList extends Vue {
   @Prop({ type: String, required: true }) public id!: string;
 
+  currentTurn: number = 0;
+
   get currentEncounter() {
     return readGetEncountersCurrent(this.$store);
   }
@@ -127,6 +133,7 @@ export default class EncounterList extends Vue {
       dispatchUpdateActiveEntityIndex(this.$store, {
         encounterId: this.id,
         activeEntityIndex: 1,
+        currentTurn: 1,
       });
 
       // Reset round counter
@@ -135,6 +142,14 @@ export default class EncounterList extends Vue {
         newRoundIndex: 1,
       });
     }
+  }
+
+  public get elapsedTimeGame(): string {
+    const seconds = (this.currentEncounter.currentTurn ? this.currentEncounter.currentTurn : 1) * 6;
+    const numHours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+    const numMinutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+    const numSeconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+    return `${numHours}:${numMinutes}:${numSeconds}`;
   }
 
   public reset(): void {
@@ -146,6 +161,7 @@ export default class EncounterList extends Vue {
     dispatchUpdateActiveEntityIndex(this.$store, {
       encounterId: this.id,
       activeEntityIndex: 1,
+      currentTurn: 1,
     });
   }
 
@@ -166,11 +182,13 @@ export default class EncounterList extends Vue {
       dispatchUpdateActiveEntityIndex(this.$store, {
         encounterId: this.id,
         activeEntityIndex: 1,
+        currentTurn: this.currentEncounter.currentTurn + 1,
       });
     } else {
       dispatchUpdateActiveEntityIndex(this.$store, {
         encounterId: this.id,
         activeEntityIndex: this.currentNpcIndex + 1,
+        currentTurn: this.currentEncounter.currentTurn + 1,
       });
     }
   }

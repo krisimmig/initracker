@@ -6,15 +6,15 @@
       @clickPostfix="removeCondition(conditionId)"
       v-if="getConditionName(conditionId)"
       :key="index"
-      :is-small="true"
+      is-small
     >
       <template #default>{{ getConditionName(conditionId) }}</template>
       <template #postfix>-</template>
     </Button>
 
     <Button
-        :is-small="true"
-        :is-secondary="true"
+        is-small
+        is-secondary
         @click="showConditionSelect = !showConditionSelect"
     >
       +
