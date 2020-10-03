@@ -19,7 +19,7 @@
               </Button>
             </div>
           </div>
-          <div class="u-scrollBoxParent">
+          <div class="CharactersLibrary-scrollBox u-scrollBoxParent">
             <div class="u-scrollBoxChild">
               <ul class="divide-y divide-gray-300 border-b" v-if="characters.length > 0">
             <li
