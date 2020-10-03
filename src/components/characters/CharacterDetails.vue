@@ -1,6 +1,6 @@
 <template>
   <div class="text-sm overflow-hidden bg-white">
-    <div class="p-4 bg-gray-500">
+    <div class="p-4 bg-blue-600 text-blue-100">
       <h4 class="mb-0 text-base font-semibold">{{ characterData.name }}</h4>
       <p class="mb-0 italic">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with a CR of {{ characterData.challenge_rating }}</p>
     </div>
