@@ -9,8 +9,8 @@
       </div>
 
       <div>
-        <Button @click.stop="deleteEncounter()" is-danger>Delete</Button>
-        <Button @click.stop="renameEncounter()">Rename</Button>
+        <Button @click="deleteEncounter()" is-danger>Delete!</Button>
+        <Button @click="renameEncounter()">Rename</Button>
       </div>
     </div>
 
