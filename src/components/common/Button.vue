@@ -7,19 +7,20 @@
       'Button--secondary': isSecondary,
       'Button--danger': isDanger,
       'Button--success': isSuccess,
+      'Button--normalCasing': isNormalCasing,
       'has-prefix': hasPrefix,
       'has-postfix': hasPostfix,
     }"
   >
-    <span class="Button-prefix" v-if="hasPrefix" @click.prevent="$emit('clickPrefix')">
+    <span class="Button-prefix" v-if="hasPrefix" @click.prevent.stop="$emit('clickPrefix')">
       <slot name="prefix"></slot>
     </span>
 
-    <span class="Button-content" @click.prevent="$emit('click')">
+    <span class="Button-content" @click.prevent.stop="handleContentClick">
       <slot></slot>
     </span>
 
-    <span class="Button-postfix" v-if="hasPostfix" @click.prevent="$emit('clickPostfix')">
+    <span class="Button-postfix" v-if="hasPostfix" @click.prevent.stop="$emit('clickPostfix')">
       <slot name="postfix"></slot>
     </span>
   </button>
@@ -35,6 +36,8 @@ export default class Button extends Vue {
   @Prop({ required: false, default: false, type: Boolean }) public isDanger!: boolean;
   @Prop({ required: false, default: false, type: Boolean }) public isSuccess!: boolean;
   @Prop({ required: false, default: false, type: Boolean }) public isSecondary!: boolean;
+  @Prop({ required: false, default: false, type: Boolean }) public isNormalCasing!: boolean;
+  @Prop({ required: false, type: String }) public href!: string;
 
   get hasPrefix() {
     return !!this.$slots.prefix;
@@ -42,6 +45,14 @@ export default class Button extends Vue {
 
   get hasPostfix() {
     return !!this.$slots.postfix;
+  }
+
+  handleContentClick() {
+    if (this.href) {
+      window.location.href = this.href;
+    } else {
+      this.$emit('click');
+    }
   }
 }
 </script>
@@ -67,7 +78,11 @@ button,
 }
 
 .Button-content {
-  @apply py-1 px-2 bg-blue-600 inline-block uppercase;
+  @apply py-1 px-2 bg-blue-600 inline-block;
+}
+
+.Button:not(.Button--normalCasing) .Button-content {
+  @apply uppercase;
 }
 
 .Button-prefix,
