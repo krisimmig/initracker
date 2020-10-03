@@ -72,6 +72,12 @@ export class Character {
         defaultCharacter.legendary_actions = [];
       }
 
+      // If a monster has no special actions the variable is just an empty string, the next lines fix that.
+      // @ts-ignore
+      if (defaultCharacter.special_abilities === '') {
+        defaultCharacter.special_abilities = [];
+      }
+
       Object.assign(this, defaultCharacter);
 
     } else {
