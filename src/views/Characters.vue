@@ -30,7 +30,7 @@
                 :character-data="character"
                 @click.native ="handleTeaserActioned(character)"
               >
-                <Button>Edit</Button>
+                <Button @click="handleTeaserActioned(character)">Edit</Button>
               </CharacterTeaser>
             </li>
           </ul>
@@ -84,6 +84,7 @@ export default class Characters extends Vue {
   }
 
   public handleTeaserActioned(characterData) {
+    console.log("handleTeaserActioned");
     this.$router.push({ name: 'editCharacter', params: { uuid: characterData.uuid }});
   }
 
