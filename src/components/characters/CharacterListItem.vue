@@ -16,7 +16,13 @@
       </div>
     </div>
 
-    <CharacterHealthBar :uuid="npc.uuid" :hp="npc.hit_points_current" :maxHp="npc.hit_points" class="pt-2"/>
+    <CharacterHealthBar
+        :uuid="npc.uuid"
+        :name="npc.name"
+        :hp="npc.hit_points_current"
+        :maxHp="npc.hit_points"
+        class="pt-2"
+    />
 
     <CharacterConditions :uuid="npc.uuid" :condition="npcConditions" />
   </div>

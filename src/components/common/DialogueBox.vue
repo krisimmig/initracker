@@ -17,7 +17,7 @@
       <div class="DialogueBox-content flex justify-end p-4">
         <slot name="actions"></slot>
         <Button
-          :is-secondary="true"
+          is-secondary
           v-if="cancel" @click="$emit('cancel')"
         >
           Cancel

@@ -72,7 +72,7 @@
                   <template v-slot:content>
                     <FormInput v-model="specialAbility.name" label="Name" />
                     <FormTextarea v-model="specialAbility.desc" label="Description" />
-                    <Button :is-danger="true" @click="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</Button>
+                    <Button is-danger @click="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</Button>
                   </template>
                 </Collapsable>
               </div>
@@ -96,7 +96,7 @@
                   <template v-slot:content>
                     <FormInput v-model="action.name" label="Name" />
                     <FormTextarea v-model="action.desc" label="Description" />
-                    <Button :is-danger="true" @click="removeAction(index)">- Remove {{ action.name }}</Button>
+                    <Button is-danger @click="removeAction(index)">- Remove {{ action.name }}</Button>
                   </template>
                 </Collapsable>
               </div>
@@ -120,7 +120,7 @@
                   <template v-slot:content>
                     <FormInput v-model="legendaryAction.name" label="Name" />
                     <FormTextarea v-model="legendaryAction.desc" label="Description" />
-                    <Button :is-danger="true" @click="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</Button>
+                    <Button is-danger @click="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</Button>
                   </template>
                 </Collapsable>
               </div>

@@ -9,14 +9,14 @@
       </div>
 
       <div>
-        <Button @click.stop="deleteEncounter()" :is-danger="true">Delete</Button>
+        <Button @click.stop="deleteEncounter()" is-danger>Delete</Button>
         <Button @click.stop="renameEncounter()">Rename</Button>
       </div>
     </div>
 
     <div v-if="isEditingName" class="Form">
       <FormInput label="Edit encounter name" v-model="newName" :placeholder="this.name" @keyup.enter="saveNewName" />
-      <Button @click="isEditingName = false" :is-secondary="true">Cancel</Button>
+      <Button @click="isEditingName = false" is-secondary>Cancel</Button>
       <Button @click="saveNewName">Save</Button>
     </div>
   </div>
