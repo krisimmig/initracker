@@ -26,12 +26,18 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
+      meta: {
+        requiresAuth: false,
+      },
     },
 
     {
       path: '/user',
       name: 'userdetails',
       component: UserDetails,
+      meta: {
+        requiresAuth: true,
+      },
     },
 
     {
@@ -115,6 +121,7 @@ const router = new Router({
 
 router.beforeEach((to: Route, from: Route, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  console.log('requiresAuth', requiresAuth);
 
   if (requiresAuth && !isLoggedIn()) {
     next({ name: 'login', query: { redirect: to.name as string } });

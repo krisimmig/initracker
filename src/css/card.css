@@ -10,6 +10,14 @@
   @apply shadow;
 }
 
+.card > p a {
+  @apply text-blue-500 underline;
+}
+
+.card a:hover {
+  @apply text-blue-600;
+}
+
 .card--interactive {
   @apply card transition duration-100 cursor-pointer;
 }

@@ -24,7 +24,6 @@
         <template v-else>
           <div class="flex items-center">
             <router-link class="MainMenu-link" :to="{ name: 'home' }">Home</router-link>
-            <router-link class="MainMenu-link" :to="{ name: 'register' }">Register</router-link>
           </div>
           <div>
             <router-link class="MainMenu-link" :to="{ name: 'login' }">Login</router-link>

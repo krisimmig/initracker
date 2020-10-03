@@ -19,8 +19,6 @@ Vue.prototype.$fireLoginUi = null;
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     dispatchLoginUser(store, user);
-  } else {
-    router.push('/login');
   }
 
   const vueApp = new Vue({
