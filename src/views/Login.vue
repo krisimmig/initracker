@@ -31,7 +31,7 @@ const firebase = require('firebase');
 export default class Npc extends Vue {
   public mounted() {
     const uiConfig = {
-      signInSuccessUrl: '/about',
+      signInSuccessUrl: '/',
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
