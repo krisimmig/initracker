@@ -22,9 +22,19 @@
           <div class="card card--rounded card--shadow">
             <h4 class="h4">Subscribe to the newsletter</h4>
             <p>We are sending a newsletter whenever new features are added to YAIT.</p>
-            <Button is-big is-success is-normal-casing @click="subscribeNewsletter">
-              Subscribe to newsletter
-            </Button>
+            <form
+                class="mt-3"
+                action="https://tinyletter.com/dndtoolsparty"
+                method="post"
+                target="popupwindow"
+                onsubmit="window.open('https://tinyletter.com/dndtoolsparty', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"
+            >
+              <label for="tlemail" class="text-gray-600 text-sm">Enter your email address</label>
+              <input type="text" class="bg-white border w-full rounded px-3 py-2 mb-3 block" name="email" id="tlemail" placeholder="name@mail.com" />
+
+              <input type="hidden" value="1" name="embed"/>
+              <input type="submit" value="Subscribe" class="uppercase text-sm font-bold block bg-green-500 text-green-100 rounded px-4 py-1 cursor-pointer hover:bg-green-300 hover:text-green-500" />
+            </form>
           </div>
         </div>
       </div>
@@ -38,25 +48,12 @@ import { Component, Vue } from 'vue-property-decorator';
 import PageTitle from '@/components/common/PageTitle.vue';
 import Button from '@/components/common/Button.vue';
 
-import { readGetUserObj } from '@/store/usersModule';
-import User from 'firebase.User';
-
-@Component
-export default class Feedback extends Vue {
+@Component({
   components: {
     Button,
     PageTitle,
   }
-
-  get user(): null | User {
-    return readGetUserObj(this.$store);
-  }
-
-  subscribeNewsletter() {
-    if(this.user) {
-
-    }
-  }
+})
+export default class Feedback extends Vue {
 }
-export default class Feedback extends Vue {}
 </script>
