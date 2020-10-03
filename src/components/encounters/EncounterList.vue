@@ -15,6 +15,7 @@
             Roll Initiative
           </Button>
           <Button
+            is-danger
             @click="reset"
             v-else
           >

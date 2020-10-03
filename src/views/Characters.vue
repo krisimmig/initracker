@@ -12,7 +12,7 @@
             <h4>Create a new monster or character</h4>
             <p>Create a character from scratch starting with a basic <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}">character sheet</router-link>.</p>
             <div class="w-1/2">
-              <Button :is-big="true" :is-success="true">
+              <Button is-big is-success>
                 <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}">
                   start new character
                 </router-link>

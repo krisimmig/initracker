@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <Button :is-success="true" @click="saveCharacter" :disabled="!hasChanged">Save</Button>
-      <Button :is-danger="true" v-if="!isNewCharacter" @click="deleteCharacter">Delete</Button>
+      <Button is-success @click="saveCharacter" :disabled="!hasChanged">Save</Button>
+      <Button is-danger v-if="!isNewCharacter" @click="deleteCharacter">Delete</Button>
     </div>
 
     <div class="CharacterBuilder flex">
@@ -128,8 +128,8 @@
             </form>
 
             <div>
-              <Button :is-success="true" @click="saveCharacter" :disabled="!hasChanged">Save</Button>
-              <Button :is-danger="true" v-if="!isNewCharacter" @click="deleteCharacter">Delete</Button>
+              <Button is-success @click="saveCharacter" :disabled="!hasChanged">Save</Button>
+              <Button is-danger v-if="!isNewCharacter" @click="deleteCharacter">Delete</Button>
             </div>
           </div>
         </div>
