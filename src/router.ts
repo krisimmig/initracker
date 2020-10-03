@@ -7,6 +7,7 @@ import Characters from '@/views/Characters.vue';
 import CharacterCreate from '@/views/CharacterCreate.vue';
 import Encounters from '@/views/Encounters.vue';
 import EncounterDetails from '@/views/EncounterDetails.vue';
+import Feedback from '@/views/Feedback.vue';
 import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
 import { isLoggedIn } from '@/store/firebase';
@@ -84,6 +85,15 @@ const router = new Router({
       path: '/encounters/:encounterId',
       name: 'encounterDetails',
       component: EncounterDetails,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+
+    {
+      path: '/feedback',
+      name: 'feedback',
+      component: Feedback,
       meta: {
         requiresAuth: true,
       },

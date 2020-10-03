@@ -7,11 +7,12 @@
           <div class="flex items-center">
             <router-link class="" :to="{ name: 'home' }">
               <div class="flex items-center mr-3">
-                <SvgIcon name="logo" class="text-red-600" /><p class="ml-2 font-bold MainMenu-link mb-0">BETTER INITIATIVE</p>
+                <SvgIcon name="logo" class="text-red-600" /><p class="ml-2 font-bold MainMenu-link mb-0">YAIT</p>
               </div>
             </router-link>
             <router-link class="MainMenu-link" :to="{ name: 'encounters' }">Encounters</router-link>
             <router-link class="MainMenu-link" :to="{ name: 'characters' }">Characters</router-link>
+            <router-link class="MainMenu-link" :to="{ name: 'feedback' }">Feedback</router-link>
           </div>
 
           <div class="ml-auto">
