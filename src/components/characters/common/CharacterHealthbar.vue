@@ -97,6 +97,7 @@
       });
 
       this.showDialog = false;
+      this.hitPointChangeAmount = 0;
     }
   }
 </script>
