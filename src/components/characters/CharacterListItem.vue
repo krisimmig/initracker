@@ -8,17 +8,17 @@
       <span v-if="removable" @click="$emit('remove')" class="CharacterListItem-removeButton">&times;</span>
 
       <div class="CharacterListItem-main flex justify-between items-center w-full">
-        <NpcArmorClass :armorClass="npc.armor_class" class="text-xs" />
+        <CharacterArmorClass :armorClass="npc.armor_class" class="text-xs" />
         <h4 class="font-semibold mb-0" :class="{ 'font-bold' : isActive }">
           {{ npc.name }}
         </h4>
-        <NpcInitiative class="CharacterListItem-initiative ml-auto self-start mr-5" :initiative="npc.initiative" :uuid="npc.uuid" />
+        <CharacterInitiative class="CharacterListItem-initiative ml-auto self-start mr-5" :initiative="npc.initiative" :uuid="npc.uuid" />
       </div>
     </div>
 
-    <NpcHealthBar :uuid="npc.uuid" :hp="npc.hit_points_current" :maxHp="npc.hit_points" class="pt-2"/>
+    <CharacterHealthBar :uuid="npc.uuid" :hp="npc.hit_points_current" :maxHp="npc.hit_points" class="pt-2"/>
 
-    <NpcConditions :uuid="npc.uuid" :condition="npcConditions" />
+    <CharacterConditions :uuid="npc.uuid" :condition="npcConditions" />
   </div>
 </template>
 
@@ -26,17 +26,17 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { commitSetNpcInDetail, readGetNpcUuidInDetail } from '@/store/encountersModule';
 import { Character as ICharacter } from '@/classes/Character';
-import NpcHealthBar from '@/components/characters/common/CharacterHealthbar.vue';
-import NpcInitiative from '@/components/characters/common/CharacterInitiative.vue';
-import NpcConditions from '@/components/characters/common/CharacterCondition.vue';
-import NpcArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
+import CharacterHealthBar from '@/components/characters/common/CharacterHealthbar.vue';
+import CharacterInitiative from '@/components/characters/common/CharacterInitiative.vue';
+import CharacterConditions from '@/components/characters/common/CharacterCondition.vue';
+import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
 
 @Component({
   components: {
-    NpcHealthBar,
-    NpcInitiative,
-    NpcConditions,
-    NpcArmorClass,
+    CharacterHealthBar,
+    CharacterInitiative,
+    CharacterConditions,
+    CharacterArmorClass,
   },
 })
 export default class CharacterListItem extends Vue {
