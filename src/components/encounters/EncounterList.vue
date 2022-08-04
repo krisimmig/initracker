@@ -24,7 +24,7 @@
           >
             Reset
           </Button>
-          <div class="Encounter-nextButton" @click="nextTurn" :disabled="npcs.length < 2">
+          <div class="Encounter-nextButton" @click="nextTurn">
             <div class="text-3xl">»</div>
             <div class="pb-4 text-sm italic">Next turn</div>
           </div>
@@ -57,7 +57,8 @@
 
 <script lang='ts'>
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { DiceRoll } from 'rpg-dice-roller';
+import { DiceRoll } from '@dice-roller/rpg-dice-roller';
+
 
 import {
   readGetEncountersCurrent,
@@ -80,8 +81,6 @@ import Button from '@/components/common/Button.vue';
 })
 export default class EncounterList extends Vue {
   @Prop({ type: String, required: true }) public id!: string;
-
-  currentTurn: number = 0;
 
   get currentEncounter() {
     return readGetEncountersCurrent(this.$store);

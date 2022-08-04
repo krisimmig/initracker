@@ -14,7 +14,7 @@
 </template>
 
 <script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { dispatchAddNewEncounter } from '@/store/encountersModule';
 import FormInput from '@/components/form/FormInput.vue';
 import Button from '@/components/common/Button.vue';
@@ -29,7 +29,9 @@ export default class EncounterNew extends Vue {
   public encounterName: string = '';
 
   public submitNewEncounter(): void {
-    if (this.encounterName === '') return;
+    if (this.encounterName === '') {
+      return;
+    }
 
     dispatchAddNewEncounter(this.$store, {
       encounterName: this.encounterName,

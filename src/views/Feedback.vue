@@ -52,7 +52,7 @@ import Button from '@/components/common/Button.vue';
   components: {
     Button,
     PageTitle,
-  }
+  },
 })
 export default class Feedback extends Vue {
 }

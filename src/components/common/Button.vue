@@ -47,7 +47,7 @@ export default class Button extends Vue {
     return !!this.$slots.postfix;
   }
 
-  handleContentClick() {
+  private handleContentClick() {
     if (this.href) {
       window.location.href = this.href;
     } else {
@@ -81,10 +81,6 @@ button,
   @apply py-1 px-2 bg-blue-600 inline-block;
 }
 
-.Button:not(.Button--normalCasing) .Button-content {
-  @apply uppercase;
-}
-
 .Button-prefix,
 .Button-postfix {
   @apply py-1 px-2 bg-blue-400 inline-block;
@@ -106,11 +102,8 @@ button:first-of-type,
 }
 
 .Button:not([disabled]) .Button-content:hover,
-.Button:not(.is-disabled) .Button-content:hover,
 .Button:not([disabled]) .Button-postfix:hover,
-.Button:not(.is-disabled) .Button-postfix:hover,
-.Button:not([disabled]) .Button-prefix:hover,
-.Button:not(.is-disabled) .Button-prefix:hover {
+.Button:not([disabled]) .Button-prefix:hover {
   @apply bg-blue-300 text-blue-600 shadow-md;
 }
 

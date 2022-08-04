@@ -38,7 +38,11 @@
   import { Component, Vue, Prop } from 'vue-property-decorator';
   import CharacterDetails from '@/components/characters/CharacterDetails.vue';
   import { Character } from '@/classes/Character';
-  import { dispatchAddNpcToEncounter, readGetEncountersCurrentId, commitSetNpcInDetail } from '@/store/encountersModule';
+  import {
+    dispatchAddNpcToEncounter,
+    readGetEncountersCurrentId,
+    commitSetNpcInDetail,
+  } from '@/store/encountersModule';
   import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
   import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
   import SvgIcon from '@/components/common/SvgIcon.vue';
