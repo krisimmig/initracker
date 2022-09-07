@@ -11,7 +11,6 @@
         <div class="p-4">
           <slot name="content"></slot>
         </div>
-
       </div>
 
       <div class="DialogueBox-content flex justify-end p-4">
@@ -38,6 +37,17 @@
     @Prop({ type: Boolean, default: true }) private cancel!: boolean;
     @Prop({ type: String, default: '' }) private title!: string;
     @Prop({ type: Boolean, default: false }) private isWide!: boolean;
+
+    public created() {
+      window.addEventListener("keyup", this.keyupHandler);
+    }
+
+    public keyupHandler(event) {
+      if(event.key === "Escape") {
+        window.removeEventListener("keyup", this.keyupHandler);
+        this.$emit("cancel");
+      }
+    }
   }
 </script>
 
