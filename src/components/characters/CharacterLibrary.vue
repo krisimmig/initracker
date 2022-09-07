@@ -1,7 +1,6 @@
 <template>
-  <div class="CharactersLibrary">
-    <div>
-
+  <div class="CharactersLibrary flex flex-row w-full">
+    <div class="w-1/3">
       <div class="bg-white p-4 border-b">
         <label class="Form-label block mb-1">Search category</label>
         <Button
@@ -25,13 +24,12 @@
           />
         </div>
       </div>
-
-      <div class="CharactersLibrary-scrollBox u-scrollBoxParent bg-white shadow" >
+      <div class="CharactersLibrary-listScrollBox u-scrollBoxParent bg-white shadow">
         <div class="u-scrollBoxChild" ref="monsterList" @scroll="onScroll">
           <ul v-if="filteredNpcs.length > 0" class="divide-y divide-gray-300 border-b">
             <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
               <div v-if="index < maxVisible">
-                <CharacterTeaser :characterData="npc" @click.native="selectCharacter(npc)">
+                <CharacterTeaser :characterData="npc" @click.native="characterPreviewSelected(npc)">
                   <Button @click="$emit('characterClicked', npc)">{{ buttonText }}</Button>
                 </CharacterTeaser>
               </div>
@@ -43,6 +41,14 @@
         </div>
       </div>
     </div>
+
+    <div class="CharacterDetails-previewScrollBox u-scrollBoxParent bg-white shadow w-2/3">
+      <div class="u-scrollBoxChild">
+        <CharacterDetails v-if="previewCharacter" :characterData="previewCharacter" />
+        <p class="u-tip" v-else>Click on a character name to see details here.</p>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -56,6 +62,7 @@ import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersMo
 import FormInput from '@/components/form/FormInput.vue';
 import { commitSetNpcInDetail, dispatchAddNpcToEncounter, readGetEncountersCurrentId } from '@/store/encountersModule';
 import Button from '@/components/common/Button.vue';
+import CharacterDetails from "@/components/characters/CharacterDetails.vue";
 
 const searchTypes = {
   MONSTERS: 'monsters',
@@ -65,6 +72,7 @@ const searchTypes = {
 @Component({
   components: {
     Button,
+    CharacterDetails,
     CharacterTeaser,
     FormInput,
   },
@@ -75,6 +83,7 @@ export default class CharacterLibrary extends Vue {
   public searchString: string = '';
   public maxVisible: number = 15;
   public showType: string = searchTypes.MONSTERS;
+  public previewCharacter: Character|null = null;
 
   get npcs() {
     if (this.showType === searchTypes.MONSTERS) {
@@ -100,6 +109,14 @@ export default class CharacterLibrary extends Vue {
     return this.npcs.filter((npc) => npc.name.toLowerCase().includes(this.searchString.toLowerCase()));
   }
 
+  get characters(): Character[] {
+    return readGetCharacters(this.$store);
+  }
+
+  public get encounterId() {
+    return readGetEncountersCurrentId(this.$store);
+  }
+
   public onScroll() {
     const htmlElement = this.$refs.monsterList as HTMLElement;
     const scrollPos = htmlElement.scrollHeight - htmlElement.scrollTop;
@@ -115,16 +132,8 @@ export default class CharacterLibrary extends Vue {
     this.showType = type;
   }
 
-  get characters(): Character[] {
-    return readGetCharacters(this.$store);
-  }
-
-  public get encounterId() {
-    return readGetEncountersCurrentId(this.$store);
-  }
-
-  public selectCharacter(characterData) {
-    commitSetNpcInDetail(this.$store, characterData);
+  public characterPreviewSelected(npc) {
+    this.previewCharacter = npc;
   }
 
   public mounted() {
@@ -134,15 +143,15 @@ export default class CharacterLibrary extends Vue {
 </script>
 
 <style scoped lang="scss">
-.CharactersLibrary-scrollBox {
-  height: calc(100vh - 300px); // Adjust this value in the parent component
+.CharactersLibrary-listScrollBox {
+  height: calc(100vh - 500px); // Adjust this value in the parent component
+}
+
+.CharacterDetails-previewScrollBox {
+  height: calc(100vh - 303px); // Adjust this value in the parent component
 }
 
 .CharactersLibrary-listItem:last-child {
   border-bottom: 1px solid theme('colors.gray.300');
-}
-
-.Characters-library .CharactersLibrary-scrollBox {
-  height: calc(100vh - 412px);
 }
 </style>

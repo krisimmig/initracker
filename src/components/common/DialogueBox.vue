@@ -2,7 +2,7 @@
   <div>
     <div class="DialogueBox-bg" @click.prevent="$emit('cancel')"></div>
 
-    <div class="DialogueBox flex flex-col">
+    <div class="DialogueBox flex flex-col" :class="{ 'is-wide': isWide }">
       <div class="DialogueBox-content flex-grow">
         <div class="bg-gray-200 text-center p-4" v-if="title">
           <h3 class="mb-0 text-light">{{ title }}</h3>
@@ -37,6 +37,7 @@
   export default class DialogueBox extends Vue {
     @Prop({ type: Boolean, default: true }) private cancel!: boolean;
     @Prop({ type: String, default: '' }) private title!: string;
+    @Prop({ type: Boolean, default: false }) private isWide!: boolean;
   }
 </script>
 
@@ -46,13 +47,18 @@
   top: 50%;
   left: 50%;
   width: 50%;
-  min-height: 50%;
+  min-height: 50vh;
+  max-height: 90vh;
   border: 1px solid theme('colors.gray.200');
   transform: translate(-50%, -50%);
   z-index: 1000;
   border-radius: 4px;
   cursor: default;
   @apply shadow-lg bg-white;
+}
+
+.DialogueBox.is-wide {
+  width: 75%;
 }
 
 .DialogueBox-bg {

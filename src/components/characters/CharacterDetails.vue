@@ -1,11 +1,11 @@
 <template>
   <div class="text-sm overflow-hidden bg-white">
-    <div class="p-4 bg-blue-600 text-blue-100">
+    <div class="p-4  border-b">
       <h4 class="mb-0 text-base font-semibold">{{ characterData.name }}</h4>
-      <p class="mb-0 italic">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with a CR of {{ characterData.challenge_rating }}</p>
+      <p class="mb-0 italic text-gray-600">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with CR of {{ characterData.challenge_rating }}</p>
     </div>
 
-    <div class="bg-gray-400">
+    <div class="border-b">
 
       <div class="flex justify-between px-4 py-3">
         <div
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="p-4 bg-gray-300">
+    <div class="p-4">
       <div class="flex">
         <div class="w-1/2 flex items-center">
           <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
@@ -67,7 +67,7 @@
 
       <template v-if="characterData.actions.length > 0">
         <h3 class="CharacterDetails-sectionHeadline">Actions</h3>
-        <p v-for="(action, index) in characterData.actions" :key="index">
+        <p v-for="(action, index) in characterData.actions" :key="index" class="mb-3">
           <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
         </p>
       </template>
