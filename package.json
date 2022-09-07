@@ -32,7 +32,6 @@
     "vuex-typescript": "^3.0.2"
   },
   "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^2.1.2",
     "@types/uuid": "^8.3.4",
     "@vue/cli-plugin-e2e-cypress": "~5.0.8",
     "@vue/cli-plugin-typescript": "~5.0.8",
