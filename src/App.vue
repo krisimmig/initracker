@@ -39,11 +39,8 @@ export default class App extends Vue {
 
 
 <style>
-/* purgecss start ignore */
 @tailwind  base;
 @tailwind  components;
-/* purgecss end ignore */
-
 @tailwind  utilities;
 
 @import 'css/base.css';
