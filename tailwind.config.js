@@ -1,7 +1,10 @@
 // tailwind.config.js
 module.exports = {
-  important: true,
+  content: [
+    // Example content paths...
+    './public/**/*.html',
+    './src/**/*.{js,jsx,ts,tsx,vue}',
+  ],
   theme: {},
-  variants: {},
   plugins: [],
 }
