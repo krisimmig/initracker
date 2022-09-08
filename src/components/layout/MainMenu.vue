@@ -1,38 +1,24 @@
 <template>
+<div class="MainMenu">
+  <template v-if="isLoggedIn">
+      <router-link class="" :to="{ name: 'home' }">
+        <div class="flex items-center mr-3">
+          <SvgIcon name="logo" class="text-red-600" /><p class="ml-2 font-bold MainMenu-link mb-0">YAIT</p>
+        </div>
+      </router-link>
+      <router-link :to="{ name: 'encounters' }">Encounters</router-link>
+      <router-link :to="{ name: 'characters' }">Characters</router-link>
+      <router-link :to="{ name: 'feedback' }">Feedback</router-link>
 
-  <div class="MainMenu bg-gray-600">
-    <div class="u-container-fluid">
-      <div class="justify-between items-center flex h-12 text-gray-100">
-        <template v-if="isLoggedIn">
-          <div class="flex items-center">
-            <router-link class="" :to="{ name: 'home' }">
-              <div class="flex items-center mr-3">
-                <SvgIcon name="logo" class="text-red-600" /><p class="ml-2 font-bold MainMenu-link mb-0">YAIT</p>
-              </div>
-            </router-link>
-            <router-link class="MainMenu-link" :to="{ name: 'encounters' }">Encounters</router-link>
-            <router-link class="MainMenu-link" :to="{ name: 'characters' }">Characters</router-link>
-            <router-link class="MainMenu-link" :to="{ name: 'feedback' }">Feedback</router-link>
-          </div>
+      <router-link :to="{ name: 'userdetails' }">{{ currentUserString }}</router-link>
+      <a class="" href="#" @click="logoutUser">Logout</a>
+  </template>
 
-          <div class="ml-auto">
-            <router-link class="MainMenu-link" :to="{ name: 'userdetails' }">{{ currentUserString }}</router-link>
-            <a class="MainMenu-link" href="#" @click="logoutUser">Logout</a>
-          </div>
-        </template>
-
-        <template v-else>
-          <div class="flex items-center">
-            <router-link class="MainMenu-link" :to="{ name: 'home' }">Home</router-link>
-          </div>
-          <div>
-            <router-link class="MainMenu-link" :to="{ name: 'login' }">Login</router-link>
-          </div>
-        </template>
-      </div>
-    </div>
-
-  </div>
+  <template v-else>
+    <router-link :to="{ name: 'home' }">Home</router-link>
+    <router-link :to="{ name: 'login' }">Login</router-link>
+  </template>
+</div>
 </template>
 
 <script lang="ts">
@@ -61,15 +47,5 @@ export default class MainMenu extends Vue {
 </script>
 
 <style lang="scss">
-  .MainMenu-link {
-    @apply ml-2;
-  }
 
-  .MainMenu-link:hover {
-    @apply underline;
-  }
-
-  .MainMenu a {
-    text-decoration: none;
-  }
 </style>
