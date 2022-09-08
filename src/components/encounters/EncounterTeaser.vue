@@ -1,17 +1,25 @@
 <template>
-  <div
-    class="card card--interactive w-full"
-  >
-    <div @click="toEncounterView(id)" v-if="!isEditingName">
-      <div class="flex justify-between">
-        <p class="mb-2 font-semibold">{{ name }}</p>
-        <p v-if="createdAt" class="text-sm mb-2 italic font-light text-gray-600">created {{ getReadableCreatedAt() }}</p>
-      </div>
+  <v-card class="mb-3">
+    <div v-if="!isEditingName">
+      <v-card-title @click="toEncounterView(id)">{{ name }}</v-card-title>
+      <v-card-subtitle>created {{ getReadableCreatedAt() }}</v-card-subtitle>
 
-      <div>
-        <Button @click="deleteEncounter()" is-danger>Delete!</Button>
-        <Button @click="renameEncounter()">Rename</Button>
-      </div>
+      <v-card-actions>
+        <v-btn
+          text
+          @click="renameEncounter()"
+        >
+          Rename
+        </v-btn>
+
+        <v-btn
+          text
+          color="error"
+          @click="deleteEncounter()"
+        >
+          Delete
+        </v-btn>
+      </v-card-actions>
     </div>
 
     <div v-if="isEditingName" class="Form">
@@ -19,7 +27,7 @@
       <Button @click="isEditingName = false" is-secondary>Cancel</Button>
       <Button @click="saveNewName">Save</Button>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script lang='ts'>

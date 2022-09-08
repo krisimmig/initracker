@@ -1,14 +1,10 @@
 <template>
-  <div class="">
-    <PageTitle title="Ecounters list" subtitle="These are all your encounters." />
+  <div class="Encounters">
+    <PageTitle title="Encounters list" subtitle="These are all your encounters." />
 
-    <div class="u-container-fluid">
-      <div class="flex">
-      <div class="w-1/2 mr-4 bg-white shadow">
-        <ul
-            v-if="encounters.length > 0"
-            class="divide-y divide-gray-300 border-b"
-        >
+    <v-row>
+      <v-col>
+        <ul v-if="encounters.length > 0" class="Encounters-list">
           <li
             v-for="encounter in encounters"
             :key="encounter.id"
@@ -17,13 +13,12 @@
           </li>
         </ul>
         <p v-else class="u-tip">Nothing here yet, please create a new encounter on the right</p>
-      </div>
+      </v-col>
 
-      <div class="w-5/12">
+      <v-col>
         <EncounterNew />
-      </div>
-    </div>
-    </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -56,4 +51,8 @@ export default class Encounters extends Vue {
 </script>
 
 <style>
+ul.Encounters-list {
+  list-style: none;
+  padding-left: 0;
+}
 </style>
