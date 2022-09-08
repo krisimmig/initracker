@@ -2,30 +2,55 @@
   <v-card class="mb-3">
     <div v-if="!isEditingName">
       <v-card-title @click="toEncounterView(id)">{{ name }}</v-card-title>
-      <v-card-subtitle>created {{ getReadableCreatedAt() }}</v-card-subtitle>
+      <v-card-subtitle>created {{ getReadableCreatedAt() }} | Rounds played: {{ round }}</v-card-subtitle>
 
       <v-card-actions>
+        <v-spacer></v-spacer>
+
         <v-btn
-          text
+          icon
           @click="renameEncounter()"
         >
-          Rename
+          <v-icon>mdi-pencil</v-icon>
         </v-btn>
 
         <v-btn
-          text
+          icon
           color="error"
           @click="deleteEncounter()"
         >
-          Delete
+          <v-icon>mdi-delete</v-icon>
         </v-btn>
       </v-card-actions>
     </div>
 
     <div v-if="isEditingName" class="Form">
-      <FormInput label="Edit encounter name" v-model="newName" :placeholder="this.name" @keyup.enter="saveNewName" />
-      <Button @click="isEditingName = false" is-secondary>Cancel</Button>
-      <Button @click="saveNewName">Save</Button>
+      <v-card-text>
+        <v-text-field
+          label="Edit encounter name"
+          hide-details="auto"
+          @keyup.enter="saveNewName"
+          v-model="newName"
+        ></v-text-field>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-btn
+          text
+          @click="isEditingName = false"
+        >
+          <v-icon left>mdi-close</v-icon>
+          Cancel
+        </v-btn>
+
+        <v-btn
+          text
+          @click="saveNewName"
+        >
+          <v-icon left>mdi-check</v-icon>
+          Save
+        </v-btn>
+      </v-card-actions>
     </div>
   </v-card>
 </template>
@@ -34,19 +59,15 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import { dispatchRemoveEncounter, dispatchUpdateName } from '@/store/encountersModule';
-import { IEncounterEntity } from '@/types/encounters';
-import FormInput from '@/components/form/FormInput.vue';
-import Button from '@/components/common/Button.vue';
 
 @Component({
   components: {
-    Button,
-    FormInput,
   },
 })
 export default class EncounterTeaser extends Vue {
   @Prop({ type: String, required: true }) public id!: string;
   @Prop({ type: String, required: true }) public name!: string;
+  @Prop({ type: Number, required: false }) public round!: number;
   @Prop({ type: Number, required: false }) public createdAt!: number;
 
   private isEditingName: boolean = false;
