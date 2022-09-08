@@ -9,5 +9,9 @@ module.exports = {
           {removeAttrs: {attrs:['fill', 'stroke']}}
         ]
       })
-  }
+  },
+
+  transpileDependencies: [
+    'vuetify'
+  ]
 }

@@ -9,6 +9,7 @@ import store from '@/store';
 import { firebase } from '@/store/firebase';
 
 import { dispatchLoginUser } from '@/store/usersModule';
+import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false;
 
@@ -25,6 +26,7 @@ firebase.auth().onAuthStateChanged((user) => {
     el: '#app',
     router,
     store,
-    render: (h) => h(App),
+    vuetify,
+    render: (h) => h(App)
   });
 });

@@ -1,50 +1,43 @@
 <template>
-  <div class="flex flex-col h-screen bg-gray-200">
-    <MainMenu />
-    <router-view />
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+        <p>foo</p>
+      </div>
+
+      <v-spacer></v-spacer>
+
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Login</span>
+        <v-icon>mdi-database-lock</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <p>main here</p>
+    </v-main>
+  </v-app>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 
-import { readIsLoggedIn, dispatchLogoutUser } from '@/store/usersModule';
-import { readGetNpcs, dispatchFetchNpcs } from '@/store/npcsModule';
-import MainMenu from '@/components/layout/MainMenu.vue';
+export default Vue.extend({
+  name: 'App',
 
-@Component({
-  components: { MainMenu },
-})
-export default class App extends Vue {
+  components: {
+  },
 
-  public logoutUser() {
-    dispatchLogoutUser(this.$store);
-  }
-
-  get isLoggedIn(): boolean {
-    return readIsLoggedIn(this.$store);
-  }
-
-  get monsters() {
-    return readGetNpcs(this.$store);
-  }
-
-  public async mounted() {
-    if (this.monsters.length < 1) {
-      await dispatchFetchNpcs(this.$store);
-    }
-  }
-}
+  data: () => ({
+    //
+  }),
+});
 </script>
-
-
-<style>
-@tailwind  base;
-@tailwind  components;
-@tailwind  utilities;
-
-@import 'css/base.css';
-@import 'css/utilities.css';
-@import 'css/form.css';
-@import 'css/card.css';
-</style>
