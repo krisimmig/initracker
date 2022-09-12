@@ -11,16 +11,10 @@
       <v-spacer></v-spacer>
 
       <div>
+        <v-btn @click.stop="showCharacterLibrary = true">
+          Add
+        </v-btn>
         <v-dialog v-model="showCharacterLibrary">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                v-bind="attrs"
-                v-on="on"
-            >
-              Add
-            </v-btn>
-          </template>
-
           <CharacterLibrary
             :encounterId="$route.params.encounterId"
             @characterClicked="handleCharClicked"
@@ -32,11 +26,13 @@
           @click="rollInitiative"
           :disabled="npcs.length === 0"
           v-if="currentRound === 1 && currentNpcIndex === 1"
+          class="mx-2"
         >
           Roll ini
         </v-btn>
         <v-btn
           @click="reset"
+          class="mx-2"
           v-else
         >
           Reset
@@ -46,15 +42,15 @@
       </div>
     </div>
 
-    <v-sheet elevation="2" rounded shaped class="pa-4" >
-      <div v-for="(npc, index) in npcs" :key="index" class="mb-4">
+    <v-sheet elevation="3" rounded shaped class="pa-4" >
+      <div v-for="(npc, index) in npcs" :key="index">
+        <v-divider v-if="index > 0" class="my-4"></v-divider>
         <CharacterListItem
           :npc="npc"
           :isActive="currentNpcIndex - 1 === index"
           :removable="true"
           @remove="removeNpcFromEncounter(npc.uuid)"
         />
-        <v-divider class="mt-4"></v-divider>
       </div>
 
       <p v-if="npcs.length === 0">

@@ -4,18 +4,18 @@
     :class="{ 'is-active': isActive, 'is-selected': isSelected }"
     @click.stop="showInDetail"
   >
-    <div class="d-flex">
+    <div class="d-flex align-center">
       <CharacterArmorClass :armorClass="npc.armor_class" />
       <div>
-        <h2 class="text-h6">{{ npc.name }}</h2>
+        <h2 class="text-h6">
+          <span class="grey--text">{{ npc.initiative }}</span>
+          {{ npc.name }}</h2>
         <p class="caption mb-0">{{ description }}</p>
       </div>
+
       <v-spacer></v-spacer>
 
-      <v-menu
-          bottom
-          left
-      >
+      <v-menu bottom left>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
