@@ -1,8 +1,8 @@
 <template>
   <v-card>
-    <div class="blue lighten-5">
+    <div class="grey lighten-5">
 
-    <v-card-title>{{ characterData.name }}</v-card-title>
+    <v-card-title class="font-weight-light">{{ characterData.name }}</v-card-title>
     <v-card-subtitle class="caption">{{ getDescription() }}</v-card-subtitle>
     </div>
 
@@ -25,7 +25,7 @@
       <div class="d-flex justify-space-between">
         <div class="d-flex align-center">
           <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
-          <p class="mb-0 ml-2 font-weight-bold">Dice: {{ characterData.hit_dice }}</p>
+          <p class="mb-0 ml-2 font-weight-bold"><v-icon>mdi-dice-multiple</v-icon> {{ characterData.hit_dice }}</p>
         </div>
         <div class="d-flex align-center">
           <CharacterArmorClass :armorClass="characterData.armor_class" />

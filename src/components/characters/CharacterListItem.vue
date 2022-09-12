@@ -16,11 +16,11 @@
       <v-spacer></v-spacer>
 
       <v-menu bottom left>
-        <template v-slot:activator="{ on, attrs }">
+        <template v-slot:activator="{ on }">
           <v-btn
             icon
-            v-bind="attrs"
             v-on="on"
+            class="align-self-start"
           >
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>

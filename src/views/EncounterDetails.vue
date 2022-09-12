@@ -6,7 +6,6 @@
 
     <v-col cols="6">
       <EncounterList :id="$route.params.encounterId" />
-
     </v-col>
 
     <v-col>

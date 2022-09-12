@@ -1,8 +1,8 @@
 <template>
   <div v-if="currentEncounter" class="Encounter">
-    <h1>{{ currentEncounter.name }}</h1>
-    <div class="d-flex mb-2">
-      <p class="subtitle-1">
+    <h1 class="my-0 font-weight-light">{{ currentEncounter.name }}</h1>
+    <div class="d-flex align-center mb-2">
+      <p class="subtitle-1 mb-0">
         Round <span class="font-weight-bold">{{ currentRound }}</span>
         Turn <span class="font-weight-bold">{{ currentEncounter.currentTurn }}</span>
         Elapsed time <span class="font-weight-bold">{{ elapsedTimeGame }}</span>
@@ -12,6 +12,7 @@
 
       <div>
         <v-btn @click.stop="showCharacterLibrary = true">
+          <v-icon left>mdi-account-multiple-plus</v-icon>
           Add
         </v-btn>
         <v-dialog v-model="showCharacterLibrary">
@@ -28,6 +29,7 @@
           v-if="currentRound === 1 && currentNpcIndex === 1"
           class="mx-2"
         >
+          <v-icon left>mdi-dice-d20-outline</v-icon>
           Roll ini
         </v-btn>
         <v-btn
@@ -35,14 +37,24 @@
           class="mx-2"
           v-else
         >
+          <v-icon left>mdi-backup-restore</v-icon>
           Reset
         </v-btn>
 
-        <v-btn @click="nextTurn">Next</v-btn>
+        <v-btn @click="nextTurn" :disabled="npcs.length === 0">
+          <v-icon left>mdi-skip-next</v-icon>
+          Next
+        </v-btn>
       </div>
     </div>
 
-    <v-sheet elevation="3" rounded shaped class="pa-4" >
+    <v-sheet
+      v-if="npcs.length > 0"
+      elevation="3"
+      rounded
+      shaped
+      class="pa-4"
+    >
       <div v-for="(npc, index) in npcs" :key="index">
         <v-divider v-if="index > 0" class="my-4"></v-divider>
         <CharacterListItem
@@ -52,17 +64,20 @@
           @remove="removeNpcFromEncounter(npc.uuid)"
         />
       </div>
-
-      <p v-if="npcs.length === 0">
-        Nobody is participating in this battle yet.
-        Choose some combatants from the <b>Monsters</b> and <b>Player Characters</b> on the left.
-        <v-btn
-          @click="showCharacterLibrary = true"
-        >
-          Add
-        </v-btn>
-      </p>
     </v-sheet>
+
+    <v-alert type="info" v-if="npcs.length === 0">
+      Nobody is participating in this battle yet.
+      Choose some combatants from the <b>Monsters</b> and <b>Players</b> library.
+      <br>
+      <v-btn
+          class="mt-4"
+          @click="showCharacterLibrary = true"
+      >
+        <v-icon left>mdi-account-multiple-plus</v-icon>
+        Open character library
+      </v-btn>
+    </v-alert>
   </div>
 </template>
 
@@ -160,7 +175,8 @@ export default class EncounterList extends Vue {
   }
 
   public get elapsedTimeGame(): string {
-    const seconds = (this.currentEncounter.currentTurn ? this.currentEncounter.currentTurn : 1) * 6;
+    const turn = this.currentEncounter.currentTurn ? this.currentEncounter.currentTurn : 1;
+    const seconds = (turn - 1) * 6;
     const numHours = Math.floor(((seconds % 31536000) % 86400) / 3600);
     const numMinutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
     const numSeconds = (((seconds % 31536000) % 86400) % 3600) % 60;
