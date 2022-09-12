@@ -2,8 +2,8 @@
 <div class="MainMenu">
   <template v-if="isLoggedIn">
       <router-link class="" :to="{ name: 'home' }">
-        <div class="flex items-center mr-3">
-          <SvgIcon name="logo" class="text-red-600" /><p class="ml-2 font-bold MainMenu-link mb-0">YAIT</p>
+        <div class="d-flexitems-center mr-3">
+          <SvgIcon name="logo" class="text-red-600" /><p class="ml-2 font-weight-bold MainMenu-link mb-0">YAIT</p>
         </div>
       </router-link>
       <router-link :to="{ name: 'encounters' }">Encounters</router-link>

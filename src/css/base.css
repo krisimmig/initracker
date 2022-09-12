@@ -20,7 +20,7 @@ h3,
 
 h4,
 .h4 {
-  @apply font-bold text-base;
+  @apply font-weight-bold text-base;
 }
 
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, p {

@@ -1,9 +1,9 @@
 <template>
   <div class="CharacterHealth">
     <div class="CharacterHealth-wrapper">
-      <SvgIcon name="heart" class="CharacterHealth-icon" />
+      <SvgIcon name="heart" class="CharacterHealth-icon red--text" />
       <div class="CharacterHealth-hpWrapper">
-        <p class="CharacterHealth-hp mb-0">{{ hp }}</p>
+        <p class="CharacterHealth-hp mb-0 white--text">{{ hp }}</p>
       </div>
     </div>
   </div>

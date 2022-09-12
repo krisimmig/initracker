@@ -1,55 +1,55 @@
 <template>
-  <div class="CharactersLibrary flex flex-row w-full">
-    <div class="w-1/3">
-      <div class="bg-white p-4 border-b">
-        <label class="Form-label block mb-1">Search category</label>
-        <Button
-          @click="switchTab('monsters')"
-          :is-secondary="showType !== 'monsters'"
-        >
-          Monsters
-        </Button>
-        <Button
-          :is-secondary="showType !== 'characters'"
-          @click="switchTab('characters')"
-        >
-          Characters
-        </Button>
+  <v-card class="CharactersLibrary d-flex">
+    <v-card-text>
+      <v-row>
+        <v-col cols="4">
+          <div class="bg-white p-4 border-b">
+            <label class="Form-label block mb-1">Search category</label>
+            <Button
+              @click="switchTab('monsters')"
+              :is-secondary="showType !== 'monsters'"
+            >
+              Monsters
+            </Button>
+            <Button
+              :is-secondary="showType !== 'characters'"
+              @click="switchTab('characters')"
+            >
+              Characters
+            </Button>
 
-        <div class="Form mt-2">
-          <FormInput
-            label="Name"
-            v-model="searchString"
-            placeholder="Search monsters & characters by name"
-          />
-        </div>
-      </div>
-      <div class="CharactersLibrary-listScrollBox u-scrollBoxParent bg-white shadow">
-        <div class="u-scrollBoxChild" ref="monsterList" @scroll="onScroll">
-          <ul v-if="filteredNpcs.length > 0" class="divide-y divide-gray-300 border-b">
-            <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
-              <div v-if="index < maxVisible">
-                <CharacterTeaser :characterData="npc" @click.native="characterPreviewSelected(npc)">
-                  <Button @click="$emit('characterClicked', npc)">{{ buttonText }}</Button>
-                </CharacterTeaser>
-              </div>
-            </li>
-          </ul>
+            <div class="Form mt-2">
+              <FormInput
+                label="Name"
+                v-model="searchString"
+                placeholder="Search monsters & characters by name"
+              />
+            </div>
+          </div>
 
-          <p v-else class="u-tip" v-html="noResultsText"></p>
+          <div ref="monsterList" @scroll="onScroll">
+            <ul v-if="filteredNpcs.length > 0" class="u-listReset">
+              <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
+                <div v-if="index < maxVisible">
+                  <CharacterTeaser :characterData="npc" @click.native="characterPreviewSelected(npc)">
+                    <v-btn @click="$emit('characterClicked', npc)">{{ buttonText }}</v-btn>
+                  </CharacterTeaser>
+                </div>
+              </li>
+            </ul>
 
-        </div>
-      </div>
-    </div>
+            <p v-else class="u-tip" v-html="noResultsText"></p>
 
-    <div class="CharacterDetails-previewScrollBox u-scrollBoxParent bg-white shadow w-2/3">
-      <div class="u-scrollBoxChild">
-        <CharacterDetails v-if="previewCharacter" :characterData="previewCharacter" />
-        <p class="u-tip" v-else>Click on a character name to see details here.</p>
-      </div>
-    </div>
+          </div>
+        </v-col>
 
-  </div>
+        <v-col>
+          <CharacterDetails v-if="previewCharacter" :characterData="previewCharacter" />
+          <p class="u-tip" v-else>Click on a character name to see details here.</p>
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">

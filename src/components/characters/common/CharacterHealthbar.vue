@@ -1,41 +1,75 @@
 <template>
-  <div>
-    <div class="CharacterHealthBar w-full cursor-pointer hover:bg-gray-300 px-2 transition duration-200 rounded-md">
-      <div @click.stop="showDialog = true">
-        <div class="flex items-center w-full">
-          <div class="relative flex-grow bg-gray-300 h-2 rounded overflow-hidden">
-            <div class="absolute top-0 left-0 h-2 bg-red-600" :style="`width: ${hpInPercent}%;`"></div>
-          </div>
-          <div class="flex ml-4 w-20 justify-end">
-            <div class="flex items-center">
-              <span class="text-lg font-bold">{{ hp }}</span>
-              <span class="text-sm text-gray-500 ml-1">/ {{ maxHp }}</span>
-            </div>
-          </div>
-        </div>
+  <div class="CharacterHealthBar">
+    <div @click.stop="showDialog = true">
+      <div class="d-flex align-center">
+        <v-progress-linear
+          :value="hpInPercent"
+          color="red darken-2"
+          height="8"
+          rounded
+        >
+        </v-progress-linear>
+        <p class="ml-4 ma-0 text-no-wrap subtitle-2">{{ hp }} / {{ maxHp }}</p>
       </div>
-
-      <DialogueBox
-        v-if="showDialog"
-        @close="showDialog = false"
-        @cancel="showDialog = false"
-        :title="`Change ${name}´s health`"
-      >
-        <template v-slot:content>
-          <Button is-big is-success @click="changeHitPoints({ subtract: false })">Heal</Button>
-          <input
-            type="number"
-            v-model.number="hitPointChangeAmount"
-            placeholder="Enter HP healed or damaged"
-            class="Form-bigInput"
-          >
-
-          <Button is-danger is-big @click="changeHitPoints()">Damage</Button>
-          <Button  is-big is-secondary @click="resetHitPoints()">Reset to full health</Button>
-        </template>
-      </DialogueBox>
-
     </div>
+
+    <v-dialog v-model="showDialog" max-width="450">
+      <v-card>
+        <v-app-bar flat>
+          <v-toolbar-title>Update Healthpoints</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click.stop="showDialog = false; hitPointChangeAmount = 0"><v-icon>mdi-close</v-icon></v-btn>
+        </v-app-bar>
+        <v-card-text>
+          <div class="my-4 d-flex align-baseline">
+            <v-text-field
+                v-model="hitPointChangeAmount"
+                hide-details
+                type="number"
+                class="mx-3"
+                label="Amount"
+                min="0"
+            />
+
+            <v-btn class="mx-1" :disabled="hitPointChangeAmount < 10" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount) - 10">
+              <v-icon left>mdi-minus</v-icon>
+              10
+            </v-btn>
+            <v-btn class="mx-1" :disabled="hitPointChangeAmount <= 0" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount - 1)">
+              <v-icon left>mdi-minus</v-icon>
+              1
+            </v-btn>
+
+            <v-btn class="mx-1" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount) + 1">
+              <v-icon left>mdi-plus</v-icon>
+              1
+            </v-btn>
+            <v-btn class="mx-1" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount) + 10">
+              <v-icon left>mdi-plus</v-icon>
+              10
+            </v-btn>
+          </div>
+
+          <v-row class="mb-2">
+            <v-col>
+              <v-btn block @click="changeHitPoints()" color="error">
+                <v-icon left>mdi-minus</v-icon>
+                Damage
+              </v-btn>
+            </v-col>
+
+            <v-col>
+              <v-btn block @click="changeHitPoints({ subtract: false })" color="primary">
+                <v-icon left>mdi-plus</v-icon>
+                Heal
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <v-btn block @click="resetHitPoints()"><v-icon left>mdi-repeat</v-icon> Reset to full health</v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -77,7 +111,9 @@
         npcId: this.uuid,
         newHitPoints: this.maxHp,
       });
+
       this.showDialog = false;
+      this.hitPointChangeAmount = 0;
     }
 
     public changeHitPoints({ subtract } = { subtract: true }) {

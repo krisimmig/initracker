@@ -93,4 +93,19 @@ export class Character {
       };
     }
   }
+
+  public getDescription(): string {
+    return `${this.size} ${this.alignment} ${this.type} with CR of ${this.challenge_rating}`;
+  }
+
+  public getSpeedString(): string {
+    const keys = Object.keys(this.speed);
+    return keys.reduce((acc, current)  => {
+      const value = this.speed[current];
+      if (value > 0) {
+        return acc !== '' ? `${acc}, ${value}ft (${current})` : `${value}ft (${current})`;
+      }
+      return acc;
+    }, '');
+  }
 }

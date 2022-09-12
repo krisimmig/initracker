@@ -81,7 +81,7 @@
         </template>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="grey lighten-5">
       <v-container fluid>
         <router-view></router-view>
       </v-container>
@@ -130,5 +130,10 @@ export default class App extends Vue {
 header.MainMenu a {
   text-decoration: none;
   color: white;
+}
+
+ul.u-listReset {
+  list-style: none;
+  padding-left: 0;
 }
 </style>

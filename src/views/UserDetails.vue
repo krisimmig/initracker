@@ -12,8 +12,8 @@
             alt="User Avatar"
             class="mb-4"
         >
-        <p><span class="font-bold">Name:</span> {{ displayName }}</p>
-        <p><span class="font-bold">Email:</span> {{ email }}</p>
+        <p><span class="font-weight-bold">Name:</span> {{ displayName }}</p>
+        <p><span class="font-weight-bold">Email:</span> {{ email }}</p>
       </div>
     </div>
   </div>

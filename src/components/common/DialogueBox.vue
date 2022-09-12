@@ -2,7 +2,7 @@
   <div>
     <div class="DialogueBox-bg" @click.prevent="$emit('cancel')"></div>
 
-    <div class="DialogueBox flex flex-col" :class="{ 'is-wide': isWide }">
+    <div class="DialogueBox d-flexflex-col" :class="{ 'is-wide': isWide }">
       <div class="DialogueBox-content flex-grow">
         <div class="bg-gray-200 text-center p-4" v-if="title">
           <h3 class="mb-0 text-light">{{ title }}</h3>
@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div class="DialogueBox-content flex justify-end p-4">
+      <div class="DialogueBox-content d-flexjustify-end p-4">
         <slot name="actions"></slot>
         <Button
           is-secondary

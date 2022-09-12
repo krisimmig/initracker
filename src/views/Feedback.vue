@@ -33,7 +33,7 @@
               <input type="text" class="bg-white border w-full rounded px-3 py-2 mb-3 block" name="email" id="tlemail" placeholder="name@mail.com" />
 
               <input type="hidden" value="1" name="embed"/>
-              <input type="submit" value="Subscribe" class="uppercase text-sm font-bold block bg-green-500 text-green-100 rounded px-4 py-1 cursor-pointer hover:bg-green-300 hover:text-green-500" />
+              <input type="submit" value="Subscribe" class="text-uppercase text-sm font-weight-bold block bg-green-500 text-green-100 rounded px-4 py-1 cursor-pointer hover:bg-green-300 hover:text-green-500" />
             </form>
           </div>
         </div>

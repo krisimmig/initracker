@@ -1,57 +1,72 @@
 <template>
-  <div v-if="currentEncounter" class="Encounter bg-white shadow-lg">
-    <div class="border-b">
-      <div class="Encounter-titleArea pt-4 pb-2 pl-4 relative">
-      <h4 class="uppercase">{{ currentEncounter.name }}</h4>
-      <div class="flex">
-        <div class="font-light text-gray-500 text-sm pt-2">
-          Round <span class="font-bold">{{ currentRound }}</span>
-          Turn <span class="font-bold">{{ currentEncounter.currentTurn }}</span>
-          Elapsed time <span class="font-bold">{{ elapsedTimeGame }}</span>
-        </div>
-        <div class="ml-auto">
-          <Button
-              @click="rollInitiative"
-              :disabled="npcs.length === 0"
-              v-if="currentRound === 1 && currentNpcIndex === 1"
-          >
-            Roll Initiative
-          </Button>
-          <Button
-            is-danger
-            @click="reset"
-            v-else
-          >
-            Reset
-          </Button>
-          <div class="Encounter-nextButton" @click="nextTurn">
-            <div class="text-3xl">»</div>
-            <div class="pb-4 text-sm italic">Next turn</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
+  <div v-if="currentEncounter" class="Encounter">
+    <h1>{{ currentEncounter.name }}</h1>
+    <div class="d-flex mb-2">
+      <p class="subtitle-1">
+        Round <span class="font-weight-bold">{{ currentRound }}</span>
+        Turn <span class="font-weight-bold">{{ currentEncounter.currentTurn }}</span>
+        Elapsed time <span class="font-weight-bold">{{ elapsedTimeGame }}</span>
+      </p>
 
-    <div class="Encounter-npcsListWrapper u-scrollBoxParent">
-      <div class="Encounter-npcsListScrollBox u-scrollBoxChild">
-        <ul
-            v-if="npcs.length > 0"
-            class="Encounter-npcsList divide-y divide-gray-300 border-b"
+      <v-spacer></v-spacer>
+
+      <div>
+        <v-dialog v-model="showCharacterLibrary">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+            >
+              Add
+            </v-btn>
+          </template>
+
+          <CharacterLibrary
+            :encounterId="$route.params.encounterId"
+            @characterClicked="handleCharClicked"
+            buttonText="Add"
+          />
+        </v-dialog>
+
+        <v-btn
+          @click="rollInitiative"
+          :disabled="npcs.length === 0"
+          v-if="currentRound === 1 && currentNpcIndex === 1"
         >
-          <li v-for="(npc, index) in npcs" :key="index">
-            <CharacterListItem
-              :npc="npc"
-              :isActive="currentNpcIndex - 1 === index"
-              :removable="true"
-              @remove="removeNpcFromEncounter(npc.uuid)"
-            />
-          </li>
-        </ul>
-        <p v-else class="u-tip text-gray-600">Nobody is participating in this battle yet. Choose some combatans from the <b>Monsters</b> and <b>Player Characters</b> on the left.</p>
+          Roll ini
+        </v-btn>
+        <v-btn
+          @click="reset"
+          v-else
+        >
+          Reset
+        </v-btn>
+
+        <v-btn @click="nextTurn">Next</v-btn>
       </div>
     </div>
 
+    <v-sheet elevation="2" rounded shaped class="pa-4" >
+      <div v-for="(npc, index) in npcs" :key="index" class="mb-4">
+        <CharacterListItem
+          :npc="npc"
+          :isActive="currentNpcIndex - 1 === index"
+          :removable="true"
+          @remove="removeNpcFromEncounter(npc.uuid)"
+        />
+        <v-divider class="mt-4"></v-divider>
+      </div>
+
+      <p v-if="npcs.length === 0">
+        Nobody is participating in this battle yet.
+        Choose some combatants from the <b>Monsters</b> and <b>Player Characters</b> on the left.
+        <v-btn
+          @click="showCharacterLibrary = true"
+        >
+          Add
+        </v-btn>
+      </p>
+    </v-sheet>
   </div>
 </template>
 
@@ -66,21 +81,26 @@ import {
   dispatchRemoveNpcFromEncounter,
   dispatchUpdateRound,
   dispatchUpdateActiveEntityIndex,
+  dispatchAddNpcToEncounter,
 } from '@/store/encountersModule';
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
 import CharacterListItem from '@/components/characters/CharacterListItem.vue';
 import { modifierWithSign } from '@/utils/dnd';
-import Button from '@/components/common/Button.vue';
+import DialogueBox from "@/components/common/DialogueBox.vue";
+import CharacterLibrary from "@/components/characters/CharacterLibrary.vue";
 
 @Component({
   components: {
-    Button,
     CharacterListItem,
     Encounter: EncounterList,
+    DialogueBox,
+    CharacterLibrary,
   },
 })
 export default class EncounterList extends Vue {
   @Prop({ type: String, required: true }) public id!: string;
+
+  public showCharacterLibrary: boolean = false;
 
   get currentEncounter() {
     return readGetEncountersCurrent(this.$store);
@@ -191,53 +211,17 @@ export default class EncounterList extends Vue {
       });
     }
   }
+
+  public handleCharClicked(npcData) {
+    if (!this.$route.params.encounterId) { return; }
+    dispatchAddNpcToEncounter(this.$store, {
+      npcData: Object.assign({}, npcData),
+      encounterId: this.$route.params.encounterId,
+    });
+  }
+
 }
 </script>
 
 <style lang="scss">
-.Encounter-titleArea {
-  padding-right: 116px !important;
-}
-
-.Encounter-npcsListWrapper {
-  height: calc(100vh - 152px) !important;
-}
-
-.Encounter-npcsList > li:last-child {
-  border-bottom: 1px solid theme('colors.gray.300');
-}
-
-.Encounter-roundIndicator {
-  padding: 1px 7px;
-  border-radius: 30%;
-  background: theme('colors.blue.200');
-  border: 1px solid theme('colors.blue.600');
-}
-
-.Encounter-nextButton {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  border-radius: 0;
-  width: 100px;
-  margin-bottom: 0;
-  @apply
-  text-blue-100
-  border-blue-300
-  transition
-  duration-200
-  ease-in-out
-  bg-blue-600
-  cursor-pointer
-  text-center
-  flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.Encounter-nextButton:hover {
-  @apply bg-blue-300 text-blue-600 shadow-md;
-}
 </style>

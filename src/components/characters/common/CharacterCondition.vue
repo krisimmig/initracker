@@ -1,6 +1,6 @@
 <template>
   <div class="NpcCondition mt-3">
-    <Button
+    <v-btn
       v-for="(conditionId, index) in condition"
       @click="setSelectedCondition(conditionId)"
       @clickPostfix="removeCondition(conditionId)"
@@ -8,18 +8,17 @@
       :key="index"
       is-small
     >
-      <template #default>{{ getConditionName(conditionId) }}</template>
-      <template #postfix>-</template>
-    </Button>
+      {{ getConditionName(conditionId) }}
+    </v-btn>
 
-    <Button
-        is-small
-        is-secondary
-        @click="showConditionSelect = !showConditionSelect"
+    <v-btn
+      is-small
+      is-secondary
+      @click="showConditionSelect = !showConditionSelect"
     >
       +
       <template v-if="[].length < 4"> condition</template>
-    </Button>
+    </v-btn>
 
     <DialogueBox
       v-if="showConditionSelect"
@@ -27,16 +26,15 @@
       title="Add a status effect to this character"
     >
       <template #content>
-        <Button
+        <v-btn
           v-for="(condition, index) in npcConditions"
           @click="addCondition(condition.id)"
           @clickPrefix="selectedCondition = condition"
-          class="ml-0 mr-2 mt-1"
           :key="index"
         >
           <template #prefix><em>i</em></template>
           {{ condition.name }}
-        </Button>
+        </v-btn>
 
         <template v-if="selectedCondition">
           <h4 class="mt-4">{{ selectedCondition.name }}</h4>

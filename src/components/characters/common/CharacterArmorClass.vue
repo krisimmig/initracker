@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="CharacterArmorClass">
-      <SvgIcon name="shield" class="CharacterArmorClass-icon text-gray-200" />
-      <p class="CharacterArmorClass-amount text-gray-600">{{ armorClass }}</p>
+      <SvgIcon name="shield" class="CharacterArmorClass-icon grey--text" />
+      <p class="CharacterArmorClass-amount white--text">{{ armorClass }}</p>
     </div>
   </div>
 </template>

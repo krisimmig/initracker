@@ -5,12 +5,8 @@
       <span class="NpcInitiative-title">Initiative </span><b>{{ initiative }}</b>
     </span>
 
-    <DialogueBox
-      v-if="showInitiativeInput"
-      @cancel="showInitiativeInput = false"
-      title="Change this characters initiative"
-    >
-      <template v-slot:content>
+    <v-dialog v-if="showInitiativeInput">
+      <v-card>
         <input
           placeholder="Enter inititive"
           type="number"
@@ -18,9 +14,9 @@
           @keyup.enter="setInititive"
           class="Form-bigInput"
         >
-        <Button is-big @click="setInititive">Set initiative</Button>
-      </template>
-    </DialogueBox>
+        <v-btn is-big @click="setInititive">Set initiative</v-btn>
+      </v-card>
+    </v-dialog>
 
   </div>
 </template>

@@ -1,95 +1,97 @@
 <template>
-  <div class="text-sm overflow-hidden bg-white">
-    <div class="p-4  border-b">
-      <h4 class="mb-0 text-base font-semibold">{{ characterData.name }}</h4>
-      <p class="mb-0 italic text-gray-600">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with CR of {{ characterData.challenge_rating }}</p>
+  <v-card>
+    <div class="blue lighten-5">
+
+    <v-card-title>{{ characterData.name }}</v-card-title>
+    <v-card-subtitle class="caption">{{ getDescription() }}</v-card-subtitle>
     </div>
 
-    <div class="border-b">
 
-      <div class="flex justify-between px-4 py-3">
+    <div class="body-2 text--primary pa-4">
+      <div class="d-flex justify-space-between text-center">
         <div
-            class="w-full"
-            v-for="(statName, statValue, index) in statsArray"
-            :key="index"
+          v-for="(statName, statValue, index) in statsArray"
+          :key="index"
         >
-          <p class="uppercase mb-0 font-bold">{{ statValue }}</p>
+          <p class="text-uppercase mb-0 font-weight-bold">{{ statValue }}</p>
           <p class="m-0 mt-1">
             {{ characterData[statName.toLowerCase()] }}
             <span class="text-gray-600 text-xs">{{ stringModifier(characterData[statName.toLowerCase()]) }}</span>
           </p>
         </div>
       </div>
-    </div>
 
-    <div class="p-4">
-      <div class="flex">
-        <div class="w-1/2 flex items-center">
+      <v-divider class="my-2"></v-divider>
+      <div class="d-flex justify-space-between">
+        <div class="d-flex align-center">
           <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
-          <p class="ml-2 mb-0"><b>Dice:</b> {{ characterData.hit_dice }}</p>
+          <p class="mb-0 ml-2 font-weight-bold">Dice: {{ characterData.hit_dice }}</p>
         </div>
-        <div class="w-1/2 flex items-center">
+        <div class="d-flex align-center">
           <CharacterArmorClass :armorClass="characterData.armor_class" />
-          <p class="mb-0" v-if="characterData.armor_desc">{{ characterData.armor_desc }}</p>
-          <p class="mb-0" v-else>Armor Class</p>
+          <p class="mb-0 ml-2" v-if="characterData.armor_desc">{{ characterData.armor_desc }}</p>
+          <p class="mb-0 ml-2 font-weight-bold" v-else>Armor Class</p>
         </div>
       </div>
+      <v-divider class="my-2"></v-divider>
 
-      <p class="mt-3">
-        <span class="font-bold">Speed</span> {{ speedString }}
+      <p class="mb-1">
+        <span class="font-weight-bold">Speed</span> {{ getSpeedString() }}
       </p>
-      <p class="mb-2" v-if="characterData.senses">
-        <span class="font-bold">Senses</span> {{ characterData.senses }}
+      <p v-if="characterData.senses" class="mb-1">
+        <span class="font-weight-bold">Senses</span> {{ characterData.senses }}
       </p>
-      <p v-if="characterData.languages">
-        <span class="font-bold">Languages</span> {{ characterData.languages }}
+      <p v-if="characterData.languages" class="mb-1">
+        <span class="font-weight-bold">Languages</span> {{ characterData.languages }}
       </p>
-      <p v-if="characterData.challenge_rating">
-        <span class="font-bold">Challenge Rating</span> {{ characterData.challenge_rating }}
+      <p v-if="characterData.challenge_rating" class="mb-1">
+        <span class="font-weight-bold">Challenge Rating</span> {{ characterData.challenge_rating }}
       </p>
-      <p v-if="characterData.damage_immunities">
-        <span class="font-bold">Damage Immunities</span> {{ characterData.damage_immunities }}
+      <p v-if="characterData.damage_immunities" class="mb-1">
+        <span class="font-weight-bold">Damage Immunities</span> {{ characterData.damage_immunities }}
       </p>
-      <p v-if="characterData.damage_resistances">
-        <span class="font-bold">Damage Resistances</span> {{ characterData.damage_resistances }}
+      <p v-if="characterData.damage_resistances" class="mb-1">
+        <span class="font-weight-bold">Damage Resistances</span> {{ characterData.damage_resistances }}
       </p>
-      <p v-if="characterData.damage_vulnerabilities">
-        <span class="font-bold">Damage Vulnerabilities</span> {{ characterData.damage_vulnerabilities }}
+      <p v-if="characterData.damage_vulnerabilities" class="mb-1">
+        <span class="font-weight-bold">Damage Vulnerabilities</span> {{ characterData.damage_vulnerabilities }}
       </p>
     </div>
 
-    <div class="p-4">
+    <div class="pa-4">
       <template v-if="characterData.special_abilities">
         <p v-for="(specialAbility, index) in characterData.special_abilities" :key="`special-${index}`">
-          <span class="font-bold">{{ specialAbility.name }}.</span> {{ specialAbility.desc }}
+          <span class="font-weight-bold">{{ specialAbility.name }}.</span> {{ specialAbility.desc }}
         </p>
       </template>
 
       <template v-if="characterData.actions.length > 0">
-        <h3 class="CharacterDetails-sectionHeadline">Actions</h3>
+        <h3>Actions</h3>
+        <v-divider class="my-2"></v-divider>
         <p v-for="(action, index) in characterData.actions" :key="index" class="mb-3">
-          <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
+          <span class="font-weight-bold">{{ action.name }}.</span> {{ action.desc }}
         </p>
       </template>
 
       <template v-if="characterData.legendary_actions.length > 0">
-        <h3 class="CharacterDetails-sectionHeadline">Legendary Actions</h3>
+        <h3>Legendary Actions</h3>
+        <v-divider class="my-2"></v-divider>
         <p>The {{ characterData.name }} can take 3 legendary actions, choosing from the options below. Only one
           legendary action option can be used at a time and only at the end of another creature's turn. The {{
           characterData.name }} regains spent legendary actions at the start of its turn.</p>
         <p v-for="(action, index) in characterData.legendary_actions" :key="`legendary-${index}`">
-          <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
+          <span class="font-weight-bold">{{ action.name }}.</span> {{ action.desc }}
         </p>
       </template>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script lang='ts'>
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
 import { Character } from '@/classes/Character';
-import { stringModifier as calculateStringModifier } from '@/utils/dnd';
+import { stringModifier } from '@/utils/dnd';
 import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
 import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
 import { CharacterAttributes } from '@/types/characterAttributes';
@@ -104,33 +106,30 @@ export default class CharacterDetails extends Vue {
   @Prop({ type: Object, required: true }) public characterData!: Character;
   @Prop({ type: Boolean, default: false }) public isWide!: boolean;
 
+  private character!: Character;
 
-  public speedString: string = '';
+  public created() {
+    this.character = new Character(this.characterData);
+  }
+
+  public beforeUpdate() {
+    this.character = new Character(this.characterData);
+  }
 
   public stringModifier(abilityScore: number): number | string {
-    return calculateStringModifier(abilityScore);
+    return stringModifier(abilityScore);
   }
 
   public get statsArray() {
     return CharacterAttributes;
   }
 
-  @Watch('characterData.speed', { immediate: true, deep: true })
-  public updateSpeedString(speedObj: object) {
-    const keys = Object.keys(speedObj);
-    this.speedString = keys.reduce((acc, current)  => {
-      const value = speedObj[current];
-      if (value > 0) {
-        return acc !== '' ? `${acc}, ${value}ft (${current})` : `${value}ft (${current})`;
-      }
-      return acc;
-    }, '');
+  public getDescription(): string {
+return this.character.getDescription();
+  }
+
+  public getSpeedString(): string {
+    return this.character.getSpeedString();
   }
 }
 </script>
-
-<style lang="scss">
-  .CharacterDetails-sectionHeadline {
-    @apply mt-8 text-gray-500 text-base;
-  }
-</style>
