@@ -1,9 +1,8 @@
 <template>
-  <v-card>
-    <div class="grey lighten-5">
-
-    <v-card-title class="font-weight-light">{{ characterData.name }}</v-card-title>
-    <v-card-subtitle class="caption">{{ getDescription() }}</v-card-subtitle>
+  <v-card class="CharacterDetails" outlined>
+    <div class="CharacterDetails-title">
+      <v-card-title class="font-weight-medium">{{ characterData.name }}</v-card-title>
+      <v-card-subtitle class="caption">{{ getDescription() }}</v-card-subtitle>
     </div>
 
 
@@ -38,23 +37,23 @@
       <p class="mb-1">
         <span class="font-weight-bold">Speed</span> {{ getSpeedString() }}
       </p>
-      <p v-if="characterData.senses" class="mb-1">
-        <span class="font-weight-bold">Senses</span> {{ characterData.senses }}
+      <p class="mb-1">
+        <span class="font-weight-bold">Senses</span> {{ characterData.senses || "&mdash;" }}
       </p>
-      <p v-if="characterData.languages" class="mb-1">
-        <span class="font-weight-bold">Languages</span> {{ characterData.languages }}
+      <p class="mb-1">
+        <span class="font-weight-bold">Languages</span> {{ characterData.languages || "&mdash;" }}
       </p>
-      <p v-if="characterData.challenge_rating" class="mb-1">
-        <span class="font-weight-bold">Challenge Rating</span> {{ characterData.challenge_rating }}
+      <p class="mb-1">
+        <span class="font-weight-bold">Challenge Rating</span> {{ characterData.challenge_rating || "&mdash;" }}
       </p>
-      <p v-if="characterData.damage_immunities" class="mb-1">
-        <span class="font-weight-bold">Damage Immunities</span> {{ characterData.damage_immunities }}
+      <p class="mb-1">
+        <span class="font-weight-bold">Damage Immunities</span> {{ characterData.damage_immunities || "&mdash;" }}
       </p>
-      <p v-if="characterData.damage_resistances" class="mb-1">
-        <span class="font-weight-bold">Damage Resistances</span> {{ characterData.damage_resistances }}
+      <p class="mb-1">
+        <span class="font-weight-bold">Damage Resistances</span> {{ characterData.damage_resistances || "&mdash;" }}
       </p>
-      <p v-if="characterData.damage_vulnerabilities" class="mb-1">
-        <span class="font-weight-bold">Damage Vulnerabilities</span> {{ characterData.damage_vulnerabilities }}
+      <p class="mb-1">
+        <span class="font-weight-bold">Damage Vulnerabilities</span> {{ characterData.damage_vulnerabilities || "&mdash;" }}
       </p>
     </div>
 
@@ -125,7 +124,7 @@ export default class CharacterDetails extends Vue {
   }
 
   public getDescription(): string {
-return this.character.getDescription();
+    return this.character.getDescription();
   }
 
   public getSpeedString(): string {
@@ -133,3 +132,9 @@ return this.character.getDescription();
   }
 }
 </script>
+
+<style lang="scss">
+.CharacterDetails-title {
+  border-top: 4px solid #488fef;
+}
+</style>
