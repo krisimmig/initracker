@@ -139,4 +139,16 @@
 </script>
 
 <style lang="scss">
+.CharacterHealthBar {
+  border-radius: 3px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  transition: background-color 100ms ease-in-out;
+}
+
+.CharacterHealthBar:hover {
+  background-color: rgba(0,0,0,0.1);
+}
 </style>

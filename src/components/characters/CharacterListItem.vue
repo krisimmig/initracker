@@ -1,6 +1,7 @@
 <template>
   <div
     v-if="npc"
+    class="CharacterListItem"
     :class="{ 'is-active': isActive, 'is-selected': isSelected }"
     @click.stop="showInDetail"
   >
@@ -103,5 +104,26 @@ export default class CharacterListItem extends Vue {
 </script>
 
 <style lang="scss">
+.CharacterListItem {
+  cursor: pointer;
+}
 
+.CharacterListItem h2 {
+  padding-left: .3rem;
+  padding-right: .3rem;
+}
+
+.CharacterListItem.is-active h2,
+.CharacterListItem.is-active.is-selected h2,
+.CharacterListItem.is-selected h2 {
+  display: inline-block;
+  background: #488fef;
+  border-radius: 3px;
+  color: #e2ebf1;
+}
+
+.CharacterListItem.is-selected h2 {
+  background: #d4dff1;
+  color: #041833;
+}
 </style>
