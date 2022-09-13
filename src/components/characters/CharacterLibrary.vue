@@ -1,55 +1,52 @@
 <template>
-  <v-card class="CharactersLibrary d-flex">
-    <v-card-text>
+  <v-sheet class="CharactersLibrary" style="height: 85vh;">
+    <v-app-bar flat>
+      <v-toolbar-title><v-icon>mdi-account-group</v-icon> Character library</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click.stop="$emit('closeClicked')"><v-icon>mdi-close</v-icon></v-btn>
+    </v-app-bar>
+
+    <div class="d-flex pa-4">
       <v-row>
-        <v-col cols="4">
-          <div class="bg-white p-4 border-b">
-            <label class="Form-label block mb-1">Search category</label>
-            <Button
-              @click="switchTab('monsters')"
-              :is-secondary="showType !== 'monsters'"
-            >
-              Monsters
-            </Button>
-            <Button
-              :is-secondary="showType !== 'characters'"
-              @click="switchTab('characters')"
-            >
-              Characters
-            </Button>
-
-            <div class="Form mt-2">
-              <FormInput
-                label="Name"
-                v-model="searchString"
-                placeholder="Search monsters & characters by name"
-              />
-            </div>
+        <v-col cols="6">
+          <div>
+            <p class="">Search category</p>
+            <v-btn @click="switchTab('monsters')">Monsters</v-btn>
+            <v-btn @click="switchTab('characters')">Characters</v-btn>
+            <v-text-field
+              label="Search"
+              v-model="searchString"
+              clearable
+              placeholder="Search monsters & characters by name"
+            />
           </div>
 
-          <div ref="monsterList" @scroll="onScroll">
-            <ul v-if="filteredNpcs.length > 0" class="u-listReset">
-              <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
-                <div v-if="index < maxVisible">
-                  <CharacterTeaser :characterData="npc" @click.native="characterPreviewSelected(npc)">
-                    <v-btn @click="$emit('characterClicked', npc)">{{ buttonText }}</v-btn>
-                  </CharacterTeaser>
-                </div>
-              </li>
-            </ul>
-
-            <p v-else class="u-tip" v-html="noResultsText"></p>
-
-          </div>
+          <v-virtual-scroll
+            bench="10"
+            :items="filteredNpcs"
+            height="calc(85vh - 242px)"
+            item-height="95"
+          >
+            <template v-slot:default="{ item }">
+              <CharacterTeaser :characterData="item" @click.native="characterPreviewSelected(item)">
+                <v-btn @click="$emit('characterClicked', item)" outlined class="mr-4">
+                  {{ buttonText }}
+                </v-btn>
+              </CharacterTeaser>
+              <v-divider class="mt-2" />
+            </template>
+          </v-virtual-scroll>
         </v-col>
 
         <v-col>
-          <CharacterDetails v-if="previewCharacter" :characterData="previewCharacter" />
-          <p class="u-tip" v-else>Click on a character name to see details here.</p>
+          <div style="height: calc(85vh - 96px); overflow-y: scroll;">
+            <CharacterDetails v-if="previewCharacter" :characterData="previewCharacter" />
+            <v-alert type="info" v-else>Select a character from the list on the lieft to see its info card here.</v-alert>
+          </div>
         </v-col>
       </v-row>
-    </v-card-text>
-  </v-card>
+    </div>
+  </v-sheet>
 </template>
 
 <script lang="ts">
@@ -102,7 +99,7 @@ export default class CharacterLibrary extends Vue {
   }
 
   get filteredNpcs() {
-    if (this.searchString === '') {
+    if (!this.searchString) {
       return this.npcs;
     }
 

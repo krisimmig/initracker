@@ -1,5 +1,5 @@
 <template>
-Update styling  <div class="mb-3">
+  <div class="mb-3">
     <v-card
       hover
       v-if="!isEditingName"

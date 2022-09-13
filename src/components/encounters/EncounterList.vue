@@ -15,10 +15,11 @@
           <v-icon left>mdi-account-multiple-plus</v-icon>
           Add
         </v-btn>
-        <v-dialog v-model="showCharacterLibrary">
+        <v-dialog v-model="showCharacterLibrary" max-width="80vw">
           <CharacterLibrary
             :encounterId="$route.params.encounterId"
             @characterClicked="handleCharClicked"
+            @closeClicked="showCharacterLibrary = false"
             buttonText="Add"
           />
         </v-dialog>
@@ -226,6 +227,8 @@ export default class EncounterList extends Vue {
 
   public handleCharClicked(npcData) {
     if (!this.$route.params.encounterId) { return; }
+
+    this.$toast(`Added ${npcData.name}`);
     dispatchAddNpcToEncounter(this.$store, {
       npcData: Object.assign({}, npcData),
       encounterId: this.$route.params.encounterId,

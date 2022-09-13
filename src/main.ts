@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VTooltip from 'v-tooltip';
+import VuetifyToast from 'vuetify-toast-snackbar'
 import 'normalize.css';
 
 import '@/instance-props';
@@ -9,11 +10,13 @@ import store from '@/store';
 import { firebase } from '@/store/firebase';
 
 import { dispatchLoginUser } from '@/store/usersModule';
-import vuetify from './plugins/vuetify'
+import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false;
 
 Vue.use(VTooltip);
+Vue.use(VuetifyToast);
+
 
 Vue.prototype.$fireLoginUi = null;
 

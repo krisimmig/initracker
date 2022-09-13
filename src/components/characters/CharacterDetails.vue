@@ -2,7 +2,7 @@
   <v-card class="CharacterDetails" outlined>
     <div class="CharacterDetails-title">
       <v-card-title class="font-weight-medium">{{ characterData.name }}</v-card-title>
-      <v-card-subtitle class="caption">{{ getDescription() }}</v-card-subtitle>
+      <v-card-subtitle class="caption pb-1">{{ getDescription() }}</v-card-subtitle>
     </div>
 
 
@@ -13,26 +13,26 @@
           :key="index"
         >
           <p class="text-uppercase mb-0 font-weight-bold">{{ statValue }}</p>
-          <p class="m-0 mt-1">
+          <p class="ma-0 my-2">
             {{ characterData[statName.toLowerCase()] }}
             <span class="text-gray-600 text-xs">{{ stringModifier(characterData[statName.toLowerCase()]) }}</span>
           </p>
         </div>
       </div>
 
-      <v-divider class="my-2"></v-divider>
-      <div class="d-flex justify-space-between">
+      <v-divider class="my-2" />
+      <div class="d-flex">
         <div class="d-flex align-center">
           <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
           <p class="mb-0 ml-2 font-weight-bold"><v-icon>mdi-dice-multiple</v-icon> {{ characterData.hit_dice }}</p>
         </div>
-        <div class="d-flex align-center">
+        <div class="d-flex align-center ml-6">
           <CharacterArmorClass :armorClass="characterData.armor_class" />
           <p class="mb-0 ml-2" v-if="characterData.armor_desc">{{ characterData.armor_desc }}</p>
           <p class="mb-0 ml-2 font-weight-bold" v-else>Armor Class</p>
         </div>
       </div>
-      <v-divider class="my-2"></v-divider>
+      <v-divider class="my-2" />
 
       <p class="mb-1">
         <span class="font-weight-bold">Speed</span> {{ getSpeedString() }}
@@ -66,7 +66,7 @@
 
       <template v-if="characterData.actions.length > 0">
         <h3>Actions</h3>
-        <v-divider class="my-2"></v-divider>
+        <v-divider class="mb-2" />
         <p v-for="(action, index) in characterData.actions" :key="index" class="mb-3">
           <span class="font-weight-bold">{{ action.name }}.</span> {{ action.desc }}
         </p>
@@ -74,7 +74,7 @@
 
       <template v-if="characterData.legendary_actions.length > 0">
         <h3>Legendary Actions</h3>
-        <v-divider class="my-2"></v-divider>
+        <v-divider class="mb-2" />
         <p>The {{ characterData.name }} can take 3 legendary actions, choosing from the options below. Only one
           legendary action option can be used at a time and only at the end of another creature's turn. The {{
           characterData.name }} regains spent legendary actions at the start of its turn.</p>

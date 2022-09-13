@@ -8,8 +8,9 @@
       <CharacterArmorClass :armorClass="npc.armor_class" />
       <div>
         <h2 class="text-h6">
-          <span class="grey--text">{{ npc.initiative }}</span>
-          {{ npc.name }}</h2>
+          <span class="grey--text pr-2">{{ npc.initiative }}</span>
+          <span :class="{ 'text-decoration-line-through grey--text': npc.hit_points_current <= 0 }">{{ npc.name }}</span>
+        </h2>
         <p class="caption mb-0">{{ description }}</p>
       </div>
 
@@ -40,12 +41,14 @@
     </div>
 
     <div>
-      <CharacterHealthBar
-        :uuid="npc.uuid"
-        :name="npc.name"
-        :hp="npc.hit_points_current"
-        :maxHp="npc.hit_points"
-      />
+      <v-hover>
+        <CharacterHealthBar
+          :uuid="npc.uuid"
+          :name="npc.name"
+          :hp="npc.hit_points_current"
+          :maxHp="npc.hit_points"
+        />
+      </v-hover>
       <CharacterConditions :uuid="npc.uuid" :condition="npcConditions" />
     </div>
   </div>
