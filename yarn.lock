@@ -6915,10 +6915,10 @@ vuetify-loader@^1.7.0:
     file-loader "^6.2.0"
     loader-utils "^2.0.0"
 
-vuetify-toast-snackbar@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/vuetify-toast-snackbar/-/vuetify-toast-snackbar-0.6.1.tgz#a90d93c5b1aae3411d7d297f5ee00934fa6952dc"
-  integrity sha512-F2bLPMXiw7qQgX68adSu0zQrMTKODN5JAzCP8AP/HGhz/Bz1z24QbvYcX0fyHnG/yP6PAPkpMCXsLQSq6HV0Ag==
+vuetify-toast-snackbar-ng@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/vuetify-toast-snackbar-ng/-/vuetify-toast-snackbar-ng-0.7.5.tgz#f3866d992d54908e3b04fcc304b1f5527a516d4d"
+  integrity sha512-Az4Y9NWQErOjzS7v1kyQKJvYZqumTOArNN354bqicDTPyrYTe/DCTSC8ZxV3D2Jaoe1/Yj+xs5UUK3iq3kLjOA==
 
 vuetify@^2.6.0:
   version "2.6.9"
