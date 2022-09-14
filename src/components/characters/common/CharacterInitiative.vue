@@ -11,10 +11,10 @@
           placeholder="Enter inititive"
           type="number"
           v-model.number="manuelInitiative"
-          @keyup.enter="setInititive"
+          @keyup.enter="setInitiative"
           class="Form-bigInput"
         >
-        <v-btn is-big @click="setInititive">Set initiative</v-btn>
+        <v-btn is-big @click="setInitiative">Set initiative</v-btn>
       </v-card>
     </v-dialog>
 
@@ -42,7 +42,7 @@ export default class NpcInitiative extends Vue {
   @Prop({ required: true, type: String }) private uuid!: string;
   @Prop({ required: true, type: Number }) private initiative!: number;
 
-  public setInititive() {
+  public setInitiative() {
     const encounterId = readGetEncountersCurrentId(this.$store);
     if (!encounterId) { return; }
 

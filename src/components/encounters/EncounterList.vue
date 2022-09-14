@@ -228,7 +228,7 @@ export default class EncounterList extends Vue {
   public handleCharClicked(npcData) {
     if (!this.$route.params.encounterId) { return; }
 
-    this.$toast.info(`Added ${npcData.name}`);
+    this.$toast(`Added ${npcData.name}`);
     dispatchAddNpcToEncounter(this.$store, {
       npcData: Object.assign({}, npcData),
       encounterId: this.$route.params.encounterId,
