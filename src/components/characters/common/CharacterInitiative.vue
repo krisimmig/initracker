@@ -1,40 +1,42 @@
 <template>
-  <div class="NpcInitiative">
+  <v-dialog v-model="showInitiativeInput" max-width="350px">
+    <template v-slot:activator="{ on, attrs }">
+      <v-list-item
+        v-bind="attrs"
+        v-on="on"
+      >
+        Set initiative
+      </v-list-item>
+    </template>
 
-    <span @click="showInitiativeInput = true" class="NpcInitiative-wrapper">
-      Set Initiative
-    </span>
-
-    <v-dialog v-if="showInitiativeInput">
-      <v-card>
-        <input
-          placeholder="Enter inititive"
-          type="number"
-          v-model.number="manuelInitiative"
-          @keyup.enter="setInitiative"
-          class="Form-bigInput"
-        >
-        <v-btn is-big @click="setInitiative">Set initiative</v-btn>
-      </v-card>
-    </v-dialog>
-
-  </div>
+    <v-card>
+      <v-app-bar flat>
+        <v-toolbar-title>Set initiative</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon @click.stop="showInitiativeInput = false"><v-icon>mdi-close</v-icon></v-btn>
+      </v-app-bar>
+      <v-card-text>
+        <div class="d-flex align-baseline mt-4">
+          <v-text-field
+            placeholder="Enter initiative"
+            type="number"
+            v-model.number="manuelInitiative"
+            @keyup.enter="setInitiative"
+          />
+          <v-btn @click="setInitiative" class="ml-4">Set initiative</v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import DialogueBox from '@/components/common/DialogueBox.vue';
 import { readGetEncountersCurrentId } from '@/store/encountersModule';
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
-import Button from '@/components/common/Button.vue';
 
-@Component({
-  components: {
-    Button,
-    DialogueBox,
-  },
-})
+@Component
 export default class NpcInitiative extends Vue {
   public showInitiativeInput: boolean = false;
   public manuelInitiative: number = 0;
