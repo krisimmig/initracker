@@ -14,14 +14,12 @@
 </template>
 
 <script lang="ts">
+import firebase from 'firebase/compat/app';
+import * as firebaseui from 'firebaseui'
+import 'firebaseui/dist/firebaseui.css'
+
 import { Component, Vue } from 'vue-property-decorator';
 import PageTitle from '@/components/common/PageTitle.vue';
-
-// tslint:disable-next-line:no-var-requires
-const firebaseui = require('firebaseui');
-// tslint:disable-next-line:no-var-requires
-const firebase = require('firebase');
-
 
 @Component({
   components: {
@@ -31,6 +29,7 @@ const firebase = require('firebase');
 export default class Npc extends Vue {
   public mounted() {
     const uiConfig = {
+      signInFlow: 'popup',
       signInSuccessUrl: '/',
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID,

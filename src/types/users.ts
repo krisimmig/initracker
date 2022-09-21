@@ -4,5 +4,5 @@ export interface LoginCredentials {
 }
 
 export interface UserState {
-  user: firebase.User | null;
+  user: any;
 }
