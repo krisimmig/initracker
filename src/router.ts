@@ -121,7 +121,6 @@ const router = new Router({
 
 router.beforeEach((to: Route, from: Route, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-  console.log('requiresAuth', requiresAuth);
 
   if (requiresAuth && !isLoggedIn()) {
     next({ name: 'login', query: { redirect: to.name as string } });
