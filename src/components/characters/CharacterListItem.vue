@@ -17,7 +17,7 @@
 
       <v-spacer />
 
-      <v-menu bottom left>
+      <v-menu bottom left :close-on-content-click="true">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
@@ -45,7 +45,7 @@
           :maxHp="npc.hit_points"
         />
       </v-hover>
-      <CharacterConditions :uuid="npc.uuid" :condition="npcConditions" />
+      <CharacterConditions :uuid="npc.uuid" :conditions="npcConditions" />
     </div>
   </div>
 </template>

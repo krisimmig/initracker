@@ -23,12 +23,12 @@
         <v-card-text>
           <div class="my-4 d-flex align-baseline">
             <v-text-field
-                v-model="hitPointChangeAmount"
-                hide-details
-                type="number"
-                class="mx-3"
-                label="Amount"
-                min="0"
+              v-model="hitPointChangeAmount"
+              hide-details
+              type="number"
+              class="mx-3"
+              label="Amount"
+              min="0"
             />
 
             <v-btn class="mx-1" :disabled="hitPointChangeAmount < 10" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount) - 10">

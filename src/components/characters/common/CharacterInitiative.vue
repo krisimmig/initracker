@@ -18,6 +18,7 @@
       <v-card-text>
         <div class="d-flex align-baseline mt-4">
           <v-text-field
+            min="1"
             placeholder="Enter initiative"
             type="number"
             v-model.number="manuelInitiative"
@@ -39,7 +40,7 @@ import { dispatchUpdateInitiative } from '@/store/npcsModule';
 @Component
 export default class NpcInitiative extends Vue {
   public showInitiativeInput: boolean = false;
-  public manuelInitiative: number = 0;
+  public manuelInitiative: number = 1;
 
   @Prop({ required: true, type: String }) private uuid!: string;
   @Prop({ required: true, type: Number }) private initiative!: number;
@@ -54,6 +55,7 @@ export default class NpcInitiative extends Vue {
       newInitiative: this.manuelInitiative,
     });
 
+    this.manuelInitiative = 0;
     this.showInitiativeInput = false;
   }
 }
