@@ -1,30 +1,32 @@
+import 'normalize.css';
 import Vue from 'vue';
 import VTooltip from 'v-tooltip';
 import VuetifyToast from 'vuetify-toast-snackbar-ng';
-import 'normalize.css';
+import PerfectScrollbar from 'vue2-perfect-scrollbar'
+import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
 
 import '@/instance-props';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
-import { firebase } from '@/store/firebase';
-
-import { dispatchLoginUser } from '@/store/usersModule';
 import vuetify from './plugins/vuetify';
+import { firebase } from '@/store/firebase';
+import { dispatchLoginUser } from '@/store/usersModule';
 
 Vue.config.productionTip = false;
 
+Vue.use(PerfectScrollbar)
 Vue.use(VTooltip);
 Vue.use(VuetifyToast);
 
-Vue.prototype.$fireLoginUi = null;
+// Vue.prototype.$fireLoginUi = null;
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     dispatchLoginUser(store, user);
   }
 
-  const vueApp = new Vue({
+  new Vue({
     el: '#app',
     router,
     store,

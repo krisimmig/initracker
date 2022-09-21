@@ -49,22 +49,23 @@
       </div>
     </div>
 
-    <v-sheet
+      <v-sheet
       v-if="npcs.length > 0"
       elevation="3"
       rounded
       shaped
-      class="pa-4"
     >
-      <div v-for="(npc, index) in npcs" :key="index">
-        <v-divider v-if="index > 0" class="my-4"></v-divider>
-        <CharacterListItem
-          :npc="npc"
-          :isActive="currentNpcIndex - 1 === index"
-          :removable="true"
-          @remove="removeNpcFromEncounter(npc.uuid)"
-        />
-      </div>
+      <perfect-scrollbar class="pa-4 pr-6">
+        <div v-for="(npc, index) in npcs" :key="index">
+          <v-divider v-if="index > 0" class="my-4"></v-divider>
+          <CharacterListItem
+            :npc="npc"
+            :isActive="currentNpcIndex - 1 === index"
+            :removable="true"
+            @remove="removeNpcFromEncounter(npc.uuid)"
+          />
+        </div>
+      </perfect-scrollbar>
     </v-sheet>
 
     <v-alert type="info" v-if="npcs.length === 0">
@@ -239,4 +240,7 @@ export default class EncounterList extends Vue {
 </script>
 
 <style lang="scss">
+.Encounter .ps {
+  height: calc(100vh - 185px);
+}
 </style>

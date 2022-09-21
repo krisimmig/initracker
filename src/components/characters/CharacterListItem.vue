@@ -8,7 +8,7 @@
     <div class="d-flex align-center">
       <CharacterArmorClass :armorClass="npc.armor_class" />
       <div>
-        <h2 class="text-h6">
+        <h2 class="CharacterListItem-name text-h6">
           <span class="grey--text pr-2">{{ npc.initiative }}</span>
           <span :class="{ 'text-decoration-line-through grey--text': npc.hit_points_current <= 0 }">{{ npc.name }}</span>
         </h2>
@@ -105,22 +105,28 @@ export default class CharacterListItem extends Vue {
   cursor: pointer;
 }
 
-.CharacterListItem h2 {
+.CharacterListItem-name {
+  display: inline-block;
+  position: relative;
   padding-left: .3rem;
   padding-right: .3rem;
 }
 
-.CharacterListItem.is-active h2,
-.CharacterListItem.is-active.is-selected h2,
-.CharacterListItem.is-selected h2 {
-  display: inline-block;
-  background: #488fef;
-  border-radius: 3px;
-  color: #e2ebf1;
+.CharacterListItem.is-active .CharacterListItem-name:after,
+.CharacterListItem.is-active.is-selected .CharacterListItem-name:after,
+.CharacterListItem.is-selected .CharacterListItem-name:after {
+  content: "";
+  position: absolute;
+  display: block;
+  background: #1f7bf3;
+  border-radius: 2rem;
+  right: -0.5rem;
+  top: 0.7em;
+  width: 0.4rem;
+  height: 0.4rem;
 }
 
-.CharacterListItem.is-selected h2 {
-  background: #d4dff1;
-  color: #041833;
+.CharacterListItem.is-selected .CharacterListItem-name:after {
+  background: #8fb3e1;
 }
 </style>
