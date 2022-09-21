@@ -15,9 +15,7 @@ import vuetify from './plugins/vuetify';
 Vue.config.productionTip = false;
 
 Vue.use(VTooltip);
-Vue.use(VuetifyToast, {
-  closeIcon: 'mdi-close',
-});
+Vue.use(VuetifyToast);
 
 Vue.prototype.$fireLoginUi = null;
 
