@@ -3,7 +3,7 @@
     <AppBar />
 
     <v-main class="grey lighten-5">
-      <v-container>
+      <v-container :fluid="$route.meta.isFullWidth">
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -33,10 +33,3 @@ export default class App extends Vue {
   }
 }
 </script>
-
-<style>
-header.MainMenu a {
-  text-decoration: none;
-  color: white;
-}
-</style>

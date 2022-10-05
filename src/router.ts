@@ -93,6 +93,7 @@ const router = new Router({
       component: EncounterDetails,
       meta: {
         requiresAuth: true,
+        isFullWidth: true,
       },
     },
 
