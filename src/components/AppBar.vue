@@ -3,102 +3,102 @@
     app
     color="primary lighten-1"
     flat
-    class="MainMenu"
+    class="AppBar"
   >
-  <template v-if="isLoggedIn">
+    <template v-if="isLoggedIn">
 
-    <v-toolbar-title><router-link :to="{ name: 'home' }">YAIT</router-link></v-toolbar-title>
+      <v-toolbar-title><router-link :to="{ name: 'home' }">YAIT</router-link></v-toolbar-title>
 
-    <v-btn
-        color="white"
-        text
-        rounded
-        class="ml-4 my-2"
-    >
       <router-link :to="{ name: 'encounters' }">
-        <v-icon>mdi-format-list-bulleted-square</v-icon>
-        Encounters
+        <v-btn
+          color="white"
+          text
+          rounded
+          class="ml-4 my-2"
+        >
+          <v-icon>mdi-format-list-bulleted-square</v-icon>
+          Encounters
+        </v-btn>
       </router-link>
-    </v-btn>
 
-    <v-btn
-        color="white"
-        text
-        rounded
-        class="my-2"
-    >
       <router-link :to="{ name: 'characters' }">
-        <v-icon>mdi-account-group</v-icon>
-        Characters
+        <v-btn
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          <v-icon>mdi-account-group</v-icon>
+          Characters
+        </v-btn>
       </router-link>
-    </v-btn>
 
-    <v-btn
-        color="white"
-        text
-        rounded
-        class="my-2"
-    >
       <router-link :to="{ name: 'feedback' }">
-        <v-icon>mdi-message-alert</v-icon>
-        Feedback
+        <v-btn
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          <v-icon>mdi-message-alert</v-icon>
+          Feedback
+        </v-btn>
       </router-link>
-    </v-btn>
 
-    <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
 
-    <v-btn
-        color="white"
-        text
-        rounded
-        class="my-2"
-    >
       <router-link :to="{ name: 'userdetails' }">
-        <v-icon>mdi-account-circle</v-icon>
-        {{ currentUserString }}
+        <v-btn
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          <v-icon>mdi-account-circle</v-icon>
+          {{ currentUserString }}
+        </v-btn>
       </router-link>
-    </v-btn>
 
-    <v-btn
-        color="white"
-        text
-        rounded
-        class="my-2"
-    >
-      <a class="" href="#" @click="logoutUser">
-        <v-icon>mdi-logout-variant</v-icon>
-        Logout
+      <a href="#" @click="logoutUser">
+        <v-btn
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          <v-icon>mdi-logout-variant</v-icon>
+          Logout
+        </v-btn>
       </a>
-    </v-btn>
 
-  </template>
+    </template>
 
-  <template v-else>
-    <v-btn
-        color="white"
-        text
-        rounded
-        class="my-2"
-    >
+    <template v-else>
       <router-link :to="{ name: 'home' }">
-        <v-icon>mdi-home</v-icon>
-        Home
+        <v-btn
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          <v-icon>mdi-home</v-icon>
+          Home
+        </v-btn>
       </router-link>
-    </v-btn>
 
-    <v-btn
-      color="white"
-      text
-      rounded
-      class="my-2"
-    >
       <router-link :to="{ name: 'login' }">
-        <v-icon>mdi-login</v-icon>
-        Login
+        <v-btn
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          <v-icon>mdi-login</v-icon>
+          Login
+        </v-btn>
       </router-link>
-    </v-btn>
 
-  </template>
+    </template>
   </v-app-bar>
 </template>
 
@@ -122,3 +122,10 @@ export default class App extends Vue {
   }
 }
 </script>
+
+<style>
+header.AppBar a {
+  text-decoration: none;
+  color: white;
+}
+</style>
