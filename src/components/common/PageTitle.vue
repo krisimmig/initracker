@@ -1,11 +1,7 @@
 <template>
-  <div class="bg-gray-300 mb-6">
-    <div class="u-container-fluid">
-      <div class="PageTitle py-3">
-        <h1 class="h3 inline-block mr-4 mb-0">{{ title }}</h1>
-        <p class="inline italic text-gray-600" v-if="subtitle">{{ subtitle }}</p>
-      </div>
-    </div>
+  <div class="py-3">
+    <h1 class="text-h4 text-md-h2 mb-0">{{ title }}</h1>
+    <p class="text-subtitle-1" v-if="subtitle">{{ subtitle }}</p>
   </div>
 </template>
 
