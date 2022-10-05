@@ -1,7 +1,7 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 
-import { arrayRemove, arrayUnion } from '@/utils/firebaseUtils';
+import { arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from '@/store/firebase';
 import { RootState } from '@/store/index';
 import { readUserUid } from '@/store/usersModule';
