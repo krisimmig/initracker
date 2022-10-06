@@ -12,7 +12,7 @@
             <EncounterTeaser v-bind="encounter" />
           </li>
         </ul>
-        <p v-else class="u-tip">Nothing here yet, please create a new encounter on the right</p>
+        <v-alert v-else type="info" outlined>Nothing here yet, please create a new encounter on the right</v-alert>
       </v-col>
 
       <v-col>
