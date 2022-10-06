@@ -235,7 +235,6 @@ export default class EncounterList extends Vue {
       encounterId: this.$route.params.encounterId,
     });
   }
-
 }
 </script>
 

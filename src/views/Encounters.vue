@@ -1,6 +1,6 @@
 <template>
   <div class="Encounters">
-    <PageTitle title="Encounters list" subtitle="These are all your encounters." />
+    <PageTitle title="Encounters" subtitle="These are all your encounters" />
 
     <v-row>
       <v-col>
@@ -12,10 +12,10 @@
             <EncounterTeaser v-bind="encounter" />
           </li>
         </ul>
-        <v-alert v-else type="info" outlined>Nothing here yet, please create a new encounter on the right</v-alert>
+        <v-alert v-else type="info" outlined>Nothing here yet, please create a new encounter on the right.</v-alert>
       </v-col>
 
-      <v-col>
+      <v-col cols="4">
         <EncounterNew />
       </v-col>
     </v-row>

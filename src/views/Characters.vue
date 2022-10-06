@@ -1,52 +1,65 @@
 <template>
   <div class="Characters">
     <PageTitle
-      title="My monsters and characters."
-      subtitle="create or edit your own monsters and characters."
+      title="Characters"
+      subtitle="Create or edit your own monsters and characters"
     />
 
-    <div class="u-container-fluid">
-      <div class="flex">
-        <div class="Characters-myCharacters w-1/2 mt-3 mr-3">
-          <div class="card border-b">
-            <h4>Create a new monster or character</h4>
-            <p>Create a character from scratch starting with a basic <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}">character sheet</router-link>.</p>
-            <div class="w-1/2">
-              <Button is-big is-success>
-                <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}">
-                  start new character
-                </router-link>
-              </Button>
-            </div>
-          </div>
-          <div class="CharactersLibrary-scrollBox u-scrollBoxParent">
-            <div class="u-scrollBoxChild">
-              <ul class="divide-y divide-gray-300 border-b" v-if="characters.length > 0">
-            <li
-              v-for="character in characters"
-              :key="character.uuid"
+    <v-row>
+      <v-col>
+        <template v-if="characters.length > 0">
+          <v-card
+            hover
+            v-for="character in characters"
+            :key="character.uuid"
+            class="pa-4 mb-3"
+          >
+            <CharacterTeaser
+              :character-data="character"
+              @click.native ="handleTeaserActioned(character)"
             >
-              <CharacterTeaser
-                :character-data="character"
-                @click.native ="handleTeaserActioned(character)"
-              >
-                <Button @click="handleTeaserActioned(character)">Edit</Button>
-              </CharacterTeaser>
-            </li>
-          </ul>
-            </div>
-          </div>
-        </div>
+              <v-btn plain @click="handleTeaserActioned(character)">
+                <v-icon left>mdi-pencil</v-icon>
+                Edit
+              </v-btn>
+            </CharacterTeaser>
+          </v-card>
+        </template>
+        <v-alert outlined type="info" v-else>No custom characters found.</v-alert>
+      </v-col>
 
-        <div class="Characters-library w-1/2 mt-3 mr-4 bg-white">
-          <div class="card pb-0">
-            <h4>Existing characters</h4>
-            <p>You can choose an existing character from the list below as your base.</p>
-          </div>
-          <CharacterLibrary @characterClicked="handleCharacterClicked" buttonText="Use as base" class="Characters-library" />
-        </div>
-      </div>
-    </div>
+      <v-col cols="4">
+        <v-card>
+          <v-card-text class="text-body-1 text-center">
+            <p>Create a new character from scratch:</p>
+            <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}" style="text-decoration: none; color: inherit;">
+              <v-btn color="primary">
+                <v-icon left>mdi-account-plus</v-icon>
+                 New character sheet
+              </v-btn>
+            </router-link>
+            <div class="d-flex my-4 align-center">
+              <v-divider />
+              <span class="px-4 font-weight-bold">or</span>
+              <v-divider />
+            </div>
+            <p>Base your new character on an existing one from the library:</p>
+            <v-btn @click="showCharacterLibrary = true" color="primary">
+              <v-icon left>mdi-account-multiple-plus</v-icon>
+              Open library
+            </v-btn>
+          </v-card-text>
+          <v-dialog v-model="showCharacterLibrary" max-width="80vw">
+            <CharacterLibrary
+                :encounterId="$route.params.encounterId"
+                @characterClicked="handleCharacterClicked"
+                @closeClicked="showCharacterLibrary = false"
+                buttonText="Use"
+            />
+          </v-dialog>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -70,6 +83,7 @@ import Button from '@/components/common/Button.vue';
   },
 })
 export default class Characters extends Vue {
+  public showCharacterLibrary: boolean = false;
 
   public get characters(): Character[] {
     return readGetCharacters(this.$store);
@@ -84,7 +98,6 @@ export default class Characters extends Vue {
   }
 
   public handleTeaserActioned(characterData) {
-    console.log('handleTeaserActioned');
     this.$router.push({ name: 'editCharacter', params: { uuid: characterData.uuid }});
   }
 
