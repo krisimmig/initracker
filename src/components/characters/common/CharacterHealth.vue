@@ -12,10 +12,7 @@
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import DialogueBox from '@/components/common/DialogueBox.vue';
 import SvgIcon from '@/components/common/SvgIcon.vue';
-import { readGetEncountersCurrentId } from '@/store/encountersModule';
-import { dispatchUpdateHitPointCurrent } from '@/store/npcsModule';
 
 @Component({
   components: {

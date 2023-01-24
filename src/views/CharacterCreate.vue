@@ -5,12 +5,10 @@
       subtitle="Here you can create or edit an existing character."
     />
 
-    <div class="u-container-fluid">
-      <div v-if="!isLoading">
-        <CharacterBuilder :character="character" />
-      </div>
-      <div v-else class="u-tip">Loading..</div>
+    <div v-if="!isLoading">
+      <CharacterBuilder :character="character" />
     </div>
+    <v-alert type="info" v-else>Loading..</v-alert>
   </div>
 </template>
 

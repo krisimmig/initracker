@@ -76,17 +76,10 @@
 <script lang='ts'>
   import { Component, Prop, Vue } from 'vue-property-decorator';
 
-  import DialogueBox from '@/components/common/DialogueBox.vue';
   import { readGetEncountersCurrentId } from '@/store/encountersModule';
   import { dispatchUpdateHitPointCurrent } from '@/store/npcsModule';
-  import Button from '@/components/common/Button.vue';
 
-  @Component({
-    components: {
-      Button,
-      DialogueBox,
-    },
-  })
+  @Component
   export default class CharacterHealthBar extends Vue {
     public showDialog: boolean = false;
     public hitPointChangeAmount: number = 0;

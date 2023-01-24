@@ -66,13 +66,13 @@ export class Character {
         }
       });
 
-      // If a monster has no legendary actions the variable is just an empty string, the next lines fix that.
+      // If a monster has no legendary actions the variable is just an empty string, the next lines fixes that.
       // @ts-ignore
       if (defaultCharacter.legendary_actions === '') {
         defaultCharacter.legendary_actions = [];
       }
 
-      // If a monster has no special actions the variable is just an empty string, the next lines fix that.
+      // If a monster has no special actions the variable is just an empty string, the next lines fixes that.
       // @ts-ignore
       if (defaultCharacter.special_abilities === '') {
         defaultCharacter.special_abilities = [];

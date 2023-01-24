@@ -7,14 +7,9 @@
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import PageTitle from '@/components/common/PageTitle.vue';
 
-@Component({
-  components: {
-    PageTitle,
-  },
-})
-export default class  extends Vue {
+@Component
+export default class PageTitle extends Vue {
   @Prop({ required: true, type: String }) private title!: string;
   @Prop({ required: false, type: String }) private subtitle!: string;
 }

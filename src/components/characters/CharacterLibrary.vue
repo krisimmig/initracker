@@ -57,8 +57,7 @@ import { readGetNpcs } from '@/store/npcsModule';
 import { Character } from '@/classes/Character';
 import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersModule';
 import FormInput from '@/components/form/FormInput.vue';
-import { commitSetNpcInDetail, dispatchAddNpcToEncounter, readGetEncountersCurrentId } from '@/store/encountersModule';
-import Button from '@/components/common/Button.vue';
+import { readGetEncountersCurrentId } from '@/store/encountersModule';
 import CharacterDetails from "@/components/characters/CharacterDetails.vue";
 
 const searchTypes = {
@@ -68,7 +67,6 @@ const searchTypes = {
 
 @Component({
   components: {
-    Button,
     CharacterDetails,
     CharacterTeaser,
     FormInput,
@@ -114,6 +112,7 @@ export default class CharacterLibrary extends Vue {
     return readGetEncountersCurrentId(this.$store);
   }
 
+  // TODO: Check if this is still needed.
   public onScroll() {
     const htmlElement = this.$refs.monsterList as HTMLElement;
     const scrollPos = htmlElement.scrollHeight - htmlElement.scrollTop;

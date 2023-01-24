@@ -99,14 +99,12 @@ import {
 import { dispatchUpdateInitiative } from '@/store/npcsModule';
 import CharacterListItem from '@/components/characters/CharacterListItem.vue';
 import { modifierWithSign } from '@/utils/dnd';
-import DialogueBox from "@/components/common/DialogueBox.vue";
 import CharacterLibrary from "@/components/characters/CharacterLibrary.vue";
 
 @Component({
   components: {
     CharacterListItem,
     Encounter: EncounterList,
-    DialogueBox,
     CharacterLibrary,
   },
 })

@@ -27,14 +27,12 @@ import {
 import EncounterList from '@/components/encounters/EncounterList.vue';
 import CharacterLibrary from '@/components/characters/CharacterLibrary.vue';
 import CharacterDetails from '@/components/characters/CharacterDetails.vue';
-import DialogueBox from "@/components/common/DialogueBox.vue";
 
 @Component({
   components: {
     EncounterList,
     CharacterLibrary,
     CharacterDetails,
-    DialogueBox,
   },
 })
 export default class EncounterDetails extends Vue {

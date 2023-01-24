@@ -1,5 +1,3 @@
-import { Character } from '@/classes/Character';
-
 export interface IEncounterEntity {
   id: string;
   name: string;
