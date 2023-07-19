@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div>
-      <v-btn color="success" @click="saveCharacter" :disabled="!hasChanged">Save</v-btn>
+    <div class="mb-4">
+      <v-btn color="success" @click="saveCharacter" :disabled="!hasChanged" class="mr-2">Save</v-btn>
       <v-btn color="error" v-if="!isNewCharacter" @click="deleteCharacter">Delete</v-btn>
     </div>
 
