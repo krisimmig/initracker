@@ -10,7 +10,15 @@
 
     <v-col>
       <CharacterDetails v-if="selectedCharacter" :characterData="selectedCharacter" />
-      <p class="u-tip" v-else>Click on a character name to see details here.</p>
+      <v-alert
+        v-else
+        dense
+        outlined
+        type="info"
+        class="mt-8"
+      >
+        Click on a <b>character name</b> to see details here.
+      </v-alert>
     </v-col>
   </v-row>
 </template>
