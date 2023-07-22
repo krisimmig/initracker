@@ -94,14 +94,14 @@ export class Character {
     }
   }
 
-  public getDescription(): string {
-    return `${this.size} ${this.alignment} ${this.type} with CR of ${this.challenge_rating}`;
+  public static getDescription(characterData): string {
+    return `${characterData.size} ${characterData.alignment} ${characterData.type} with CR of ${characterData.challenge_rating}`;
   }
 
-  public getSpeedString(): string {
-    const keys = Object.keys(this.speed);
+  public static  getSpeedString(characterData): string {
+    const keys = Object.keys(characterData.speed);
     return keys.reduce((acc, current)  => {
-      const value = this.speed[current];
+      const value = characterData.speed[current];
       if (value > 0) {
         return acc !== '' ? `${acc}, ${value}ft (${current})` : `${value}ft (${current})`;
       }

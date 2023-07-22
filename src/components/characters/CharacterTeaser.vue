@@ -55,18 +55,13 @@
   })
   export default class CharacterTeaser extends Vue {
     @Prop({ type: Object, required: true }) public characterData!: Character;
-    private character!: Character;
-
-    created() {
-      this.character = new Character(this.characterData);
-    }
 
     public get encounterId() {
       return readGetEncountersCurrentId(this.$store);
     }
 
     public get description() {
-      return this.character.getDescription();
+      return Character.getDescription(this.characterData);
     }
 
     public addToEncounter() {

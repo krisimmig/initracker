@@ -107,16 +107,6 @@ export default class CharacterDetails extends Vue {
   @Prop({ type: Object, required: true }) public characterData!: Character;
   @Prop({ type: Boolean, default: false }) public isWide!: boolean;
 
-  private character!: Character;
-
-  public created() {
-    this.character = new Character(this.characterData);
-  }
-
-  public beforeUpdate() {
-    this.character = new Character(this.characterData);
-  }
-
   public stringModifier(abilityScore: number): number | string {
     return stringModifier(abilityScore);
   }
@@ -126,11 +116,11 @@ export default class CharacterDetails extends Vue {
   }
 
   public getDescription(): string {
-    return this.character.getDescription();
+    return Character.getDescription(this.characterData);
   }
 
   public getSpeedString(): string {
-    return this.character.getSpeedString();
+    return Character.getSpeedString(this.characterData);
   }
 }
 </script>

@@ -133,7 +133,7 @@
       </v-col>
 
       <v-col>
-        <CharacterDetails :characterData="character"/>
+        <CharacterDetails :characterData="character" />
       </v-col>
     </v-row>
   </div>

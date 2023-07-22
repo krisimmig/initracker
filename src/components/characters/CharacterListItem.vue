@@ -94,8 +94,7 @@ export default class CharacterListItem extends Vue {
   }
 
   public get description() {
-    const npc = new Character(this.npc);
-    return npc.getDescription();
+    return Character.getDescription(this.npc);
   }
 }
 </script>
