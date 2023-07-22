@@ -89,7 +89,7 @@
 </template>
 
 <script lang='ts'>
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import { Character } from '@/classes/Character';
 import { stringModifier } from '@/utils/dnd';
