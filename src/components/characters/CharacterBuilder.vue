@@ -55,75 +55,29 @@
             <v-text-field v-model="character.damage_vulnerabilities" hint="e.g. bludgeoning, fire" label="Damage Vulnerabilities" />
           </form>
 
-          <form class="Form">
-            <h3>Special Abilities</h3>
-            <div
-              class="CharacterBuilder-removable"
-              v-for="(specialAbility, index) in character.special_abilities"
-              :key="`special-${index}`"
-            >
-              <Collapsable>
-                <template v-slot:title>
-                  <p class="CharacterBuilder-actionTitle">{{ specialAbility.name }}</p>
-                </template>
+          <CharacterBuilderAbilities
+              title="Special Abilites"
+              type="special_abilities"
+              :abilities="character.special_abilities"
+              @addAbility="onAddAbility"
+              @removeAbility="onRemoveAbility"
+          />
 
-                <template v-slot:content>
-                  <v-text-field v-model="specialAbility.name" label="Name" />
-                  <v-textarea v-model="specialAbility.desc" label="Description" />
-                  <v-btn color="error" @click="removeSpecialAbility(index)">- Remove {{ specialAbility.name }}</v-btn>
-                </template>
-              </Collapsable>
-            </div>
-            <div>
-              <v-btn @click="addSpecialAbility">+ Add ability</v-btn>
-            </div>
-          </form>
+          <CharacterBuilderAbilities
+              title="Actions"
+              type="actions"
+              :abilities="character.actions"
+              @addAbility="onAddAbility"
+              @removeAbility="onRemoveAbility"
+          />
 
-          <form class="Form">
-            <h3>Actions</h3>
-            <div
-              class="CharacterBuilder-removable"
-              v-for="(action, index) in character.actions"
-              :key="`action${index}`"
-            >
-              <Collapsable>
-                <template v-slot:title>
-                  <p class="CharacterBuilder-actionTitle">{{ action.name }}</p>
-                </template>
-
-                <template v-slot:content>
-                  <v-text-field v-model="action.name" label="Name" />
-                  <v-textarea v-model="action.desc" label="Description" />
-                  <v-btn color="error" @click="removeAction(index)">- Remove {{ action.name }}</v-btn>
-                </template>
-              </Collapsable>
-            </div>
-            <div>
-              <v-btn @click="addAction">+ Add action</v-btn>
-            </div>
-          </form>
-
-          <form class="Form">
-            <h3>Legendary Actions</h3>
-            <div
-              class="CharacterBuilder-removable"
-              v-for="(legendaryAction, index) in character.legendary_actions"
-              :key="`legendary-${index}`"
-            >
-              <Collapsable>
-                <template v-slot:title>
-                  <p class="CharacterBuilder-actionTitle">{{ legendaryAction.name }}</p>
-                </template>
-
-                <template v-slot:content>
-                  <v-text-field v-model="legendaryAction.name" label="Name" />
-                  <v-textarea v-model="legendaryAction.desc" label="Description" />
-                  <v-btn color="error" @click="removeLegendaryAction(index)">- Remove {{ legendaryAction.name }}</v-btn>
-                </template>
-              </Collapsable>
-            </div>
-            <v-btn @click="addLegendaryAction">+ Add legendary action</v-btn>
-          </form>
+          <CharacterBuilderAbilities
+              title="Legendary Actions"
+              type="legendary_actions"
+              :abilities="character.legendary_actions"
+              @addAbility="onAddAbility"
+              @removeAbility="onRemoveAbility"
+          />
 
           <div>
             <v-btn @click="saveCharacter" :disabled="!hasChanged">Save</v-btn>
@@ -152,9 +106,11 @@ import Collapsable from '@/components/common/Collapsable.vue';
 import { CharacterRaces } from '@/types/characterRaces';
 import CharacterAlignments from '@/types/characterAlignments';
 import CharacterSizes from '@/types/characterSizes';
+import CharacterBuilderAbilities from "@/components/characters/CharacterBuilderAbilities.vue";
 
 @Component({
   components: {
+    CharacterBuilderAbilities,
     CharacterDetails,
     Collapsable,
   },
@@ -193,37 +149,15 @@ export default class CharacterBuilder extends Vue {
     await this.$router.push({name: 'characters'});
   }
 
-  public addLegendaryAction() {
-    this.character.legendary_actions.push({
-      name: 'Name',
+  public onAddAbility({ type }:{ type: string}) {
+    this.character[type].push({
+      name: `New ${type.replace('_', ' ')}`,
       desc: 'Description',
     });
   }
 
-  public removeLegendaryAction(index) {
-    this.character.legendary_actions.splice(index, 1);
-  }
-
-  public addSpecialAbility() {
-    this.character.special_abilities.push({
-      name: 'Name',
-      desc: 'Description',
-    });
-  }
-
-  public removeSpecialAbility(index) {
-    this.character.special_abilities.splice(index, 1);
-  }
-
-  public addAction() {
-    this.character.actions.push({
-      name: 'Name',
-      desc: 'Description',
-    });
-  }
-
-  public removeAction(index) {
-    this.character.actions.splice(index, 1);
+  public onRemoveAbility({ type, index }: { type: string, index: number }) {
+    this.character[type].splice(index, 1);
   }
 
   public mounted() {
