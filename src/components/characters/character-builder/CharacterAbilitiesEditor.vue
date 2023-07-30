@@ -6,7 +6,7 @@
       <CharacterAbilityDialogue @change="handleChangeEvent($event)">
         <template #button>
           <v-btn color="primary" text>
-            <v-icon left>mdi-plus</v-icon> Add ability
+            <v-icon left>mdi-plus</v-icon> Add
           </v-btn>
         </template>
       </CharacterAbilityDialogue>

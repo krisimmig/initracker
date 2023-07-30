@@ -76,10 +76,20 @@ export default class CharacterAbilityDialogue extends Vue {
   }
 
   remove() {
-    this.dialog = false;
-    this.$emit('change', {
-      remove: true,
-    });
+    const options = {
+      message: 'Are you sure you want to delete this ability?',
+      options: {
+        color: 'error',
+      },
+    };
+    this.$root.$confirm(options).then((result) => {
+      if(result) {
+        this.dialog = false;
+        this.$emit('change', {
+          remove: true,
+        });
+      }
+    })
   }
 }
 </script>

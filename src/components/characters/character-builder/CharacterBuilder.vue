@@ -56,16 +56,16 @@
           </form>
 
           <CharacterAbilitiesEditor
-              title="Actions"
-              type="actions"
-              :abilities="character.actions"
+              title="Special abilites"
+              type="special_abilities"
+              :abilities="character.special_abilities"
               @change="handleChange"
           />
 
           <CharacterAbilitiesEditor
-              title="Special abilites"
-              type="special_abilities"
-              :abilities="character.special_abilities"
+              title="Actions"
+              type="actions"
+              :abilities="character.actions"
               @change="handleChange"
           />
 
@@ -140,8 +140,18 @@ export default class CharacterBuilder extends Vue {
   }
 
   public async deleteCharacter() {
-    await dispatchDeleteCharacter(this.$store, { characterUuid: this.character.uuid });
-    await this.$router.push({name: 'characters'});
+    const options = {
+      message: 'Are you sure you want to delete this character?',
+      options: {
+        color: 'error',
+      },
+    };
+    this.$root.$confirm(options).then(async (result) => {
+      if(result) {
+        await dispatchDeleteCharacter(this.$store, { characterUuid: this.character.uuid });
+        await this.$router.push({name: 'characters'});
+      }
+    })
   }
 
   public handleChange(payload) {
