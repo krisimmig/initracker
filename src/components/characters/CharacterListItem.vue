@@ -45,6 +45,7 @@
           :maxHp="npc.hit_points"
         />
       </v-hover>
+
       <CharacterConditions :uuid="npc.uuid" :conditions="npcConditions" />
     </div>
   </div>

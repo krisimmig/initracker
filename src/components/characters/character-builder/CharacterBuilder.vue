@@ -55,34 +55,29 @@
             <v-text-field v-model="character.damage_vulnerabilities" hint="e.g. bludgeoning, fire" label="Damage Vulnerabilities" />
           </form>
 
-          <CharacterBuilderAbilities
-              title="Special Abilites"
-              type="special_abilities"
-              :abilities="character.special_abilities"
-              @addAbility="onAddAbility"
-              @removeAbility="onRemoveAbility"
-          />
-
-          <CharacterBuilderAbilities
+          <CharacterAbilitiesEditor
               title="Actions"
               type="actions"
               :abilities="character.actions"
-              @addAbility="onAddAbility"
-              @removeAbility="onRemoveAbility"
+              @change="handleChange"
           />
 
-          <CharacterBuilderAbilities
-              title="Legendary Actions"
+          <CharacterAbilitiesEditor
+              title="Special abilites"
+              type="special_abilities"
+              :abilities="character.special_abilities"
+              @change="handleChange"
+          />
+
+          <CharacterAbilitiesEditor
+              title="Legendary actions"
               type="legendary_actions"
               :abilities="character.legendary_actions"
-              @addAbility="onAddAbility"
-              @removeAbility="onRemoveAbility"
+              @change="handleChange"
           />
 
-          <div>
-            <v-btn @click="saveCharacter" :disabled="!hasChanged">Save</v-btn>
-            <v-btn v-if="!isNewCharacter" @click="deleteCharacter">Delete</v-btn>
-          </div>
+          <v-btn color="error" v-if="!isNewCharacter" @click="deleteCharacter">Delete</v-btn>
+          <v-btn class="ml-4" @click="saveCharacter" :disabled="!hasChanged">Save</v-btn>
         </v-sheet>
       </v-col>
 
@@ -106,11 +101,11 @@ import Collapsable from '@/components/common/Collapsable.vue';
 import { CharacterRaces } from '@/types/characterRaces';
 import CharacterAlignments from '@/types/characterAlignments';
 import CharacterSizes from '@/types/characterSizes';
-import CharacterBuilderAbilities from "@/components/characters/CharacterBuilderAbilities.vue";
+import CharacterAbilitiesEditor from "@/components/characters/character-builder/CharacterAbilitiesEditor.vue";
 
 @Component({
   components: {
-    CharacterBuilderAbilities,
+    CharacterAbilitiesEditor,
     CharacterDetails,
     Collapsable,
   },
@@ -149,15 +144,24 @@ export default class CharacterBuilder extends Vue {
     await this.$router.push({name: 'characters'});
   }
 
-  public onAddAbility({ type }:{ type: string}) {
-    this.character[type].push({
-      name: `New ${type.replace('_', ' ')}`,
-      desc: 'Description',
-    });
-  }
+  public handleChange(payload) {
+    const abilities = [...this.character[payload.type]];
 
-  public onRemoveAbility({ type, index }: { type: string, index: number }) {
-    this.character[type].splice(index, 1);
+    if(payload.remove) {
+      abilities.splice(payload.index, 1);
+      Vue.set(this.character, payload.type, abilities);
+      return;
+    }
+
+    const newAbility = { name: payload.name, desc: payload.desc };
+
+    if(payload.new) {
+      abilities.push(newAbility);
+    } else {
+      abilities[payload.index] = newAbility;
+    }
+
+    Vue.set(this.character, payload.type, abilities);
   }
 
   public mounted() {

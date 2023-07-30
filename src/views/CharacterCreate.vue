@@ -13,9 +13,9 @@
 </template>
 
 <script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 
-import CharacterBuilder from '@/components/characters/CharacterBuilder.vue';
+import CharacterBuilder from '@/components/characters/character-builder/CharacterBuilder.vue';
 import PageTitle from '@/components/common/PageTitle.vue';
 
 import {

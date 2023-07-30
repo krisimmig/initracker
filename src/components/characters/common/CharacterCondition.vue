@@ -91,8 +91,8 @@ export default class NpcConditions extends Vue {
   public npcConditions: ICondition[] = conditionList;
   public selectedCondition: ICondition | null = null;
 
-  @Prop({ required: true, type: String }) private uuid!: string;
-  @Prop({ required: true, type: Array }) private conditions!: string[];
+  @Prop() uuid!: string;
+  @Prop() conditions!: string[];
 
   public addCondition(conditionId) {
     const encounterId = readGetEncountersCurrentId(this.$store);

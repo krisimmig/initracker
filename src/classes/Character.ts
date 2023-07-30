@@ -4,7 +4,6 @@ import { mergeWith, isNull } from 'lodash';
 import CreatureTypes from '@/types/creatureTypes';
 import CharacterAlignments from '@/types/characterAlignments';
 import CharacterSizes from '@/types/characterSizes';
-import { ICondition } from '@/types/conditionTypes';
 import { CharacterRaces } from '@/types/characterRaces';
 
 type CharacterType = CreatureTypes | CharacterRaces;
@@ -15,7 +14,7 @@ interface ICharacterAbility {
 }
 
 export class Character {
-  public conditions: ICondition[] = [];
+  public conditions: string[] = [];
   public actions: ICharacterAbility[] = [];
   public alignment: string = CharacterAlignments.NeutralGood;
   public armor_class: number = 10;
