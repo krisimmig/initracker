@@ -27,7 +27,7 @@ export const characterBuilderModule = {
 
   getters: {
     getCharacter(state: CharacterBuilderState) {
-      return state.character;
+      return new Character(state.character);
     },
 
     getIsLoading(state: CharacterBuilderState) {

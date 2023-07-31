@@ -89,7 +89,7 @@
 </template>
 
 <script lang='ts'>
-import { isEqual, clone } from 'lodash';
+import { isEqual } from 'lodash';
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { $enum } from 'ts-enum-util';
 
@@ -122,6 +122,12 @@ export default class CharacterBuilder extends Vue {
     this.$emit('change', !isEqual(this.originalCharacter, this.character));
   }
 
+  @Watch('originalCharacter', { deep: true })
+  public onOriginalCharacterChange() {
+    console.log('onOriginalCharacterChange', !isEqual(this.originalCharacter, this.character), this.originalCharacter, this.character);
+    this.$emit('change', !isEqual(this.originalCharacter, this.character));
+  }
+
   public get hasChanged() {
     return !isEqual(this.originalCharacter, this.character);
   }
@@ -141,7 +147,7 @@ export default class CharacterBuilder extends Vue {
 
   public saveCharacter(): void {
     dispatchSaveCharacter(this.$store, { character: this.character }).then((event) => {
-      this.originalCharacter = clone(this.character);
+      this.originalCharacter = new Character(this.character);
       this.isNewCharacter = false;
     });
   }
@@ -183,7 +189,8 @@ export default class CharacterBuilder extends Vue {
   }
 
   public mounted() {
-    this.originalCharacter = clone(this.character);
+    console.log('mounted');
+    this.originalCharacter = new Character(this.character);
     this.isNewCharacter = !!this.$route.query.new;
   }
 }
