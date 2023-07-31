@@ -1,4 +1,5 @@
 import 'normalize.css';
+import './class-component-hooks';
 import Vue from 'vue';
 import VTooltip from 'v-tooltip';
 import VuetifyToast from 'vuetify-toast-snackbar-ng';

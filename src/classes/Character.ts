@@ -82,7 +82,6 @@ export class Character {
     } else {
       this.id = this.name;
       this.hit_points_current = this.hit_points;
-      this.uuid = uuid();
       this.speed = {
         walk: 30,
         swim: 10,

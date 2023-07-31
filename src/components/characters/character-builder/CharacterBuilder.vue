@@ -59,21 +59,21 @@
               title="Special abilites"
               type="special_abilities"
               :abilities="character.special_abilities"
-              @change="handleChange"
+              @change="handleAbilityChange"
           />
 
           <CharacterAbilitiesEditor
               title="Actions"
               type="actions"
               :abilities="character.actions"
-              @change="handleChange"
+              @change="handleAbilityChange"
           />
 
           <CharacterAbilitiesEditor
               title="Legendary actions"
               type="legendary_actions"
               :abilities="character.legendary_actions"
-              @change="handleChange"
+              @change="handleAbilityChange"
           />
 
           <v-btn color="error" v-if="!isNewCharacter" @click="deleteCharacter">Delete</v-btn>
@@ -90,7 +90,7 @@
 
 <script lang='ts'>
 import { isEqual, clone } from 'lodash';
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { $enum } from 'ts-enum-util';
 
 import { Character } from '@/classes/Character';
@@ -116,6 +116,12 @@ export default class CharacterBuilder extends Vue {
   public originalCharacter: Character | null = null;
   public isNewCharacter = false;
 
+  @Watch('character', { deep: true })
+  public onCharacterChange() {
+    console.log('onCharacterChange', !isEqual(this.originalCharacter, this.character), this.originalCharacter, this.character);
+    this.$emit('change', !isEqual(this.originalCharacter, this.character));
+  }
+
   public get hasChanged() {
     return !isEqual(this.originalCharacter, this.character);
   }
@@ -134,8 +140,9 @@ export default class CharacterBuilder extends Vue {
   }
 
   public saveCharacter(): void {
-    dispatchSaveCharacter(this.$store, { character: this.character }).then(() => {
-      this.originalCharacter = { ...this.character };
+    dispatchSaveCharacter(this.$store, { character: this.character }).then((event) => {
+      this.originalCharacter = clone(this.character);
+      this.isNewCharacter = false;
     });
   }
 
@@ -146,15 +153,16 @@ export default class CharacterBuilder extends Vue {
         color: 'error',
       },
     };
-    this.$root.$confirm(options).then(async (result) => {
+
+    this.$root.$confirm(options).then((result) => {
       if(result) {
-        await dispatchDeleteCharacter(this.$store, { characterUuid: this.character.uuid });
-        await this.$router.push({name: 'characters'});
+        dispatchDeleteCharacter(this.$store, { characterUuid: this.character.uuid });
+        this.$router.push({name: 'characters'});
       }
     })
   }
 
-  public handleChange(payload) {
+  public handleAbilityChange(payload) {
     const abilities = [...this.character[payload.type]];
 
     if(payload.remove) {

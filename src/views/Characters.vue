@@ -32,7 +32,7 @@
         <v-card>
           <v-card-text class="text-body-1 text-center">
             <p>Create a new character from scratch:</p>
-            <router-link :to="{ name: 'characterBuilder', query: { new: 1 }}" style="text-decoration: none; color: inherit;">
+            <router-link :to="{ name: 'characterBuilder', query: { new: true }}" style="text-decoration: none; color: inherit;">
               <v-btn color="primary">
                 <v-icon left>mdi-account-plus</v-icon>
                  New character sheet
