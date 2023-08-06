@@ -1,53 +1,110 @@
-<template>
-  <v-sheet class="CharactersLibrary" style="height: 85vh;">
+<template >
+  <v-sheet
+      class="CharactersLibrary"
+      style="height: 85vh;"
+  >
     <v-app-bar flat>
-      <v-toolbar-title><v-icon>mdi-account-group</v-icon> Character library</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon @click.stop="$emit('closeClicked')"><v-icon>mdi-close</v-icon></v-btn>
-    </v-app-bar>
+      <v-toolbar-title >
+        <v-icon class="mr-2 mb-2">mdi-account-group</v-icon >
+        Character library
+      </v-toolbar-title >
+      <v-spacer ></v-spacer >
+      <v-btn
+          icon
+          @click.stop="$emit('closeClicked')"
+      >
+        <v-icon >mdi-close</v-icon >
+      </v-btn >
+    </v-app-bar >
 
     <div class="d-flex pa-4">
-      <v-row>
+      <v-row >
         <v-col cols="6">
-          <div>
-            <p class="">Search category</p>
-            <v-btn @click="switchTab('monsters')">Monsters</v-btn>
-            <v-btn @click="switchTab('characters')">Characters</v-btn>
+          <div >
+            <div class="d-flex align-center">
+              <v-icon class="mr-2">mdi-filter</v-icon >
+              <v-btn
+                  @click="switchTab('all')"
+                  class="mr-2"
+                  text
+                  :color="showType === 'all' ? 'primary' : ''"
+              >
+                All
+              </v-btn >
+              <v-btn
+                  @click="switchTab('monsters')"
+                  class="mr-2"
+                  text
+                  :color="showType === 'monsters' ? 'primary' : ''"
+              >
+                Monsters
+              </v-btn >
+              <v-btn
+                  @click="switchTab('characters')"
+                  text
+                  :color="showType === 'characters' ? 'primary' : ''"
+              >
+                Custom Characters
+              </v-btn >
+            </div >
             <v-text-field
-              label="Search"
-              v-model="searchString"
-              clearable
-              placeholder="Search monsters & characters by name"
+                label="Search by name"
+                v-model="searchString"
+                prepend-icon="mdi-account-search"
+                clearable
             />
-          </div>
+          </div >
 
           <v-virtual-scroll
-            bench="10"
-            :items="filteredNpcs"
-            height="calc(85vh - 242px)"
-            item-height="95"
+              bench="10"
+              :items="filteredNpcs"
+              height="calc(85vh - 205px)"
+              item-height="95"
           >
             <template v-slot:default="{ item }">
-              <CharacterTeaser :characterData="item" @click.native="characterPreviewSelected(item)">
-                <v-btn @click="$emit('characterClicked', item)" outlined class="mr-4">
-                  {{ buttonText }}
-                </v-btn>
-              </CharacterTeaser>
-              <v-divider class="mt-2" />
-            </template>
-          </v-virtual-scroll>
-        </v-col>
+              <CharacterTeaser
+                  :characterData="item"
+                  @click.native="characterPreviewSelected(item)"
+              >
+                <v-btn
+                    small
+                    outlined
+                    color="primary"
+                    class="mr-4"
+                >
+                  Preview
+                </v-btn >
+              </CharacterTeaser >
+              <v-divider class="mt-2"/>
+            </template >
+          </v-virtual-scroll >
+        </v-col >
 
-        <v-col>
-          <div style="height: calc(85vh - 96px); overflow-y: scroll;">
-            <CharacterDetails v-if="previewCharacter" :characterData="previewCharacter" />
-            <v-alert type="info" v-else>Select a character from the list on the lieft to see its info card here.</v-alert>
-          </div>
-        </v-col>
-      </v-row>
-    </div>
-  </v-sheet>
-</template>
+        <v-col >
+          <div
+              v-if="previewCharacter"
+              class="CharacterPreview"
+          >
+            <v-btn
+                @click="$emit('characterClicked', previewCharacter)"
+                color="primary"
+                depressed
+                class="CharacterPreview-addButton mr-4"
+            >
+              {{ buttonText }}
+            </v-btn >
+            <CharacterDetails :characterData="previewCharacter"/>
+          </div >
+          <v-alert
+              type="info"
+              v-else
+          >Select a character on the left.
+          </v-alert >
+        </v-col >
+      </v-row >
+    </div >
+  </v-sheet >
+</template >
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -61,6 +118,7 @@ import { readGetEncountersCurrentId } from '@/store/encountersModule';
 import CharacterDetails from "@/components/characters/CharacterDetails.vue";
 
 const searchTypes = {
+  ALL: 'all',
   MONSTERS: 'monsters',
   CHARACTERS: 'characters',
 };
@@ -73,39 +131,40 @@ const searchTypes = {
   },
 })
 export default class CharacterLibrary extends Vue {
-  @Prop({ type: String, default: 'Add' }) public buttonText!: string;
+  @Prop({type: String, default: ''}) public buttonText!: string;
 
   public searchString: string = '';
   public maxVisible: number = 15;
-  public showType: string = searchTypes.MONSTERS;
-  public previewCharacter: Character|null = null;
+  public showType: string = searchTypes.ALL;
+  public previewCharacter: Character | null = null;
+
+  get noResultsText() {
+    return 'No characters found, you can create your own monsters and player-characters <a href="/characters">here</a>';
+  }
 
   get npcs() {
     if (this.showType === searchTypes.MONSTERS) {
       return readGetNpcs(this.$store);
-    }
-
-    return readGetCharacters(this.$store);
-  }
-
-  get noResultsText() {
-    if (this.showType === searchTypes.MONSTERS) {
-      return 'No monsters found, please add some here <a href="/characters">here</a>';
     } else if (this.showType === searchTypes.CHARACTERS) {
-      return 'No characters found, you can create your own monsters and player-characters <a href="/characters">here</a>';
+      return readGetCharacters(this.$store);
     }
+
+    return [...readGetNpcs(this.$store), ...readGetCharacters(this.$store)];
   }
 
   get filteredNpcs() {
     if (!this.searchString) {
       return this.npcs;
     }
-
     return this.npcs.filter((npc) => npc.name.toLowerCase().includes(this.searchString.toLowerCase()));
   }
 
   get characters(): Character[] {
     return readGetCharacters(this.$store);
+  }
+
+  get combinedCharacters(): Character[] {
+    return [...this.characters, ...readGetNpcs(this.$store)]
   }
 
   public get encounterId() {
@@ -136,18 +195,21 @@ export default class CharacterLibrary extends Vue {
     dispatchFetchCharacters(this.$store);
   }
 }
-</script>
+</script >
 
-<style scoped lang="scss">
-.CharactersLibrary-listScrollBox {
-  height: calc(100vh - 500px); // Adjust this value in the parent component
+<style lang="scss">
+.CharactersLibrary .CharacterDetails .ps {
+  max-height: calc(85vh - 100px);
 }
 
-.CharacterDetails-previewScrollBox {
-  height: calc(100vh - 303px); // Adjust this value in the parent component
+.CharacterPreview {
+  position: relative;
 }
 
-.CharactersLibrary-listItem:last-child {
-  border-bottom: 1px solid theme('colors.gray.300');
+.CharacterPreview-addButton {
+  position: absolute;
+  z-index: 100;
+  top: 1rem;
+  right: 0;
 }
-</style>
+</style >
