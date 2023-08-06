@@ -2,16 +2,16 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import { Route } from 'vue-router';
 
-import Home from '@/views/Home.vue';
-import Characters from '@/views/Characters.vue';
-import CharacterCreate from '@/views/CharacterCreate.vue';
-import Encounters from '@/views/Encounters.vue';
-import EncounterDetails from '@/views/EncounterDetails.vue';
-import Feedback from '@/views/Feedback.vue';
-import Login from '@/views/Login.vue';
-import Register from '@/views/Register.vue';
+import HomeView from '@/views/HomeView.vue';
+import CharactersView from '@/views/CharactersView.vue';
+import CharacterCreateView from '@/views/CharacterCreateView.vue';
+import EncountersView from '@/views/EncountersView.vue';
+import EncounterDetailsView from '@/views/EncounterDetailsView.vue';
+import FeedbackView from '@/views/FeedbackView.vue';
+import LoginView from '@/views/LoginView.vue';
+import RegisterView from '@/views/RegisterView.vue';
+import UserDetailsView from '@/views/UserDetailsView.vue';
 import { isLoggedIn } from '@/store/firebase';
-import UserDetails from '@/views/UserDetails.vue';
 
 Vue.use(Router);
 
@@ -25,7 +25,7 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: HomeView,
       meta: {
         requiresAuth: false,
       },
@@ -34,7 +34,7 @@ const router = new Router({
     {
       path: '/user',
       name: 'userdetails',
-      component: UserDetails,
+      component: UserDetailsView,
       meta: {
         requiresAuth: true,
       },
@@ -43,7 +43,7 @@ const router = new Router({
     {
       path: '/characters',
       name: 'characters',
-      component: Characters,
+      component: CharactersView,
       meta: {
         requiresAuth: true,
       },
@@ -52,7 +52,7 @@ const router = new Router({
     {
       path: '/characters/edit/:uuid',
       name: 'editCharacter',
-      component: CharacterCreate,
+      component: CharacterCreateView,
       meta: {
         requiresAuth: true,
         edit: true,
@@ -62,7 +62,7 @@ const router = new Router({
     {
       path: '/characters/builder',
       name: 'characterBuilder',
-      component: CharacterCreate,
+      component: CharacterCreateView,
       meta: {
         requiresAuth: true,
         new: true,
@@ -72,7 +72,7 @@ const router = new Router({
     {
       path: '/characters/builder/:characterId',
       name: 'characterCreate',
-      component: CharacterCreate,
+      component: CharacterCreateView,
       meta: {
         requiresAuth: true,
       },
@@ -81,7 +81,7 @@ const router = new Router({
     {
       path: '/encounters',
       name: 'encounters',
-      component: Encounters,
+      component: EncountersView,
       meta: {
         requiresAuth: true,
       },
@@ -90,7 +90,7 @@ const router = new Router({
     {
       path: '/encounters/:encounterId',
       name: 'encounterDetails',
-      component: EncounterDetails,
+      component: EncounterDetailsView,
       meta: {
         requiresAuth: true,
         isFullWidth: true,
@@ -100,7 +100,7 @@ const router = new Router({
     {
       path: '/feedback',
       name: 'feedback',
-      component: Feedback,
+      component: FeedbackView,
       meta: {
         requiresAuth: true,
       },
@@ -109,13 +109,13 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: LoginView,
     },
 
     {
       path: '/register',
       name: 'register',
-      component: Register,
+      component: RegisterView,
     },
   ],
 });
@@ -124,9 +124,9 @@ router.beforeEach((to: Route, from: Route, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   if (requiresAuth && !isLoggedIn()) {
-    next({ name: 'login', query: { redirect: to.name as string } });
+    next({name: 'login', query: {redirect: to.name as string}});
   } else if (isLoggedIn() && ['login', 'register'].includes(to.name as string)) {
-    next({ name: 'home' });
+    next({name: 'home'});
   } else {
     next();
   }

@@ -27,7 +27,7 @@ export const characterBuilderModule = {
 
   getters: {
     getCharacter(state: CharacterBuilderState) {
-      return new Character(state.character);
+      return state.character;
     },
 
     getIsLoading(state: CharacterBuilderState) {
@@ -36,57 +36,57 @@ export const characterBuilderModule = {
   },
 
   mutations: {
-    setCharacter(state: CharacterBuilderState, { character }: { character: Character }) {
+    setCharacter(state: CharacterBuilderState, {character}: { character: Character }) {
       state.character = character;
     },
 
-    setLoading(state: CharacterBuilderState, { isLoading }: { isLoading: boolean }) {
+    setLoading(state: CharacterBuilderState, {isLoading}: { isLoading: boolean }) {
       state.isLoading = isLoading;
     },
   },
 
   actions: {
-    async fetchCharacterById(context: CharacterBuilderContext, { id }: { id: string }) {
-      commitSetLoading(context, { isLoading: true });
+    async fetchCharacterById(context: CharacterBuilderContext, {id}: { id: string }) {
+      commitSetLoading(context, {isLoading: true});
       const characterRef = db.collection('monsters').doc(id);
 
       characterRef.get().then((doc) => {
         if (doc.exists) {
           const characterData = doc.data() as Character;
           const character = new Character(characterData);
-          commitSetCharacter(context, { character });
-          commitSetLoading(context, { isLoading: false });
+          commitSetCharacter(context, {character});
+          commitSetLoading(context, {isLoading: false});
         } else {
           console.warn('No such document!');
-          commitSetLoading(context, { isLoading: false });
+          commitSetLoading(context, {isLoading: false});
         }
       }).catch((error) => {
         console.error('Error getting document:', error);
-        commitSetLoading(context, { isLoading: false });
+        commitSetLoading(context, {isLoading: false});
       });
     },
 
-    async fetchCharacterByUuid(context: CharacterBuilderContext, { characterUuid }: { characterUuid: string }) {
-      commitSetLoading(context, { isLoading: true });
+    async fetchCharacterByUuid(context: CharacterBuilderContext, {characterUuid}: { characterUuid: string }) {
+      commitSetLoading(context, {isLoading: true});
       const userUid = readUserUid(context);
       const characterRef = db.doc(`users/${userUid}/characters/${characterUuid}`);
 
       characterRef.get().then((doc) => {
         if (doc.exists) {
           const character = doc.data() as Character;
-          commitSetCharacter(context, { character });
-          commitSetLoading(context, { isLoading: false });
+          commitSetCharacter(context, {character});
+          commitSetLoading(context, {isLoading: false});
         } else {
           console.warn('No such document!');
-          commitSetLoading(context, { isLoading: false });
+          commitSetLoading(context, {isLoading: false});
         }
       }).catch((error) => {
         console.error('Error getting document:', error);
-        commitSetLoading(context, { isLoading: false });
+        commitSetLoading(context, {isLoading: false});
       });
     },
 
-    saveCharacter(context: CharacterBuilderContext, { character }: { character: Character}) {
+    saveCharacter(context: CharacterBuilderContext, {character}: { character: Character }) {
       let newCharacter = false;
       if (!character.uuid) {
         character.uuid = uuid();
@@ -96,14 +96,14 @@ export const characterBuilderModule = {
       const userUid = readUserUid(context);
       const characterRef = db.doc(`users/${userUid}/characters/${character.uuid}`);
 
-      characterRef.set({ ...character }, { merge: true });
+      characterRef.set({...character}, {merge: true});
 
       if (newCharacter) {
-        router.push({ name: 'editCharacter', params: { uuid: character.uuid }});
+        router.push({name: 'editCharacter', params: {uuid: character.uuid}});
       }
     },
 
-    async deleteCharacter(context: CharacterBuilderContext, { characterUuid }: { characterUuid: string }) {
+    async deleteCharacter(context: CharacterBuilderContext, {characterUuid}: { characterUuid: string }) {
       const userUid = readUserUid(context);
       return db.doc(`users/${userUid}/characters/${characterUuid}`).delete();
     },
