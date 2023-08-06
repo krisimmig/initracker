@@ -1,23 +1,28 @@
-<template>
-  <div>
-    <p>Register</p>
-    <div>
-      <label for="email">Email</label>
-      <input type="email" placeholder="name@mail.com" v-model="email">
-    </div>
+<template >
+  <div >
+    <p >Register</p >
+    <div >
+      <label for="email">Email</label >
+      <input
+          type="email"
+          placeholder="name@mail.com"
+          v-model="email"
+      >
+    </div >
 
-    <div>
-      <label for="password">Password</label>
-      <input type="password" v-model="password">
-    </div>
-    <button @click="submit">Submit</button>
-  </div>
-</template>
+    <div >
+      <label for="password">Password</label >
+      <input
+          type="password"
+          v-model="password"
+      >
+    </div >
+    <button @click="submit">Submit</button >
+  </div >
+</template >
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-
-// import { firebase } from '@/store/firebase';
+import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Register extends Vue {
@@ -34,7 +39,7 @@ export default class Register extends Vue {
     //   );
   }
 }
-</script>
+</script >
 
-<style>
-</style>
+<style >
+</style >
