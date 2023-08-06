@@ -29,19 +29,21 @@ export const charactersModule = {
     fetchCharacters(context: CharactersContext) {
       const userUid = readUserUid(context);
 
-      db.collection(`users/${userUid}/characters`).onSnapshot((data) => {
-        const characters: Character[] = data.docs.map((doc) => new Character(doc.data() as Character));
-        commitSetCharacters(context, { characters });
-      });
+      db.collection(`users/${userUid}/characters`)
+        .orderBy('meta.updatedAt', 'desc')
+        .onSnapshot((data) => {
+          const characters: Character[] = data.docs.map((doc) => new Character(doc.data() as Character));
+          commitSetCharacters(context, {characters});
+        });
     },
   },
 
   mutations: {
-    updateCharacters(state: CharactersState, { newChar }: { newChar: Character }) {
+    updateCharacters(state: CharactersState, {newChar}: { newChar: Character }) {
       state.characters.push(newChar);
     },
 
-    setCharacters(state: CharactersState, { characters }) {
+    setCharacters(state: CharactersState, {characters}) {
       state.characters = characters;
     },
   },

@@ -75,6 +75,7 @@ const router = new Router({
       component: CharacterCreateView,
       meta: {
         requiresAuth: true,
+        based: true,
       },
     },
 

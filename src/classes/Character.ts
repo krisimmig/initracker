@@ -1,10 +1,10 @@
-import uuid from 'uuid/v1';
-import { mergeWith, isNull } from 'lodash';
+import { isNull, mergeWith } from 'lodash';
 
 import CreatureTypes from '@/types/creatureTypes';
 import CharacterAlignments from '@/types/characterAlignments';
 import CharacterSizes from '@/types/characterSizes';
 import { CharacterRaces } from '@/types/characterRaces';
+import CharacterCategories from "@/types/characterCategories";
 
 type CharacterType = CreatureTypes | CharacterRaces;
 
@@ -54,6 +54,8 @@ export class Character {
   public uuid!: string;
   public id!: string;
   public initiative: number = 10;
+  public category: CharacterCategories = CharacterCategories.NPC;
+  public meta!: { createdAt: Date, updatedAt: Date };
 
   public constructor(data?: Character) {
     if (data) {
@@ -81,6 +83,12 @@ export class Character {
 
     } else {
       this.id = this.name;
+      this.category = CharacterCategories.Enemy;
+      this.meta = {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
       this.hit_points_current = this.hit_points;
       this.speed = {
         walk: 30,
@@ -96,14 +104,26 @@ export class Character {
     return `${characterData.size} ${characterData.alignment} ${characterData.type} with CR of ${characterData.challenge_rating}`;
   }
 
-  public static  getSpeedString(characterData): string {
+  public static getSpeedString(characterData): string {
     const keys = Object.keys(characterData.speed);
-    return keys.reduce((acc, current)  => {
+    return keys.reduce((acc, current) => {
       const value = characterData.speed[current];
       if (value > 0) {
         return acc !== '' ? `${acc}, ${value}ft (${current})` : `${value}ft (${current})`;
       }
       return acc;
     }, '');
+  }
+
+  public static getCreatedAt(characterData): string | boolean {
+    return (characterData.meta && characterData.meta.createdAt) ?
+      new Date(characterData.meta.createdAt.seconds * 1000).toLocaleString()
+      : false;
+  }
+
+  public static getUpdatedAt(characterData): string | boolean {
+    return (characterData.meta && characterData.meta.updatedAt) ?
+      new Date(characterData.meta.updatedAt.seconds * 1000).toLocaleString()
+      : false;
   }
 }

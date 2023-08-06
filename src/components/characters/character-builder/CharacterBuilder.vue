@@ -1,69 +1,202 @@
-<template>
-  <div>
+<template >
+  <div >
     <div class="mb-4">
-      <v-btn color="success" @click="saveCharacter" :disabled="!hasChanged" class="mr-2">Save</v-btn>
-      <v-btn color="error" v-if="!isNewCharacter" @click="deleteCharacter">Delete</v-btn>
-    </div>
+      <v-btn
+          color="success"
+          @click="saveCharacter"
+          :disabled="!hasChanged"
+          class="mr-2"
+      >Save
+      </v-btn >
+      <v-btn
+          color="error"
+          v-if="!isNewCharacter"
+          @click="deleteCharacter"
+      >Delete
+      </v-btn >
+    </div >
 
-    <v-row>
+    <v-row >
       <v-col col="8">
-        <v-sheet class="CharacterBuilder-wrapper pa-4" elevation="1">
+        <v-sheet
+            class="CharacterBuilder-wrapper pa-4"
+            elevation="1"
+        >
           <form class="Form">
+            <v-text-field
+                class="text-h6"
+                v-model="character.name"
+                label="Name"
+            />
             <div class="d-flex">
-              <v-text-field v-model="character.name" label="Name"/>
-              <v-text-field v-model="character.challenge_rating" label="Challenge rating" type="number" min="0"/>
-            </div>
+              <v-text-field
+                  v-model="character.challenge_rating"
+                  label="Challenge rating"
+              />
+              <v-select
+                  outlined
+                  v-model="character.category"
+                  :items="optionsCategory"
+                  item-text="name"
+                  label="Category"
+                  :optionSelected="character.category"
+              />
+            </div >
 
             <div class="d-flex">
-              <v-select outlined v-model="character.size" :items="optionsSize" item-text="name" label="Size"
-                        :optionSelected="character.size"/>
-              <v-select outlined v-model="character.type" :items="optionsTypes" label="Type" item-text="name"
-                        :optionSelected="character.type"/>
-              <v-select outlined v-model="character.alignment" :items="optionsAlignment" item-text="name"
-                        label="Alignment" :optionSelected="character.alignment"/>
-            </div>
+              <v-select
+                  outlined
+                  v-model="character.size"
+                  :items="optionsSize"
+                  item-text="name"
+                  label="Size"
+                  :optionSelected="character.size"
+              />
+              <v-select
+                  outlined
+                  v-model="character.type"
+                  :items="optionsTypes"
+                  label="Type"
+                  item-text="name"
+                  :optionSelected="character.type"
+              />
+              <v-select
+                  outlined
+                  v-model="character.alignment"
+                  :items="optionsAlignment"
+                  item-text="name"
+                  label="Alignment"
+                  :optionSelected="character.alignment"
+              />
+            </div >
 
             <div class="d-flex">
-              <v-text-field v-model.number="character.armor_class" prepend-icon="mdi-shield" label="Armor Class"
-                            type="number" min="0"/>
-              <v-text-field v-model="character.armor_desc" label="Armor Description"/>
-            </div>
+              <v-text-field
+                  v-model.number="character.armor_class"
+                  prepend-icon="mdi-shield"
+                  label="Armor Class"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model="character.armor_desc"
+                  label="Armor Description"
+              />
+            </div >
 
             <div class="d-flex">
-              <v-text-field v-model.number="character.hit_points" prepend-icon="mdi-heart" label="Hit points"
-                            type="number" min="0"/>
-              <v-text-field v-model="character.hit_dice" label="Hit dice"/>
-            </div>
+              <v-text-field
+                  v-model.number="character.hit_points"
+                  prepend-icon="mdi-heart"
+                  label="Hit points"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model="character.hit_dice"
+                  label="Hit dice"
+              />
+            </div >
 
             <div class="d-flex">
-              <v-text-field v-model.number="character.strength" label="STR" type="number" min="0"/>
-              <v-text-field v-model.number="character.dexterity" label="DEX" type="number" min="0"/>
-              <v-text-field v-model.number="character.constitution" label="CON" type="number" min="0"/>
-              <v-text-field v-model.number="character.intelligence" label="INT" type="number" min="0"/>
-              <v-text-field v-model.number="character.wisdom" label="WIS" type="number" min="0"/>
-              <v-text-field v-model.number="character.charisma" label="CHR" type="number" min="0"/>
-            </div>
+              <v-text-field
+                  v-model.number="character.strength"
+                  label="STR"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.dexterity"
+                  label="DEX"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.constitution"
+                  label="CON"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.intelligence"
+                  label="INT"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.wisdom"
+                  label="WIS"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.charisma"
+                  label="CHR"
+                  type="number"
+                  min="0"
+              />
+            </div >
 
-            <p><b>Speed:</b></p>
+            <p ><b >Speed:</b ></p >
             <div class="d-flex">
-              <v-text-field v-model.number="character.speed.walk" label="Walk" type="number" min="0"/>
-              <v-text-field v-model.number="character.speed.swim" label="Swim" type="number" min="0"/>
-              <v-text-field v-model.number="character.speed.climb" label="Climb" type="number" min="0"/>
-              <v-text-field v-model.number="character.speed.fly" label="Fly" type="number" min="0"/>
-              <v-text-field v-model.number="character.speed.burrow" label="Burrow" type="number" min="0"/>
-            </div>
+              <v-text-field
+                  v-model.number="character.speed.walk"
+                  label="Walk"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.speed.swim"
+                  label="Swim"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.speed.climb"
+                  label="Climb"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.speed.fly"
+                  label="Fly"
+                  type="number"
+                  min="0"
+              />
+              <v-text-field
+                  v-model.number="character.speed.burrow"
+                  label="Burrow"
+                  type="number"
+                  min="0"
+              />
+            </div >
 
-            <v-text-field v-model="character.senses" hint="e.g. darkvision 60 ft., passive Perception 12"
-                          label="Senses"/>
-            <v-text-field v-model="character.languages" hint="e.g. Common, Dwarvish" label="Languages"/>
-            <v-text-field v-model="character.damage_immunities" hint="e.g. lightning, poison"
-                          label="Damage Immunities"/>
-            <v-text-field v-model="character.damage_resistances"
-                          hint="e.g. cold; bludgeoning, piercing, and slashing from nonmagical weapons"
-                          label="Damage Resistances"/>
-            <v-text-field v-model="character.damage_vulnerabilities" hint="e.g. bludgeoning, fire"
-                          label="Damage Vulnerabilities"/>
-          </form>
+            <v-text-field
+                v-model="character.senses"
+                hint="e.g. darkvision 60 ft., passive Perception 12"
+                label="Senses"
+            />
+            <v-text-field
+                v-model="character.languages"
+                hint="e.g. Common, Dwarvish"
+                label="Languages"
+            />
+            <v-text-field
+                v-model="character.damage_immunities"
+                hint="e.g. lightning, poison"
+                label="Damage Immunities"
+            />
+            <v-text-field
+                v-model="character.damage_resistances"
+                hint="e.g. cold; bludgeoning, piercing, and slashing from nonmagical weapons"
+                label="Damage Resistances"
+            />
+            <v-text-field
+                v-model="character.damage_vulnerabilities"
+                hint="e.g. bludgeoning, fire"
+                label="Damage Vulnerabilities"
+            />
+          </form >
 
           <CharacterAbilitiesEditor
               title="Special abilites"
@@ -86,17 +219,28 @@
               @change="handleAbilityChange"
           />
 
-          <v-btn color="success" @click="saveCharacter" :disabled="!hasChanged" class="mr-2">Save</v-btn>
-          <v-btn color="error" v-if="!isNewCharacter" @click="deleteCharacter">Delete</v-btn>
-        </v-sheet>
-      </v-col>
+          <v-btn
+              color="success"
+              @click="saveCharacter"
+              :disabled="!hasChanged"
+              class="mr-2"
+          >Save
+          </v-btn >
+          <v-btn
+              color="error"
+              v-if="!isNewCharacter"
+              @click="deleteCharacter"
+          >Delete
+          </v-btn >
+        </v-sheet >
+      </v-col >
 
-      <v-col>
+      <v-col >
         <CharacterDetails :characterData="character"/>
-      </v-col>
-    </v-row>
-  </div>
-</template>
+      </v-col >
+    </v-row >
+  </div >
+</template >
 
 <script lang='ts'>
 import { clone, isEqual } from 'lodash';
@@ -112,6 +256,7 @@ import { CharacterRaces } from '@/types/characterRaces';
 import CharacterAlignments from '@/types/characterAlignments';
 import CharacterSizes from '@/types/characterSizes';
 import CharacterAbilitiesEditor from "@/components/characters/character-builder/CharacterAbilitiesEditor.vue";
+import CharacterCategories from "@/types/characterCategories";
 
 @Component({
   components: {
@@ -120,13 +265,18 @@ import CharacterAbilitiesEditor from "@/components/characters/character-builder/
 })
 export default class CharacterBuilder extends Vue {
   public originalCharacter: Character | null = null;
-  public isNewCharacter = false;
+  public isNewCharacter: boolean = true;
 
   @Prop({type: Object, required: true}) public character!: Character;
 
   @Watch('character', {deep: true})
   public onCharacterChange() {
     this.$emit('change', !isEqual(this.originalCharacter, this.character));
+  }
+
+  @Watch('$route', {deep: true})
+  public onRouteChange() {
+    this.isNewCharacter = this.$router.currentRoute.name !== 'editCharacter';
   }
 
   @Watch('originalCharacter', {deep: true})
@@ -142,6 +292,10 @@ export default class CharacterBuilder extends Vue {
     return $enum(CharacterSizes).map((value, name) => ({value, name}));
   }
 
+  public get optionsCategory() {
+    return $enum(CharacterCategories).map((value, name) => ({value, name}));
+  }
+
   public get optionsTypes() {
     const types = {...CreatureTypes, ...CharacterRaces};
     return $enum(types).map((name, value) => ({value, name}));
@@ -152,9 +306,8 @@ export default class CharacterBuilder extends Vue {
   }
 
   public saveCharacter(): void {
-    dispatchSaveCharacter(this.$store, {character: this.character}).then((event) => {
-      this.originalCharacter = {...this.character};
-      this.isNewCharacter = false;
+    dispatchSaveCharacter(this.$store, {character: this.character}).then(() => {
+      this.originalCharacter = clone(this.character);
     });
   }
 
@@ -196,10 +349,10 @@ export default class CharacterBuilder extends Vue {
 
   public mounted() {
     this.originalCharacter = clone(this.character);
-    this.isNewCharacter = !!this.$route.query.new;
+    this.isNewCharacter = this.$router.currentRoute.name !== 'editCharacter';
   }
 }
-</script>
+</script >
 
 <style lang="scss">
 .CharacterBuilder-wrapper .v-input {
@@ -210,4 +363,4 @@ export default class CharacterBuilder extends Vue {
   margin-bottom: 3rem;
 }
 
-</style>
+</style >

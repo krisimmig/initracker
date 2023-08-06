@@ -19,7 +19,8 @@
                 @click.native="handleTeaserActioned(character)"
             >
               <v-btn
-                  plain
+                  outlined
+                  color="primary"
                   @click="handleTeaserActioned(character)"
               >
                 <v-icon left>mdi-pencil</v-icon >

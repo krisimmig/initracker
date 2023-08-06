@@ -59,23 +59,25 @@
               bench="10"
               :items="filteredNpcs"
               height="calc(85vh - 205px)"
-              item-height="95"
+              item-height="130"
           >
             <template v-slot:default="{ item }">
-              <CharacterTeaser
-                  :characterData="item"
-                  @click.native="characterPreviewSelected(item)"
-              >
-                <v-btn
-                    small
-                    outlined
-                    color="primary"
-                    class="mr-4"
+              <div class="mr-4">
+                <CharacterTeaser
+                    :characterData="item"
+                    @click.native="characterPreviewSelected(item)"
                 >
-                  Preview
-                </v-btn >
-              </CharacterTeaser >
-              <v-divider class="mt-2"/>
+                  <v-btn
+                      small
+                      outlined
+                      color="primary"
+                      class="mr-4"
+                  >
+                    Preview
+                  </v-btn >
+                </CharacterTeaser >
+                <v-divider class="mt-2"/>
+              </div >
             </template >
           </v-virtual-scroll >
         </v-col >

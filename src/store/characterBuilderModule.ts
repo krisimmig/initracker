@@ -90,8 +90,11 @@ export const characterBuilderModule = {
       let newCharacter = false;
       if (!character.uuid) {
         character.uuid = uuid();
+        character.meta.createdAt = new Date();
         newCharacter = true;
       }
+
+      character.meta.updatedAt = new Date();
 
       const userUid = readUserUid(context);
       const characterRef = db.doc(`users/${userUid}/characters/${character.uuid}`);

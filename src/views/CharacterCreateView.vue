@@ -1,4 +1,4 @@
-<template>
+<template >
   <div class="">
     <PageTitle
         title="Character editor"
@@ -6,11 +6,18 @@
     />
 
     <div v-if="!isLoading">
-      <CharacterBuilder :character="character" @change="changeHandler"/>
-    </div>
-    <v-alert type="info" v-else>Loading..</v-alert>
-  </div>
-</template>
+      <CharacterBuilder
+          :character="character"
+          @change="changeHandler"
+      />
+    </div >
+    <v-alert
+        type="info"
+        v-else
+    >Loading..
+    </v-alert >
+  </div >
+</template >
 
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
@@ -64,20 +71,18 @@ export default class CharacterCreate extends Vue {
   }
 
   public beforeRouteLeave(to, from, next) {
-    if (!this.hasUnsavedChanges || this.$route.meta!.new) {
+    if (from.name === 'editCharacter' && this.hasUnsavedChanges) {
+      this.$root.$confirm({
+        title: 'Unsaved changes',
+        message: 'You have unsaved changes. Are you sure you want to leave?',
+        options: {color: 'error'}
+      }).then(resp => next(resp));
+    } else {
       next();
-      return;
     }
-
-    this.$root.$confirm({
-      title: 'Unsaved changes',
-      message: 'You have unsaved changes. Are you sure you want to leave?',
-      options: {color: 'error'}
-    }).then(resp => next(resp));
-
   }
 }
-</script>
+</script >
 
-<style>
-</style>
+<style >
+</style >
