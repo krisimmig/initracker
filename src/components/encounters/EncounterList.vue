@@ -58,30 +58,25 @@
       </div >
     </div >
 
-    <v-sheet
-        v-if="npcs.length > 0"
-        elevation="3"
-        rounded
-        shaped
-    >
-      <perfect-scrollbar class="pa-4 pr-6">
+    <div v-if="npcs.length > 0">
+      <perfect-scrollbar
+          class="pr-4"
+          style="margin-right: -16px;"
+      >
         <div
             v-for="(npc, index) in npcs"
             :key="index"
         >
-          <v-divider
-              v-if="index > 0"
-              class="my-4"
-          ></v-divider >
           <CharacterListItem
               :npc="npc"
               :isActive="currentNpcIndex - 1 === index"
+              :hasActed="currentNpcIndex - 1 > index"
               :removable="true"
               @remove="removeNpcFromEncounter(npc.uuid)"
           />
         </div >
       </perfect-scrollbar >
-    </v-sheet >
+    </div >
 
     <v-alert
         type="info"
