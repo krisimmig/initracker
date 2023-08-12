@@ -306,9 +306,10 @@ export default class CharacterBuilder extends Vue {
   }
 
   public saveCharacter(): void {
-    dispatchSaveCharacter(this.$store, {character: this.character}).then(() => {
-      this.originalCharacter = clone(this.character);
-    });
+    dispatchSaveCharacter(this.$store, {character: this.character})
+        .then(() => {
+          this.originalCharacter = clone(this.character);
+        });
   }
 
   public async deleteCharacter() {

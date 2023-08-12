@@ -7,6 +7,8 @@ import { RootState } from '@/store/index';
 import { Character } from '@/classes/Character';
 import { readUserUid } from '@/store/usersModule';
 import router from '@/router';
+import firebase from "firebase/compat";
+import onLog = firebase.onLog;
 
 export interface CharacterBuilderState {
   character: Character;
@@ -94,12 +96,20 @@ export const characterBuilderModule = {
         newCharacter = true;
       }
 
+      if (!character.uuid_ref) {
+        character.uuid_ref = uuid();
+      }
+
       character.meta.updatedAt = new Date();
 
       const userUid = readUserUid(context);
       const characterRef = db.doc(`users/${userUid}/characters/${character.uuid}`);
 
       characterRef.set({...character}, {merge: true});
+
+      if (!newCharacter) {
+        dispatchUpdateCharacterInEncounters(context, {character});
+      }
 
       if (newCharacter) {
         router.push({name: 'editCharacter', params: {uuid: character.uuid}});
@@ -109,6 +119,42 @@ export const characterBuilderModule = {
     async deleteCharacter(context: CharacterBuilderContext, {characterUuid}: { characterUuid: string }) {
       const userUid = readUserUid(context);
       return db.doc(`users/${userUid}/characters/${characterUuid}`).delete();
+    },
+
+    async updateCharacterInEncounters(context: CharacterBuilderContext, {character}: { character: Character }) {
+      const userUid = readUserUid(context);
+      console.log('updating characterUuid', character.uuid_ref);
+
+      const encountersQuerySnapshot = await db.collection(`users/${userUid}/encounters`).get();
+
+      for (const encounterDoc of encountersQuerySnapshot.docs) {
+        const npcsQuerySnapshot =
+          await encounterDoc.ref
+            .collection('npcs')
+            .where('uuid_ref', '==', character.uuid_ref)
+            .get();
+
+        npcsQuerySnapshot.forEach(docRef => {
+          const encounterId = docRef.ref.parent.parent?.id;
+          const oldCharacterDarta = docRef.data();
+          character.conditions = oldCharacterDarta.conditions;
+          character.hit_points_current = oldCharacterDarta.hit_points_current;
+          character.uuid = oldCharacterDarta.uuid;
+          character.initiative = oldCharacterDarta.initiative;
+          const charRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${docRef.id}`);
+          charRef.set(character);
+        });
+      }
+
+      // db.collection(`users/${userUid}/encounters`).get().then((querySnapshot) => {
+      //   querySnapshot.forEach((doc) => {
+      //     doc.ref.collection('npcs').where('uuid_ref', '==', characterUuidRef).get().then(snap => {
+      //       snap.docs.forEach(docRef => {
+      //         useId(docRef.ref.parent.parent!.id);
+      //       });
+      //     });
+      //   });
+      // });
     },
   },
 
@@ -133,3 +179,4 @@ export const dispatchFetchCharacterById = dispatch(characterBuilderModule.action
 export const dispatchFetchCharacterByUuid = dispatch(characterBuilderModule.actions.fetchCharacterByUuid);
 export const dispatchSaveCharacter = dispatch(characterBuilderModule.actions.saveCharacter);
 export const dispatchDeleteCharacter = dispatch(characterBuilderModule.actions.deleteCharacter);
+export const dispatchUpdateCharacterInEncounters = dispatch(characterBuilderModule.actions.updateCharacterInEncounters);

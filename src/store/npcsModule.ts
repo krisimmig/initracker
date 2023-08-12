@@ -66,48 +66,49 @@ export const npcsModule = {
 
     updateCondition(
       context: NpcsContext,
-      { encounterId, npcId, newCondition }: { encounterId: string, npcId: string, newCondition: ICondition }) {
+      {encounterId, npcId, newCondition}: { encounterId: string, npcId: string, newCondition: ICondition }) {
       const userUid = readUserUid(context);
       const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`);
 
       npcRef.set({
         conditions: arrayUnion(newCondition),
-      }, { merge: true });
+      }, {merge: true});
     },
 
     async removeConditionFromNpc(
       context: NpcsContext,
-      { encounterId, npcId, conditionId }: { encounterId: string, npcId: string, conditionId: string }) {
+      {encounterId, npcId, conditionId}: { encounterId: string, npcId: string, conditionId: string }) {
       const userUid = readUserUid(context);
       const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({
         conditions: arrayRemove(conditionId),
-      }, { merge: true });
+      }, {merge: true});
     },
 
     updateInitiative(
       context: NpcsContext,
-      { encounterId, npcId, newInitiative }: { encounterId: string, npcId: string, newInitiative: number }) {
+      {encounterId, npcId, newInitiative}: { encounterId: string, npcId: string, newInitiative: number }) {
       const userUid = readUserUid(context);
+      console.log(npcId);
       const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`);
 
       npcRef.set({
         initiative: newInitiative,
-      }, { merge: true });
+      }, {merge: true});
     },
 
     updateHitPointCurrent(
       context: NpcsContext,
-      { encounterId, npcId, newHitPoints }: { encounterId: string, npcId: string, newHitPoints: number }) {
+      {encounterId, npcId, newHitPoints}: { encounterId: string, npcId: string, newHitPoints: number }) {
       const userUid = readUserUid(context);
       const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId);
       const npcRef = encounterRef.collection('npcs').doc(npcId);
 
       npcRef.set({
         hit_points_current: newHitPoints,
-      }, { merge: true });
+      }, {merge: true});
     },
   },
 

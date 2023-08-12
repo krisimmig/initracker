@@ -69,7 +69,7 @@
 </template >
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import {
   commitSetNpcInDetail,
   readGetNpcUuidInDetail
@@ -95,6 +95,11 @@ export default class CharacterListItem extends Vue {
   @Prop({type: Object, required: true}) public npc!: ICharacter;
   @Prop({type: Boolean, required: true}) public isActive!: boolean;
   @Prop({default: false}) public hasActed!: boolean;
+
+  @Watch('npc')
+  public onNpcChange(npcData) {
+    Vue.set(this, 'character', new Character(npcData));
+  }
 
   get selectedNpcUuid() {
     return readGetNpcUuidInDetail(this.$store);
@@ -127,22 +132,31 @@ export default class CharacterListItem extends Vue {
 <style lang="scss">
 .CharacterListItem {
   cursor: pointer;
-  border: 2px solid #d5d5d5;
-  border-radius: 3px;
+  border: 1px solid #d5d5d5;
+  background-color: white;
+  border-radius: 5px;
   margin-bottom: 5px;
   padding: 10px;
 }
 
 .Category-Enemy {
-  border-color: #c7c7c7;
+  border-color: #e0e0e0;
 }
 
 .Category-Player {
-  border-color: #68bff6;
+  border-color: #5ab3fd;
+}
+
+.Category-NPC {
+  border-color: #c500cb;
+}
+
+.Category-Other {
+  border-color: #ffa600;
 }
 
 .CharacterListItem.has-acted {
-  opacity: 0.4;
+  opacity: 0.6;
 }
 
 .CharacterListItem.has-acted:hover {

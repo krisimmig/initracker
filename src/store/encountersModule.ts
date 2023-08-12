@@ -71,26 +71,26 @@ export const encountersModule = {
       db.collection(`users/${userUid}/encounters`)
         .orderBy('createdAt', 'desc')
         .onSnapshot((data) => {
-        const encounters: IEncounterEntity[] = [];
-        data.forEach((doc) => {
-          encounters.push(doc.data() as IEncounterEntity);
-        });
+          const encounters: IEncounterEntity[] = [];
+          data.forEach((doc) => {
+            encounters.push(doc.data() as IEncounterEntity);
+          });
 
-        commitSetEncounters(context, encounters);
-      });
+          commitSetEncounters(context, encounters);
+        });
     },
 
-    fetchEncounterById(context: EncountersContext, { encounterId }) {
+    fetchEncounterById(context: EncountersContext, {encounterId}) {
       const userUid = usersModule.readUserUid(context);
       db.doc(`users/${userUid}/encounters/${encounterId}`).onSnapshot((doc) => {
         const encounter = doc.data();
 
         commitSetEncounter(context, encounter as IEncounterEntity);
-        dispatchFetchEncountersCurrentNpcs(context, { encounterId });
+        dispatchFetchEncountersCurrentNpcs(context, {encounterId});
       });
     },
 
-    fetchEncountersCurrentNpcs(context: EncountersContext, { encounterId }) {
+    fetchEncountersCurrentNpcs(context: EncountersContext, {encounterId}) {
       const userUid = usersModule.readUserUid(context);
       db.collection(`users/${userUid}/encounters/${encounterId}/npcs`)
         .orderBy('initiative', 'desc')
@@ -100,13 +100,13 @@ export const encountersModule = {
             npcs.push(doc.data() as ICharacter);
           });
 
-          commitSetEncountersCurrentNpcs(context, { npcs });
+          commitSetEncountersCurrentNpcs(context, {npcs});
         });
     },
 
     async addNpcToEncounter(
       context: EncountersContext,
-      { npcData, encounterId }: { npcData: ICharacter, encounterId: string },
+      {npcData, encounterId}: { npcData: ICharacter, encounterId: string },
     ) {
       const userUid = usersModule.readUserUid(context);
       const id = uuid();
@@ -121,7 +121,7 @@ export const encountersModule = {
 
     removeNpcFromEncounter(
       context: EncountersContext,
-      { npcID, encounterId }: { npcID: string, encounterId: string },
+      {npcID, encounterId}: { npcID: string, encounterId: string },
     ) {
       const userUid = usersModule.readUserUid(context);
 
@@ -134,7 +134,7 @@ export const encountersModule = {
 
     async addNewEncounter(
       context: EncountersContext,
-      { encounterName }: { encounterName: string },
+      {encounterName}: { encounterName: string },
     ) {
       const userUid = usersModule.readUserUid(context);
       const id = uuid();
@@ -154,7 +154,7 @@ export const encountersModule = {
 
     removeEncounter(
       context: EncountersContext,
-      { encounterId }: { encounterId: string },
+      {encounterId}: { encounterId: string },
     ) {
       const userUid = usersModule.readUserUid(context);
 
@@ -165,41 +165,41 @@ export const encountersModule = {
 
     async updateName(
       context: EncountersContext,
-      { encounterId, newName }: { encounterId: string, newName: string },
+      {encounterId, newName}: { encounterId: string, newName: string },
     ) {
       const userUid = usersModule.readUserUid(context);
 
       const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
       encounterRef.set({
         name: newName,
-      }, { merge: true });
+      }, {merge: true});
     },
 
     async updateRound(
       context: EncountersContext,
-      { encounterId, newRoundIndex }: { encounterId: string, newRoundIndex: number },
+      {encounterId, newRoundIndex}: { encounterId: string, newRoundIndex: number },
     ) {
       const userUid = usersModule.readUserUid(context);
 
       const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
       encounterRef.set({
         round: newRoundIndex,
-      }, { merge: true });
+      }, {merge: true});
     },
 
     async updateActiveEntityIndex(
       context: EncountersContext,
-      { encounterId, activeEntityIndex, currentTurn }:
-      { encounterId: string, activeEntityIndex: number, currentTurn?: number },
+      {encounterId, activeEntityIndex, currentTurn}:
+        { encounterId: string, activeEntityIndex: number, currentTurn?: number },
     ) {
       const userUid = usersModule.readUserUid(context);
-      let newData = { activeEntityIndex };
+      let newData = {activeEntityIndex};
       if (currentTurn) {
-        newData = { ...newData, ...{ currentTurn} };
+        newData = {...newData, ...{currentTurn}};
       }
 
       const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId);
-      encounterRef.set(newData, { merge: true });
+      encounterRef.set(newData, {merge: true});
     },
   },
 
@@ -212,7 +212,7 @@ export const encountersModule = {
       state.encountersCurrent = encounter;
     },
 
-    setEncountersCurrentNpcs(state: EncountersState, { npcs }: { npcs: ICharacter[] }) {
+    setEncountersCurrentNpcs(state: EncountersState, {npcs}: { npcs: ICharacter[] }) {
       state.encountersNpcs = npcs;
     },
 

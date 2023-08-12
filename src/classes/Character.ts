@@ -52,6 +52,7 @@ export class Character {
   public wisdom: number = 10;
   public wisdom_save: number = 0;
   public uuid!: string;
+  public uuid_ref!: string;
   public id!: string;
   public initiative: number = 10;
   public category: CharacterCategories = CharacterCategories.NPC;
