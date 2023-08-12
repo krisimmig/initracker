@@ -5,6 +5,7 @@ import CharacterAlignments from '@/types/characterAlignments';
 import CharacterSizes from '@/types/characterSizes';
 import { CharacterRaces } from '@/types/characterRaces';
 import CharacterCategories from "@/types/characterCategories";
+import { ICondition } from "@/types/conditionTypes";
 
 type CharacterType = CreatureTypes | CharacterRaces;
 
@@ -14,7 +15,7 @@ interface ICharacterAbility {
 }
 
 export class Character {
-  public conditions: string[] = [];
+  public conditions: ICondition[] = [];
   public actions: ICharacterAbility[] = [];
   public alignment: string = CharacterAlignments.NeutralGood;
   public armor_class: number = 10;

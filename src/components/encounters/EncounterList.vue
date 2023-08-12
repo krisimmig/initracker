@@ -109,7 +109,7 @@ import {
   dispatchUpdateActiveEntityIndex,
   dispatchAddNpcToEncounter,
 } from '@/store/encountersModule';
-import { dispatchUpdateInitiative } from '@/store/npcsModule';
+import { dispatchUpdateInitiative, dispatchUpdateNpcConditionRound } from '@/store/npcsModule';
 import CharacterListItem from '@/components/characters/CharacterListItem.vue';
 import { modifierWithSign } from '@/utils/dnd';
 import CharacterLibrary from "@/components/characters/CharacterLibrary.vue";
@@ -217,24 +217,23 @@ export default class EncounterList extends Vue {
       return;
     }
 
-    if (this.currentNpcIndex === this.npcs.length) {
-      dispatchUpdateRound(this.$store, {
-        encounterId: this.id,
-        newRoundIndex: this.currentRound + 1,
-      });
+    const nextIndex = this.currentNpcIndex === this.npcs.length ? 1 : this.currentNpcIndex + 1;
 
-      dispatchUpdateActiveEntityIndex(this.$store, {
-        encounterId: this.id,
-        activeEntityIndex: 1,
-        currentTurn: this.currentEncounter.currentTurn + 1,
-      });
-    } else {
-      dispatchUpdateActiveEntityIndex(this.$store, {
-        encounterId: this.id,
-        activeEntityIndex: this.currentNpcIndex + 1,
-        currentTurn: this.currentEncounter.currentTurn + 1,
-      });
-    }
+    dispatchUpdateNpcConditionRound(this.$store, {
+      encounterId: this.id,
+      npcId: npc.uuid,
+    });
+
+    dispatchUpdateRound(this.$store, {
+      encounterId: this.id,
+      newRoundIndex: this.currentRound + 1,
+    });
+
+    dispatchUpdateActiveEntityIndex(this.$store, {
+      encounterId: this.id,
+      activeEntityIndex: nextIndex,
+      currentTurn: this.currentEncounter.currentTurn + 1,
+    });
   }
 
   public handleCharClicked(npcData) {

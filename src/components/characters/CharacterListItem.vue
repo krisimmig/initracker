@@ -171,7 +171,8 @@ export default class CharacterListItem extends Vue {
 }
 
 .CharacterListItem.is-selected {
-  border-color: green;
+  border-color: black;
+  box-shadow: 0 0 20px 1px #ececec;
 }
 
 .CharacterListItem.is-selected .CharacterListItem-name:after {

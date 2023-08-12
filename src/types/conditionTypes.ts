@@ -1,7 +1,8 @@
 interface ICondition {
   name: string;
   id: string;
-  effects: string[];
+  effects?: string[];
+  duration?: number;
 }
 
 const conditionList: ICondition[] = [

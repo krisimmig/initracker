@@ -1,89 +1,126 @@
-<template>
+<template >
   <div class="NpcCondition mt-3">
     <v-btn
-      v-for="(conditionId, index) in conditions"
-
-      @click="setSelectedCondition(conditionId)"
-      v-if="getConditionName(conditionId)"
-      :key="index"
-      small
-      text
-      color="primary"
+        v-for="(condition, index) in conditions"
+        @click="setSelectedCondition(condition.id)"
+        :key="index"
+        small
+        text
+        color="primary"
     >
-      {{ getConditionName(conditionId) }}
-    </v-btn>
+      {{ condition.name }}
+      <span
+          v-if="condition.duration"
+          class="ml-1"
+      >
+        ({{ condition.duration }})
+      </span >
+    </v-btn >
 
     <v-btn
-     @click="showConditionSelect = true"
-     small
-     outlined
-     color="primary"
+        @click="showConditionSelect = true"
+        small
+        outlined
+        color="primary"
     >
-      <v-icon>mdi-plus</v-icon>
-      <template v-if="conditions.length < 4"> condition</template>
-    </v-btn>
+      <v-icon >mdi-plus</v-icon >
+      <template v-if="conditions.length < 4"> condition</template >
+    </v-btn >
 
-    <v-dialog v-model="showConditionSelect" max-width="650px">
-      <v-card>
+    <v-dialog
+        v-model="showConditionSelect"
+        max-width="650px"
+    >
+      <v-card >
         <v-app-bar flat>
-          <v-toolbar-title>Update conditions</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon @click.stop="showConditionSelect = false"><v-icon>mdi-close</v-icon></v-btn>
-        </v-app-bar>
+          <v-toolbar-title >Update conditions</v-toolbar-title >
+          <v-spacer ></v-spacer >
+          <v-btn
+              icon
+              @click.stop="showConditionSelect = false"
+          >
+            <v-icon >mdi-close</v-icon >
+          </v-btn >
+        </v-app-bar >
 
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col>
+        <v-card-text >
+          <v-container >
+            <v-row >
+              <v-col >
                 <div >
                   <v-btn
-                    small
-                    v-for="(condition, index) in npcConditions" :key="index"
-                    @click="selectedCondition = condition"
-                    :color="conditions.includes(condition.id) ? 'primary' : ''"
-                    class="mb-2 mr-2"
+                      small
+                      v-for="(condition, index) in npcConditions"
+                      :key="index"
+                      @click="selectedCondition = condition"
+                      :color="isActiveCondition(condition.id) ? 'primary' : ''"
+                      class="mb-2 mr-2"
                   >
                     {{ condition.name }}
-                  </v-btn>
-                </div>
-              </v-col>
-              <v-col>
+                  </v-btn >
+                </div >
+              </v-col >
+              <v-col >
                 <template v-if="selectedCondition">
-                  <h4 class="title">{{ selectedCondition.name }}</h4>
+                  <h4 class="title">{{ selectedCondition.name }}</h4 >
                   <ul class="u-list mb-4 body-1">
-                    <li v-for="(effect, index) in selectedCondition.effects" :key="index">{{ effect }}</li>
-                  </ul>
+                    <li
+                        v-for="(effect, index) in selectedCondition.effects"
+                        :key="index"
+                    >{{ effect }}
+                    </li >
+                  </ul >
 
-                  <div v-if="conditions.includes(selectedCondition.id)">
-                    <v-btn small color="primary" @click="removeCondition(selectedCondition.id)">
-                      <v-icon>mdi-minus</v-icon>
+                  <div v-if="isActiveCondition(selectedCondition.id)">
+                    <v-btn
+                        small
+                        color="primary"
+                        @click="removeCondition(selectedCondition.id)"
+                    >
+                      <v-icon >mdi-minus</v-icon >
                       Remove {{ selectedCondition.name }}
-                    </v-btn>
-                  </div>
+                    </v-btn >
+                  </div >
                   <div v-else>
-                    <v-btn small color="primary" @click="addCondition(selectedCondition.id)">
-                      <v-icon>mdi-plus</v-icon>
+                    <v-btn
+                        small
+                        color="primary"
+                        @click="addCondition(selectedCondition)"
+                    >
+                      <v-icon >mdi-plus</v-icon >
                       Add {{ selectedCondition.name }}
-                    </v-btn>
-                  </div>
-                </template>
+                    </v-btn >
+                    <v-text-field
+                        v-model="selectedCondition.duration"
+                        label="Duration"
+                        outlined
+                        dense
+                        class="mt-3"
+                    />
+                  </div >
+                </template >
                 <template v-else>
-                  <v-alert type="info" outlined>Select a condition from the list to see more info.</v-alert>
-                </template>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-  </div>
-</template>
+                  <v-alert
+                      type="info"
+                      outlined
+                  >Select a condition from the list to see more info.
+                  </v-alert >
+                </template >
+              </v-col >
+            </v-row >
+          </v-container >
+        </v-card-text >
+      </v-card >
+    </v-dialog >
+  </div >
+</template >
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { readGetEncountersCurrentId } from '@/store/encountersModule';
 import { dispatchRemoveConditionFromNpc, dispatchUpdateCondition } from '@/store/npcsModule';
 import { ICondition, conditionList } from '@/types/conditionTypes';
+import { find } from "lodash";
 
 @Component
 export default class NpcConditions extends Vue {
@@ -92,16 +129,22 @@ export default class NpcConditions extends Vue {
   public selectedCondition: ICondition | null = null;
 
   @Prop() uuid!: string;
-  @Prop() conditions!: string[];
+  @Prop() conditions!: ICondition[];
 
-  public addCondition(conditionId) {
+  public isActiveCondition(conditionId: string): boolean {
+    return !!find(this.conditions, (c) => c.id === conditionId);
+  }
+
+  public addCondition(condition: ICondition) {
     const encounterId = readGetEncountersCurrentId(this.$store);
-    if (!encounterId) { return; }
+    if (!encounterId) {
+      return;
+    }
 
     dispatchUpdateCondition(this.$store, {
       encounterId,
       npcId: this.uuid,
-      newCondition: conditionId,
+      newCondition: condition,
     });
   }
 
@@ -114,16 +157,27 @@ export default class NpcConditions extends Vue {
   }
 
   public getConditionName(conditionId: string): string | boolean {
-    const condition =  this.npcConditions.find((s) => s.id === conditionId);
+    const condition = this.npcConditions.find((s) => s.id === conditionId);
     if (condition) {
       return condition.name;
     }
     return false;
   }
 
+  public getConditionDuration(conditionId: string): number | boolean {
+    console.log('getConditionDuration', conditionId);
+    const condition = this.npcConditions.find((s) => s.id === conditionId);
+    if (condition && condition.duration) {
+      return condition.duration;
+    }
+    return false;
+  }
+
   public removeCondition(conditionId: string) {
     const encounterId = readGetEncountersCurrentId(this.$store);
-    if (!encounterId) { return; }
+    if (!encounterId) {
+      return;
+    }
 
     dispatchRemoveConditionFromNpc(this.$store, {
       encounterId,
@@ -132,7 +186,7 @@ export default class NpcConditions extends Vue {
     });
   }
 }
-</script>
+</script >
 
 <style lang="scss">
 .NpcCondition-condition,
@@ -164,4 +218,4 @@ export default class NpcConditions extends Vue {
   border-color: theme('colors.blue.500');
   background-color: theme('colors.blue.600');
 }
-</style>
+</style >
