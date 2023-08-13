@@ -5,8 +5,9 @@
         @click="setSelectedCondition(condition.id)"
         :key="index"
         small
-        text
-        color="primary"
+        outlined
+        color="secondary"
+        class="mr-1 mb-1"
     >
       {{ condition.name }}
       <span
@@ -20,20 +21,21 @@
     <v-btn
         @click="showConditionSelect = true"
         small
-        outlined
+        text
         color="primary"
+        class="mb-1"
     >
-      <v-icon >mdi-plus</v-icon >
+      <v-icon left>mdi-plus</v-icon >
       <template v-if="conditions.length < 4"> condition</template >
     </v-btn >
 
     <v-dialog
         v-model="showConditionSelect"
-        max-width="650px"
+        width="min(80vw, 900px)"
     >
       <v-card >
         <v-app-bar flat>
-          <v-toolbar-title >Update conditions</v-toolbar-title >
+          <v-toolbar-title >Set this characters status effects</v-toolbar-title >
           <v-spacer ></v-spacer >
           <v-btn
               icon
@@ -43,21 +45,25 @@
           </v-btn >
         </v-app-bar >
 
-        <v-card-text >
+        <v-card-text style="height: 500px;">
           <v-container >
             <v-row >
               <v-col >
-                <div >
-                  <v-btn
-                      small
-                      v-for="(condition, index) in npcConditions"
-                      :key="index"
-                      @click="selectedCondition = condition"
-                      :color="isActiveCondition(condition.id) ? 'primary' : ''"
-                      class="mb-2 mr-2"
+                <div style="column-count: 2">
+                  <div
+                      v-for="condition in npcConditions"
+                      :key="condition.id"
                   >
-                    {{ condition.name }}
-                  </v-btn >
+                    <v-btn
+                        small
+                        text
+                        @click="selectedCondition = condition"
+                        :color="isActiveCondition(condition.id) ? 'primary' : ''"
+                        :class="[{'text-decoration-underline': selectedCondition?.id === condition.id}, 'mb-2 mr-2']"
+                    >
+                      {{ condition.name }}
+                    </v-btn >
+                  </div >
                 </div >
               </v-col >
               <v-col >
@@ -71,33 +77,6 @@
                     </li >
                   </ul >
 
-                  <div v-if="isActiveCondition(selectedCondition.id)">
-                    <v-btn
-                        small
-                        color="primary"
-                        @click="removeCondition(selectedCondition.id)"
-                    >
-                      <v-icon >mdi-minus</v-icon >
-                      Remove {{ selectedCondition.name }}
-                    </v-btn >
-                  </div >
-                  <div v-else>
-                    <v-btn
-                        small
-                        color="primary"
-                        @click="addCondition(selectedCondition)"
-                    >
-                      <v-icon >mdi-plus</v-icon >
-                      Add {{ selectedCondition.name }}
-                    </v-btn >
-                    <v-text-field
-                        v-model="selectedCondition.duration"
-                        label="Duration"
-                        outlined
-                        dense
-                        class="mt-3"
-                    />
-                  </div >
                 </template >
                 <template v-else>
                   <v-alert
@@ -110,6 +89,41 @@
             </v-row >
           </v-container >
         </v-card-text >
+        <v-card-actions >
+          <v-spacer ></v-spacer >
+          <template v-if="selectedCondition">
+            <div v-if="isActiveCondition(selectedCondition.id)">
+              <v-btn
+                  color="primary"
+                  @click="removeCondition(selectedCondition.id)"
+
+              >
+                <v-icon left>mdi-minus</v-icon >
+                Remove {{ selectedCondition.name }}
+              </v-btn >
+            </div >
+            <div
+                v-else
+                class="d-flex align-middle"
+            >
+              <v-text-field
+                  v-model="selectedCondition.duration"
+                  label="Duration (in Rounds)"
+                  class="pt-0 mt-0"
+                  prepend-inner-icon="mdi-clock"
+                  hint="Leave empty for permanent conditions"
+              />
+              <v-btn
+                  color="primary"
+                  style="width: 200px; margin: 0 1rem;"
+                  @click="addCondition(selectedCondition)"
+              >
+                <v-icon left>mdi-plus</v-icon >
+                Add {{ selectedCondition.name }}
+              </v-btn >
+            </div >
+          </template >
+        </v-card-actions >
       </v-card >
     </v-dialog >
   </div >
@@ -129,6 +143,7 @@ export default class NpcConditions extends Vue {
   public selectedCondition: ICondition | null = null;
 
   @Prop() uuid!: string;
+  @Prop() name!: string;
   @Prop() conditions!: ICondition[];
 
   public isActiveCondition(conditionId: string): boolean {
@@ -146,6 +161,9 @@ export default class NpcConditions extends Vue {
       npcId: this.uuid,
       newCondition: condition,
     });
+
+    const rounds = condition.duration ? ` for ${condition.duration} rounds` : '';
+    this.$toast(`${this.name} is ${condition.name.toLowerCase()}${rounds}.`);
   }
 
   public setSelectedCondition(conditionId: string) {
@@ -154,23 +172,6 @@ export default class NpcConditions extends Vue {
       this.showConditionSelect = true;
       this.selectedCondition = condition;
     }
-  }
-
-  public getConditionName(conditionId: string): string | boolean {
-    const condition = this.npcConditions.find((s) => s.id === conditionId);
-    if (condition) {
-      return condition.name;
-    }
-    return false;
-  }
-
-  public getConditionDuration(conditionId: string): number | boolean {
-    console.log('getConditionDuration', conditionId);
-    const condition = this.npcConditions.find((s) => s.id === conditionId);
-    if (condition && condition.duration) {
-      return condition.duration;
-    }
-    return false;
   }
 
   public removeCondition(conditionId: string) {
@@ -184,6 +185,11 @@ export default class NpcConditions extends Vue {
       npcId: this.uuid,
       conditionId,
     });
+
+    const condition = this.npcConditions.find(({id}) => id === conditionId);
+    if (condition) {
+      this.$toast(`${this.name} is no longer ${condition.name.toLowerCase()}.`);
+    }
   }
 }
 </script >

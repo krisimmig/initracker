@@ -62,6 +62,7 @@
 
       <CharacterConditions
           :uuid="npc.uuid"
+          :name="npc.name"
           :conditions="npcConditions"
       />
     </div >
@@ -136,7 +137,7 @@ export default class CharacterListItem extends Vue {
   background-color: white;
   border-radius: 5px;
   margin-bottom: 5px;
-  padding: 10px;
+  padding: 0.7rem 1rem 1rem 1rem;
 }
 
 .Category-Enemy {
