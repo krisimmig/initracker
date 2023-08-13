@@ -96,7 +96,7 @@
               <v-btn
                   color="primary"
                   @click="removeCondition(selectedCondition.id)"
-
+                  class="mb-5 mr-3"
               >
                 <v-icon left>mdi-minus</v-icon >
                 Remove {{ selectedCondition.name }}
