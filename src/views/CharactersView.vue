@@ -7,34 +7,52 @@
 
     <v-row >
       <v-col >
-        <template v-if="characters.length > 0">
-          <v-card
-              hover
-              v-for="character in characters"
-              :key="character.uuid"
-              class="pa-4 mb-3"
-          >
-            <CharacterTeaser
-                :character-data="character"
-                @click.native="handleTeaserActioned(character)"
-            >
-              <v-btn
-                  outlined
-                  color="primary"
-                  @click="handleTeaserActioned(character)"
-              >
-                <v-icon left>mdi-pencil</v-icon >
-                Edit
-              </v-btn >
-            </CharacterTeaser >
+        <div v-if="isLoading">
+          <v-card class="mb-3">
+            <v-skeleton-loader
+                class="mx-auto "
+                type="card-heading, list-item-three-line"
+            />
           </v-card >
+
+          <v-card class="mb-3">
+            <v-skeleton-loader
+                class="mx-auto"
+                type="card-heading, list-item-three-line"
+            />
+          </v-card >
+        </div >
+
+        <template v-if="!isLoading">
+          <template v-if="characters.length > 0">
+            <v-card
+                hover
+                v-for="character in characters"
+                :key="character.uuid"
+                class="pa-4 mb-3"
+            >
+              <CharacterTeaser
+                  :character-data="character"
+                  @click.native="handleTeaserActioned(character)"
+              >
+                <v-btn
+                    outlined
+                    color="primary"
+                    @click="handleTeaserActioned(character)"
+                >
+                  <v-icon left>mdi-pencil</v-icon >
+                  Edit
+                </v-btn >
+              </CharacterTeaser >
+            </v-card >
+          </template >
+          <v-alert
+              outlined
+              type="info"
+              v-else
+          >No custom characters found.
+          </v-alert >
         </template >
-        <v-alert
-            outlined
-            type="info"
-            v-else
-        >No custom characters found.
-        </v-alert >
       </v-col >
 
       <v-col cols="4">
@@ -91,6 +109,7 @@ import PageTitle from '@/components/common/PageTitle.vue';
 import { readGetNpcs } from '@/store/npcsModule';
 import CharacterLibrary from '@/components/characters/CharacterLibrary.vue';
 import Button from '@/components/common/Button.vue';
+import { readGetIsLoading } from "@/store/charactersModule";
 
 @Component({
   components: {
@@ -102,6 +121,10 @@ import Button from '@/components/common/Button.vue';
 })
 export default class Characters extends Vue {
   public showCharacterLibrary: boolean = false;
+
+  get isLoading() {
+    return readGetIsLoading(this.$store);
+  }
 
   public get characters(): Character[] {
     return readGetCharacters(this.$store);

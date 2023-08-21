@@ -7,8 +7,6 @@ import { RootState } from '@/store/index';
 import { Character } from '@/classes/Character';
 import { readUserUid } from '@/store/usersModule';
 import router from '@/router';
-import firebase from "firebase/compat";
-import onLog = firebase.onLog;
 
 export interface CharacterBuilderState {
   character: Character;

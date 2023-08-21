@@ -13,6 +13,7 @@ export interface EncountersState {
   encountersCurrent: IEncounterEntity;
   encountersNpcs: ICharacter[];
   npcInDetail?: ICharacter;
+  isLoading: boolean
 }
 
 type EncountersContext = ActionContext<EncountersState, RootState>;
@@ -25,9 +26,14 @@ export const encountersModule = {
     encountersCurrent: null,
     encountersNpcs: [],
     npcInDetail: null,
+    isLoading: true,
   },
 
   getters: {
+    getIsLoading(state: EncountersState) {
+      return state.isLoading;
+    },
+
     getEncountersAll(state: EncountersState) {
       return state.encountersAll;
     },
@@ -67,6 +73,7 @@ export const encountersModule = {
 
   actions: {
     fetchEncounters(context: EncountersContext) {
+      commitSetLoading(context, {isLoading: true});
       const userUid = usersModule.readUserUid(context);
       db.collection(`users/${userUid}/encounters`)
         .orderBy('createdAt', 'desc')
@@ -77,20 +84,24 @@ export const encountersModule = {
           });
 
           commitSetEncounters(context, encounters);
+          commitSetLoading(context, {isLoading: false});
         });
     },
 
     fetchEncounterById(context: EncountersContext, {encounterId}) {
+      commitSetLoading(context, {isLoading: true});
       const userUid = usersModule.readUserUid(context);
-      db.doc(`users/${userUid}/encounters/${encounterId}`).onSnapshot((doc) => {
+      db.doc(`users/${userUid}/encounters/${encounterId}`).onSnapshot(async (doc) => {
         const encounter = doc.data();
 
         commitSetEncounter(context, encounter as IEncounterEntity);
-        dispatchFetchEncountersCurrentNpcs(context, {encounterId});
+        await dispatchFetchEncountersCurrentNpcs(context, {encounterId});
+        commitSetLoading(context, {isLoading: false});
       });
     },
 
     fetchEncountersCurrentNpcs(context: EncountersContext, {encounterId}) {
+      commitSetLoading(context, {isLoading: true});
       const userUid = usersModule.readUserUid(context);
       db.collection(`users/${userUid}/encounters/${encounterId}/npcs`)
         .orderBy('initiative', 'desc')
@@ -101,6 +112,7 @@ export const encountersModule = {
           });
 
           commitSetEncountersCurrentNpcs(context, {npcs});
+          commitSetLoading(context, {isLoading: false});
         });
     },
 
@@ -204,6 +216,11 @@ export const encountersModule = {
   },
 
   mutations: {
+    setLoading(state: EncountersState, {isLoading}: { isLoading: boolean }) {
+      console.log('setLoading', isLoading);
+      state.isLoading = isLoading;
+    },
+
     setEncounters(state: EncountersState, encounters: IEncounterEntity[]) {
       state.encountersAll = encounters;
     },
@@ -230,19 +247,20 @@ const {
 
 // Getters
 export const readGetEncountersAll = read(encountersModule.getters.getEncountersAll);
-export const readGetEncounterById = read(encountersModule.getters.getEncounterById);
 export const readGetNpcInDetail = read(encountersModule.getters.getNpcInDetail);
 export const readGetNpcUuidInDetail = read(encountersModule.getters.getNpcUuidInDetail);
 export const readGetEncountersCurrent = read(encountersModule.getters.getEncountersCurrent);
 export const readGetEncountersActiveNpc = read(encountersModule.getters.getEncountersActiveNpc);
 export const readGetEncountersCurrentId = read(encountersModule.getters.getEncountersCurrentId);
 export const readGetEncountersCurrentNpcs = read(encountersModule.getters.getEncountersCurrentNpcs);
+export const readGetIsLoading = read(encountersModule.getters.getIsLoading);
 
 // Mutations
 export const commitSetEncounters = commit(encountersModule.mutations.setEncounters);
 export const commitSetEncounter = commit(encountersModule.mutations.setEncounter);
 export const commitSetEncountersCurrentNpcs = commit(encountersModule.mutations.setEncountersCurrentNpcs);
 export const commitSetNpcInDetail = commit(encountersModule.mutations.setNpcInDetail);
+export const commitSetLoading = commit(encountersModule.mutations.setLoading);
 
 // Actions
 export const dispatchFetchEncounters = dispatch(encountersModule.actions.fetchEncounters);
