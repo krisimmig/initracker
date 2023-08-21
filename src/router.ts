@@ -4,7 +4,7 @@ import { Route } from 'vue-router';
 
 import HomeView from '@/views/HomeView.vue';
 import CharactersView from '@/views/CharactersView.vue';
-import CharacterCreateView from '@/views/CharacterCreateView.vue';
+import CharacterEdit from '@/views/CharacterEdit.vue';
 import EncountersView from '@/views/EncountersView.vue';
 import EncounterDetailsView from '@/views/EncounterDetailsView.vue';
 import FeedbackView from '@/views/FeedbackView.vue';
@@ -50,32 +50,12 @@ const router = new Router({
     },
 
     {
-      path: '/characters/edit/:uuid',
-      name: 'editCharacter',
-      component: CharacterCreateView,
+      path: '/characters/edit/:type/:uuid?',
+      name: 'characterEdit',
+      component: CharacterEdit,
+      props: true,
       meta: {
         requiresAuth: true,
-        edit: true,
-      },
-    },
-
-    {
-      path: '/characters/builder',
-      name: 'characterBuilder',
-      component: CharacterCreateView,
-      meta: {
-        requiresAuth: true,
-        new: true,
-      },
-    },
-
-    {
-      path: '/characters/builder/:characterId',
-      name: 'characterCreate',
-      component: CharacterCreateView,
-      meta: {
-        requiresAuth: true,
-        based: true,
       },
     },
 

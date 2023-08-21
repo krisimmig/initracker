@@ -42,7 +42,7 @@
           <v-card-text class="text-body-1 text-center">
             <p >Create a new character from scratch:</p >
             <router-link
-                :to="{ name: 'characterBuilder', query: { new: true }}"
+                :to="{ name: 'characterEdit', params: { type: 'base-empty' } }"
                 style="text-decoration: none; color: inherit;"
             >
               <v-btn color="primary">
@@ -116,11 +116,24 @@ export default class Characters extends Vue {
   }
 
   public handleTeaserActioned(characterData) {
-    this.$router.push({name: 'editCharacter', params: {uuid: characterData.uuid}});
+    this.$router.push({
+      name: 'characterEdit',
+      params: {type: 'edit', uuid: characterData.uuid},
+    });
   }
 
   public handleCharacterClicked(characterData) {
-    this.$router.push({name: 'characterCreate', params: {characterId: characterData.id}});
+    if (characterData.uuid) {
+      this.$router.push({
+        name: 'characterEdit',
+        params: {type: 'base-character', uuid: characterData.uuid},
+      });
+    } else {
+      this.$router.push({
+        name: 'characterEdit',
+        params: {type: 'base-monster', uuid: characterData.id},
+      });
+    }
   }
 }
 </script >

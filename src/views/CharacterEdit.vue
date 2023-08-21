@@ -8,9 +8,11 @@
     <div v-if="!isLoading">
       <CharacterBuilder
           :character="character"
+          :is-new-character="this.type !== 'edit'"
           @change="changeHandler"
       />
     </div >
+
     <v-alert
         type="info"
         v-else
@@ -20,19 +22,16 @@
 </template >
 
 <script lang='ts'>
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import CharacterBuilder from '@/components/characters/character-builder/CharacterBuilder.vue';
 import PageTitle from '@/components/common/PageTitle.vue';
-
 import {
-  readGetIsLoading,
-  dispatchFetchCharacterById,
-  readGetCharacter,
   commitSetCharacter,
-  dispatchFetchCharacterByUuid,
-} from '@/store/characterBuilderModule';
-import { Character } from '@/classes/Character';
+  dispatchFetchCharacterById,
+  dispatchFetchCharacterByUuid, readGetCharacter, readGetIsLoading
+} from "@/store/characterBuilderModule";
+import { Character } from "@/classes/Character";
+import CharacterBuilder from "@/components/characters/character-builder/CharacterBuilder.vue";
 
 @Component({
   components: {
@@ -43,26 +42,31 @@ import { Character } from '@/classes/Character';
 export default class CharacterCreate extends Vue {
   hasUnsavedChanges = false;
 
-  public get isLoading() {
+  @Prop({default: ''}) uuid!: string;
+  @Prop({default: 'edit'}) type!: string;
+
+  get isLoading() {
     return readGetIsLoading(this.$store);
   }
 
-  public get characterId() {
-    return this.$route.params.characterId || false;
-  }
-
-  public get character() {
+  get character() {
     return readGetCharacter(this.$store);
   }
 
-  public mounted() {
-    if (this.$route.meta!.edit) {
-      dispatchFetchCharacterByUuid(this.$store, {characterUuid: this.$route.params.uuid});
-    } else if (this.$route.meta!.new) {
-      commitSetCharacter(this.$store, {character: new Character()});
-    } else if (this.characterId) {
-      // This is the route we take when the user is basing the character on a monster (monsters have an ID, not UUID)
-      dispatchFetchCharacterById(this.$store, {id: this.characterId});
+  mounted() {
+    switch (this.type) {
+      case 'edit':
+      case 'base-character':
+        dispatchFetchCharacterByUuid(this.$store, {characterUuid: this.uuid});
+        break;
+      case 'base-empty':
+        commitSetCharacter(this.$store, {character: new Character()});
+        break;
+      case 'base-monster':
+        dispatchFetchCharacterById(this.$store, {id: this.uuid});
+        break;
+      default:
+        break;
     }
   }
 
@@ -71,7 +75,7 @@ export default class CharacterCreate extends Vue {
   }
 
   public beforeRouteLeave(to, from, next) {
-    if (from.name === 'editCharacter' && this.hasUnsavedChanges) {
+    if (this.hasUnsavedChanges) {
       this.$root.$confirm({
         title: 'Unsaved changes',
         message: 'You have unsaved changes. Are you sure you want to leave?',
@@ -83,6 +87,3 @@ export default class CharacterCreate extends Vue {
   }
 }
 </script >
-
-<style >
-</style >

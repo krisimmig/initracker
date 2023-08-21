@@ -50,9 +50,9 @@ export const characterBuilderModule = {
   actions: {
     async fetchCharacterById(context: CharacterBuilderContext, {id}: { id: string }) {
       commitSetLoading(context, {isLoading: true});
-      const characterRef = db.collection('monsters').doc(id);
+      const characterDoc = await db.doc(`monsters/${id}`);
 
-      characterRef.get().then((doc) => {
+      characterDoc.get().then((doc) => {
         if (doc.exists) {
           const characterData = doc.data() as Character;
           const character = new Character(characterData);
@@ -88,12 +88,13 @@ export const characterBuilderModule = {
       });
     },
 
-    saveCharacter(context: CharacterBuilderContext, {character}: { character: Character }) {
-      let newCharacter = false;
-      if (!character.uuid) {
+    saveCharacter(context: CharacterBuilderContext, {character, newCharacter = false}: {
+      character: Character,
+      newCharacter: boolean
+    }) {
+      if (newCharacter) {
         character.uuid = uuid();
         character.meta.createdAt = new Date();
-        newCharacter = true;
       }
 
       if (!character.uuid_ref) {
@@ -112,7 +113,7 @@ export const characterBuilderModule = {
       }
 
       if (newCharacter) {
-        router.push({name: 'editCharacter', params: {uuid: character.uuid}});
+        router.push({name: 'characterEdit', params: {uuid: character.uuid, type: 'edit'}});
       }
     },
 

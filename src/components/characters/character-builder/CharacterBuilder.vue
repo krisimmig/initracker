@@ -265,18 +265,13 @@ import CharacterCategories from "@/types/characterCategories";
 })
 export default class CharacterBuilder extends Vue {
   public originalCharacter: Character | null = null;
-  public isNewCharacter: boolean = true;
 
   @Prop({type: Object, required: true}) public character!: Character;
+  @Prop({default: false}) isNewCharacter!: boolean;
 
   @Watch('character', {deep: true})
   public onCharacterChange() {
     this.$emit('change', !isEqual(this.originalCharacter, this.character));
-  }
-
-  @Watch('$route', {deep: true})
-  public onRouteChange() {
-    this.isNewCharacter = this.$router.currentRoute.name !== 'editCharacter';
   }
 
   @Watch('originalCharacter', {deep: true})
@@ -306,7 +301,7 @@ export default class CharacterBuilder extends Vue {
   }
 
   public saveCharacter(): void {
-    dispatchSaveCharacter(this.$store, {character: this.character})
+    dispatchSaveCharacter(this.$store, {character: this.character, newCharacter: this.isNewCharacter})
         .then(() => {
           this.originalCharacter = clone(this.character);
         });
@@ -314,7 +309,7 @@ export default class CharacterBuilder extends Vue {
 
   public async deleteCharacter() {
     const options = {
-      message: 'Are you sure you want to delete this character?',
+      message: 'Do you want to delete this character?',
       options: {
         color: 'error',
       },
@@ -350,7 +345,6 @@ export default class CharacterBuilder extends Vue {
 
   public mounted() {
     this.originalCharacter = clone(this.character);
-    this.isNewCharacter = this.$router.currentRoute.name !== 'editCharacter';
   }
 }
 </script >
@@ -363,5 +357,4 @@ export default class CharacterBuilder extends Vue {
 .CharacterBuilder .Form {
   margin-bottom: 3rem;
 }
-
 </style >
