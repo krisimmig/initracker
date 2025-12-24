@@ -15,11 +15,7 @@
         />
         <v-skeleton-loader
             class="ml-1"
-            type="button"
-        />
-        <v-skeleton-loader
-            class="ml-1"
-            type="button"
+            type="avatar"
         />
       </div >
 
@@ -51,9 +47,12 @@
           <v-spacer ></v-spacer >
 
           <div >
-            <v-btn @click.stop="showCharacterLibrary = true">
-              <v-icon left>mdi-account-multiple-plus</v-icon >
-              Add
+            <v-btn
+                @click="nextTurn"
+                :disabled="npcs.length === 0"
+            >
+              <v-icon left>mdi-skip-next</v-icon >
+              Next
             </v-btn >
             <v-dialog
                 v-model="showCharacterLibrary"
@@ -67,31 +66,49 @@
               />
             </v-dialog >
 
-            <v-btn
-                @click="rollInitiative"
-                :disabled="npcs.length === 0"
-                v-if="currentRound === 1 && currentNpcIndex === 1"
-                class="mx-2"
-            >
-              <v-icon left>mdi-dice-d20-outline</v-icon >
-              Roll ini
-            </v-btn >
-            <v-btn
-                @click="reset"
-                class="mx-2"
-                v-else
-            >
-              <v-icon left>mdi-backup-restore</v-icon >
-              Reset
-            </v-btn >
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                    class="ml-2"
+                >
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                    @click.stop="showCharacterLibrary = true"
+                >
+                  <v-list-item-icon>
+                    <v-icon>mdi-account-multiple-plus</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>Add</v-list-item-title>
+                </v-list-item>
 
-            <v-btn
-                @click="nextTurn"
-                :disabled="npcs.length === 0"
-            >
-              <v-icon left>mdi-skip-next</v-icon >
-              Next
-            </v-btn >
+                <v-list-item
+                    v-if="currentRound === 1 && currentNpcIndex === 1"
+                    @click="rollInitiative"
+                    :disabled="npcs.length === 0"
+                >
+                  <v-list-item-icon>
+                    <v-icon>mdi-dice-d20-outline</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>Roll ini</v-list-item-title>
+                </v-list-item>
+
+                <v-list-item
+                    v-else
+                    @click="reset"
+                >
+                  <v-list-item-icon>
+                    <v-icon>mdi-backup-restore</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>Reset</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </div >
         </div >
 
