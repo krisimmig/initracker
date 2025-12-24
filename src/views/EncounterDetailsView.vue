@@ -1,14 +1,14 @@
 <template >
   <v-row >
+    <v-col cols="5">
+      <EncounterList :id="$route.params.encounterId"/>
+    </v-col >
+
     <v-col >
       <CharacterDetails
           v-if="activeCharacter"
           :characterData="activeCharacter"
       />
-    </v-col >
-
-    <v-col cols="6">
-      <EncounterList :id="$route.params.encounterId"/>
     </v-col >
 
     <v-col >

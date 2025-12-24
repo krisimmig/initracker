@@ -5,8 +5,8 @@
         subtitle="These are all your encounters"
     />
 
-    <v-row >
-      <v-col >
+    <v-row>
+      <v-col>
 
         <div v-if="isLoading">
           <v-card class="mb-3">
@@ -35,12 +35,14 @@
             >
               <EncounterTeaser v-bind="encounter"/>
             </li >
-          </ul >
+          </ul>
+
           <v-alert
               v-else
               type="info"
               outlined
-          >Nothing here yet, please create a new encounter on the right.
+          >
+            Nothing here yet, please create a new encounter on the right.
           </v-alert >
         </template >
       </v-col >
