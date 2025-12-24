@@ -80,7 +80,8 @@
               v-for="(specialAbility, index) in characterData.special_abilities"
               :key="`special-${index}`"
           >
-            <span class="font-weight-bold">{{ specialAbility.name }}.</span > {{ specialAbility.desc }}
+            <span class="font-weight-bold">{{ specialAbility.name }}.</span >
+            <DiceText :text="specialAbility.desc" />
           </p >
         </template >
 
@@ -92,7 +93,8 @@
               :key="index"
               class="mb-3"
           >
-            <span class="font-weight-bold">{{ action.name }}.</span > {{ action.desc }}
+            <span class="font-weight-bold">{{ action.name }}.</span >
+            <DiceText :text="action.desc" />
           </p >
         </template >
 
@@ -107,7 +109,8 @@
               v-for="(action, index) in characterData.legendary_actions"
               :key="`legendary-${index}`"
           >
-            <span class="font-weight-bold">{{ action.name }}.</span > {{ action.desc }}
+            <span class="font-weight-bold">{{ action.name }}.</span >
+            <DiceText :text="action.desc" />
           </p >
         </template >
       </div >
@@ -122,12 +125,14 @@ import { Character } from '@/classes/Character';
 import { stringModifier } from '@/utils/dnd';
 import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
 import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
+import DiceText from '@/components/common/DiceText.vue';
 import { CharacterAttributes } from '@/types/characterAttributes';
 
 @Component({
   components: {
     CharacterArmorClass,
     CharacterHealth,
+    DiceText,
   },
 })
 export default class CharacterDetails extends Vue {
