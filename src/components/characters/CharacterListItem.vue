@@ -156,6 +156,10 @@ export default class CharacterListItem extends Vue {
   border-color: #ffa600;
 }
 
+.CharacterListItem.is-active {
+  border-color: #3d3df0;
+}
+
 .CharacterListItem.has-acted {
   opacity: 0.6;
 }
