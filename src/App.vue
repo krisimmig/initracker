@@ -3,7 +3,7 @@
     <AppBar />
 
     <v-main class="grey lighten-5">
-      <v-container :fluid="$route.meta.isFullWidth">
+      <v-container :fluid="$route.meta?.isFullWidth">
         <router-view></router-view>
         <confirm ref="confirm"></confirm>
       </v-container>
@@ -22,18 +22,20 @@ import Confirm from '@/components/common/Confirm.vue';
 @Component({
   components: { AppBar, Confirm },
 })
-export default class App extends Vue {
+class App extends Vue {
 
   get monsters() {
     return readGetNpcs(this.$store);
   }
 
   public async mounted() {
-    this.$root.$confirm = this.$refs.confirm.open;
+    this.$root.$confirm = (this.$refs.confirm as InstanceType<typeof Confirm>)?.open;
 
     if (this.monsters.length < 1) {
       await dispatchFetchNpcs(this.$store);
     }
   }
 }
+
+export default App;
 </script>
