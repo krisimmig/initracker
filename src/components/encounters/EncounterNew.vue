@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>Create new encounter</v-card-title>
-    <v-card-text  class="text-body-1">
+    <v-card-text class="text-body-1">
       <p>
         An encounter is a battle that your party has to survive to reach their goals in your campaign.<br />
       </p>
@@ -14,47 +14,31 @@
         color="primary"
         @keyup.enter="submitNewEncounter"
         clearable
+        prepend-icon="mdi-newspaper-plus"
       >
-        <v-icon slot="prepend">mdi-newspaper-plus</v-icon>
       </v-text-field>
       <v-btn
         color="primary"
-        :disabled="!this.encounterName"
+        :disabled="!encounterName"
         @click="submitNewEncounter"
       >
-        <v-icon left>mdi-plus</v-icon> Create encounter
+        <v-icon start>mdi-plus</v-icon> Create encounter
       </v-btn>
     </v-card-text>
   </v-card>
 </template>
 
-<script lang='ts'>
-import { Component, Vue } from 'vue-property-decorator';
-import { dispatchAddNewEncounter } from '@/store/encountersModule';
-import FormInput from '@/components/form/FormInput.vue';
-import Button from '@/components/common/Button.vue';
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useEncountersStore } from '@/store/useEncountersStore'
 
-@Component({
-  components: {
-    Button,
-    FormInput,
-  },
-})
-export default class EncounterNew extends Vue {
-  public encounterName: string = '';
+const encounterName = ref('')
+const encountersStore = useEncountersStore()
 
-  public submitNewEncounter(): void {
-    if (this.encounterName === '') {
-      return;
-    }
+function submitNewEncounter(): void {
+  if (!encounterName.value) return
 
-    dispatchAddNewEncounter(this.$store, {
-      encounterName: this.encounterName,
-    });
-    this.encounterName = '';
-  }
+  encountersStore.addNewEncounter({ encounterName: encounterName.value })
+  encounterName.value = ''
 }
 </script>
-
-<style>
-</style>

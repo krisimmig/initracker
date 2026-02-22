@@ -1,47 +1,25 @@
-<template >
+<template>
   <div class="UserDetails">
     <div class="">
-      <PageTitle
-          title="User Details"
-      />
+      <PageTitle title="User Details" />
 
       <div class="card w-3/12">
-        <img
-            v-if="photoUrl"
-            :src="photoUrl"
-            alt="User Avatar"
-            class="mb-4"
-        >
-        <p ><span class="font-weight-bold">Name:</span > {{ displayName }}</p >
-        <p ><span class="font-weight-bold">Email:</span > {{ email }}</p >
-      </div >
-    </div >
-  </div >
-</template >
+        <img v-if="photoUrl" :src="photoUrl" alt="User Avatar" class="mb-4">
+        <p><span class="font-weight-bold">Name:</span> {{ displayName }}</p>
+        <p><span class="font-weight-bold">Email:</span> {{ email }}</p>
+      </div>
+    </div>
+  </div>
+</template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue'
+import PageTitle from '@/components/common/PageTitle.vue'
+import { useUsersStore } from '@/store/useUsersStore'
 
-import PageTitle from '@/components/common/PageTitle.vue';
-import { readUserEmail, readUserPhotoUrl, readUserString } from '@/store/usersModule';
+const usersStore = useUsersStore()
 
-@Component({
-  components: {
-    PageTitle,
-  },
-})
-export default class UserDetails extends Vue {
-  public get photoUrl() {
-    return readUserPhotoUrl(this.$store);
-  }
-
-  public get displayName() {
-    return readUserString(this.$store);
-  }
-
-  public get email() {
-    return readUserEmail(this.$store);
-  }
-}
-</script >
-
+const photoUrl = computed(() => usersStore.userPhotoUrl)
+const displayName = computed(() => usersStore.userString)
+const email = computed(() => usersStore.userEmail)
+</script>

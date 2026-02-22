@@ -1,28 +1,21 @@
 <template>
   <div class="CharacterHealth">
     <div class="CharacterHealth-wrapper">
-      <SvgIcon name="heart" class="CharacterHealth-icon red--text" />
+      <SvgIcon name="heart" class="CharacterHealth-icon text-red" />
       <div class="CharacterHealth-hpWrapper">
-        <p class="CharacterHealth-hp mb-0 white--text">{{ hp }}</p>
+        <p class="CharacterHealth-hp mb-0 text-white">{{ hp }}</p>
       </div>
     </div>
   </div>
 </template>
 
-<script lang='ts'>
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import SvgIcon from '@/components/common/SvgIcon.vue'
 
-import SvgIcon from '@/components/common/SvgIcon.vue';
-
-@Component({
-  components: {
-    SvgIcon,
-  },
-})
-export default class CharacterHealth extends Vue {
-  @Prop({ type: String }) private uuid!: string;
-  @Prop({ type: Number, required: true }) private hp!: number;
-}
+defineProps<{
+  uuid?: string
+  hp: number
+}>()
 </script>
 
 <style lang="scss">

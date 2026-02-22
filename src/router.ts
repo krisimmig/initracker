@@ -1,116 +1,90 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import { Route } from 'vue-router';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
-import HomeView from '@/views/HomeView.vue';
-import CharactersView from '@/views/CharactersView.vue';
-import CharacterEdit from '@/views/CharacterEdit.vue';
-import EncountersView from '@/views/EncountersView.vue';
-import EncounterDetailsView from '@/views/EncounterDetailsView.vue';
-import FeedbackView from '@/views/FeedbackView.vue';
-import LoginView from '@/views/LoginView.vue';
-import RegisterView from '@/views/RegisterView.vue';
-import UserDetailsView from '@/views/UserDetailsView.vue';
-import { isLoggedIn } from '@/store/firebase';
+import HomeView from '@/views/HomeView.vue'
+import CharactersView from '@/views/CharactersView.vue'
+import CharacterEdit from '@/views/CharacterEdit.vue'
+import EncountersView from '@/views/EncountersView.vue'
+import EncounterDetailsView from '@/views/EncounterDetailsView.vue'
+import FeedbackView from '@/views/FeedbackView.vue'
+import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import UserDetailsView from '@/views/UserDetailsView.vue'
+import { isLoggedIn, authReady } from '@/store/firebase'
 
-Vue.use(Router);
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView,
+    meta: { requiresAuth: false },
+  },
+  {
+    path: '/user',
+    name: 'userdetails',
+    component: UserDetailsView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/characters',
+    name: 'characters',
+    component: CharactersView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/characters/edit/:type/:uuid?',
+    name: 'characterEdit',
+    component: CharacterEdit,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/encounters',
+    name: 'encounters',
+    component: EncountersView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/encounters/:encounterId',
+    name: 'encounterDetails',
+    component: EncounterDetailsView,
+    meta: { requiresAuth: true, isFullWidth: true },
+  },
+  {
+    path: '/feedback',
+    name: 'feedback',
+    component: FeedbackView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
+  },
+]
 
-const router = new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
   linkExactActiveClass: 'is-activeExact',
   linkActiveClass: 'is-active',
+  routes,
+})
 
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-      meta: {
-        requiresAuth: false,
-      },
-    },
-
-    {
-      path: '/user',
-      name: 'userdetails',
-      component: UserDetailsView,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-
-    {
-      path: '/characters',
-      name: 'characters',
-      component: CharactersView,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-
-    {
-      path: '/characters/edit/:type/:uuid?',
-      name: 'characterEdit',
-      component: CharacterEdit,
-      props: true,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-
-    {
-      path: '/encounters',
-      name: 'encounters',
-      component: EncountersView,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-
-    {
-      path: '/encounters/:encounterId',
-      name: 'encounterDetails',
-      component: EncounterDetailsView,
-      meta: {
-        requiresAuth: true,
-        isFullWidth: true,
-      },
-    },
-
-    {
-      path: '/feedback',
-      name: 'feedback',
-      component: FeedbackView,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-
-    {
-      path: '/login',
-      name: 'login',
-      component: LoginView,
-    },
-
-    {
-      path: '/register',
-      name: 'register',
-      component: RegisterView,
-    },
-  ],
-});
-
-router.beforeEach((to: Route, from: Route, next) => {
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+router.beforeEach(async (to, from, next) => {
+  await authReady
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
 
   if (requiresAuth && !isLoggedIn()) {
-    next({name: 'login', query: {redirect: to.name as string}});
+    next({ name: 'login', query: { redirect: to.name as string } })
   } else if (isLoggedIn() && ['login', 'register'].includes(to.name as string)) {
-    next({name: 'home'});
+    next({ name: 'home' })
   } else {
-    next();
+    next()
   }
-});
+})
 
-export default router;
+export default router

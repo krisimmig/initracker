@@ -1,6 +1,5 @@
 <template>
   <div class="Form-item Form-item--input">
-
     <label
       :for="label"
       class="Form-label"
@@ -10,31 +9,28 @@
 
     <select
       class="Form-element Form-element--select"
-      v-on:change="$emit('input', $event.target.value)"
+      @change="emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
     >
       <option
         v-for="(option, index) in options"
-        v-bind:value="option.value"
+        :value="option.value"
         :key="index"
         :selected="option.value == optionSelected"
       >
         {{ option.name }}
       </option>
     </select>
-
   </div>
 </template>
 
-<script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+defineProps<{
+  label: string
+  options: Array<{ value: string; name: string }>
+  optionSelected: string
+}>()
 
-@Component({})
-export default class FormSelect extends Vue {
-  @Prop({ type: String, required: true }) public label!: string;
-  @Prop({ type: Array, required: true }) public options!: [];
-  @Prop({ type: String, required: true }) public optionSelected!: string;
-}
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
 </script>
-
-<style>
-</style>

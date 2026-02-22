@@ -1,69 +1,36 @@
-<template >
-  <v-row >
+<template>
+  <v-row>
     <v-col cols="5">
-      <EncounterList :id="$route.params.encounterId"/>
-    </v-col >
+      <EncounterList :id="route.params.encounterId as string"/>
+    </v-col>
 
-    <v-col >
-      <CharacterDetails
-          v-if="activeCharacter"
-          :characterData="activeCharacter"
-      />
-    </v-col >
+    <v-col>
+      <CharacterDetails v-if="activeCharacter" :characterData="activeCharacter" />
+    </v-col>
 
-    <v-col >
-      <CharacterDetails
-          v-if="selectedCharacter"
-          :characterData="selectedCharacter"
-      />
-      <v-alert
-          v-else
-          dense
-          outlined
-          type="info"
-          class="mt-8"
-      >
-        Click on a <b >character name</b > to see details here.
-      </v-alert >
-    </v-col >
-  </v-row >
-</template >
+    <v-col>
+      <CharacterDetails v-if="selectedCharacter" :characterData="selectedCharacter" />
+      <v-alert v-else density="compact" variant="outlined" type="info" class="mt-8">
+        Click on a <b>character name</b> to see details here.
+      </v-alert>
+    </v-col>
+  </v-row>
+</template>
 
-<script lang='ts'>
-import { Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import EncounterList from '@/components/encounters/EncounterList.vue'
+import CharacterDetails from '@/components/characters/CharacterDetails.vue'
 
-import {
-  readGetNpcInDetail,
-  readGetEncountersActiveNpc,
-  dispatchFetchEncounterById,
-} from '@/store/encountersModule';
+const route = useRoute()
+const encountersStore = useEncountersStore()
 
-import EncounterList from '@/components/encounters/EncounterList.vue';
-import CharacterLibrary from '@/components/characters/CharacterLibrary.vue';
-import CharacterDetails from '@/components/characters/CharacterDetails.vue';
+const selectedCharacter = computed(() => encountersStore.npcInDetail)
+const activeCharacter = computed(() => encountersStore.encountersActiveNpc())
 
-@Component({
-  components: {
-    EncounterList,
-    CharacterLibrary,
-    CharacterDetails,
-  },
+onMounted(() => {
+  encountersStore.fetchEncounterById({ encounterId: route.params.encounterId as string })
 })
-export default class EncounterDetails extends Vue {
-  get selectedCharacter() {
-    return readGetNpcInDetail(this.$store);
-  }
-
-  get activeCharacter() {
-    return readGetEncountersActiveNpc(this.$store);
-  }
-
-  public mounted() {
-    dispatchFetchEncounterById(this.$store, {encounterId: this.$route.params.encounterId});
-  }
-}
-</script >
-
-<style lang="scss">
-
-</style >
+</script>

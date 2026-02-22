@@ -1,106 +1,71 @@
-<template >
+<template>
   <div
-      v-if="characterData"
-      class="CharacterTeaser d-flex align-center"
+    v-if="characterData"
+    class="CharacterTeaser d-flex align-center"
   >
     <div class="d-flex flex-column">
-
-      <h4 class="text-h6 font-weight-medium">{{ characterData.name }}</h4 >
-      <p class="mb-1">{{ description }}</p >
+      <h4 class="text-h6 font-weight-medium">{{ characterData.name }}</h4>
+      <p class="mb-1">{{ description }}</p>
 
       <div class="d-flex">
         <div class="d-flex align-center">
-          <SvgIcon
-              name="heart"
-              class="red--text mr-1"
-          />
+          <SvgIcon name="heart" class="text-red mr-1" />
           {{ characterData.hit_points }}
-        </div >
+        </div>
 
         <div class="d-flex align-center ml-2">
-          <SvgIcon
-              name="shield"
-              class="grey--text mr-1"
-          />
+          <SvgIcon name="shield" class="text-grey mr-1" />
           {{ characterData.armor_class }}
-        </div >
+        </div>
 
         <div class="d-flex align-center ml-2">
           <p class="mb-0 mr-1">
-            <b >CR</b >
+            <b>CR</b>
             <span v-if="characterData.challenge_rating">
-                {{ characterData.challenge_rating }}
-              </span >
-            <span v-else> &mdash;</span >
-          </p >
-        </div >
-      </div >
-      <p
-          class="caption mb-0 mt-2 text--secondary"
-      >
+              {{ characterData.challenge_rating }}
+            </span>
+            <span v-else> &mdash;</span>
+          </p>
+        </div>
+      </div>
+      <p class="text-caption mb-0 mt-2 text-secondary">
         Created {{ createdAt || 'sometime in the past' }} - Updated {{ updatedAt || 'never' }}
-      </p >
-    </div >
+      </p>
+    </div>
 
     <v-spacer />
-    <slot ></slot >
-  </div >
-</template >
+    <slot></slot>
+  </div>
+</template>
 
-<script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import CharacterDetails from '@/components/characters/CharacterDetails.vue';
-import { Character } from '@/classes/Character';
-import {
-  dispatchAddNpcToEncounter,
-  readGetEncountersCurrentId,
-} from '@/store/encountersModule';
-import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
-import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
-import SvgIcon from '@/components/common/SvgIcon.vue';
+<script setup lang="ts">
+import { computed } from 'vue'
+import { Character } from '@/classes/Character'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import SvgIcon from '@/components/common/SvgIcon.vue'
 
-@Component({
-  components: {
-    CharacterDetails,
-    CharacterArmorClass,
-    CharacterHealth,
-    SvgIcon,
-  },
-})
-export default class CharacterTeaser extends Vue {
-  @Prop({type: Object, required: true}) public characterData!: Character;
+const props = defineProps<{
+  characterData: Character
+}>()
 
-  public get encounterId() {
-    return readGetEncountersCurrentId(this.$store);
-  }
+const encountersStore = useEncountersStore()
 
-  public get description() {
-    return Character.getDescription(this.characterData);
-  }
+const encounterId = computed(() => encountersStore.encountersCurrentId())
+const description = computed(() => Character.getDescription(props.characterData))
+const createdAt = computed(() => Character.getCreatedAt(props.characterData))
+const updatedAt = computed(() => Character.getUpdatedAt(props.characterData))
 
-  public addToEncounter() {
-    if (!this.encounterId) {
-      return;
-    }
-    dispatchAddNpcToEncounter(this.$store, {
-      npcData: Object.assign({}, this.characterData),
-      encounterId: this.encounterId,
-    });
-  }
-
-  public get createdAt() {
-    return Character.getCreatedAt(this.characterData);
-  }
-
-  public get updatedAt() {
-    return Character.getUpdatedAt(this.characterData);
-  }
+function addToEncounter() {
+  if (!encounterId.value) return
+  encountersStore.addNpcToEncounter({
+    npcData: Object.assign({}, props.characterData),
+    encounterId: encounterId.value,
+  })
 }
-</script >
-
+</script>
 
 <style lang="scss">
 .CharacterTeaser {
   cursor: pointer;
 }
-</style >
+</style>

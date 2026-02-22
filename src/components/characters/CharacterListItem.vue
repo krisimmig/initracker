@@ -1,134 +1,92 @@
-<template >
+<template>
   <div
-      v-if="npc"
-      :class="[{ 'is-active': isActive, 'is-selected': isSelected, 'has-acted': hasActed }, `Category-${character.category}`]"
-      class="CharacterListItem"
-      @click.stop="showInDetail"
+    v-if="npc"
+    :class="[{ 'is-active': isActive, 'is-selected': isSelected, 'has-acted': hasActed }, `Category-${npc.category}`]"
+    class="CharacterListItem"
+    @click.stop="showInDetail"
   >
     <div class="d-flex align-center">
       <CharacterArmorClass :armorClass="npc.armor_class"/>
-      <div >
+      <div>
         <h2 class="CharacterListItem-name text-h6">
-          <span class="grey--text pr-2">{{ npc.initiative }}</span >
-          <span :class="{ 'text-decoration-line-through grey--text': npc.hit_points_current <= 0 }">
+          <span class="text-grey pr-2">{{ npc.initiative }}</span>
+          <span :class="{ 'text-decoration-line-through text-grey': npc.hit_points_current <= 0 }">
             {{ npc.name }}
-          </span >
-        </h2 >
-        <p class="caption mb-0">{{ description }}</p >
-      </div >
+          </span>
+        </h2>
+        <p class="text-caption mb-0">{{ description }}</p>
+      </div>
 
       <v-spacer />
 
-      <v-menu
-          bottom
-          left
-          :close-on-content-click="true"
-      >
-        <template v-slot:activator="{ on, attrs }">
+      <v-menu location="bottom end" :close-on-content-click="true">
+        <template v-slot:activator="{ props: activatorProps }">
           <v-btn
-              icon
-              v-on="on"
-              v-bind="attrs"
-              class="align-self-start"
+            icon
+            v-bind="activatorProps"
+            class="align-self-start"
           >
-            <v-icon >mdi-dots-vertical</v-icon >
-          </v-btn >
-        </template >
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
 
-        <v-list >
-          <CharacterInitiative
-              :initiative="npc.initiative"
-              :uuid="npc.uuid"
-          />
-          <v-list-item
-              link
-              v-if="removable"
-              @click="$emit('remove')"
-          >Remove
-          </v-list-item >
-        </v-list >
-      </v-menu >
-    </div >
+        <v-list>
+          <CharacterInitiative :initiative="npc.initiative" :uuid="npc.uuid" />
+          <v-list-item v-if="removable" @click="emit('remove')">Remove</v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
 
-    <div >
-      <v-hover >
-        <CharacterHealthBar
-            :uuid="npc.uuid"
-            :name="npc.name"
-            :hp="npc.hit_points_current"
-            :maxHp="npc.hit_points"
-        />
-      </v-hover >
+    <div>
+      <CharacterHealthBar
+        :uuid="npc.uuid"
+        :name="npc.name"
+        :hp="npc.hit_points_current"
+        :maxHp="npc.hit_points"
+      />
 
       <CharacterConditions
-          :uuid="npc.uuid"
-          :name="npc.name"
-          :conditions="npcConditions"
+        :uuid="npc.uuid"
+        :name="npc.name"
+        :conditions="npcConditions"
       />
-    </div >
-  </div >
-</template >
+    </div>
+  </div>
+</template>
 
-<script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import {
-  commitSetNpcInDetail,
-  readGetNpcUuidInDetail
-} from '@/store/encountersModule';
-import { Character, Character as ICharacter } from '@/classes/Character';
-import CharacterHealthBar from '@/components/characters/common/CharacterHealthbar.vue';
-import CharacterInitiative from '@/components/characters/common/CharacterInitiative.vue';
-import CharacterConditions from '@/components/characters/common/CharacterCondition.vue';
-import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import { Character, Character as ICharacter } from '@/classes/Character'
+import CharacterHealthBar from '@/components/characters/common/CharacterHealthbar.vue'
+import CharacterInitiative from '@/components/characters/common/CharacterInitiative.vue'
+import CharacterConditions from '@/components/characters/common/CharacterCondition.vue'
+import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue'
 
-@Component({
-  components: {
-    CharacterHealthBar,
-    CharacterInitiative,
-    CharacterConditions,
-    CharacterArmorClass,
-  },
-})
-export default class CharacterListItem extends Vue {
-  character!: Character;
+const props = defineProps<{
+  npc: ICharacter
+  isActive: boolean
+  removable: boolean
+  hasActed?: boolean
+}>()
 
-  @Prop({type: Boolean, required: true}) public removable!: boolean;
-  @Prop({type: Object, required: true}) public npc!: ICharacter;
-  @Prop({type: Boolean, required: true}) public isActive!: boolean;
-  @Prop({default: false}) public hasActed!: boolean;
+const emit = defineEmits<{
+  remove: []
+}>()
 
-  @Watch('npc')
-  public onNpcChange(npcData) {
-    Vue.set(this, 'character', new Character(npcData));
-  }
+const encountersStore = useEncountersStore()
 
-  get selectedNpcUuid() {
-    return readGetNpcUuidInDetail(this.$store);
-  }
+const selectedNpcUuid = computed(() => encountersStore.npcUuidInDetail())
+const isSelected = computed(() => props.npc.uuid === selectedNpcUuid.value)
+const npcConditions = computed(() => props.npc.conditions || [])
+const description = computed(() => Character.getDescription(props.npc))
 
-  get isSelected() {
-    return this.npc.uuid === this.selectedNpcUuid;
-  }
-
-  get npcConditions() {
-    return this.npc.conditions || [];
-  }
-
-  public showInDetail() {
-    if (this.npc) {
-      commitSetNpcInDetail(this.$store, this.npc);
-    }
-  }
-
-  public get description() {
-    return Character.getDescription(this.npc);
-  }
-
-  created() {
-    this.character = new Character(this.npc);
+function showInDetail() {
+  if (props.npc) {
+    encountersStore.setNpcInDetail(props.npc)
   }
 }
-</script >
+</script>
 
 <style lang="scss">
 .CharacterListItem {
@@ -183,4 +141,4 @@ export default class CharacterListItem extends Vue {
 .CharacterListItem.is-selected .CharacterListItem-name:after {
   background: #8fb3e1;
 }
-</style >
+</style>

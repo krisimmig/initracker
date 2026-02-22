@@ -10,14 +10,8 @@
   </div>
 </template>
 
-<script lang='ts'>
-  import { Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref } from 'vue'
 
-  @Component
-  export default class Collapsable extends Vue {
-    private isCollapsed: boolean = true;
-  }
+const isCollapsed = ref(true)
 </script>
-
-<style lang="scss">
-</style>

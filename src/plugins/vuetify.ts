@@ -1,14 +1,14 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
-import { VBtn, VIcon, VSnackbar } from "vuetify/lib";
+import { createVuetify } from 'vuetify'
+import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css'
 
-Vue.use(Vuetify, {
-  components: {
-    VSnackbar,
-    VBtn,
-    VIcon
-  }
-});
-
-export default new Vuetify({
-});
+export default createVuetify({
+  icons: { defaultSet: 'mdi' },
+  theme: {
+    variations: {
+      colors: ['primary', 'secondary'],
+      lighten: 2,
+      darken: 2,
+    },
+  },
+})

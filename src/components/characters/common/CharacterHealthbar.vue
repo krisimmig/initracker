@@ -3,13 +3,13 @@
     <div @click.stop="showDialog = true">
       <div class="d-flex align-center">
         <v-progress-linear
-          :value="hpInPercent"
-          color="red darken-2"
+          :model-value="hpInPercent"
+          color="red-darken-2"
           height="8"
           rounded
         >
         </v-progress-linear>
-        <p class="ml-4 ma-0 text-no-wrap subtitle-2">{{ hp }} / {{ maxHp }}</p>
+        <p class="ml-4 ma-0 text-no-wrap text-body-2">{{ hp }} / {{ maxHp }}</p>
       </div>
     </div>
 
@@ -18,7 +18,9 @@
         <v-app-bar flat>
           <v-toolbar-title>Update Healthpoints</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon @click.stop="showDialog = false; hitPointChangeAmount = 0"><v-icon>mdi-close</v-icon></v-btn>
+          <v-btn icon @click.stop="showDialog = false; hitPointChangeAmount = 0">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-app-bar>
         <v-card-text>
           <div class="my-4 d-flex align-baseline">
@@ -31,21 +33,21 @@
               min="0"
             />
 
-            <v-btn class="mx-1" :disabled="hitPointChangeAmount < 10" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount) - 10">
-              <v-icon left>mdi-minus</v-icon>
+            <v-btn class="mx-1" :disabled="hitPointChangeAmount < 10" rounded variant="outlined" size="small" @click="hitPointChangeAmount = Number(hitPointChangeAmount) - 10">
+              <v-icon start>mdi-minus</v-icon>
               10
             </v-btn>
-            <v-btn class="mx-1" :disabled="hitPointChangeAmount <= 0" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount - 1)">
-              <v-icon left>mdi-minus</v-icon>
+            <v-btn class="mx-1" :disabled="hitPointChangeAmount <= 0" rounded variant="outlined" size="small" @click="hitPointChangeAmount = Number(hitPointChangeAmount - 1)">
+              <v-icon start>mdi-minus</v-icon>
               1
             </v-btn>
 
-            <v-btn class="mx-1" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount) + 1">
-              <v-icon left>mdi-plus</v-icon>
+            <v-btn class="mx-1" rounded variant="outlined" size="small" @click="hitPointChangeAmount = Number(hitPointChangeAmount) + 1">
+              <v-icon start>mdi-plus</v-icon>
               1
             </v-btn>
-            <v-btn class="mx-1" rounded outlined small @click="hitPointChangeAmount = Number(hitPointChangeAmount) + 10">
-              <v-icon left>mdi-plus</v-icon>
+            <v-btn class="mx-1" rounded variant="outlined" size="small" @click="hitPointChangeAmount = Number(hitPointChangeAmount) + 10">
+              <v-icon start>mdi-plus</v-icon>
               10
             </v-btn>
           </div>
@@ -53,82 +55,87 @@
           <v-row class="mb-2">
             <v-col>
               <v-btn block @click="changeHitPoints()" color="error">
-                <v-icon left>mdi-minus</v-icon>
+                <v-icon start>mdi-minus</v-icon>
                 Damage
               </v-btn>
             </v-col>
 
             <v-col>
               <v-btn block @click="changeHitPoints({ subtract: false })" color="primary">
-                <v-icon left>mdi-plus</v-icon>
+                <v-icon start>mdi-plus</v-icon>
                 Heal
               </v-btn>
             </v-col>
           </v-row>
 
-          <v-btn block @click="resetHitPoints()"><v-icon left>mdi-repeat</v-icon> Reset to full health</v-btn>
+          <v-btn block @click="resetHitPoints()">
+            <v-icon start>mdi-repeat</v-icon>
+            Reset to full health
+          </v-btn>
         </v-card-text>
       </v-card>
     </v-dialog>
   </div>
 </template>
 
-<script lang='ts'>
-  import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import { useNpcsStore } from '@/store/useNpcsStore'
 
-  import { readGetEncountersCurrentId } from '@/store/encountersModule';
-  import { dispatchUpdateHitPointCurrent } from '@/store/npcsModule';
+const props = defineProps<{
+  uuid?: string
+  name?: string
+  hp: number
+  maxHp?: number
+}>()
 
-  @Component
-  export default class CharacterHealthBar extends Vue {
-    public showDialog: boolean = false;
-    public hitPointChangeAmount: number = 0;
+const showDialog = ref(false)
+const hitPointChangeAmount = ref(0)
 
-    @Prop({ type: String }) private uuid!: string;
-    @Prop({ type: String }) private name!: string;
-    @Prop({ type: Number, required: true }) private hp!: number;
-    @Prop({ type: Number, required: false }) private maxHp!: number;
+const encountersStore = useEncountersStore()
+const npcsStore = useNpcsStore()
 
-    public get hpInPercent() {
-      if (this.hp < 0) { return 0; }
-      if (this.hp > this.maxHp) { return 100; }
-      return this.hp / (this.maxHp / 100);
-    }
+const hpInPercent = computed(() => {
+  if (props.hp < 0) return 0
+  if (props.maxHp && props.hp > props.maxHp) return 100
+  return props.maxHp ? props.hp / (props.maxHp / 100) : 0
+})
 
-    public resetHitPoints() {
-      const encounterId = readGetEncountersCurrentId(this.$store);
-      if (!encounterId) { return; }
+function resetHitPoints() {
+  const encounterId = encountersStore.encountersCurrentId()
+  if (!encounterId || !props.maxHp) return
 
-      dispatchUpdateHitPointCurrent(this.$store, {
-        encounterId,
-        npcId: this.uuid,
-        newHitPoints: this.maxHp,
-      });
+  npcsStore.updateHitPointCurrent({
+    encounterId,
+    npcId: props.uuid!,
+    newHitPoints: props.maxHp,
+  })
 
-      this.showDialog = false;
-      this.hitPointChangeAmount = 0;
-    }
+  showDialog.value = false
+  hitPointChangeAmount.value = 0
+}
 
-    public changeHitPoints({ subtract } = { subtract: true }) {
-      const encounterId = readGetEncountersCurrentId(this.$store);
-      if (!encounterId) { return; }
-      let newHitPoints;
+function changeHitPoints({ subtract } = { subtract: true }) {
+  const encounterId = encountersStore.encountersCurrentId()
+  if (!encounterId) return
 
-      if (subtract) {
-        newHitPoints = this.hp - this.hitPointChangeAmount;
-      } else {
-        newHitPoints = this.hp + this.hitPointChangeAmount;
-      }
-      dispatchUpdateHitPointCurrent(this.$store, {
-        encounterId,
-        npcId: this.uuid,
-        newHitPoints,
-      });
-
-      this.showDialog = false;
-      this.hitPointChangeAmount = 0;
-    }
+  let newHitPoints: number
+  if (subtract) {
+    newHitPoints = props.hp - hitPointChangeAmount.value
+  } else {
+    newHitPoints = props.hp + hitPointChangeAmount.value
   }
+
+  npcsStore.updateHitPointCurrent({
+    encounterId,
+    npcId: props.uuid!,
+    newHitPoints,
+  })
+
+  showDialog.value = false
+  hitPointChangeAmount.value = 0
+}
 </script>
 
 <style lang="scss">

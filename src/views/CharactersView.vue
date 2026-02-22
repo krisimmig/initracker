@@ -1,176 +1,117 @@
-<template >
+<template>
   <div class="Characters">
-    <PageTitle
-        title="Characters"
-        subtitle="Create or edit your own monsters and characters"
-    />
+    <PageTitle title="Characters" subtitle="Create or edit your own monsters and characters" />
 
-    <v-row >
-      <v-col >
+    <v-row>
+      <v-col>
         <div v-if="isLoading">
           <v-card class="mb-3">
-            <v-skeleton-loader
-                class="mx-auto "
-                type="card-heading, list-item-three-line"
-            />
-          </v-card >
-
+            <v-skeleton-loader class="mx-auto" type="heading, list-item-three-line" />
+          </v-card>
           <v-card class="mb-3">
-            <v-skeleton-loader
-                class="mx-auto"
-                type="card-heading, list-item-three-line"
-            />
-          </v-card >
-        </div >
+            <v-skeleton-loader class="mx-auto" type="heading, list-item-three-line" />
+          </v-card>
+        </div>
 
         <template v-if="!isLoading">
           <template v-if="characters.length > 0">
             <v-card
-                hover
-                v-for="character in characters"
-                :key="character.uuid"
-                class="pa-4 mb-3"
+              hover
+              v-for="character in characters"
+              :key="character.uuid"
+              class="pa-4 mb-3"
             >
-              <CharacterTeaser
-                  :character-data="character"
-                  @click.native="handleTeaserActioned(character)"
-              >
-                <v-btn
-                    outlined
-                    color="primary"
-                    @click="handleTeaserActioned(character)"
-                >
-                  <v-icon left>mdi-pencil</v-icon >
+              <CharacterTeaser :character-data="character" @click="handleTeaserActioned(character)">
+                <v-btn variant="outlined" color="primary" @click="handleTeaserActioned(character)">
+                  <v-icon start>mdi-pencil</v-icon>
                   Edit
-                </v-btn >
-              </CharacterTeaser >
-            </v-card >
-          </template >
-          <v-alert
-              outlined
-              type="info"
-              v-else
-          >No custom characters found.
-          </v-alert >
-        </template >
-      </v-col >
+                </v-btn>
+              </CharacterTeaser>
+            </v-card>
+          </template>
+          <v-alert variant="outlined" type="info" v-else>No custom characters found.</v-alert>
+        </template>
+      </v-col>
 
       <v-col cols="4">
-        <v-card >
+        <v-card>
           <v-card-text class="text-body-1 text-center">
-            <p >Create a new character from scratch:</p >
-            <router-link
-                :to="{ name: 'characterEdit', params: { type: 'base-empty' } }"
-                style="text-decoration: none; color: inherit;"
-            >
+            <p>Create a new character from scratch:</p>
+            <router-link :to="{ name: 'characterEdit', params: { type: 'base-empty' } }" style="text-decoration: none; color: inherit;">
               <v-btn color="primary">
-                <v-icon left>mdi-account-plus</v-icon >
+                <v-icon start>mdi-account-plus</v-icon>
                 New character sheet
-              </v-btn >
-            </router-link >
+              </v-btn>
+            </router-link>
             <div class="d-flex my-4 align-center">
               <v-divider />
-              <span class="px-4 font-weight-bold">or</span >
+              <span class="px-4 font-weight-bold">or</span>
               <v-divider />
-            </div >
-            <p >Base your new character on an existing one from the library:</p >
-            <v-btn
-                @click="showCharacterLibrary = true"
-                color="primary"
-            >
-              <v-icon left>mdi-account-multiple-plus</v-icon >
+            </div>
+            <p>Base your new character on an existing one from the library:</p>
+            <v-btn @click="showCharacterLibrary = true" color="primary">
+              <v-icon start>mdi-account-multiple-plus</v-icon>
               Open library
-            </v-btn >
-          </v-card-text >
-          <v-dialog
-              v-model="showCharacterLibrary"
-              max-width="80vw"
-          >
+            </v-btn>
+          </v-card-text>
+          <v-dialog v-model="showCharacterLibrary" max-width="80vw">
             <CharacterLibrary
-                :encounterId="$route.params.encounterId"
-                @characterClicked="handleCharacterClicked"
-                @closeClicked="showCharacterLibrary = false"
-                buttonText="Use as base"
+              @characterClicked="handleCharacterClicked"
+              @closeClicked="showCharacterLibrary = false"
+              buttonText="Use as base"
             />
-          </v-dialog >
-        </v-card >
-      </v-col >
-    </v-row >
-  </div >
-</template >
+          </v-dialog>
+        </v-card>
+      </v-col>
+    </v-row>
+  </div>
+</template>
 
-<script lang='ts'>
-import { Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useCharactersStore } from '@/store/useCharactersStore'
+import CharacterTeaser from '@/components/characters/CharacterTeaser.vue'
+import { Character } from '@/classes/Character'
+import PageTitle from '@/components/common/PageTitle.vue'
+import CharacterLibrary from '@/components/characters/CharacterLibrary.vue'
 
-import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersModule';
-import CharacterTeaser from '@/components/characters/CharacterTeaser.vue';
-import { Character } from '@/classes/Character';
-import PageTitle from '@/components/common/PageTitle.vue';
-import { readGetNpcs } from '@/store/npcsModule';
-import CharacterLibrary from '@/components/characters/CharacterLibrary.vue';
-import Button from '@/components/common/Button.vue';
-import { readGetIsLoading } from "@/store/charactersModule";
+const router = useRouter()
+const charactersStore = useCharactersStore()
 
-@Component({
-  components: {
-    Button,
-    CharacterTeaser,
-    PageTitle,
-    CharacterLibrary,
-  },
+const showCharacterLibrary = ref(false)
+
+const isLoading = computed(() => charactersStore.isLoading)
+const characters = computed(() => charactersStore.characters)
+
+onMounted(() => {
+  charactersStore.fetchCharacters()
 })
-export default class Characters extends Vue {
-  public showCharacterLibrary: boolean = false;
 
-  get isLoading() {
-    return readGetIsLoading(this.$store);
-  }
+function handleTeaserActioned(characterData: Character) {
+  router.push({
+    name: 'characterEdit',
+    params: { type: 'edit', uuid: characterData.uuid },
+  })
+}
 
-  public get characters(): Character[] {
-    return readGetCharacters(this.$store);
-  }
-
-  public get npcs(): Character[] {
-    return readGetNpcs(this.$store);
-  }
-
-  public mounted() {
-    dispatchFetchCharacters(this.$store);
-  }
-
-  public handleTeaserActioned(characterData) {
-    this.$router.push({
+function handleCharacterClicked(characterData: Character) {
+  if (characterData.uuid) {
+    router.push({
       name: 'characterEdit',
-      params: {type: 'edit', uuid: characterData.uuid},
-    });
-  }
-
-  public handleCharacterClicked(characterData) {
-    if (characterData.uuid) {
-      this.$router.push({
-        name: 'characterEdit',
-        params: {type: 'base-character', uuid: characterData.uuid},
-      });
-    } else {
-      this.$router.push({
-        name: 'characterEdit',
-        params: {type: 'base-monster', uuid: characterData.id},
-      });
-    }
+      params: { type: 'base-character', uuid: characterData.uuid },
+    })
+  } else {
+    router.push({
+      name: 'characterEdit',
+      params: { type: 'base-monster', uuid: (characterData as any).id },
+    })
   }
 }
-</script >
+</script>
 
 <style lang="scss">
 .CharacterList li {
   @apply text-gray-600 block;
 }
-
-.Characters-myCharacters .CharactersLibrary-scrollBox {
-  height: calc(100vh - 310px);
-}
-
-.Characters-library .CharactersLibrary-scrollBox {
-  height: calc(100vh - 412px);
-}
-</style >
+</style>

@@ -1,33 +1,31 @@
 <template>
   <div class="Form-item Form-item--input">
     <label
-      :for="random"
+      :for="randomId"
       class="Form-label"
     >
       {{ label }}:
     </label>
     <textarea
       class="Form-element Form-element--textArea"
-      :id="random"
-      v-bind:value="value"
-      v-on:input="$emit('input', $event.target.value)"
+      :id="randomId"
+      :value="value"
+      @input="emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
     ></textarea>
   </div>
 </template>
 
-<script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue'
 
-@Component({})
-export default class FormTextarea extends Vue {
-  @Prop({ type: String, required: true }) public label!: string;
-  @Prop({ type: String, required: false }) public value!: string;
+defineProps<{
+  label: string
+  value?: string
+}>()
 
-  public get random() {
-    return Math.random();
-  }
-}
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
+
+const randomId = computed(() => String(Math.random()))
 </script>
-
-<style>
-</style>

@@ -12,7 +12,7 @@
       'has-postfix': hasPostfix,
     }"
   >
-    <span class="Button-prefix" v-if="hasPrefix" @click.prevent.stop="$emit('clickPrefix')">
+    <span class="Button-prefix" v-if="hasPrefix" @click.prevent.stop="emit('clickPrefix')">
       <slot name="prefix"></slot>
     </span>
 
@@ -20,39 +20,47 @@
       <slot></slot>
     </span>
 
-    <span class="Button-postfix" v-if="hasPostfix" @click.prevent.stop="$emit('clickPostfix')">
+    <span class="Button-postfix" v-if="hasPostfix" @click.prevent.stop="emit('clickPostfix')">
       <slot name="postfix"></slot>
     </span>
   </button>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, useSlots } from 'vue'
 
-@Component
-export default class Button extends Vue {
-  @Prop({ required: false, default: false, type: Boolean }) public isSmall!: boolean;
-  @Prop({ required: false, default: false, type: Boolean }) public isBig!: boolean;
-  @Prop({ required: false, default: false, type: Boolean }) public isDanger!: boolean;
-  @Prop({ required: false, default: false, type: Boolean }) public isSuccess!: boolean;
-  @Prop({ required: false, default: false, type: Boolean }) public isSecondary!: boolean;
-  @Prop({ required: false, default: false, type: Boolean }) public isNormalCasing!: boolean;
-  @Prop({ required: false, type: String }) public href!: string;
+const props = withDefaults(defineProps<{
+  isSmall?: boolean
+  isBig?: boolean
+  isDanger?: boolean
+  isSuccess?: boolean
+  isSecondary?: boolean
+  isNormalCasing?: boolean
+  href?: string
+}>(), {
+  isSmall: false,
+  isBig: false,
+  isDanger: false,
+  isSuccess: false,
+  isSecondary: false,
+  isNormalCasing: false,
+})
 
-  get hasPrefix() {
-    return !!this.$slots.prefix;
-  }
+const emit = defineEmits<{
+  click: []
+  clickPrefix: []
+  clickPostfix: []
+}>()
 
-  get hasPostfix() {
-    return !!this.$slots.postfix;
-  }
+const slots = useSlots()
+const hasPrefix = computed(() => !!slots.prefix)
+const hasPostfix = computed(() => !!slots.postfix)
 
-  private handleContentClick() {
-    if (this.href) {
-      window.location.href = this.href;
-    } else {
-      this.$emit('click');
-    }
+function handleContentClick() {
+  if (props.href) {
+    window.location.href = props.href
+  } else {
+    emit('click')
   }
 }
 </script>

@@ -1,10 +1,7 @@
 <template>
   <div class="Home">
     <div class="">
-      <PageTitle
-        title="Welcome home"
-        subtitle="your monsters are waiting."
-      />
+      <PageTitle title="Welcome home" subtitle="your monsters are waiting." />
 
       <div class="u-container-fluid max-w-3xl">
         <div class="card card--rounded card--shadow">
@@ -19,10 +16,10 @@
           <p>You can create and preplan all your encounters on the <router-link :to="{ name: 'encounters' }">encounters overview</router-link> page. Simply give it a name, hit save and add monsters and players to your newly created encounter. Your are probably also want to add some of your players characters to the mix, to do just that, read the newxt part about the Character Builder.</p>
 
           <h4 class="h4 mt-4">Give Feedback</h4>
-          <p>Once you have seen all the features that we have build so far, please give us some <router-link :to="{ name: 'encounters' }">feedback</router-link> about new features you want to see or bugs you might have necountered. You can also subscirbe to our newsletter or join our reddit community.</p>
+          <p>Once you have seen all the features that we have build so far, please give us some <router-link :to="{ name: 'feedback' }">feedback</router-link> about new features you want to see or bugs you might have necountered. You can also subscirbe to our newsletter or join our reddit community.</p>
 
           <h4 class="h4 mt-4">Roadmap</h4>
-          <p>There are a lot of features that we want to add to this app. If you want to participate in what features those are, feel free to send <router-link :to="{ name: 'encounters' }">feedback</router-link>. Here is a list of some of the most important ones we have on our list:</p>
+          <p>There are a lot of features that we want to add to this app. If you want to participate in what features those are, feel free to send <router-link :to="{ name: 'feedback' }">feedback</router-link>. Here is a list of some of the most important ones we have on our list:</p>
           <ul>
             <li>- Sharing the encounter with your players via a custom URL</li>
             <li>- Let players edit and create their own payer character sheets for your campaign</li>
@@ -35,16 +32,6 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-
-import PageTitle from '@/components/common/PageTitle.vue';
-
-@Component({
-  components: {
-    PageTitle,
-  },
-})
-export default class Home extends Vue {}
+<script setup lang="ts">
+import PageTitle from '@/components/common/PageTitle.vue'
 </script>
-

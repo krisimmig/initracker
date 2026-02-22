@@ -1,89 +1,76 @@
-<template >
+<template>
   <div class="">
     <PageTitle
-        title="Character editor"
-        subtitle="Here you can create or edit an existing character."
+      title="Character editor"
+      subtitle="Here you can create or edit an existing character."
     />
 
     <div v-if="!isLoading">
       <CharacterBuilder
-          :character="character"
-          :is-new-character="this.type !== 'edit'"
-          @change="changeHandler"
+        :character="character"
+        :is-new-character="type !== 'edit'"
+        @change="changeHandler"
       />
-    </div >
+    </div>
 
-    <v-alert
-        type="info"
-        v-else
-    >Loading..
-    </v-alert >
-  </div >
-</template >
+    <v-alert type="info" v-else>Loading..</v-alert>
+  </div>
+</template>
 
-<script lang='ts'>
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
+import PageTitle from '@/components/common/PageTitle.vue'
+import { useCharacterBuilderStore } from '@/store/useCharacterBuilderStore'
+import { useConfirmStore } from '@/store/useConfirmStore'
+import { Character } from '@/classes/Character'
+import CharacterBuilder from '@/components/characters/character-builder/CharacterBuilder.vue'
 
-import PageTitle from '@/components/common/PageTitle.vue';
-import {
-  commitSetCharacter,
-  dispatchFetchCharacterById,
-  dispatchFetchCharacterByUuid, readGetCharacter, readGetIsLoading
-} from "@/store/characterBuilderModule";
-import { Character } from "@/classes/Character";
-import CharacterBuilder from "@/components/characters/character-builder/CharacterBuilder.vue";
-
-@Component({
-  components: {
-    CharacterBuilder,
-    PageTitle,
-  },
+const props = withDefaults(defineProps<{
+  uuid?: string
+  type?: string
+}>(), {
+  uuid: '',
+  type: 'edit',
 })
-export default class CharacterCreate extends Vue {
-  hasUnsavedChanges = false;
 
-  @Prop({default: ''}) uuid!: string;
-  @Prop({default: 'edit'}) type!: string;
+const builderStore = useCharacterBuilderStore()
+const confirmStore = useConfirmStore()
 
-  get isLoading() {
-    return readGetIsLoading(this.$store);
+const hasUnsavedChanges = ref(false)
+
+const isLoading = computed(() => builderStore.isLoading)
+const character = computed(() => builderStore.character)
+
+onMounted(() => {
+  switch (props.type) {
+    case 'edit':
+    case 'base-character':
+      builderStore.fetchCharacterByUuid({ characterUuid: props.uuid })
+      break
+    case 'base-empty':
+      builderStore.setCharacter(new Character())
+      break
+    case 'base-monster':
+      builderStore.fetchCharacterById({ id: props.uuid })
+      break
+    default:
+      break
   }
+})
 
-  get character() {
-    return readGetCharacter(this.$store);
-  }
-
-  mounted() {
-    switch (this.type) {
-      case 'edit':
-      case 'base-character':
-        dispatchFetchCharacterByUuid(this.$store, {characterUuid: this.uuid});
-        break;
-      case 'base-empty':
-        commitSetCharacter(this.$store, {character: new Character()});
-        break;
-      case 'base-monster':
-        dispatchFetchCharacterById(this.$store, {id: this.uuid});
-        break;
-      default:
-        break;
-    }
-  }
-
-  changeHandler(hasChanges) {
-    this.hasUnsavedChanges = hasChanges;
-  }
-
-  public beforeRouteLeave(to, from, next) {
-    if (this.hasUnsavedChanges) {
-      this.$root.$confirm({
-        title: 'Unsaved changes',
-        message: 'You have unsaved changes. Are you sure you want to leave?',
-        options: {color: 'error'}
-      }).then(resp => next(resp));
-    } else {
-      next();
-    }
-  }
+function changeHandler(hasChanges: boolean) {
+  hasUnsavedChanges.value = hasChanges
 }
-</script >
+
+onBeforeRouteLeave((to, from, next) => {
+  if (hasUnsavedChanges.value) {
+    confirmStore.open({
+      title: 'Unsaved changes',
+      message: 'You have unsaved changes. Are you sure you want to leave?',
+    }).then((ok) => next(ok))
+  } else {
+    next()
+  }
+})
+</script>

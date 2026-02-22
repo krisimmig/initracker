@@ -5,8 +5,8 @@
       <v-spacer></v-spacer>
       <CharacterAbilityDialogue @change="handleChangeEvent($event)">
         <template #button>
-          <v-btn color="primary" text>
-            <v-icon left>mdi-plus</v-icon> Add
+          <v-btn color="primary" variant="text">
+            <v-icon start>mdi-plus</v-icon> Add
           </v-btn>
         </template>
       </CharacterAbilityDialogue>
@@ -14,53 +14,43 @@
 
     <v-divider class="mb-4"></v-divider>
 
-    <p v-if="abilities.length === 0" class="grey--text">Nothing here, yet.</p>
+    <p v-if="abilities.length === 0" class="text-grey">Nothing here, yet.</p>
 
     <ul style="list-style: none" class="ma-0 pa-0">
       <li
         v-for="(ability, index) in abilities"
-        :key="`ability-${type}-${getUuid()}`"
+        :key="`ability-${type}-${index}`"
       >
-          <div class="d-flex">
-            <p><strong>{{ ability.name}}.</strong> {{ ability.desc }}</p>
-            <v-spacer />
-            <CharacterAbilityDialogue :ability="ability" @change="handleChangeEvent($event, index)" class="mr-2">
-              <template #button>
-                <v-btn small color="primary" depressed text>
-                  <v-icon left>mdi-pencil-outline</v-icon> Edit
-                </v-btn>
-              </template>
-            </CharacterAbilityDialogue>
-          </div>
+        <div class="d-flex">
+          <p><strong>{{ ability.name }}.</strong> {{ ability.desc }}</p>
+          <v-spacer />
+          <CharacterAbilityDialogue :ability="ability" @change="handleChangeEvent($event, index)" class="mr-2">
+            <template #button>
+              <v-btn size="small" color="primary" variant="text">
+                <v-icon start>mdi-pencil-outline</v-icon> Edit
+              </v-btn>
+            </template>
+          </CharacterAbilityDialogue>
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
-<script lang='ts'>
-import uuid from 'uuid/v1';
+<script setup lang="ts">
+import CharacterAbilityDialogue from '@/components/characters/character-builder/CharacterAbilityDialogue.vue'
 
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import Collapsable from "@/components/common/Collapsable.vue";
-import CharacterAbilityDialogue from "@/components/characters/character-builder/CharacterAbilityDialogue.vue";
+const props = defineProps<{
+  type: string
+  title: string
+  abilities: Array<{ name: string; desc: string }>
+}>()
 
-@Component({
-  components: {CharacterAbilityDialogue, Collapsable}
-})
-export default class CharacterAbilitiesEditor extends Vue {
-  @Prop({ required: true, type: String }) private type!: string;
-  @Prop({ required: true, type: String }) private title!: string;
-  @Prop({ required: true, type: Array }) private abilities!: [{ name: string, desc: string }];
+const emit = defineEmits<{
+  change: [payload: object]
+}>()
 
-  public getUuid() {
-    return uuid();
-  }
-
-  public handleChangeEvent(payload, index: null | number = null): void {
-    this.$emit('change', {...payload, index, type: this.type });
-  }
+function handleChangeEvent(payload: object, index: number | null = null): void {
+  emit('change', { ...payload, index, type: props.type })
 }
 </script>
-
-<style lang="scss">
-</style>

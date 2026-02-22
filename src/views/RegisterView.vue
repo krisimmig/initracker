@@ -1,45 +1,26 @@
-<template >
-  <div >
-    <p >Register</p >
-    <div >
-      <label for="email">Email</label >
-      <input
-          type="email"
-          placeholder="name@mail.com"
-          v-model="email"
-      >
-    </div >
+<template>
+  <div>
+    <p>Register</p>
+    <div>
+      <label for="email">Email</label>
+      <input type="email" placeholder="name@mail.com" v-model="email">
+    </div>
 
-    <div >
-      <label for="password">Password</label >
-      <input
-          type="password"
-          v-model="password"
-      >
-    </div >
-    <button @click="submit">Submit</button >
-  </div >
-</template >
+    <div>
+      <label for="password">Password</label>
+      <input type="password" v-model="password">
+    </div>
+    <button @click="submit">Submit</button>
+  </div>
+</template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref } from 'vue'
 
-@Component
-export default class Register extends Vue {
-  public email: string = '';
-  public password: string = '';
+const email = ref('')
+const password = ref('')
 
-  public submit(): void {
-    // firebase
-    //   .auth()
-    //   .createUserWithEmailAndPassword(this.email, this.password)
-    //   .then(
-    //     () => this.$router.push({ name: 'home' }),
-    //     (error) => console.error(error),
-    //   );
-  }
+function submit(): void {
+  // Firebase registration logic disabled
 }
-</script >
-
-<style >
-</style >
+</script>

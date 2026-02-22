@@ -1,119 +1,81 @@
-<template >
-  <v-dialog
-      max-width="600px"
-      v-model="dialog"
-  >
-    <template v-slot:activator="{ on, attrs }">
-      <div
-          v-bind="attrs"
-          v-on="on"
-      >
-        <slot name="button"></slot >
-      </div >
-    </template >
+<template>
+  <v-dialog max-width="600px" v-model="dialog">
+    <template v-slot:activator="{ props: activatorProps }">
+      <div v-bind="activatorProps">
+        <slot name="button"></slot>
+      </div>
+    </template>
 
-    <v-card >
-      <v-card-title >
-        <span
-            class="headline"
-            v-if="!ability.new"
-        >Update ability</span >
-        <span
-            class="headline"
-            v-else
-        >Add a new ability</span >
-      </v-card-title >
-      <v-card-text >
-        <v-text-field
-            v-model="name"
-            label="Ability name"
-        />
-        <v-textarea
-            v-model="desc"
-            label="Ability description"
-        />
-      </v-card-text >
-      <v-card-actions >
-        <v-btn
-            v-if="!ability.new"
-            text
-            color="error"
-            @click="remove"
-        >
-          Delete
-        </v-btn >
-        <v-spacer ></v-spacer >
-        <v-btn
-            text
-            @click="cancel"
-            color="primary"
-        >
-          Cancel
-        </v-btn >
-        <v-btn
-            text
-            @click="save"
-            color="primary"
-            :disabled="!name || !desc"
-        >
-          Save
-        </v-btn >
-      </v-card-actions >
-    </v-card >
-  </v-dialog >
-</template >
+    <v-card>
+      <v-card-title>
+        <span class="text-h6" v-if="!ability.new">Update ability</span>
+        <span class="text-h6" v-else>Add a new ability</span>
+      </v-card-title>
+      <v-card-text>
+        <v-text-field v-model="name" label="Ability name" />
+        <v-textarea v-model="desc" label="Ability description" />
+      </v-card-text>
+      <v-card-actions>
+        <v-btn v-if="!ability.new" variant="text" color="error" @click="remove">Delete</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn variant="text" @click="cancel" color="primary">Cancel</v-btn>
+        <v-btn variant="text" @click="save" color="primary" :disabled="!name || !desc">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useConfirmStore } from '@/store/useConfirmStore'
 
-@Component
-export default class CharacterAbilityDialogue extends Vue {
-  dialog = false;
-  name = '';
-  desc = '';
+const props = withDefaults(defineProps<{
+  ability?: { name: string; desc: string; new: boolean }
+}>(), {
+  ability: () => ({ name: '', desc: '', new: true }),
+})
 
-  @Prop({default: () => ({name: '', desc: '', new: true})}) public ability;
+const emit = defineEmits<{
+  change: [payload: object]
+}>()
 
-  private mounted() {
-    this.name = this.ability.name;
-    this.desc = this.ability.desc;
-  }
+const dialog = ref(false)
+const name = ref('')
+const desc = ref('')
 
-  cancel() {
-    this.dialog = false;
-  }
+const confirmStore = useConfirmStore()
 
-  reset() {
-    this.name = '';
-    this.desc = '';
-  }
+onMounted(() => {
+  name.value = props.ability.name
+  desc.value = props.ability.desc
+})
 
-  save() {
-    this.dialog = false;
-    this.$emit('change', {
-      name: this.name,
-      desc: this.desc,
-      new: !!this.ability.new,
-    });
+function cancel() {
+  dialog.value = false
+}
 
-    this.reset();
-  }
+function reset() {
+  name.value = ''
+  desc.value = ''
+}
 
-  remove() {
-    const options = {
-      message: 'Do you really want to delete this ability?',
-      options: {
-        color: 'error',
-      },
-    };
-    this.$root.$confirm(options).then((result) => {
-      if (result) {
-        this.dialog = false;
-        this.$emit('change', {
-          remove: true,
-        });
-      }
-    })
+function save() {
+  dialog.value = false
+  emit('change', {
+    name: name.value,
+    desc: desc.value,
+    new: !!props.ability.new,
+  })
+  reset()
+}
+
+async function remove() {
+  const result = await confirmStore.open({
+    message: 'Do you really want to delete this ability?',
+  })
+  if (result) {
+    dialog.value = false
+    emit('change', { remove: true })
   }
 }
-</script >
+</script>
