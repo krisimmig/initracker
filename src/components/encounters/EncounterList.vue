@@ -142,17 +142,11 @@ function nextTurn(): void {
 
   npcsStore.updateNpcConditionRound({ encounterId: props.id, npcId: npc.uuid })
 
-  if (isLastInRound) {
-    encountersStore.updateRound({
-      encounterId: props.id,
-      newRoundIndex: (currentEncounter.value?.round ?? 1) + 1,
-    })
-  }
-
-  encountersStore.updateActiveEntityIndex({
+  encountersStore.updateTurnState({
     encounterId: props.id,
     activeEntityIndex: nextIndex,
     currentTurn: (currentEncounter.value?.currentTurn ?? 1) + 1,
+    round: isLastInRound ? (currentEncounter.value?.round ?? 1) + 1 : undefined,
   })
 }
 

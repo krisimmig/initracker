@@ -58,7 +58,6 @@ export const useEncountersStore = defineStore('encounters', () => {
 
   function fetchEncountersCurrentNpcs({ encounterId }: { encounterId: string }) {
     const usersStore = useUsersStore()
-    isLoading.value = true
     const userUid = usersStore.userUid
     return new Promise<void>((resolve) => {
       db.collection(`users/${userUid}/encounters/${encounterId}/npcs`)
@@ -69,7 +68,6 @@ export const useEncountersStore = defineStore('encounters', () => {
             npcs.push(doc.data() as ICharacter)
           })
           encountersNpcs.value = npcs
-          isLoading.value = false
           resolve()
         })
     })
@@ -144,9 +142,22 @@ export const useEncountersStore = defineStore('encounters', () => {
   ) {
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
-    let newData: any = { activeEntityIndex }
-    if (currentTurn) {
-      newData = { ...newData, currentTurn }
+    const newData: Record<string, number> = { activeEntityIndex }
+    if (currentTurn !== undefined) {
+      newData.currentTurn = currentTurn
+    }
+    const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId)
+    encounterRef.set(newData, { merge: true })
+  }
+
+  async function updateTurnState(
+    { encounterId, activeEntityIndex, currentTurn, round }: { encounterId: string; activeEntityIndex: number; currentTurn: number; round?: number },
+  ) {
+    const usersStore = useUsersStore()
+    const userUid = usersStore.userUid
+    const newData: Record<string, number> = { activeEntityIndex, currentTurn }
+    if (round !== undefined) {
+      newData.round = round
     }
     const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId)
     encounterRef.set(newData, { merge: true })
@@ -175,6 +186,7 @@ export const useEncountersStore = defineStore('encounters', () => {
     updateName,
     updateRound,
     updateActiveEntityIndex,
+    updateTurnState,
     setNpcInDetail,
   }
 })
