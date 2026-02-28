@@ -1,48 +1,42 @@
 <template>
-  <div
+  <v-card
     v-if="characterData"
-    class="CharacterTeaser d-flex align-center"
+    class="CharacterTeaser mb-2"
+    variant="outlined"
   >
-    <div class="d-flex flex-column">
-      <h4 class="text-h6 font-weight-medium">{{ characterData.name }}</h4>
-      <p class="mb-1">{{ description }}</p>
+    <v-card-text class="pa-3 d-flex align-start">
+      <div class="flex-grow-1 min-width-0">
+        <div class="text-subtitle-1 font-weight-bold text-truncate">{{ characterData.name }}</div>
+        <div class="text-caption text-medium-emphasis mb-2">{{ description }}</div>
 
-      <div class="d-flex">
-        <div class="d-flex align-center">
-          <SvgIcon name="heart" class="text-red mr-1" />
-          {{ characterData.hit_points }}
+        <div class="d-flex align-center gap-2 flex-wrap">
+          <v-chip size="x-small" label color="error" variant="tonal" prepend-icon="mdi-heart">
+            {{ characterData.hit_points }}
+          </v-chip>
+          <v-chip size="x-small" label color="secondary" variant="tonal" prepend-icon="mdi-shield">
+            {{ characterData.armor_class }}
+          </v-chip>
+          <v-chip size="x-small" label color="primary" variant="tonal">
+            CR {{ characterData.challenge_rating || '—' }}
+          </v-chip>
         </div>
 
-        <div class="d-flex align-center ml-2">
-          <SvgIcon name="shield" class="text-grey mr-1" />
-          {{ characterData.armor_class }}
-        </div>
-
-        <div class="d-flex align-center ml-2">
-          <p class="mb-0 mr-1">
-            <b>CR</b>
-            <span v-if="characterData.challenge_rating">
-              {{ characterData.challenge_rating }}
-            </span>
-            <span v-else> &mdash;</span>
-          </p>
+        <div class="text-caption text-disabled mt-2">
+          Created {{ createdAt || 'sometime in the past' }} · Updated {{ updatedAt || 'never' }}
         </div>
       </div>
-      <p class="text-caption mb-0 mt-2 text-secondary">
-        Created {{ createdAt || 'sometime in the past' }} - Updated {{ updatedAt || 'never' }}
-      </p>
-    </div>
 
-    <v-spacer />
-    <slot></slot>
-  </div>
+      <div class="ml-2 flex-shrink-0 d-flex">
+        <slot></slot>
+      </div>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Character } from '@/classes/Character'
 import { useEncountersStore } from '@/store/useEncountersStore'
-import SvgIcon from '@/components/common/SvgIcon.vue'
 
 const props = defineProps<{
   characterData: Character
@@ -67,5 +61,8 @@ function addToEncounter() {
 <style>
 .CharacterTeaser {
   cursor: pointer;
+}
+.CharacterTeaser:hover {
+  background-color: rgb(var(--v-theme-primary), 0.04) !important;
 }
 </style>

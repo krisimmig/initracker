@@ -19,61 +19,65 @@
 
     <v-row>
       <v-col cols="12" lg="8">
-        <v-sheet class="CharacterBuilder-wrapper pa-4" elevation="0">
-          <form class="Form">
-            <v-text-field class="text-h6" v-model="character.name" label="Name" />
-            <div class="d-flex">
-              <v-text-field v-model="character.challenge_rating" label="Challenge rating" />
-              <v-select
-                variant="outlined"
-                v-model="character.category"
-                :items="optionsCategory"
-                item-title="name"
-                item-value="value"
-                label="Category"
-              />
-            </div>
+        <div class="pa-4">
+          <v-card variant="outlined">
+            <v-card-text>
+            <form> 
+              <v-text-field class="text-h6" v-model="character.name" label="Name" />
+              <div class="d-flex">
+                <v-text-field v-model="character.challenge_rating" label="Challenge rating" />
+                <v-select
+                  variant="outlined"
+                  v-model="character.category"
+                  :items="optionsCategory"
+                  item-title="name"
+                  item-value="value"
+                  label="Category"
+                />
+              </div>
 
-            <div class="d-flex">
-              <v-select variant="outlined" v-model="character.size" :items="optionsSize" item-title="name" item-value="value" label="Size" />
-              <v-select variant="outlined" v-model="character.type" :items="optionsTypes" item-title="name" item-value="value" label="Type" />
-              <v-select variant="outlined" v-model="character.alignment" :items="optionsAlignment" item-title="name" item-value="value" label="Alignment" />
-            </div>
+              <div class="d-flex">
+                <v-select variant="outlined" v-model="character.size" :items="optionsSize" item-title="name" item-value="value" label="Size" />
+                <v-select variant="outlined" v-model="character.type" :items="optionsTypes" item-title="name" item-value="value" label="Type" />
+                <v-select variant="outlined" v-model="character.alignment" :items="optionsAlignment" item-title="name" item-value="value" label="Alignment" />
+              </div>
 
-            <div class="d-flex">
-              <v-text-field v-model.number="character.armor_class" prepend-icon="mdi-shield" label="Armor Class" type="number" min="0" />
-              <v-text-field v-model="character.armor_desc" label="Armor Description" />
-            </div>
+              <div class="d-flex">
+                <v-text-field v-model.number="character.armor_class" prepend-icon="mdi-shield" label="Armor Class" type="number" min="0" />
+                <v-text-field v-model="character.armor_desc" label="Armor Description" />
+              </div>
 
-            <div class="d-flex">
-              <v-text-field v-model.number="character.hit_points" prepend-icon="mdi-heart" label="Hit points" type="number" min="0" />
-              <v-text-field v-model="character.hit_dice" label="Hit dice" />
-            </div>
+              <div class="d-flex">
+                <v-text-field v-model.number="character.hit_points" prepend-icon="mdi-heart" label="Hit points" type="number" min="0" />
+                <v-text-field v-model="character.hit_dice" label="Hit dice" />
+              </div>
 
-            <div class="d-flex">
-              <v-text-field v-model.number="character.strength" label="STR" type="number" min="0" />
-              <v-text-field v-model.number="character.dexterity" label="DEX" type="number" min="0" />
-              <v-text-field v-model.number="character.constitution" label="CON" type="number" min="0" />
-              <v-text-field v-model.number="character.intelligence" label="INT" type="number" min="0" />
-              <v-text-field v-model.number="character.wisdom" label="WIS" type="number" min="0" />
-              <v-text-field v-model.number="character.charisma" label="CHR" type="number" min="0" />
-            </div>
+              <div class="d-flex">
+                <v-text-field v-model.number="character.strength" label="STR" type="number" min="0" />
+                <v-text-field v-model.number="character.dexterity" label="DEX" type="number" min="0" />
+                <v-text-field v-model.number="character.constitution" label="CON" type="number" min="0" />
+                <v-text-field v-model.number="character.intelligence" label="INT" type="number" min="0" />
+                <v-text-field v-model.number="character.wisdom" label="WIS" type="number" min="0" />
+                <v-text-field v-model.number="character.charisma" label="CHR" type="number" min="0" />
+              </div>
 
-            <p><b>Speed:</b></p>
-            <div class="d-flex">
-              <v-text-field v-model.number="character.speed.walk" label="Walk" type="number" min="0" />
-              <v-text-field v-model.number="character.speed.swim" label="Swim" type="number" min="0" />
-              <v-text-field v-model.number="character.speed.climb" label="Climb" type="number" min="0" />
-              <v-text-field v-model.number="character.speed.fly" label="Fly" type="number" min="0" />
-              <v-text-field v-model.number="character.speed.burrow" label="Burrow" type="number" min="0" />
-            </div>
+              <p><b>Speed:</b></p>
+              <div class="d-flex">
+                <v-text-field v-model.number="character.speed.walk" label="Walk" type="number" min="0" />
+                <v-text-field v-model.number="character.speed.swim" label="Swim" type="number" min="0" />
+                <v-text-field v-model.number="character.speed.climb" label="Climb" type="number" min="0" />
+                <v-text-field v-model.number="character.speed.fly" label="Fly" type="number" min="0" />
+                <v-text-field v-model.number="character.speed.burrow" label="Burrow" type="number" min="0" />
+              </div>
 
-            <v-text-field v-model="character.senses" hint="e.g. darkvision 60 ft., passive Perception 12" label="Senses" />
-            <v-text-field v-model="character.languages" hint="e.g. Common, Dwarvish" label="Languages" />
-            <v-text-field v-model="character.damage_immunities" hint="e.g. lightning, poison" label="Damage Immunities" />
-            <v-text-field v-model="character.damage_resistances" hint="e.g. cold; bludgeoning, piercing, and slashing from nonmagical weapons" label="Damage Resistances" />
-            <v-text-field v-model="character.damage_vulnerabilities" hint="e.g. bludgeoning, fire" label="Damage Vulnerabilities" />
-          </form>
+              <v-text-field v-model="character.senses" hint="e.g. darkvision 60 ft., passive Perception 12" label="Senses" />
+              <v-text-field v-model="character.languages" hint="e.g. Common, Dwarvish" label="Languages" />
+              <v-text-field v-model="character.damage_immunities" hint="e.g. lightning, poison" label="Damage Immunities" />
+              <v-text-field v-model="character.damage_resistances" hint="e.g. cold; bludgeoning, piercing, and slashing from nonmagical weapons" label="Damage Resistances" />
+              <v-text-field v-model="character.damage_vulnerabilities" hint="e.g. bludgeoning, fire" label="Damage Vulnerabilities" />
+            </form>
+          </v-card-text>
+        </v-card>
 
           <CharacterAbilitiesEditor
             title="Special abilites"
@@ -96,7 +100,7 @@
             @change="handleAbilityChange"
           />
 
-        </v-sheet>
+        </div>
       </v-col>
 
       <v-col class="d-none d-lg-block" lg="4">

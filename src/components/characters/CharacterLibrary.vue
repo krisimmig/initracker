@@ -38,9 +38,10 @@
             <template v-slot:default="{ item }">
               <div class="mr-4">
                 <CharacterTeaser :characterData="item" @click="characterPreviewSelected(item)">
-                  <v-btn size="small" variant="outlined" color="primary" class="mr-4">Preview</v-btn>
+                  <v-btn size="small" icon variant="text" @click.stop="characterPreviewSelected(item)">
+                    <v-icon>mdi-eye-outline</v-icon>
+                  </v-btn>
                 </CharacterTeaser>
-                <v-divider class="mt-2"/>
               </div>
             </template>
           </v-virtual-scroll>
