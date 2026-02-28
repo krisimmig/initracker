@@ -2,12 +2,12 @@
 /* src/styles/main.css */
 .v-theme--dark {
   .v-card--variant-outlined {
-    border-color: #6666b7 !important;
+    border-color: #6666b7;
   }
 }
 
 .v-theme--light {
   .v-card--variant-outlined {
-    border-color: #cfcfe2 !important;
+    border-color: #cfcfe2;
   }
 }
