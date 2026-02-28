@@ -1,13 +1,25 @@
 <template>
-  <div>
-    <div class="mb-4">
-      <v-btn color="success" @click="saveCharacter" :disabled="!hasChanged" class="mr-2">Save</v-btn>
-      <v-btn color="error" v-if="!isNewCharacter" @click="deleteCharacter">Delete</v-btn>
-    </div>
+  <div class="pb-20">
+
+    <!-- Preview modal (visible only on small screens) -->
+    <v-dialog v-model="previewOpen" fullscreen scrollable>
+      <v-card>
+        <v-toolbar color="primary" density="compact">
+          <v-toolbar-title>Preview</v-toolbar-title>
+          <v-spacer />
+          <v-btn icon @click="previewOpen = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-card-text>
+          <CharacterDetails :characterData="character" />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <v-row>
-      <v-col col="8">
-        <v-sheet class="CharacterBuilder-wrapper pa-4" elevation="1">
+      <v-col cols="12" lg="8">
+        <v-sheet class="CharacterBuilder-wrapper pa-4" elevation="0">
           <form class="Form">
             <v-text-field class="text-h6" v-model="character.name" label="Name" />
             <div class="d-flex">
@@ -84,27 +96,35 @@
             @change="handleAbilityChange"
           />
 
-          <v-btn color="success" @click="saveCharacter" :disabled="!hasChanged" class="mr-2">Save</v-btn>
-          <v-btn color="error" v-if="!isNewCharacter" @click="deleteCharacter">Delete</v-btn>
         </v-sheet>
       </v-col>
 
-      <v-col>
+      <v-col class="d-none d-lg-block" lg="4">
         <CharacterDetails :characterData="character"/>
       </v-col>
     </v-row>
+
+    <!-- Fixed bottom action bar -->
+    <v-footer app elevation="4" class="py-3 justify-center">
+      <v-btn-group elevation="1" rounded="lg">
+        <v-btn color="success" @click="saveCharacter" :disabled="!hasChanged || builderStore.isSaving" :loading="builderStore.isSaving" prepend-icon="mdi-content-save">Save</v-btn>
+        <v-btn color="error" v-if="!isNewCharacter" @click="deleteCharacter" prepend-icon="mdi-delete">Delete</v-btn>
+        <v-btn class="d-lg-none" @click="previewOpen = true" prepend-icon="mdi-eye">Preview</v-btn>
+      </v-btn-group>
+    </v-footer>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import { clone, isEqual } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
 import { $enum } from 'ts-enum-util'
 import { useRouter } from 'vue-router'
 import { Character } from '@/classes/Character'
 import CreatureTypes from '@/types/creatureTypes'
 import { useCharacterBuilderStore } from '@/store/useCharacterBuilderStore'
 import { useConfirmStore } from '@/store/useConfirmStore'
+import { useSnackbarStore } from '@/store/useSnackbarStore'
 import CharacterDetails from '@/components/characters/CharacterDetails.vue'
 import { CharacterRaces } from '@/types/characterRaces'
 import CharacterAlignments from '@/types/characterAlignments'
@@ -126,8 +146,10 @@ const emit = defineEmits<{
 const router = useRouter()
 const builderStore = useCharacterBuilderStore()
 const confirmStore = useConfirmStore()
+const snackbarStore = useSnackbarStore()
 
 const originalCharacter = ref<Character | null>(null)
+const previewOpen = ref(false)
 
 const hasChanged = computed(() => !isEqual(originalCharacter.value, props.character))
 
@@ -149,7 +171,8 @@ watch(originalCharacter, () => {
 
 async function saveCharacter(): Promise<void> {
   await builderStore.saveCharacter({ char: props.character, newCharacter: props.isNewCharacter })
-  originalCharacter.value = clone(props.character)
+  originalCharacter.value = cloneDeep(props.character)
+  snackbarStore.show('Character saved successfully.')
 }
 
 async function deleteCharacter() {
@@ -183,7 +206,7 @@ function handleAbilityChange(payload: any) {
 }
 
 onMounted(() => {
-  originalCharacter.value = clone(props.character)
+  originalCharacter.value = cloneDeep(props.character)
 })
 </script>
 
