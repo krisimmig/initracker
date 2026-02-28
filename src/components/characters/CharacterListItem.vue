@@ -1,57 +1,55 @@
 <template>
-  <div
+  <v-card
     v-if="npc"
     :class="[{ 'is-active': isActive, 'is-selected': isSelected, 'has-acted': hasActed }, `Category-${npc.category}`]"
-    class="CharacterListItem"
+    class="CharacterListItem mb-2"
+    variant="outlined"
     @click.stop="showInDetail"
   >
-    <div class="d-flex align-center">
-      <CharacterArmorClass :armorClass="npc.armor_class"/>
-      <div>
-        <h2 class="CharacterListItem-name text-h6">
-          <span class="text-grey pr-2">{{ npc.initiative }}</span>
-          <span :class="{ 'text-decoration-line-through text-grey': npc.hit_points_current <= 0 }">
-            {{ npc.name }}
-          </span>
-        </h2>
-        <p class="text-caption mb-0">{{ description }}</p>
-      </div>
+    <v-card-item class="py-2 px-3">
+      <template #prepend>
+        <CharacterArmorClass :armorClass="npc.armor_class" />
+      </template>
 
-      <v-spacer />
+      <v-card-title class="text-body-1 font-weight-bold pa-0">
+        <span class="text-medium-emphasis text-body-2 pr-2">{{ npc.initiative }}</span>
+        <span :class="{ 'text-decoration-line-through text-disabled': npc.hit_points_current <= 0 }">
+          {{ npc.name }}
+        </span>
+      </v-card-title>
+      <v-card-subtitle class="text-caption pa-0">{{ description }}</v-card-subtitle>
 
-      <v-menu location="bottom end" :close-on-content-click="true">
-        <template v-slot:activator="{ props: activatorProps }">
-          <v-btn
-            icon
-            v-bind="activatorProps"
-            class="align-self-start"
-          >
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
+      <template #append>
+        <v-menu location="bottom end" :close-on-content-click="true">
+          <template #activator="{ props: activatorProps }">
+            <v-btn icon variant="text" size="small" v-bind="activatorProps" @click.stop>
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <v-list density="compact">
+            <CharacterInitiative :initiative="npc.initiative" :uuid="npc.uuid" />
+            <v-list-item v-if="removable" prepend-icon="mdi-account-remove" @click="emit('remove')">
+              <v-list-item-title>Remove</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </template>
+    </v-card-item>
 
-        <v-list>
-          <CharacterInitiative :initiative="npc.initiative" :uuid="npc.uuid" />
-          <v-list-item v-if="removable" @click="emit('remove')">Remove</v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
-
-    <div>
+    <v-card-text class="px-3 pt-0 pb-2">
       <CharacterHealthBar
         :uuid="npc.uuid"
         :name="npc.name"
         :hp="npc.hit_points_current"
         :maxHp="npc.hit_points"
       />
-
       <CharacterConditions
         :uuid="npc.uuid"
         :name="npc.name"
         :conditions="npcConditions"
       />
-    </div>
-  </div>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup lang="ts">
@@ -91,54 +89,20 @@ function showInDetail() {
 <style>
 .CharacterListItem {
   cursor: pointer;
-  border: 1px solid #d5d5d5;
-  background-color: white;
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding: 0.7rem 1rem 1rem 1rem;
-}
-
-.Category-Enemy {
-  border-color: #e0e0e0;
-}
-
-.Category-Player {
-  border-color: #5ab3fd;
-}
-
-.Category-NPC {
-  border-color: #c500cb;
-}
-
-.Category-Other {
-  border-color: #ffa600;
+  transition: border-color 0.15s ease;
 }
 
 .CharacterListItem.is-active {
-  border-color: #3d3df0;
-}
-
-.CharacterListItem.has-acted {
-  opacity: 0.6;
-}
-
-.CharacterListItem.has-acted:hover {
-  opacity: 1;
-}
-
-.CharacterListItem-name {
-  display: inline-block;
-  position: relative;
-  padding-left: .3rem;
-  padding-right: .3rem;
+  border-color: rgb(var(--v-theme-primary)) !important;
 }
 
 .CharacterListItem.is-selected {
-  border-color: black;
-  box-shadow: 0 0 20px 1px #ececec;
+  border-color: rgb(var(--v-theme-secondary)) !important;
 }
 
-.CharacterListItem.is-selected .CharacterListItem-name:after {
-  background: #8fb3e1;
+.CharacterListItem.has-acted {
+  opacity: 0.55;
 }
 </style>
+
+
