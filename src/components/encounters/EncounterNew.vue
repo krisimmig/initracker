@@ -1,30 +1,37 @@
 <template>
-  <v-card>
-    <v-card-title>Create new encounter</v-card-title>
-    <v-card-text class="text-body-1">
-      <p>
-        An encounter is a battle that your party has to survive to reach their goals in your campaign.<br />
+  <v-card variant="outlined">
+    <v-card-title class="d-flex align-center pa-3 pb-0">
+      <v-icon color="primary" class="mr-2">mdi-sword-cross</v-icon>
+      <span class="text-subtitle-1 font-weight-bold">New encounter</span>
+    </v-card-title>
+
+    <v-card-text class="pa-3">
+      <p class="text-body-2 text-medium-emphasis mb-3">
+        An encounter is a battle your party must survive. Prepare as many as you need and start them whenever it fits your narrative.
       </p>
-      <p>
-        You can prepare as many encounters here as you want and stat them whenever it fits into your narrative.
-      </p>
+
       <v-text-field
-        label="Encounter name..."
         v-model="encounterName"
-        color="primary"
-        @keyup.enter="submitNewEncounter"
+        label="Encounter name"
+        prepend-inner-icon="mdi-tag-outline"
         clearable
-        prepend-icon="mdi-newspaper-plus"
-      >
-      </v-text-field>
+        hide-details="auto"
+        @keyup.enter="submitNewEncounter"
+      />
+    </v-card-text>
+
+    <v-card-actions class="pa-3 pt-0">
+      <v-spacer />
       <v-btn
         color="primary"
+        variant="flat"
         :disabled="!encounterName"
+        prepend-icon="mdi-plus"
         @click="submitNewEncounter"
       >
-        <v-icon start>mdi-plus</v-icon> Create encounter
+        Create
       </v-btn>
-    </v-card-text>
+    </v-card-actions>
   </v-card>
 </template>
 

@@ -1,34 +1,49 @@
 <template>
-  <div class="mb-3">
-    <v-card hover v-if="!isEditingName" @click="toEncounterView(id)">
-      <div>
-        <v-card-title>{{ name }}</v-card-title>
-        <v-card-subtitle>created {{ getReadableCreatedAt() }} | Rounds played: {{ round }}</v-card-subtitle>
+  <div class="mb-2">
+    <!-- Display mode -->
+    <v-card
+      v-if="!isEditingName"
+      variant="outlined"
+      class="EncounterTeaser"
+      @click="toEncounterView(id)"
+    >
+      <v-card-text class="pa-3 d-flex align-start">
+        <div class="flex-grow-1 min-width-0">
+          <div class="text-subtitle-1 font-weight-bold text-truncate">{{ name }}</div>
+          <div class="text-caption text-medium-emphasis mb-2">
+            Created {{ getReadableCreatedAt() || 'sometime in the past' }}
+          </div>
+          <div class="d-flex align-center gap-2 flex-wrap">
+            <v-chip size="x-small" label color="primary" variant="tonal" prepend-icon="mdi-sword-cross">
+              Round {{ round ?? 0 }}
+            </v-chip>
+          </div>
+        </div>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn icon @click.stop="renameEncounter()">
-            <v-icon>mdi-pencil</v-icon>
+        <div class="ml-2 flex-shrink-0 d-flex">
+          <v-btn size="small" icon variant="text" @click.stop="renameEncounter()">
+            <v-icon>mdi-pencil-outline</v-icon>
           </v-btn>
-          <v-btn icon color="error" @click.stop="deleteEncounter()">
-            <v-icon>mdi-delete</v-icon>
+          <v-btn size="small" icon variant="text" color="error" @click.stop="deleteEncounter()">
+            <v-icon>mdi-delete-outline</v-icon>
           </v-btn>
-        </v-card-actions>
-      </div>
+        </div>
+      </v-card-text>
     </v-card>
 
-    <v-card v-if="isEditingName">
-      <v-card-text>
+    <!-- Edit name mode -->
+    <v-card v-if="isEditingName" variant="outlined">
+      <v-card-text class="pa-3">
         <v-text-field
           label="Edit encounter name"
           hide-details="auto"
           @keyup.enter="saveNewName"
           v-model="newName"
-        ></v-text-field>
+          autofocus
+        />
       </v-card-text>
-
       <v-card-actions>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn @click.stop="isEditingName = false" variant="text">Cancel</v-btn>
         <v-btn @click="saveNewName" variant="text" color="primary">Save</v-btn>
       </v-card-actions>
@@ -40,6 +55,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useEncountersStore } from '@/store/useEncountersStore'
+import { useConfirmStore } from '@/store/useConfirmStore'
 
 const props = defineProps<{
   id: string
@@ -50,6 +66,7 @@ const props = defineProps<{
 
 const router = useRouter()
 const encountersStore = useEncountersStore()
+const confirmStore = useConfirmStore()
 
 const isEditingName = ref(false)
 const newName = ref(props.name)
@@ -58,8 +75,13 @@ function toEncounterView(encounterId: string) {
   router.push({ name: 'encounterDetails', params: { encounterId: props.id } })
 }
 
-function deleteEncounter() {
-  encountersStore.removeEncounter({ encounterId: props.id })
+async function deleteEncounter() {
+  const confirmed = await confirmStore.open({
+    message: 'Do you want to delete this encounter?',
+  })
+  if (confirmed) {
+    encountersStore.removeEncounter({ encounterId: props.id })
+  }
 }
 
 async function saveNewName() {
