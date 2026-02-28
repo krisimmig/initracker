@@ -37,7 +37,6 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { IEncounterEntity } from '@/types/encounters'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import EncounterNew from '@/components/encounters/EncounterNew.vue'
 import EncounterTeaser from '@/components/encounters/EncounterTeaser.vue'
