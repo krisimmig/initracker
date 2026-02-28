@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useConfirmStore } from '@/store/useConfirmStore'
 
 const props = withDefaults(defineProps<{
@@ -48,6 +48,13 @@ const confirmStore = useConfirmStore()
 onMounted(() => {
   name.value = props.ability.name
   desc.value = props.ability.desc
+})
+
+watch(dialog, (isOpen) => {
+  if (isOpen) {
+    name.value = props.ability.name
+    desc.value = props.ability.desc
+  }
 })
 
 function cancel() {
