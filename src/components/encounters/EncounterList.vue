@@ -135,12 +135,11 @@ const currentNpcIndex = computed(() => currentEncounter.value?.activeEntityIndex
 const npcs = computed(() => encountersStore.encountersNpcs)
 
 const elapsedTimeGame = computed((): string => {
-  const turn = currentEncounter.value?.currentTurn ?? 1
-  const seconds = (turn - 1) * 6
-  const numHours = Math.floor(((seconds % 31536000) % 86400) / 3600)
-  const numMinutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60)
-  const numSeconds = (((seconds % 31536000) % 86400) % 3600) % 60
-  return `${numHours}:${numMinutes}:${numSeconds}`
+  const seconds = ((currentEncounter.value?.currentTurn ?? 1) - 1) * 6
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = seconds % 60
+  return `${h}:${m}:${s}`
 })
 
 function removeNpcFromEncounter(npcID: string) {
