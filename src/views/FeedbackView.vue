@@ -1,43 +1,99 @@
 <template>
   <div class="Feedback">
-    <div class="">
-      <PageTitle title="Feedback" subtitle="ways to help improve this app." icon="mdi-message-draw" />
+    <PageTitle title="Feedback" subtitle="Ways to help improve this app." icon="mdi-message-draw" />
 
-      <div class="u-container-fluid">
-        <div class="grid grid-cols-2 gap-4">
-          <div class="card card--rounded card--shadow">
-            <h4 class="h4">Give feedback on reddit</h4>
-            <p>We have created a reddit community where we can talk about how this app can be imrpoved or any bugs you might have found. Visit the reddit community here:</p>
-            <p>
-              <Button is-big is-success is-normal-casing href="https://www.reddit.com/r/DNDToolsParty/new/">
-                /r/DNDToolsParty
-              </Button>
+    <v-row>
+      <v-col cols="12" md="6">
+        <v-card variant="outlined">
+          <v-card-title class="d-flex align-center pa-3 pb-0">
+            <v-icon color="primary" class="mr-2">mdi-reddit</v-icon>
+            <span class="text-subtitle-1 font-weight-bold">Give feedback on Reddit</span>
+          </v-card-title>
+          <v-card-text class="pa-3">
+            <p class="text-body-2 text-medium-emphasis mb-3">
+              We have created a Reddit community where we can talk about how this app can be improved or any bugs you might have found.
             </p>
-          </div>
-
-          <div class="card card--rounded card--shadow">
-            <h4 class="h4">Subscribe to the newsletter</h4>
-            <p>We are sending a newsletter whenever new features are added to YAIT.</p>
-            <form
-              class="mt-3"
-              action="https://tinyletter.com/dndtoolsparty"
-              method="post"
-              target="popupwindow"
-              onsubmit="window.open('https://tinyletter.com/dndtoolsparty', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"
+          </v-card-text>
+          <v-card-actions class="pa-3 pt-0">
+            <v-spacer />
+            <v-btn
+              color="primary"
+              variant="flat"
+              prepend-icon="mdi-open-in-new"
+              href="https://www.reddit.com/r/DNDToolsParty/new/"
+              target="_blank"
+              rel="noopener"
             >
-              <label for="tlemail" class="text-gray-600 text-sm">Enter your email address</label>
-              <input type="text" class="bg-white border w-full rounded px-3 py-2 mb-3 block" name="email" id="tlemail" placeholder="name@mail.com" />
-              <input type="hidden" value="1" name="embed"/>
-              <input type="submit" value="Subscribe" class="text-uppercase text-sm font-weight-bold block bg-green-500 text-green-100 rounded px-4 py-1 cursor-pointer hover:bg-green-300 hover:text-green-500" />
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+              /r/DNDToolsParty
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" md="6">
+        <v-card variant="outlined">
+          <v-card-title class="d-flex align-center pa-3 pb-0">
+            <v-icon color="primary" class="mr-2">mdi-email-newsletter</v-icon>
+            <span class="text-subtitle-1 font-weight-bold">Subscribe to the newsletter</span>
+          </v-card-title>
+          <v-card-text class="pa-3">
+            <p class="text-body-2 text-medium-emphasis mb-3">
+              We send a newsletter whenever new features are added to YAIT.
+            </p>
+            <v-text-field
+              v-model="newsletterEmail"
+              label="Email address"
+              placeholder="name@mail.com"
+              prepend-inner-icon="mdi-email-outline"
+              variant="outlined"
+              density="compact"
+              hide-details="auto"
+              type="email"
+            />
+          </v-card-text>
+          <v-card-actions class="pa-3 pt-0">
+            <v-spacer />
+            <v-btn
+              color="primary"
+              variant="flat"
+              prepend-icon="mdi-send-outline"
+              @click="submitNewsletter"
+            >
+              Subscribe
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import PageTitle from '@/components/common/PageTitle.vue'
-import Button from '@/components/common/Button.vue'
+
+const newsletterEmail = ref('')
+
+function submitNewsletter() {
+  if (!newsletterEmail.value) return
+  const popup = window.open('https://tinyletter.com/dndtoolsparty', 'popupwindow', 'scrollbars=yes,width=800,height=600')
+  const form = document.createElement('form')
+  form.action = 'https://tinyletter.com/dndtoolsparty'
+  form.method = 'post'
+  form.target = 'popupwindow'
+  const emailInput = document.createElement('input')
+  emailInput.type = 'hidden'
+  emailInput.name = 'email'
+  emailInput.value = newsletterEmail.value
+  const embedInput = document.createElement('input')
+  embedInput.type = 'hidden'
+  embedInput.name = 'embed'
+  embedInput.value = '1'
+  form.appendChild(emailInput)
+  form.appendChild(embedInput)
+  document.body.appendChild(form)
+  form.submit()
+  document.body.removeChild(form)
+  newsletterEmail.value = ''
+}
 </script>
