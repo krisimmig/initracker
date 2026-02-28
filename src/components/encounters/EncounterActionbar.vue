@@ -5,7 +5,14 @@
       <div class="d-flex ga-3 text-caption text-medium-emphasis">
         <span>Round <strong class="text-body-2 text-high-emphasis">{{ encounter.round }}</strong></span>
         <span>Turn <strong class="text-body-2 text-high-emphasis">{{ encounter.currentTurn }}</strong></span>
-        <span>{{ elapsedTimeGame }}</span>
+        <v-tooltip location="bottom" text="Elapsed time">
+          <template #activator="{ props: tooltipProps }">
+            <span v-bind="tooltipProps" class="d-flex align-center ga-1">
+              <v-icon size="12">mdi-clock-outline</v-icon>
+              {{ elapsedTimeGame }}
+            </span>
+          </template>
+        </v-tooltip>
       </div>
     </div>
 
@@ -72,6 +79,7 @@ const elapsedTimeGame = computed((): string => {
   const h = Math.floor(seconds / 3600)
   const m = Math.floor((seconds % 3600) / 60)
   const s = seconds % 60
-  return `${h}:${m}:${s}`
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${pad(h)}:${pad(m)}:${pad(s)}`
 })
 </script>
