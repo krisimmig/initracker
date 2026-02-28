@@ -1,38 +1,40 @@
 <template>
-  <v-sheet class="CharactersLibrary" style="height: 85vh;">
-    <v-app-bar flat>
-      <v-toolbar-title>
-        <v-icon class="mr-2 mb-2">mdi-account-group</v-icon>
-        Character library
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon @click.stop="emit('closeClicked')">
+  <v-card class="CharactersLibrary" style="height: 85vh;" rounded="lg">
+    <v-card-title class="d-flex align-center pa-4 pb-3">
+      <v-icon color="primary" class="mr-2">mdi-account-group</v-icon>
+      <span class="text-subtitle-1 font-weight-bold">Character library</span>
+      <v-spacer />
+      <v-btn icon variant="text" @click.stop="emit('closeClicked')">
         <v-icon>mdi-close</v-icon>
       </v-btn>
-    </v-app-bar>
+    </v-card-title>
 
-    <div class="d-flex pa-4">
+    <v-divider />
+
+    <v-card-text class="pa-4 CharactersLibrary-body">
       <v-row>
-        <v-col cols="6">
-          <div>
-            <div class="d-flex align-center">
-              <v-icon class="mr-2">mdi-filter</v-icon>
-              <v-btn @click="switchTab('all')" class="mr-2" variant="text" :color="showType === 'all' ? 'primary' : ''">All</v-btn>
-              <v-btn @click="switchTab('monsters')" class="mr-2" variant="text" :color="showType === 'monsters' ? 'primary' : ''">Monsters</v-btn>
-              <v-btn @click="switchTab('characters')" variant="text" :color="showType === 'characters' ? 'primary' : ''">Custom Characters</v-btn>
-            </div>
+        <v-col cols="6" class="d-flex flex-column">
+          <div class="mb-3">
+            <v-btn-toggle v-model="showType" mandatory color="primary" variant="outlined" density="compact" class="mb-3">
+              <v-btn value="all">All</v-btn>
+              <v-btn value="monsters">Monsters</v-btn>
+              <v-btn value="characters">Custom</v-btn>
+            </v-btn-toggle>
             <v-text-field
               label="Search by name"
               v-model="searchString"
-              prepend-icon="mdi-account-search"
+              prepend-inner-icon="mdi-account-search"
               clearable
+              hide-details="auto"
+              variant="outlined"
+              density="compact"
             />
           </div>
 
           <v-virtual-scroll
             bench="10"
             :items="filteredNpcs"
-            height="calc(85vh - 205px)"
+            height="calc(85vh - 230px)"
             item-height="130"
           >
             <template v-slot:default="{ item }">
@@ -48,22 +50,24 @@
         </v-col>
 
         <v-col>
-          <div v-if="previewCharacter" class="CharacterPreview">
-            <v-btn
-              @click="emit('characterClicked', previewCharacter)"
-              color="primary"
-              variant="flat"
-              class="CharacterPreview-addButton mr-4"
-            >
-              {{ buttonText }}
-            </v-btn>
-            <CharacterDetails :characterData="previewCharacter"/>
-          </div>
-          <v-alert type="info" v-else>Select a character on the left.</v-alert>
+          <template v-if="previewCharacter">
+            <div class="d-flex justify-end mb-3">
+              <v-btn
+                @click="emit('characterClicked', previewCharacter)"
+                color="primary"
+                variant="flat"
+                prepend-icon="mdi-account-plus"
+              >
+                {{ buttonText }}
+              </v-btn>
+            </div>
+            <CharacterDetails :characterData="previewCharacter" />
+          </template>
+          <v-alert type="info" variant="outlined" v-else>Select a character on the left.</v-alert>
         </v-col>
       </v-row>
-    </div>
-  </v-sheet>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup lang="ts">
@@ -103,10 +107,6 @@ const filteredNpcs = computed(() => {
   return npcs.value.filter((npc) => npc.name.toLowerCase().includes(searchString.value.toLowerCase()))
 })
 
-function switchTab(type: string) {
-  showType.value = type
-}
-
 function characterPreviewSelected(npc: Character) {
   previewCharacter.value = npc
 }
@@ -118,18 +118,7 @@ onMounted(() => {
 
 <style>
 .CharactersLibrary .CharacterDetails {
-  max-height: calc(85vh - 100px);
+  max-height: calc(85vh - 160px);
   overflow-y: auto;
-}
-
-.CharacterPreview {
-  position: relative;
-}
-
-.CharacterPreview-addButton {
-  position: absolute;
-  z-index: 100;
-  top: 1rem;
-  right: 0;
 }
 </style>
