@@ -91,12 +91,9 @@
           </div>
         </div>
 
-        <v-alert type="info" v-if="npcs.length === 0">
-          Nobody is participating in this battle yet.
-          Choose some combatants from the <b>Characters</b> library.
-          <br>
-          <v-btn class="mt-4" @click="showCharacterLibrary = true">
-            <v-icon start>mdi-account-multiple-plus</v-icon>
+        <v-alert v-if="npcs.length === 0" type="info" variant="outlined">
+          <p class="mb-3">Nobody is participating in this battle yet. Choose some combatants from the <strong>Characters</strong> library.</p>
+          <v-btn variant="tonal" color="info" prepend-icon="mdi-account-multiple-plus" @click="showCharacterLibrary = true">
             Open character library
           </v-btn>
         </v-alert>
