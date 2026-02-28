@@ -38,7 +38,7 @@
             item-height="130"
           >
             <template v-slot:default="{ item }">
-              <div class="mr-4">
+              <div>
                 <CharacterTeaser :characterData="item" @click="characterPreviewSelected(item)">
                   <v-btn size="small" icon variant="text" @click.stop="characterPreviewSelected(item)">
                     <v-icon>mdi-eye-outline</v-icon>
