@@ -6,6 +6,7 @@ import vuetify from '@/plugins/vuetify'
 import { firebase } from '@/store/firebase'
 import { useUsersStore } from '@/store/useUsersStore'
 import { useNpcsStore } from '@/store/useNpcsStore'
+import '@/css/base.css'
 
 const app = createApp(App)
 const pinia = createPinia()
