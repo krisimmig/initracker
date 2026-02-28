@@ -17,68 +17,26 @@
 
     <template v-if="!isLoading && currentEncounter">
       <div class="Encounter">
-        <h1 class="my-0 font-weight-light">{{ currentEncounter.name }}</h1>
-        <div class="d-flex align-center mb-2">
-          <p class="text-subtitle-1 mb-0">
-            Round <span class="font-weight-bold">{{ currentRound }}</span>
-            Turn <span class="font-weight-bold">{{ currentEncounter.currentTurn }}</span>
-            Elapsed time <span class="font-weight-bold">{{ elapsedTimeGame }}</span>
-          </p>
+        <EncounterActionbar
+          :encounter="currentEncounter"
+          :disableActions="npcs.length === 0"
+          @nextTurn="nextTurn"
+          @addCharacters="showCharacterLibrary = true"
+          @rollInitiative="rollInitiative"
+          @reset="reset"
+        />
 
-          <v-spacer></v-spacer>
-
-          <div>
-            <v-btn @click="nextTurn" :disabled="npcs.length === 0">
-              <v-icon start>mdi-skip-next</v-icon>
-              Next
-            </v-btn>
-            <v-dialog v-model="showCharacterLibrary" max-width="80vw">
-              <CharacterLibrary
-                :encounterId="route.params.encounterId"
-                @characterClicked="handleCharClicked"
-                @closeClicked="showCharacterLibrary = false"
-                button-text="Add"
-              />
-            </v-dialog>
-
-            <v-menu location="bottom end">
-              <template v-slot:activator="{ props: activatorProps }">
-                <v-btn icon v-bind="activatorProps" class="ml-2">
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item @click.stop="showCharacterLibrary = true">
-                  <template #prepend>
-                    <v-icon>mdi-account-multiple-plus</v-icon>
-                  </template>
-                  <v-list-item-title>Add</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item
-                  v-if="currentRound === 1 && currentNpcIndex === 1"
-                  @click="rollInitiative"
-                  :disabled="npcs.length === 0"
-                >
-                  <template #prepend>
-                    <v-icon>mdi-dice-d20-outline</v-icon>
-                  </template>
-                  <v-list-item-title>Roll ini</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item v-else @click="reset">
-                  <template #prepend>
-                    <v-icon>mdi-backup-restore</v-icon>
-                  </template>
-                  <v-list-item-title>Reset</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </div>
-        </div>
+        <v-dialog v-model="showCharacterLibrary" max-width="80vw">
+          <CharacterLibrary
+            :encounterId="route.params.encounterId"
+            @characterClicked="handleCharClicked"
+            @closeClicked="showCharacterLibrary = false"
+            button-text="Add"
+          />
+        </v-dialog>
 
         <div v-if="npcs.length > 0">
-          <div class="pr-4" style="overflow-y: auto; height: calc(100vh - 185px); margin-right: -16px;">
+          <div class="p-4" style="overflow-y: auto; height: calc(100vh - 185px); margin-right: -16px;">
             <div v-for="(npc, index) in npcs" :key="index">
               <CharacterListItem
                 :npc="npc"
@@ -111,6 +69,7 @@ import { useNpcsStore } from '@/store/useNpcsStore'
 import { useSnackbarStore } from '@/store/useSnackbarStore'
 import CharacterListItem from '@/components/characters/CharacterListItem.vue'
 import CharacterLibrary from '@/components/characters/CharacterLibrary.vue'
+import EncounterActionbar from '@/components/encounters/EncounterActionbar.vue'
 import { modifierWithSign } from '@/utils/dnd'
 import { Character as ICharacter } from '@/classes/Character'
 
@@ -127,17 +86,8 @@ const showCharacterLibrary = ref(false)
 
 const isLoading = computed(() => encountersStore.isLoading)
 const currentEncounter = computed(() => encountersStore.encountersCurrent)
-const currentRound = computed(() => currentEncounter.value?.round)
 const currentNpcIndex = computed(() => currentEncounter.value?.activeEntityIndex ?? 1)
 const npcs = computed(() => encountersStore.encountersNpcs)
-
-const elapsedTimeGame = computed((): string => {
-  const seconds = ((currentEncounter.value?.currentTurn ?? 1) - 1) * 6
-  const h = Math.floor(seconds / 3600)
-  const m = Math.floor((seconds % 3600) / 60)
-  const s = seconds % 60
-  return `${h}:${m}:${s}`
-})
 
 function removeNpcFromEncounter(npcID: string) {
   encountersStore.removeNpcFromEncounter({ npcID, encounterId: props.id })
@@ -187,14 +137,17 @@ function nextTurn(): void {
     return
   }
 
-  const nextIndex = currentNpcIndex.value === npcs.value.length ? 1 : currentNpcIndex.value + 1
+  const isLastInRound = currentNpcIndex.value === npcs.value.length
+  const nextIndex = isLastInRound ? 1 : currentNpcIndex.value + 1
 
   npcsStore.updateNpcConditionRound({ encounterId: props.id, npcId: npc.uuid })
 
-  encountersStore.updateRound({
-    encounterId: props.id,
-    newRoundIndex: (currentRound.value ?? 1) + 1,
-  })
+  if (isLastInRound) {
+    encountersStore.updateRound({
+      encounterId: props.id,
+      newRoundIndex: (currentEncounter.value?.round ?? 1) + 1,
+    })
+  }
 
   encountersStore.updateActiveEntityIndex({
     encounterId: props.id,
