@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    color="primary-lighten-1"
+    color="primary"
     flat
     class="AppBar"
   >
@@ -35,6 +35,10 @@
       </router-link>
 
       <v-spacer></v-spacer>
+
+      <v-btn icon variant="text" color="white" class="my-2" @click="toggleTheme">
+        <v-icon>{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
+      </v-btn>
 
       <router-link :to="{ name: 'userdetails' }">
         <v-btn color="white" variant="text" rounded class="my-2">
@@ -71,12 +75,19 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useTheme } from 'vuetify'
 import { useUsersStore } from '@/store/useUsersStore'
 
 const usersStore = useUsersStore()
+const theme = useTheme()
 
 const currentUserString = computed(() => usersStore.userString || 'ERROR getting username')
 const isLoggedIn = computed(() => usersStore.isLoggedIn)
+const isDark = computed(() => theme.global.current.value.dark)
+
+function toggleTheme() {
+  theme.global.name.value = isDark.value ? 'light' : 'dark'
+}
 
 function logoutUser() {
   usersStore.logoutUser()

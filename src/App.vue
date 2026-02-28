@@ -2,7 +2,7 @@
   <v-app>
     <AppBar />
 
-    <v-main class="bg-grey-lighten-5">
+    <v-main>
       <v-container :fluid="route.meta?.isFullWidth">
         <router-view></router-view>
         <Confirm />
