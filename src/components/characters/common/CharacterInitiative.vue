@@ -1,31 +1,38 @@
 <template>
-  <v-dialog v-model="showInitiativeInput" max-width="350px">
-    <template v-slot:activator="{ props: activatorProps }">
-      <v-list-item v-bind="activatorProps">
-        Set initiative
-      </v-list-item>
+  <v-dialog v-model="showInitiativeInput" max-width="320">
+    <template #activator="{ props: activatorProps }">
+      <v-list-item
+        v-bind="activatorProps"
+        prepend-icon="mdi-sword"
+        title="Set initiative"
+      />
     </template>
 
     <v-card>
-      <v-app-bar flat>
-        <v-toolbar-title>Set initiative</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon @click.stop="showInitiativeInput = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </v-app-bar>
-      <v-card-text>
-        <div class="d-flex align-baseline mt-4">
-          <v-text-field
-            min="1"
-            placeholder="Enter initiative"
-            type="number"
-            v-model.number="manuelInitiative"
-            @keyup.enter="setInitiative"
-          />
-          <v-btn @click="setInitiative" class="ml-4">Set initiative</v-btn>
-        </div>
+      <v-card-title class="d-flex align-center justify-space-between pt-4 px-4">
+        <span>Set initiative</span>
+        <v-btn icon="mdi-close" variant="text" @click="showInitiativeInput = false" />
+      </v-card-title>
+
+      <v-card-text class="px-4 pb-2">
+        <v-text-field
+          v-model.number="manuelInitiative"
+          label="Initiative"
+          type="number"
+          min="1"
+          variant="outlined"
+          density="compact"
+          prepend-inner-icon="mdi-sword"
+          autofocus
+          @keyup.enter="setInitiative"
+        />
       </v-card-text>
+
+      <v-card-actions class="px-4 pb-4">
+        <v-spacer />
+        <v-btn variant="text" @click="showInitiativeInput = false">Cancel</v-btn>
+        <v-btn color="primary" variant="tonal" prepend-icon="mdi-check" @click="setInitiative">Confirm</v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -41,7 +48,7 @@ const props = defineProps<{
 }>()
 
 const showInitiativeInput = ref(false)
-const manuelInitiative = ref(1)
+const manuelInitiative = ref(props.initiative ?? 1)
 
 const encountersStore = useEncountersStore()
 const npcsStore = useNpcsStore()

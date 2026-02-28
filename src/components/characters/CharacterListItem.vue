@@ -22,15 +22,17 @@
       <template #append>
         <v-menu location="bottom end" :close-on-content-click="true">
           <template #activator="{ props: activatorProps }">
-            <v-btn icon variant="text" size="small" v-bind="activatorProps" @click.stop>
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
+            <v-btn icon="mdi-dots-vertical" variant="text" size="small" v-bind="activatorProps" @click.stop />
           </template>
-          <v-list density="compact">
+          <v-list density="compact" nav>
             <CharacterInitiative :initiative="npc.initiative" :uuid="npc.uuid" />
-            <v-list-item v-if="removable" prepend-icon="mdi-account-remove" @click="emit('remove')">
-              <v-list-item-title>Remove</v-list-item-title>
-            </v-list-item>
+            <v-list-item
+              v-if="removable"
+              prepend-icon="mdi-account-remove"
+              title="Remove"
+              base-color="error"
+              @click="emit('remove')"
+            />
           </v-list>
         </v-menu>
       </template>
@@ -89,7 +91,7 @@ function showInDetail() {
 <style>
 .CharacterListItem {
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 
 .CharacterListItem.is-active {
