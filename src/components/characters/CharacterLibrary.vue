@@ -115,7 +115,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
+<style>
 .CharactersLibrary .CharacterDetails {
   max-height: calc(85vh - 100px);
   overflow-y: auto;

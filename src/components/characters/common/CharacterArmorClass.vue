@@ -15,13 +15,16 @@ defineProps<{
 }>()
 </script>
 
-<style lang="scss">
-$width: 2.5em;
+<style>
+:root {
+  --width: 2.5em;
+}
+
 
 .CharacterArmorClass {
   position: relative;
-  width: $width;
-  height: $width;
+  width: var(--width);
+  height: var(--width);
   margin-right: .5em;
 }
 
@@ -35,6 +38,6 @@ $width: 2.5em;
 }
 
 .CharacterArmorClass-icon {
-  font-size: $width;
+  font-size: var(--width);
 }
 </style>

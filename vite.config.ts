@@ -17,11 +17,6 @@ export default defineConfig({
     include: ['firebaseui'],
   },
   css: {
-    preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler',
-      },
-    },
     postcss: {
       plugins: [autoprefixer],
     },

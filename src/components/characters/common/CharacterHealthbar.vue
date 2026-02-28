@@ -138,7 +138,7 @@ function changeHitPoints({ subtract } = { subtract: true }) {
 }
 </script>
 
-<style lang="scss">
+<style>
 .CharacterHealthBar {
   border-radius: 3px;
   padding-left: 0.5rem;

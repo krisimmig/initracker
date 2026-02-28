@@ -110,7 +110,7 @@ function handleCharacterClicked(characterData: Character) {
 }
 </script>
 
-<style lang="scss">
+<style>
 .CharacterList li {
   @apply text-gray-600 block;
 }

@@ -172,7 +172,7 @@ function removeCondition(conditionId: string) {
 }
 </script>
 
-<style lang="scss">
+<style>
 .NpcCondition-condition,
 .NpcCondition-add {
   font-size: .8em;

@@ -18,13 +18,15 @@ defineProps<{
 }>()
 </script>
 
-<style lang="scss">
-$width: 2.5em;
+<style>
+:root {
+  --width: 2.5em;
+}
 
 .CharacterHealth-wrapper {
   position: relative;
-  width: $width;
-  height: $width;
+  width: var(--width);
+  height: var(--width);
 }
 
 .CharacterHealth-hpWrapper {
@@ -45,6 +47,6 @@ $width: 2.5em;
 
 .CharacterHealth-icon {
   color: theme('colors.red.600');
-  font-size: $width;
+  font-size: var(--width);
 }
 </style>

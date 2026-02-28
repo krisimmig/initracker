@@ -187,7 +187,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
+<style>
 .CharacterBuilder-wrapper .v-input {
   margin-right: 0.7rem;
 }

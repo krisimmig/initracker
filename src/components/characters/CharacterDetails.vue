@@ -102,7 +102,7 @@ function getSpeedString(): string {
 }
 </script>
 
-<style lang="scss">
+<style>
 .CharacterDetails-title {
   border-top: 4px solid #488fef;
 }

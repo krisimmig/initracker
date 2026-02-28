@@ -64,7 +64,7 @@ function addToEncounter() {
 }
 </script>
 
-<style lang="scss">
+<style>
 .CharacterTeaser {
   cursor: pointer;
 }

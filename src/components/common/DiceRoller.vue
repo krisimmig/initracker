@@ -35,7 +35,7 @@ function roll(): void {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .DiceRoller {
   cursor: pointer;
   height: 20px;

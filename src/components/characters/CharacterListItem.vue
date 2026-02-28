@@ -88,7 +88,7 @@ function showInDetail() {
 }
 </script>
 
-<style lang="scss">
+<style>
 .CharacterListItem {
   cursor: pointer;
   border: 1px solid #d5d5d5;
