@@ -1,7 +1,7 @@
 <template>
   <div class="UserDetails">
     <div class="">
-      <PageTitle title="User Details" />
+      <PageTitle title="User Details" icon="mdi-account-circle" />
 
       <div class="card w-3/12">
         <img v-if="photoUrl" :src="photoUrl" alt="User Avatar" class="mb-4">

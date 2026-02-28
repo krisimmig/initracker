@@ -1,7 +1,7 @@
 <template>
   <div class="Feedback">
     <div class="">
-      <PageTitle title="Feedback" subtitle="ways to help improve this app." />
+      <PageTitle title="Feedback" subtitle="ways to help improve this app." icon="mdi-message-draw" />
 
       <div class="u-container-fluid">
         <div class="grid grid-cols-2 gap-4">

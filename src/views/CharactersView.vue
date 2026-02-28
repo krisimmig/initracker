@@ -1,6 +1,6 @@
 <template>
   <div class="Characters">
-    <PageTitle title="Characters" subtitle="Create or edit your own monsters and characters" />
+    <PageTitle title="Characters" subtitle="Create or edit your own monsters and characters" icon="mdi-account-group" />
 
     <v-row>
       <v-col>
@@ -15,19 +15,16 @@
 
         <template v-if="!isLoading">
           <template v-if="characters.length > 0">
-            <v-card
-              hover
+            <CharacterTeaser
               v-for="character in characters"
               :key="character.uuid"
-              class="pa-4 mb-3"
+              :character-data="character"
+              @click="handleTeaserActioned(character)"
             >
-              <CharacterTeaser :character-data="character" @click="handleTeaserActioned(character)">
-                <v-btn variant="outlined" color="primary" @click="handleTeaserActioned(character)">
-                  <v-icon start>mdi-pencil</v-icon>
-                  Edit
-                </v-btn>
-              </CharacterTeaser>
-            </v-card>
+              <v-btn size="small" icon variant="text" @click.stop="handleTeaserActioned(character)">
+                <v-icon>mdi-pencil-outline</v-icon>
+              </v-btn>
+            </CharacterTeaser>
           </template>
           <v-alert variant="outlined" type="info" v-else>No custom characters found.</v-alert>
         </template>

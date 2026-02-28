@@ -1,9 +1,15 @@
 <template>
   <div class="Encounters">
-    <PageTitle title="Encounters" subtitle="These are all your encounters" />
+    <PageTitle title="Encounters" subtitle="These are all your encounters" icon="mdi-sword-cross" />
 
     <v-row>
-      <v-col>
+      <!-- New encounter: first on mobile, right column on md+ -->
+      <v-col cols="12" md="4" :order="1" :order-md="2">
+        <EncounterNew />
+      </v-col>
+
+      <!-- Encounter list: second on mobile, left column on md+ -->
+      <v-col cols="12" md="8" :order="2" :order-md="1">
         <div v-if="isLoading">
           <v-card class="mb-3">
             <v-skeleton-loader class="mx-auto" type="heading, list-item-two-line" />
@@ -21,13 +27,9 @@
           </ul>
 
           <v-alert v-else type="info" variant="outlined">
-            Nothing here yet, please create a new encounter on the right.
+            Nothing here yet, create a new encounter above.
           </v-alert>
         </template>
-      </v-col>
-
-      <v-col cols="4">
-        <EncounterNew />
       </v-col>
     </v-row>
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageTitle title="Login" subtitle="use one of these methods to login." />
+    <PageTitle title="Login" subtitle="use one of these methods to login." icon="mdi-login" />
     <div class="u-container-fluid max-w-3xl">
       <div class="card card--rounded card--shadow">
         <p>To create a new account or login to an existing one, click one of the methods below.</p>

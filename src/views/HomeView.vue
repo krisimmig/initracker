@@ -1,7 +1,7 @@
 <template>
   <div class="Home">
     <div class="">
-      <PageTitle title="Welcome home" subtitle="your monsters are waiting." />
+      <PageTitle title="Welcome home" subtitle="your monsters are waiting." icon="mdi-home" />
 
       <div class="u-container-fluid max-w-3xl">
         <div class="card card--rounded card--shadow">
