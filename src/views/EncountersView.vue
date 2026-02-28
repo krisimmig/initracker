@@ -1,6 +1,6 @@
 <template>
   <div class="Encounters">
-    <PageTitle title="Encounters" subtitle="These are all your encounters" icon="mdi-sword-cross" />
+    <PageTitle title="Encounters" icon="mdi-sword-cross" />
 
     <v-row>
       <!-- New encounter: first on mobile, right column on md+ -->

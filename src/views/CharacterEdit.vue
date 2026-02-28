@@ -2,7 +2,6 @@
   <div class="">
     <PageTitle
       title="Character editor"
-      subtitle="Here you can create or edit an existing character."
       icon="mdi-pencil"
     />
 

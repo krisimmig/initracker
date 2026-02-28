@@ -1,6 +1,6 @@
 <template>
   <div class="Feedback">
-    <PageTitle title="Feedback" subtitle="Ways to help improve this app." icon="mdi-message-draw" />
+    <PageTitle title="Feedback" icon="mdi-message-draw" />
 
     <v-row>
       <v-col cols="12" md="6">

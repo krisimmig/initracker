@@ -1,6 +1,6 @@
 <template>
   <div class="Characters">
-    <PageTitle title="Characters" subtitle="Create or edit your own monsters and characters" icon="mdi-account-group" />
+    <PageTitle title="Characters"  icon="mdi-account-group" />
 
     <v-row>
       <!-- New character: first on mobile, right column on md+ -->

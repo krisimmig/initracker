@@ -47,6 +47,8 @@ const props = defineProps<{
   initiative: number
 }>()
 
+const emit = defineEmits<{ confirm: [] }>()
+
 const showInitiativeInput = ref(false)
 const manuelInitiative = ref(props.initiative ?? 1)
 
@@ -65,5 +67,6 @@ function setInitiative() {
 
   manuelInitiative.value = 0
   showInitiativeInput.value = false
+  emit('confirm')
 }
 </script>

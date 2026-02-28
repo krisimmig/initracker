@@ -67,7 +67,7 @@ export default createVuetify({
       elevation: 0,
     },
     VTextField: {
-      variant: 'outlined',
+      variant: 'underlined',
       rounded: 1,
     },
     VSelect: {
@@ -91,6 +91,7 @@ export default createVuetify({
     },
     VMenu: {
       rounded: 1,
+      contentClass: 'app-menu',
     },
     VChip: {
       rounded: 1,

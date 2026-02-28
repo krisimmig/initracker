@@ -21,15 +21,15 @@
     </v-card-text>
 
     <v-card-actions class="pa-3 pt-0">
-      <v-spacer />
       <v-btn
         color="primary"
+        block
         variant="flat"
         :disabled="!encounterName"
         prepend-icon="mdi-plus"
         @click="submitNewEncounter"
       >
-        Create
+        Create encounter
       </v-btn>
     </v-card-actions>
   </v-card>

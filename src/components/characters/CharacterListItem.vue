@@ -20,18 +20,18 @@
       <v-card-subtitle class="text-caption pa-0">{{ description }}</v-card-subtitle>
 
       <template #append>
-        <v-menu location="bottom end" :close-on-content-click="true">
+        <v-menu v-model="menuOpen" location="bottom end" :close-on-content-click="false">
           <template #activator="{ props: activatorProps }">
             <v-btn icon="mdi-dots-vertical" variant="text" size="small" v-bind="activatorProps" @click.stop />
           </template>
           <v-list density="compact" nav>
-            <CharacterInitiative :initiative="npc.initiative" :uuid="npc.uuid" />
+            <CharacterInitiative :initiative="npc.initiative" :uuid="npc.uuid" @confirm="menuOpen = false" />
             <v-list-item
               v-if="removable"
               prepend-icon="mdi-account-remove"
               title="Remove"
               base-color="error"
-              @click="emit('remove')"
+              @click="menuOpen = false; emit('remove')"
             />
           </v-list>
         </v-menu>
@@ -55,13 +55,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import { Character, Character as ICharacter } from '@/classes/Character'
 import CharacterHealthBar from '@/components/characters/common/CharacterHealthbar.vue'
 import CharacterInitiative from '@/components/characters/common/CharacterInitiative.vue'
 import CharacterConditions from '@/components/characters/common/CharacterCondition.vue'
 import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue'
+
+const menuOpen = ref(false)
 
 const props = defineProps<{
   npc: ICharacter

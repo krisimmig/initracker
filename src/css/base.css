@@ -1,5 +1,17 @@
 
 /* src/styles/main.css */
+.app-menu.v-overlay__content > .v-list {
+  border: 1px solid rgba(var(--v-border-color), calc(var(--v-border-opacity) * 2));
+}
+
+.v-theme--dark .app-menu.v-overlay__content > .v-list {
+  border-color: #6666b7;
+}
+
+.v-theme--light .app-menu.v-overlay__content > .v-list {
+  border-color: #cfcfe2;
+}
+
 .v-theme--dark {
   .v-card--variant-outlined {
     border-color: #6666b7;
