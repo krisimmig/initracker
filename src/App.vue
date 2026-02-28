@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <AppBar />
+    <AppBar v-if="!route.meta?.hideAppBar" />
 
     <v-main>
       <v-container :fluid="route.meta?.isFullWidth">

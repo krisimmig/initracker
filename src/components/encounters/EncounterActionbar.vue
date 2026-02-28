@@ -28,6 +28,20 @@
       Next
     </v-btn>
 
+    <v-tooltip location="bottom" text="Share with players">
+      <template #activator="{ props: shareTooltipProps }">
+        <v-btn
+          v-bind="shareTooltipProps"
+          :icon="encounter.shareId ? 'mdi-link-variant' : 'mdi-share-variant'"
+          :color="encounter.shareId ? 'primary' : undefined"
+          variant="text"
+          class="ml-1"
+          :loading="isGeneratingLink"
+          @click="handleShareClick"
+        />
+      </template>
+    </v-tooltip>
+
     <v-menu location="bottom end" :close-on-content-click="true">
       <template #activator="{ props: activatorProps }">
         <v-btn icon="mdi-dots-vertical" variant="text" v-bind="activatorProps" class="ml-1" />
@@ -53,12 +67,61 @@
         />
       </v-list>
     </v-menu>
+
+    <!-- Share dialog -->
+    <v-dialog v-model="showShareDialog" max-width="480">
+      <v-card>
+        <v-card-title class="d-flex align-center pt-4 px-4">
+          <v-icon class="mr-2">mdi-share-variant</v-icon>
+          Share with Players
+        </v-card-title>
+        <v-card-subtitle class="px-4 pb-2">
+          Players can view initiative order and conditions in real time.
+        </v-card-subtitle>
+
+        <v-divider />
+
+        <v-card-text class="pa-4">
+          <v-text-field
+            :model-value="shareUrl"
+            label="Player link"
+            readonly
+            variant="outlined"
+            density="compact"
+            prepend-inner-icon="mdi-link-variant"
+            append-inner-icon="mdi-content-copy"
+            @click:append-inner="copyShareLink"
+            @focus="($event.target as HTMLInputElement).select()"
+          />
+          <p v-if="copied" class="text-caption text-success mt-1">
+            <v-icon size="14">mdi-check</v-icon> Copied to clipboard
+          </p>
+        </v-card-text>
+
+        <v-divider />
+
+        <v-card-actions class="pa-4">
+          <v-btn
+            color="error"
+            variant="text"
+            prepend-icon="mdi-link-variant-off"
+            @click="handleRevokeShare"
+          >
+            Stop sharing
+          </v-btn>
+          <v-spacer />
+          <v-btn variant="text" @click="showShareDialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { IEncounterEntity } from '@/types/encounters'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import { useSnackbarStore } from '@/store/useSnackbarStore'
 
 const props = defineProps<{
   encounter: IEncounterEntity
@@ -72,7 +135,19 @@ const emit = defineEmits<{
   reset: []
 }>()
 
+const encountersStore = useEncountersStore()
+const snackbar = useSnackbarStore()
+
+const showShareDialog = ref(false)
+const isGeneratingLink = ref(false)
+const copied = ref(false)
+
 const isAtStart = computed(() => props.encounter.round === 1 && props.encounter.activeEntityIndex === 1)
+
+const shareUrl = computed(() => {
+  if (!props.encounter.shareId) return ''
+  return `${window.location.origin}/play/${props.encounter.shareId}`
+})
 
 const elapsedTimeGame = computed((): string => {
   const seconds = ((props.encounter.currentTurn ?? 1) - 1) * 6
@@ -82,4 +157,43 @@ const elapsedTimeGame = computed((): string => {
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${pad(h)}:${pad(m)}:${pad(s)}`
 })
+
+async function handleShareClick() {
+  if (props.encounter.shareId) {
+    showShareDialog.value = true
+    return
+  }
+
+  isGeneratingLink.value = true
+  try {
+    await encountersStore.generateShareLink({ encounterId: props.encounter.id })
+    showShareDialog.value = true
+  } catch (e) {
+    console.error('Failed to generate share link:', e)
+    snackbar.show('Failed to generate share link.')
+  } finally {
+    isGeneratingLink.value = false
+  }
+}
+
+async function handleRevokeShare() {
+  try {
+    await encountersStore.revokeShareLink({ encounterId: props.encounter.id })
+    showShareDialog.value = false
+    snackbar.show('Share link revoked.')
+  } catch (e) {
+    console.error('Failed to revoke share link:', e)
+    snackbar.show('Failed to revoke share link.')
+  }
+}
+
+async function copyShareLink() {
+  try {
+    await navigator.clipboard.writeText(shareUrl.value)
+    copied.value = true
+    setTimeout(() => { copied.value = false }, 2000)
+  } catch {
+    snackbar.show('Failed to copy link.')
+  }
+}
 </script>

@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { v1 as uuid } from 'uuid'
-import { db } from '@/store/firebase'
+import { nanoid } from 'nanoid'
+import { db, firebase } from '@/store/firebase'
 import { Character as ICharacter } from '@/classes/Character'
 import { IEncounterEntity } from '@/types/encounters'
 import { useUsersStore } from '@/store/useUsersStore'
@@ -12,6 +13,12 @@ export const useEncountersStore = defineStore('encounters', () => {
   const encountersNpcs = ref<ICharacter[]>([])
   const npcInDetail = ref<ICharacter | null>(null)
   const isLoading = ref(true)
+
+  // Player view (shared encounter) state
+  const sharedEncounter = ref<IEncounterEntity | null>(null)
+  const sharedEncounterNpcs = ref<ICharacter[]>([])
+  const isLoadingShared = ref(true)
+  const sharedError = ref<string | null>(null)
 
   const encountersActiveNpc = () => {
     if (encountersCurrent.value) {
@@ -167,12 +174,102 @@ export const useEncountersStore = defineStore('encounters', () => {
     npcInDetail.value = npc
   }
 
+  async function generateShareLink({ encounterId }: { encounterId: string }): Promise<string> {
+    const usersStore = useUsersStore()
+    const userUid = usersStore.userUid
+
+    // Check if encounter already has a shareId
+    const encounterRef = db.doc(`users/${userUid}/encounters/${encounterId}`)
+    const encounterDoc = await encounterRef.get()
+    const existing = encounterDoc.data() as IEncounterEntity | undefined
+
+    if (existing?.shareId) {
+      return existing.shareId
+    }
+
+    const shareId = nanoid(10)
+
+    // Write shareId to the encounter doc
+    await encounterRef.set({ shareId }, { merge: true })
+
+    // Create a lookup document in the shared_encounters collection
+    await db.doc(`shared_encounters/${shareId}`).set({
+      ownerUid: userUid,
+      encounterId,
+      createdAt: Date.now(),
+    })
+
+    return shareId
+  }
+
+  async function revokeShareLink({ encounterId }: { encounterId: string }) {
+    const usersStore = useUsersStore()
+    const userUid = usersStore.userUid
+    const encounterRef = db.doc(`users/${userUid}/encounters/${encounterId}`)
+    const encounterDoc = await encounterRef.get()
+    const existing = encounterDoc.data() as IEncounterEntity | undefined
+
+    if (existing?.shareId) {
+      // Remove the shared_encounters lookup doc
+      await db.doc(`shared_encounters/${existing.shareId}`).delete()
+      // Remove shareId from encounter using FieldValue.delete()
+      await encounterRef.update({ shareId: firebase.firestore.FieldValue.delete() })
+    }
+  }
+
+  function fetchSharedEncounter({ shareId }: { shareId: string }) {
+    isLoadingShared.value = true
+    sharedError.value = null
+
+    // Look up the shareId to get ownerUid and encounterId
+    db.doc(`shared_encounters/${shareId}`).get().then((doc) => {
+      if (!doc.exists) {
+        sharedError.value = 'This shared encounter link is invalid or has expired.'
+        isLoadingShared.value = false
+        return
+      }
+
+      const data = doc.data() as { ownerUid: string; encounterId: string }
+      const { ownerUid, encounterId } = data
+
+      // Listen to the encounter document in real time
+      db.doc(`users/${ownerUid}/encounters/${encounterId}`).onSnapshot((encounterDoc) => {
+        if (!encounterDoc.exists) {
+          sharedError.value = 'This encounter no longer exists.'
+          isLoadingShared.value = false
+          return
+        }
+        sharedEncounter.value = encounterDoc.data() as IEncounterEntity
+      })
+
+      // Listen to the NPCs subcollection in real time
+      db.collection(`users/${ownerUid}/encounters/${encounterId}/npcs`)
+        .orderBy('initiative', 'desc')
+        .onSnapshot((data) => {
+          const npcs: ICharacter[] = []
+          data.forEach((doc) => {
+            npcs.push(doc.data() as ICharacter)
+          })
+          sharedEncounterNpcs.value = npcs
+          isLoadingShared.value = false
+        })
+    }).catch((err) => {
+      console.error('Error fetching shared encounter:', err)
+      sharedError.value = 'Failed to load the shared encounter. Please try again.'
+      isLoadingShared.value = false
+    })
+  }
+
   return {
     encountersAll,
     encountersCurrent,
     encountersNpcs,
     npcInDetail,
     isLoading,
+    sharedEncounter,
+    sharedEncounterNpcs,
+    isLoadingShared,
+    sharedError,
     encountersActiveNpc,
     encountersCurrentId,
     npcUuidInDetail,
@@ -188,5 +285,8 @@ export const useEncountersStore = defineStore('encounters', () => {
     updateActiveEntityIndex,
     updateTurnState,
     setNpcInDetail,
+    generateShareLink,
+    revokeShareLink,
+    fetchSharedEncounter,
   }
 })

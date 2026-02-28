@@ -56,6 +56,12 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/play/:shareId',
+    name: 'player-view',
+    component: () => import('@/views/PlayerView.vue'),
+    meta: { requiresAuth: false, isFullWidth: true, hideAppBar: true },
+  },
+  {
     path: '/login',
     name: 'login',
     component: LoginView,

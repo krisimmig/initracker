@@ -5,4 +5,5 @@ export interface IEncounterEntity {
   activeEntityIndex: number;
   currentTurn: number;
   createdAt: number;
+  shareId?: string;
 }
