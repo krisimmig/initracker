@@ -8,6 +8,7 @@ import { useUsersStore } from '@/store/useUsersStore'
 export const useCharacterBuilderStore = defineStore('characterBuilder', () => {
   const character = ref<Character>(new Character())
   const isLoading = ref(false)
+  const isSaving = ref(false)
 
   async function fetchCharacterById({ id }: { id: string }) {
     isLoading.value = true
@@ -61,17 +62,22 @@ export const useCharacterBuilderStore = defineStore('characterBuilder', () => {
 
     char.meta.updatedAt = new Date()
 
-    const userUid = usersStore.userUid
-    const characterRef = db.doc(`users/${userUid}/characters/${char.uuid}`)
-    characterRef.set({ ...char }, { merge: true })
+    isSaving.value = true
+    try {
+      const userUid = usersStore.userUid
+      const characterRef = db.doc(`users/${userUid}/characters/${char.uuid}`)
+      await characterRef.set({ ...char }, { merge: true })
 
-    if (!newCharacter) {
-      await updateCharacterInEncounters({ character: char })
-    }
+      if (!newCharacter) {
+        await updateCharacterInEncounters({ character: char })
+      }
 
-    if (newCharacter) {
-      const router = (await import('@/router')).default
-      router.push({ name: 'characterEdit', params: { uuid: char.uuid, type: 'edit' } })
+      if (newCharacter) {
+        const router = (await import('@/router')).default
+        router.push({ name: 'characterEdit', params: { uuid: char.uuid, type: 'edit' } })
+      }
+    } finally {
+      isSaving.value = false
     }
   }
 
@@ -114,6 +120,7 @@ export const useCharacterBuilderStore = defineStore('characterBuilder', () => {
   return {
     character,
     isLoading,
+    isSaving,
     fetchCharacterById,
     fetchCharacterByUuid,
     saveCharacter,
