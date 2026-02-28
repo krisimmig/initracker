@@ -1,25 +1,61 @@
 <template>
-  <v-dialog max-width="600px" v-model="dialog">
-    <template v-slot:activator="{ props: activatorProps }">
+  <v-dialog max-width="560" v-model="dialog">
+    <template #activator="{ props: activatorProps }">
       <div v-bind="activatorProps">
-        <slot name="button"></slot>
+        <slot name="button" />
       </div>
     </template>
 
     <v-card>
-      <v-card-title>
-        <span class="text-h6" v-if="!ability.new">Update ability</span>
-        <span class="text-h6" v-else>Add a new ability</span>
+      <v-card-title class="d-flex align-center justify-space-between pt-4 px-4">
+        <span>{{ ability.new ? 'Add ability' : 'Edit ability' }}</span>
+        <v-btn icon="mdi-close" variant="text" @click="cancel" />
       </v-card-title>
-      <v-card-text>
-        <v-text-field v-model="name" label="Ability name" />
-        <v-textarea v-model="desc" label="Ability description" />
+
+      <v-divider />
+
+      <v-card-text class="px-4 pt-4 pb-2">
+        <v-text-field
+          v-model="name"
+          label="Name"
+          variant="outlined"
+          density="compact"
+          autofocus
+          class="mb-3"
+        />
+        <v-textarea
+          v-model="desc"
+          label="Description"
+          variant="outlined"
+          density="compact"
+          rows="5"
+          auto-grow
+        />
       </v-card-text>
-      <v-card-actions>
-        <v-btn v-if="!ability.new" variant="text" color="error" @click="remove">Delete</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn variant="text" @click="cancel" color="primary">Cancel</v-btn>
-        <v-btn variant="text" @click="save" color="primary" :disabled="!name || !desc">Save</v-btn>
+
+      <v-divider />
+
+      <v-card-actions class="px-4 py-3">
+        <v-btn
+          v-if="!ability.new"
+          color="error"
+          variant="text"
+          prepend-icon="mdi-delete-outline"
+          @click="remove"
+        >
+          Delete
+        </v-btn>
+        <v-spacer />
+        <v-btn variant="text" @click="cancel">Cancel</v-btn>
+        <v-btn
+          color="primary"
+          variant="tonal"
+          prepend-icon="mdi-check"
+          :disabled="!name || !desc"
+          @click="save"
+        >
+          Save
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
