@@ -1,33 +1,7 @@
-html,
-body {
-  @apply h-full overflow-hidden;
-}
 
-h1,
-.h1 {
-  @apply text-4xl;
+/* src/styles/main.css */
+.v-theme--dark {
+  .v-card--variant-outlined {
+    border-color: #6666b7 !important;
+  }
 }
-
-h2,
-.h2 {
-  @apply text-3xl;
-}
-
-h3,
-.h3 {
-  @apply text-2xl;
-}
-
-h4,
-.h4 {
-  @apply font-weight-bold text-base;
-}
-
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, p {
-  margin-bottom: .5em;
-}
-
-a {
-  text-decoration: underline;
-}
-
