@@ -17,7 +17,7 @@
           <div class="mb-3">
             <v-btn-toggle v-model="showType" mandatory color="primary" variant="outlined" density="compact" class="mb-3">
               <v-btn value="all">All</v-btn>
-              <v-btn value="monsters">Monsters</v-btn>
+              <v-btn value="monsters">Player's Handbook</v-btn>
               <v-btn value="characters">Custom</v-btn>
             </v-btn-toggle>
             <v-text-field
