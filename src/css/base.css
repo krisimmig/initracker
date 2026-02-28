@@ -5,3 +5,9 @@
     border-color: #6666b7 !important;
   }
 }
+
+.v-theme--light {
+  .v-card--variant-outlined {
+    border-color: #cfcfe2 !important;
+  }
+}
