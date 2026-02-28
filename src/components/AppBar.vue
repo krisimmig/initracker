@@ -15,7 +15,7 @@
 
       <router-link :to="{ name: 'encounters' }">
         <v-btn color="white" variant="text" rounded class="ml-4 my-2">
-          <v-icon start>mdi-format-list-bulleted-square</v-icon>
+          <v-icon start>mdi-sword-cross</v-icon>
           Encounters
         </v-btn>
       </router-link>
