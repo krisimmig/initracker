@@ -58,11 +58,3 @@ function addToEncounter() {
 }
 </script>
 
-<style>
-.CharacterTeaser {
-  cursor: pointer;
-}
-.CharacterTeaser:hover {
-  background-color: rgb(var(--v-theme-primary), 0.04) !important;
-}
-</style>
