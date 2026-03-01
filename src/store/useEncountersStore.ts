@@ -221,19 +221,29 @@ export const useEncountersStore = defineStore('encounters', () => {
     isLoadingShared.value = true
     sharedError.value = null
 
-    // Look up the shareId to get ownerUid and encounterId
-    db.doc(`shared_encounters/${shareId}`).get().then((doc) => {
+    let unsubscribeEncounter: (() => void) | null = null
+    let unsubscribeNpcs: (() => void) | null = null
+
+    // Watch the share lookup doc — fires immediately and on any change (including deletion)
+    const unsubscribeShareDoc = db.doc(`shared_encounters/${shareId}`).onSnapshot((doc) => {
       if (!doc.exists) {
+        // Sharing was revoked (or link was never valid)
         sharedError.value = 'This shared encounter link is invalid or has expired.'
+        sharedEncounter.value = null
+        sharedEncounterNpcs.value = []
         isLoadingShared.value = false
+        unsubscribeEncounter?.()
+        unsubscribeNpcs?.()
+        unsubscribeShareDoc()
         return
       }
 
-      const data = doc.data() as { ownerUid: string; encounterId: string }
-      const { ownerUid, encounterId } = data
+      // Only set up encounter listeners once (guard against repeated snapshots)
+      if (unsubscribeEncounter) return
 
-      // Listen to the encounter document in real time
-      db.doc(`users/${ownerUid}/encounters/${encounterId}`).onSnapshot((encounterDoc) => {
+      const { ownerUid, encounterId } = doc.data() as { ownerUid: string; encounterId: string }
+
+      unsubscribeEncounter = db.doc(`users/${ownerUid}/encounters/${encounterId}`).onSnapshot((encounterDoc) => {
         if (!encounterDoc.exists) {
           sharedError.value = 'This encounter no longer exists.'
           isLoadingShared.value = false
@@ -242,18 +252,17 @@ export const useEncountersStore = defineStore('encounters', () => {
         sharedEncounter.value = encounterDoc.data() as IEncounterEntity
       })
 
-      // Listen to the NPCs subcollection in real time
-      db.collection(`users/${ownerUid}/encounters/${encounterId}/npcs`)
+      unsubscribeNpcs = db.collection(`users/${ownerUid}/encounters/${encounterId}/npcs`)
         .orderBy('initiative', 'desc')
-        .onSnapshot((data) => {
+        .onSnapshot((snapshot) => {
           const npcs: ICharacter[] = []
-          data.forEach((doc) => {
+          snapshot.forEach((doc) => {
             npcs.push(doc.data() as ICharacter)
           })
           sharedEncounterNpcs.value = npcs
           isLoadingShared.value = false
         })
-    }).catch((err) => {
+    }, (err) => {
       console.error('Error fetching shared encounter:', err)
       sharedError.value = 'Failed to load the shared encounter. Please try again.'
       isLoadingShared.value = false
