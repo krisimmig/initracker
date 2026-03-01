@@ -7,7 +7,8 @@ import { useCharactersStore } from '@/store/useCharactersStore'
 import { useNpcsStore } from '@/store/useNpcsStore'
 
 export const useUsersStore = defineStore('users', () => {
-  const user = ref<firebase.User | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = ref<any>(null)
 
   const isLoggedIn = computed(() => user.value !== null)
 
@@ -72,7 +73,8 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
-  function loginUser(newUser: firebase.User) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function loginUser(newUser: any) {
     user.value = newUser
   }
 

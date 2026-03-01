@@ -15,7 +15,7 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 // Firestore DB
-const db = firebaseApp.firestore();
+const db = firebaseApp.firestore!();
 
 // Enable offline persistence (IndexedDB cache)
 db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
@@ -27,15 +27,17 @@ db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
 });
 
 // Resolves once Firebase has restored auth state from the session (fires once on startup)
-let resolveAuthReady: (user: firebase.User | null) => void
-const authReady = new Promise<firebase.User | null>((resolve) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let resolveAuthReady: (user: any) => void
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const authReady = new Promise<any>((resolve) => {
   resolveAuthReady = resolve
 })
-firebaseApp.auth().onAuthStateChanged((user) => resolveAuthReady(user))
+firebaseApp.auth!().onAuthStateChanged((user) => resolveAuthReady(user))
 
 // Helper
 function isLoggedIn() {
-  return !!firebaseApp.auth().currentUser;
+  return !!firebaseApp.auth!().currentUser;
 }
 
 export { db, firebase, firebaseApp, isLoggedIn, authReady };

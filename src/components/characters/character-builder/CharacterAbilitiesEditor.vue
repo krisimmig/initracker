@@ -28,7 +28,7 @@
             <span class="font-weight-bold">{{ ability.name }}</span>
           </template>
           <template #append>
-            <CharacterAbilityDialogue :ability="ability" @change="handleChangeEvent($event, index)">
+            <CharacterAbilityDialogue :ability="{ ...ability, new: ability.new ?? false }" @change="handleChangeEvent($event, index)">
               <template #button>
                 <v-btn size="small" color="primary" variant="text" icon>
                   <v-icon>mdi-pencil-outline</v-icon>
@@ -52,7 +52,7 @@ import { useConfirmStore } from '@/store/useConfirmStore'
 const props = defineProps<{
   type: string
   title: string
-  abilities: Array<{ name: string; desc: string }>
+  abilities: Array<{ name: string; desc: string; new?: boolean }>
 }>()
 
 const emit = defineEmits<{
