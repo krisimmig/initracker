@@ -63,6 +63,13 @@
         </v-btn>
       </router-link>
 
+      <router-link :to="{ name: 'demo' }">
+        <v-btn color="white" variant="text" rounded class="my-2">
+          <v-icon start>mdi-play-circle</v-icon>
+          Try Demo
+        </v-btn>
+      </router-link>
+
       <router-link :to="{ name: 'login' }">
         <v-btn color="white" variant="text" rounded class="my-2">
           <v-icon start>mdi-login</v-icon>

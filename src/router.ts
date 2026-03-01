@@ -56,6 +56,19 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/demo',
+    name: 'demo',
+    component: () => import('@/views/DemoEncounterView.vue'),
+    meta: { requiresAuth: false, isFullWidth: true },
+  },
+  {
+    path: '/demo/character/:type/:uuid?',
+    name: 'demoCharacterEdit',
+    component: () => import('@/views/DemoCharacterEdit.vue'),
+    props: true,
+    meta: { requiresAuth: false },
+  },
+  {
     path: '/play/:shareId',
     name: 'player-view',
     component: () => import('@/views/PlayerView.vue'),

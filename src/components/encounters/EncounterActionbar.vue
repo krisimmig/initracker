@@ -28,7 +28,7 @@
       Next
     </v-btn>
 
-    <v-tooltip location="bottom" text="Share with players">
+    <v-tooltip v-if="!demoStore.isDemoActive" location="bottom" text="Share with players">
       <template #activator="{ props: shareTooltipProps }">
         <v-btn
           v-bind="shareTooltipProps"
@@ -38,6 +38,18 @@
           class="ml-1"
           :loading="isGeneratingLink"
           @click="handleShareClick"
+        />
+      </template>
+    </v-tooltip>
+
+    <v-tooltip v-else location="bottom" text="Share with players">
+      <template #activator="{ props: shareTooltipProps }">
+        <v-btn
+          v-bind="shareTooltipProps"
+          icon="mdi-share-variant"
+          variant="text"
+          class="ml-1"
+          @click="showDemoShareDialog = true"
         />
       </template>
     </v-tooltip>
@@ -67,6 +79,29 @@
         />
       </v-list>
     </v-menu>
+
+    <!-- Demo share dialog -->
+    <v-dialog v-model="showDemoShareDialog" max-width="480">
+      <v-card>
+        <v-card-title class="d-flex align-center pt-4 px-4">
+          <v-icon class="mr-2">mdi-share-variant</v-icon>
+          Share with Players
+        </v-card-title>
+        <v-card-text class="pa-4">
+          <p class="text-body-1 mb-2">
+            Share your encounter with players via a unique link. They can follow the initiative order and conditions in real time — no account needed on their end.
+          </p>
+          <p class="text-body-2 text-medium-emphasis">
+            Create a free account to unlock sharing and save your encounters.
+          </p>
+        </v-card-text>
+        <v-card-actions class="pa-4 pt-0">
+          <v-btn variant="text" @click="showDemoShareDialog = false">Close</v-btn>
+          <v-spacer />
+          <v-btn color="primary" variant="flat" :to="{ name: 'login' }">Create account</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <!-- Share dialog -->
     <v-dialog v-model="showShareDialog" max-width="480">
@@ -122,6 +157,7 @@ import { computed, ref } from 'vue'
 import { IEncounterEntity } from '@/types/encounters'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import { useSnackbarStore } from '@/store/useSnackbarStore'
+import { useDemoStore } from '@/store/useDemoStore'
 
 const props = defineProps<{
   encounter: IEncounterEntity
@@ -137,8 +173,10 @@ const emit = defineEmits<{
 
 const encountersStore = useEncountersStore()
 const snackbar = useSnackbarStore()
+const demoStore = useDemoStore()
 
 const showShareDialog = ref(false)
+const showDemoShareDialog = ref(false)
 const isGeneratingLink = ref(false)
 const copied = ref(false)
 
