@@ -1,81 +1,101 @@
 <template>
-  <div
-    class="card card--interactive w-full"
-  >
-    <div @click="toEncounterView(id)" v-if="!isEditingName">
-      <div class="flex justify-between">
-        <p class="mb-2 font-semibold">{{ name }}</p>
-        <p v-if="createdAt" class="text-sm mb-2 italic font-light text-gray-600">created {{ getReadableCreatedAt() }}</p>
-      </div>
+  <div class="mb-2">
+    <!-- Display mode -->
+    <v-card
+      v-if="!isEditingName"
+      variant="outlined"
+      class="EncounterTeaser"
+      @click="toEncounterView(id)"
+    >
+      <v-card-text class="pa-3 d-flex align-start">
+        <div class="flex-grow-1 min-width-0">
+          <div class="text-subtitle-1 font-weight-bold text-truncate">{{ name }}</div>
+          <div class="text-caption text-medium-emphasis mb-2">
+            Created {{ getReadableCreatedAt() || 'sometime in the past' }}
+          </div>
+          <div class="d-flex align-center gap-2 flex-wrap">
+            <v-chip size="x-small" label color="primary" variant="tonal" prepend-icon="mdi-sword-cross">
+              Round {{ round ?? 0 }}
+            </v-chip>
+          </div>
+        </div>
 
-      <div>
-        <Button @click="deleteEncounter()" is-danger>Delete!</Button>
-        <Button @click="renameEncounter()">Rename</Button>
-      </div>
-    </div>
+        <div class="ml-2 flex-shrink-0 d-flex">
+          <v-btn size="small" icon variant="text" @click.stop="renameEncounter()">
+            <v-icon>mdi-pencil-outline</v-icon>
+          </v-btn>
+          <v-btn size="small" icon variant="text" color="error" @click.stop="deleteEncounter()">
+            <v-icon>mdi-delete-outline</v-icon>
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
 
-    <div v-if="isEditingName" class="Form">
-      <FormInput label="Edit encounter name" v-model="newName" :placeholder="this.name" @keyup.enter="saveNewName" />
-      <Button @click="isEditingName = false" is-secondary>Cancel</Button>
-      <Button @click="saveNewName">Save</Button>
-    </div>
+    <!-- Edit name mode -->
+    <v-card v-if="isEditingName" variant="outlined">
+      <v-card-text class="pa-3">
+        <v-text-field
+          label="Edit encounter name"
+          hide-details="auto"
+          @keyup.enter="saveNewName"
+          v-model="newName"
+          autofocus
+        />
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn @click.stop="isEditingName = false" variant="text">Cancel</v-btn>
+        <v-btn @click="saveNewName" variant="text" color="primary">Save</v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
-<script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import { useConfirmStore } from '@/store/useConfirmStore'
 
-import { dispatchRemoveEncounter, dispatchUpdateName } from '@/store/encountersModule';
-import { IEncounterEntity } from '@/types/encounters';
-import FormInput from '@/components/form/FormInput.vue';
-import Button from '@/components/common/Button.vue';
+const props = defineProps<{
+  id: string
+  name: string
+  round?: number
+  createdAt?: number
+}>()
 
-@Component({
-  components: {
-    Button,
-    FormInput,
-  },
-})
-export default class EncounterTeaser extends Vue {
-  @Prop({ type: String, required: true }) public id!: string;
-  @Prop({ type: String, required: true }) public name!: string;
-  @Prop({ type: Number, required: false }) public createdAt!: number;
+const router = useRouter()
+const encountersStore = useEncountersStore()
+const confirmStore = useConfirmStore()
 
-  private isEditingName: boolean = false;
-  private newName: string = this.name;
+const isEditingName = ref(false)
+const newName = ref(props.name)
 
-  public toEncounterView(encounterId: string) {
-    this.$router.push({ name: 'encounterDetails', params: { encounterId: this.id } });
-  }
+function toEncounterView(encounterId: string) {
+  router.push({ name: 'encounterDetails', params: { encounterId: props.id } })
+}
 
-  public deleteEncounter() {
-    dispatchRemoveEncounter(this.$store, {
-      encounterId: this.id,
-    });
-  }
-
-  public saveNewName() {
-    dispatchUpdateName(this.$store, {
-      encounterId: this.id,
-      newName: this.newName,
-    }).then(() => {
-      this.isEditingName = false;
-    });
-  }
-
-  public renameEncounter() {
-    this.isEditingName = !this.isEditingName;
-  }
-
-  public getReadableCreatedAt() {
-    if (!this.createdAt) {
-      return false;
-    }
-    const date = new Date(this.createdAt);
-    return `${ date.toLocaleDateString() } ${ date.toLocaleTimeString() }`;
+async function deleteEncounter() {
+  const confirmed = await confirmStore.open({
+    message: 'Do you want to delete this encounter?',
+  })
+  if (confirmed) {
+    encountersStore.removeEncounter({ encounterId: props.id })
   }
 }
-</script>
 
-<style>
-</style>
+async function saveNewName() {
+  await encountersStore.updateName({ encounterId: props.id, newName: newName.value })
+  isEditingName.value = false
+}
+
+function renameEncounter() {
+  isEditingName.value = !isEditingName.value
+}
+
+function getReadableCreatedAt() {
+  if (!props.createdAt) return false
+  const date = new Date(props.createdAt)
+  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+}
+</script>

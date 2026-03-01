@@ -1,33 +1,25 @@
-html,
-body {
-  @apply h-full overflow-hidden;
+
+/* src/styles/main.css */
+.app-menu.v-overlay__content > .v-list {
+  border: 1px solid rgba(var(--v-border-color), calc(var(--v-border-opacity) * 2));
 }
 
-h1,
-.h1 {
-  @apply text-4xl;
+.v-theme--dark .app-menu.v-overlay__content > .v-list {
+  border-color: #6666b7;
 }
 
-h2,
-.h2 {
-  @apply text-3xl;
+.v-theme--light .app-menu.v-overlay__content > .v-list {
+  border-color: #cfcfe2;
 }
 
-h3,
-.h3 {
-  @apply text-2xl;
+.v-theme--dark {
+  .v-card--variant-outlined {
+    border-color: #6666b7;
+  }
 }
 
-h4,
-.h4 {
-  @apply font-bold text-base;
+.v-theme--light {
+  .v-card--variant-outlined {
+    border-color: #cfcfe2;
+  }
 }
-
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, p {
-  margin-bottom: .5em;
-}
-
-a {
-  text-decoration: underline;
-}
-

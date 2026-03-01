@@ -1,5 +1,3 @@
-import { Character } from '@/classes/Character';
-
 export interface IEncounterEntity {
   id: string;
   name: string;
@@ -7,4 +5,5 @@ export interface IEncounterEntity {
   activeEntityIndex: number;
   currentTurn: number;
   createdAt: number;
+  shareId?: string;
 }

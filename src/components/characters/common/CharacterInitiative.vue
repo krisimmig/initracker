@@ -1,77 +1,72 @@
 <template>
-  <div class="NpcInitiative">
+  <v-dialog v-model="showInitiativeInput" max-width="320">
+    <template #activator="{ props: activatorProps }">
+      <v-list-item
+        v-bind="activatorProps"
+        prepend-icon="mdi-sword"
+        title="Set initiative"
+      />
+    </template>
 
-    <span @click="showInitiativeInput = true" class="NpcInitiative-wrapper">
-      <span class="NpcInitiative-title">Initiative </span><b>{{ initiative }}</b>
-    </span>
+    <v-card>
+      <v-card-title class="d-flex align-center justify-space-between pt-4 px-4">
+        <span>Set initiative</span>
+        <v-btn icon="mdi-close" variant="text" @click="showInitiativeInput = false" />
+      </v-card-title>
 
-    <DialogueBox
-      v-if="showInitiativeInput"
-      @cancel="showInitiativeInput = false"
-      title="Change this characters initiative"
-    >
-      <template v-slot:content>
-        <input
-          placeholder="Enter inititive"
-          type="number"
+      <v-card-text class="px-4 pb-2">
+        <v-text-field
           v-model.number="manuelInitiative"
-          @keyup.enter="setInititive"
-          class="Form-bigInput"
-        >
-        <Button is-big @click="setInititive">Set initiative</Button>
-      </template>
-    </DialogueBox>
+          label="Initiative"
+          type="number"
+          min="1"
+          variant="outlined"
+          density="compact"
+          prepend-inner-icon="mdi-sword"
+          autofocus
+          @keyup.enter="setInitiative"
+        />
+      </v-card-text>
 
-  </div>
+      <v-card-actions class="px-4 pb-4">
+        <v-spacer />
+        <v-btn variant="text" @click="showInitiativeInput = false">Cancel</v-btn>
+        <v-btn color="primary" variant="tonal" prepend-icon="mdi-check" @click="setInitiative">Confirm</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
-<script lang='ts'>
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import { useNpcsStore } from '@/store/useNpcsStore'
 
-import DialogueBox from '@/components/common/DialogueBox.vue';
-import { readGetEncountersCurrentId } from '@/store/encountersModule';
-import { dispatchUpdateInitiative } from '@/store/npcsModule';
-import Button from '@/components/common/Button.vue';
+const props = defineProps<{
+  uuid: string
+  initiative: number
+}>()
 
-@Component({
-  components: {
-    Button,
-    DialogueBox,
-  },
-})
-export default class NpcInitiative extends Vue {
-  public showInitiativeInput: boolean = false;
-  public manuelInitiative: number = 0;
+const emit = defineEmits<{ confirm: [] }>()
 
-  @Prop({ required: true, type: String }) private uuid!: string;
-  @Prop({ required: true, type: Number }) private initiative!: number;
+const showInitiativeInput = ref(false)
+const manuelInitiative = ref(props.initiative ?? 1)
 
-  public setInititive() {
-    const encounterId = readGetEncountersCurrentId(this.$store);
-    if (!encounterId) { return; }
+const encountersStore = useEncountersStore()
+const npcsStore = useNpcsStore()
 
-    dispatchUpdateInitiative(this.$store, {
-      encounterId,
-      npcId: this.uuid,
-      newInitiative: this.manuelInitiative,
-    });
+function setInitiative() {
+  const encounterId = encountersStore.encountersCurrentId()
+  if (!encounterId) return
 
-    this.showInitiativeInput = false;
-  }
+  npcsStore.updateInitiative({
+    encounterId,
+    npcId: props.uuid,
+    newInitiative: manuelInitiative.value,
+  })
+
+  manuelInitiative.value = 0
+  showInitiativeInput.value = false
+  emit('confirm')
 }
 </script>
-
-<style lang="scss">
-.NpcInitiative-wrapper {
-  font-size: .8em;
-  cursor: pointer;
-}
-
-.NpcInitiative-title {
-  color: theme('colors.gray.600');
-}
-
-.NpcInitiative-wrapper:hover .NpcInitiative-title {
-  color: deeppink;
-}
-</style>

@@ -1,34 +1,30 @@
 <template>
   <div>
     <div class="CharacterArmorClass">
-      <SvgIcon name="shield" class="CharacterArmorClass-icon text-gray-200" />
-      <p class="CharacterArmorClass-amount text-gray-600">{{ armorClass }}</p>
+      <SvgIcon name="shield" class="CharacterArmorClass-icon text-grey" />
+      <p class="CharacterArmorClass-amount text-white">{{ armorClass }}</p>
     </div>
   </div>
 </template>
 
-<script lang='ts'>
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import SvgIcon from '@/components/common/SvgIcon.vue'
 
-import SvgIcon from '@/components/common/SvgIcon.vue';
-
-@Component({
-  components: {
-    SvgIcon,
-  },
-})
-export default class CharacterArmorClass extends Vue {
-  @Prop({ required: true, type: Number }) private armorClass!: number;
-}
+defineProps<{
+  armorClass: number
+}>()
 </script>
 
-<style lang="scss">
-$width: 2.5em;
+<style>
+:root {
+  --width: 2.5em;
+}
+
 
 .CharacterArmorClass {
   position: relative;
-  width: $width;
-  height: $width;
+  width: var(--width);
+  height: var(--width);
   margin-right: .5em;
 }
 
@@ -42,6 +38,6 @@ $width: 2.5em;
 }
 
 .CharacterArmorClass-icon {
-  font-size: $width;
+  font-size: var(--width);
 }
 </style>

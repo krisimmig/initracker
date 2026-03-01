@@ -1,43 +1,51 @@
 <template>
-  <div class="EncounterNew card shadow">
-    <h4 class="h4">Create a new encounter</h4>
-    <p>An encounter is a battle that your party has to survive to reach their goals in your campaign. You can prepare as many encounters here as you want and stat them whenever it fits into your narrative. </p>
-    <FormInput
-      class="mb-3 mt-3"
-      placeholder="for example 'The burning planes'"
-      label="Encounter name"
-      v-model="encounterName"
-      @keyup.enter="submitNewEncounter"
-    />
-    <Button is-success :disabled="this.encounterName === ''" @click="submitNewEncounter">Add encounter</Button>
-  </div>
+  <v-card variant="outlined">
+    <v-card-title class="d-flex align-center pa-3 pb-0">
+      <v-icon color="primary" class="mr-2">mdi-sword-cross</v-icon>
+      <span class="text-subtitle-1 font-weight-bold">New encounter</span>
+    </v-card-title>
+
+    <v-card-text class="pa-3">
+      <p class="text-body-2 text-medium-emphasis mb-3">
+        An encounter is a battle your party must survive. Prepare as many as you need and start them whenever it fits your narrative.
+      </p>
+
+      <v-text-field
+        v-model="encounterName"
+        label="Encounter name"
+        prepend-inner-icon="mdi-tag-outline"
+        clearable
+        hide-details="auto"
+        @keyup.enter="submitNewEncounter"
+      />
+    </v-card-text>
+
+    <v-card-actions class="pa-3 pt-0">
+      <v-btn
+        color="primary"
+        block
+        variant="flat"
+        :disabled="!encounterName"
+        prepend-icon="mdi-plus"
+        @click="submitNewEncounter"
+      >
+        Create encounter
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
-<script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { dispatchAddNewEncounter } from '@/store/encountersModule';
-import FormInput from '@/components/form/FormInput.vue';
-import Button from '@/components/common/Button.vue';
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useEncountersStore } from '@/store/useEncountersStore'
 
-@Component({
-  components: {
-    Button,
-    FormInput,
-  },
-})
-export default class EncounterNew extends Vue {
-  public encounterName: string = '';
+const encounterName = ref('')
+const encountersStore = useEncountersStore()
 
-  public submitNewEncounter(): void {
-    if (this.encounterName === '') return;
+function submitNewEncounter(): void {
+  if (!encounterName.value) return
 
-    dispatchAddNewEncounter(this.$store, {
-      encounterName: this.encounterName,
-    });
-    this.encounterName = '';
-  }
+  encountersStore.addNewEncounter({ encounterName: encounterName.value })
+  encounterName.value = ''
 }
 </script>
-
-<style>
-</style>

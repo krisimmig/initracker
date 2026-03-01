@@ -1,148 +1,124 @@
 <template>
-  <div class="CharactersLibrary">
-    <div>
+  <v-card class="CharactersLibrary" style="height: 85vh;" rounded="lg">
+    <v-card-title class="d-flex align-center pa-4 pb-3">
+      <v-icon color="primary" class="mr-2">mdi-account-group</v-icon>
+      <span class="text-subtitle-1 font-weight-bold">Character library</span>
+      <v-spacer />
+      <v-btn icon variant="text" @click.stop="emit('closeClicked')">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-card-title>
 
-      <div class="bg-white p-4 border-b">
-        <label class="Form-label block mb-1">Search category</label>
-        <Button
-          @click="switchTab('monsters')"
-          :is-secondary="showType !== 'monsters'"
-        >
-          Monsters
-        </Button>
-        <Button
-          :is-secondary="showType !== 'characters'"
-          @click="switchTab('characters')"
-        >
-          Characters
-        </Button>
+    <v-divider />
 
-        <div class="Form mt-2">
-          <FormInput
-            label="Name"
-            v-model="searchString"
-            placeholder="Search monsters & characters by name"
-          />
-        </div>
-      </div>
+    <v-card-text class="pa-4 CharactersLibrary-body">
+      <v-row>
+        <v-col cols="6" class="d-flex flex-column">
+          <div class="mb-3">
+            <v-btn-toggle v-model="showType" mandatory color="primary" variant="outlined" density="compact" class="mb-3">
+              <v-btn value="all">All</v-btn>
+              <v-btn value="monsters">Player's Handbook</v-btn>
+              <v-btn value="characters">Custom</v-btn>
+            </v-btn-toggle>
+            <v-text-field
+              label="Search by name"
+              v-model="searchString"
+              prepend-inner-icon="mdi-account-search"
+              clearable
+              hide-details="auto"
+              variant="outlined"
+              density="compact"
+            />
+          </div>
 
-      <div class="CharactersLibrary-scrollBox u-scrollBoxParent bg-white shadow" >
-        <div class="u-scrollBoxChild" ref="monsterList" @scroll="onScroll">
-          <ul v-if="filteredNpcs.length > 0" class="divide-y divide-gray-300 border-b">
-            <li v-for="(npc, index) in filteredNpcs" :key="npc.uuid" class="CharactersLibrary-listItem">
-              <div v-if="index < maxVisible">
-                <CharacterTeaser :characterData="npc" @click.native="selectCharacter(npc)">
-                  <Button @click="$emit('characterClicked', npc)">{{ buttonText }}</Button>
+          <v-virtual-scroll
+            bench="10"
+            :items="filteredNpcs"
+            height="calc(85vh - 230px)"
+            item-height="130"
+          >
+            <template v-slot:default="{ item }">
+              <div>
+                <CharacterTeaser :characterData="item" @click="characterPreviewSelected(item)">
+                  <v-btn size="small" icon variant="text" @click.stop="characterPreviewSelected(item)">
+                    <v-icon>mdi-eye-outline</v-icon>
+                  </v-btn>
                 </CharacterTeaser>
               </div>
-            </li>
-          </ul>
+            </template>
+          </v-virtual-scroll>
+        </v-col>
 
-          <p v-else class="u-tip" v-html="noResultsText"></p>
-
-        </div>
-      </div>
-    </div>
-  </div>
+        <v-col>
+          <template v-if="previewCharacter">
+            <div class="d-flex justify-end mb-3">
+              <v-btn
+                @click="emit('characterClicked', previewCharacter)"
+                color="primary"
+                variant="flat"
+                prepend-icon="mdi-account-plus"
+              >
+                {{ buttonText }}
+              </v-btn>
+            </div>
+            <CharacterDetails :characterData="previewCharacter" />
+          </template>
+          <v-alert type="info" variant="outlined" v-else>Select a character on the left.</v-alert>
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import CharacterTeaser from '@/components/characters/CharacterTeaser.vue'
+import { useNpcsStore } from '@/store/useNpcsStore'
+import { useCharactersStore } from '@/store/useCharactersStore'
+import { Character } from '@/classes/Character'
+import CharacterDetails from '@/components/characters/CharacterDetails.vue'
 
-import CharacterTeaser from '@/components/characters/CharacterTeaser.vue';
-import { readGetNpcs } from '@/store/npcsModule';
-import { Character } from '@/classes/Character';
-import { readGetCharacters, dispatchFetchCharacters } from '@/store/charactersModule';
-import FormInput from '@/components/form/FormInput.vue';
-import { commitSetNpcInDetail, dispatchAddNpcToEncounter, readGetEncountersCurrentId } from '@/store/encountersModule';
-import Button from '@/components/common/Button.vue';
-
-const searchTypes = {
-  MONSTERS: 'monsters',
-  CHARACTERS: 'characters',
-};
-
-@Component({
-  components: {
-    Button,
-    CharacterTeaser,
-    FormInput,
-  },
+const props = withDefaults(defineProps<{
+  buttonText?: string
+}>(), {
+  buttonText: '',
 })
-export default class CharacterLibrary extends Vue {
-  @Prop({ type: String, default: 'Add' }) public buttonText!: string;
 
-  public searchString: string = '';
-  public maxVisible: number = 15;
-  public showType: string = searchTypes.MONSTERS;
+const emit = defineEmits<{
+  characterClicked: [character: Character]
+  closeClicked: []
+}>()
 
-  get npcs() {
-    if (this.showType === searchTypes.MONSTERS) {
-      return readGetNpcs(this.$store);
-    }
+const searchString = ref('')
+const showType = ref('all')
+const previewCharacter = ref<Character | null>(null)
 
-    return readGetCharacters(this.$store);
-  }
+const npcsStore = useNpcsStore()
+const charactersStore = useCharactersStore()
 
-  get noResultsText() {
-    if (this.showType === searchTypes.MONSTERS) {
-      return 'No monsters found, please add some here <a href="/characters">here</a>';
-    } else if (this.showType === searchTypes.CHARACTERS) {
-      return 'No characters found, you can create your own monsters and player-characters <a href="/characters">here</a>';
-    }
-  }
+const npcs = computed(() => {
+  if (showType.value === 'monsters') return npcsStore.npcs
+  if (showType.value === 'characters') return charactersStore.characters
+  return [...npcsStore.npcs, ...charactersStore.characters]
+})
 
-  get filteredNpcs() {
-    if (this.searchString === '') {
-      return this.npcs;
-    }
+const filteredNpcs = computed(() => {
+  if (!searchString.value) return npcs.value
+  return npcs.value.filter((npc) => npc.name.toLowerCase().includes(searchString.value.toLowerCase()))
+})
 
-    return this.npcs.filter((npc) => npc.name.toLowerCase().includes(this.searchString.toLowerCase()));
-  }
-
-  public onScroll() {
-    const htmlElement = this.$refs.monsterList as HTMLElement;
-    const scrollPos = htmlElement.scrollHeight - htmlElement.scrollTop;
-    const maxScroll = htmlElement.clientHeight;
-    const offset = 100;
-
-    if (scrollPos < maxScroll + offset) {
-      this.maxVisible += 10;
-    }
-  }
-
-  public switchTab(type) {
-    this.showType = type;
-  }
-
-  get characters(): Character[] {
-    return readGetCharacters(this.$store);
-  }
-
-  public get encounterId() {
-    return readGetEncountersCurrentId(this.$store);
-  }
-
-  public selectCharacter(characterData) {
-    commitSetNpcInDetail(this.$store, characterData);
-  }
-
-  public mounted() {
-    dispatchFetchCharacters(this.$store);
-  }
+function characterPreviewSelected(npc: Character) {
+  previewCharacter.value = npc
 }
+
+onMounted(() => {
+  charactersStore.fetchCharacters()
+})
 </script>
 
-<style scoped lang="scss">
-.CharactersLibrary-scrollBox {
-  height: calc(100vh - 300px); // Adjust this value in the parent component
-}
-
-.CharactersLibrary-listItem:last-child {
-  border-bottom: 1px solid theme('colors.gray.300');
-}
-
-.Characters-library .CharactersLibrary-scrollBox {
-  height: calc(100vh - 412px);
+<style>
+.CharactersLibrary .CharacterDetails {
+  max-height: calc(85vh - 160px);
+  overflow-y: auto;
 }
 </style>

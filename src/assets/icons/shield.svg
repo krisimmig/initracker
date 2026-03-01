@@ -2,7 +2,7 @@
 <svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>shield</title>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="shield" transform="translate(1.000000, 1.000000)" fill="#DDE3EA" fill-rule="nonzero" stroke="#979797">
+        <g id="shield" transform="translate(1.000000, 1.000000)" fill="currentColor" fill-rule="nonzero" stroke="#979797">
             <path d="M46,0 L45.9977425,1.64436603 L45.9799451,3.39453011 C45.5445366,31.694966 38.0152967,46 23,46 C7.83303367,46 0.30412135,31.4045159 0.00903164,2.5326576 L0,0 L46,0 Z" id="Combined-Shape"></path>
         </g>
     </g>

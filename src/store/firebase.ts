@@ -1,7 +1,7 @@
-import * as firebase from 'firebase';
+import firebase from 'firebase/compat/app';
 
-import 'firebase/auth';
-import 'firebase/firestore';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBnsD8E9GV10_rSaifr0FYNJpurrWJWGtY',
@@ -17,9 +17,16 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 // Firestore DB
 const db = firebaseApp.firestore();
 
+// Resolves once Firebase has restored auth state from the session (fires once on startup)
+let resolveAuthReady: (user: firebase.User | null) => void
+const authReady = new Promise<firebase.User | null>((resolve) => {
+  resolveAuthReady = resolve
+})
+firebaseApp.auth().onAuthStateChanged((user) => resolveAuthReady(user))
+
 // Helper
 function isLoggedIn() {
   return !!firebaseApp.auth().currentUser;
 }
 
-export { db, firebase, firebaseApp, isLoggedIn };
+export { db, firebase, firebaseApp, isLoggedIn, authReady };

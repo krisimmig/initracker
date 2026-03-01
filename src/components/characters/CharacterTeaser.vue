@@ -1,73 +1,60 @@
 <template>
-  <div
-    class="bg-white cursor-pointer hover:bg-gray-100 transition duration-100"
+  <v-card
     v-if="characterData"
+    class="CharacterTeaser mb-2"
+    variant="outlined"
   >
-    <div class="flex w-full justify-between items-start p-2 pb-1">
-      <h4 class="CharacterSearchResult-name m-0 font-semibold mr-1">{{ characterData.name }}</h4>
-      <p class="CharacterSearchResult-meta ml-auto text-xs italic text-gray-600 text-right">{{ characterData.size }}</p>
-    </div>
+    <v-card-text class="pa-3 d-flex align-start">
+      <div class="flex-grow-1 min-width-0">
+        <div class="text-subtitle-1 font-weight-bold text-truncate">{{ characterData.name }}</div>
+        <div class="text-caption text-medium-emphasis mb-2">{{ description }}</div>
 
-    <div class="flex items-end w-full p-2 pt-0 justify-between items-center">
-      <div class="flex text-gray-600 font-light text-sm">
-        <div class="mr-4 flex items-center">
-          <SvgIcon name="heart" class="mr-1 text-red-600" />
-          {{ characterData.hit_points }}
+        <div class="d-flex align-center gap-2 flex-wrap">
+          <v-chip size="x-small" label color="error" variant="tonal" prepend-icon="mdi-heart">
+            {{ characterData.hit_points }}
+          </v-chip>
+          <v-chip size="x-small" label color="secondary" variant="tonal" prepend-icon="mdi-shield">
+            {{ characterData.armor_class }}
+          </v-chip>
+          <v-chip size="x-small" label color="primary" variant="tonal">
+            CR {{ characterData.challenge_rating || '—' }}
+          </v-chip>
         </div>
 
-        <div class="mr-4 flex items-center">
-          <SvgIcon name="shield" class="mr-1 text-gray-300" />
-          {{ characterData.armor_class }}
-        </div>
-
-        <div class="flex items-center">
-          <p class="font-semibold mb-0">CR</p>
-          <p class="ml-1 mb-0">{{ characterData.challenge_rating }}</p>
+        <div class="text-caption text-disabled mt-2">
+          Created {{ createdAt || 'sometime in the past' }} · Updated {{ updatedAt || 'never' }}
         </div>
       </div>
 
-      <div>
+      <div class="ml-2 flex-shrink-0 d-flex">
         <slot></slot>
       </div>
-    </div>
-
-  </div>
+    </v-card-text>
+  </v-card>
 </template>
 
-<script lang='ts'>
-  import { Component, Vue, Prop } from 'vue-property-decorator';
-  import CharacterDetails from '@/components/characters/CharacterDetails.vue';
-  import { Character } from '@/classes/Character';
-  import { dispatchAddNpcToEncounter, readGetEncountersCurrentId, commitSetNpcInDetail } from '@/store/encountersModule';
-  import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
-  import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
-  import SvgIcon from '@/components/common/SvgIcon.vue';
+<script setup lang="ts">
+import { computed } from 'vue'
+import { Character } from '@/classes/Character'
+import { useEncountersStore } from '@/store/useEncountersStore'
 
-  @Component({
-    components: {
-      CharacterDetails,
-      CharacterArmorClass,
-      CharacterHealth,
-      SvgIcon,
-    },
+const props = defineProps<{
+  characterData: Character
+}>()
+
+const encountersStore = useEncountersStore()
+
+const encounterId = computed(() => encountersStore.encountersCurrentId())
+const description = computed(() => Character.getDescription(props.characterData))
+const createdAt = computed(() => Character.getCreatedAt(props.characterData))
+const updatedAt = computed(() => Character.getUpdatedAt(props.characterData))
+
+function addToEncounter() {
+  if (!encounterId.value) return
+  encountersStore.addNpcToEncounter({
+    npcData: Object.assign({}, props.characterData),
+    encounterId: encounterId.value,
   })
-  export default class CharacterTeaser extends Vue {
-    @Prop({ type: Object, required: true }) public characterData!: Character;
-
-    public get encounterId() {
-      return readGetEncountersCurrentId(this.$store);
-    }
-
-    public addToEncounter() {
-      if (!this.encounterId) { return; }
-      dispatchAddNpcToEncounter(this.$store, {
-        npcData: Object.assign({}, this.characterData),
-        encounterId: this.encounterId,
-      });
-    }
-
-    public selectCharacter() {
-      commitSetNpcInDetail(this.$store, this.characterData);
-    }
-  }
+}
 </script>
+

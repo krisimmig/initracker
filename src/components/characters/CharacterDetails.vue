@@ -1,136 +1,176 @@
 <template>
-  <div class="text-sm overflow-hidden bg-white">
-    <div class="p-4 bg-blue-600 text-blue-100">
-      <h4 class="mb-0 text-base font-semibold">{{ characterData.name }}</h4>
-      <p class="mb-0 italic">{{ characterData.size }}, {{ characterData.alignment }} {{ characterData.type }} with a CR of {{ characterData.challenge_rating }}</p>
-    </div>
+  <v-card class="CharacterDetails" variant="outlined">
+    <div style="overflow-y: auto; max-height: calc(100vh - 95px);">
 
-    <div class="bg-gray-400">
+      <!-- Header -->
+      <v-card-item class="pb-1 pt-3">
+        <v-card-title class="text-body-1 font-weight-bold pa-0">{{ characterData.name }}</v-card-title>
+        <v-card-subtitle class="text-caption pa-0">{{ getDescription() }} &mdash; {{ characterData.category }}</v-card-subtitle>
+      </v-card-item>
 
-      <div class="flex justify-between px-4 py-3">
-        <div
-            class="w-full"
-            v-for="(statName, statValue, index) in statsArray"
-            :key="index"
-        >
-          <p class="uppercase mb-0 font-bold">{{ statValue }}</p>
-          <p class="m-0 mt-1">
-            {{ characterData[statName.toLowerCase()] }}
-            <span class="text-gray-600 text-xs">{{ stringModifier(characterData[statName.toLowerCase()]) }}</span>
+      <v-divider />
+
+      <!-- Stat block -->
+      <v-table density="compact" class="CharacterDetails-stats text-center">
+        <thead>
+          <tr>
+            <th
+              v-for="(statName, statValue) in statsArray"
+              :key="statValue"
+              class="text-uppercase text-center text-caption font-weight-bold"
+            >
+              {{ statValue }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td v-for="(statName, statValue) in statsArray" :key="`val-${statValue}`" class="text-center text-body-2">
+              {{ characterData[statName.toLowerCase()] }}
+              <span class="text-medium-emphasis text-caption"> {{ stringModifier(characterData[statName.toLowerCase()]) }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+
+      <v-divider />
+
+      <!-- HP / AC row -->
+      <div class="d-flex align-center ga-6 px-3 py-2">
+        <div class="d-flex align-center ga-2">
+          <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
+          <span class="text-body-2 font-weight-medium">
+            <v-icon size="small">mdi-dice-multiple</v-icon>
+            {{ characterData.hit_dice }}
+          </span>
+        </div>
+        <div class="d-flex align-center ga-2">
+          <CharacterArmorClass :armorClass="characterData.armor_class" />
+          <span class="text-body-2 font-weight-medium">{{ characterData.armor_desc || 'Armor Class' }}</span>
+        </div>
+      </div>
+
+      <v-divider />
+
+      <!-- Properties list -->
+      <div class="CharacterDetails-props px-3 py-2 text-body-2">
+        <template v-if="getSpeedString()">
+          <span class="CharacterDetails-label text-caption font-weight-bold text-medium-emphasis">Speed</span>
+          <span>{{ getSpeedString() }}</span>
+        </template>
+        <template v-if="characterData.senses">
+          <span class="CharacterDetails-label text-caption font-weight-bold text-medium-emphasis">Senses</span>
+          <span>{{ characterData.senses }}</span>
+        </template>
+        <template v-if="characterData.languages">
+          <span class="CharacterDetails-label text-caption font-weight-bold text-medium-emphasis">Languages</span>
+          <span>{{ characterData.languages }}</span>
+        </template>
+        <template v-if="characterData.challenge_rating">
+          <span class="CharacterDetails-label text-caption font-weight-bold text-medium-emphasis">CR</span>
+          <span>{{ characterData.challenge_rating }}</span>
+        </template>
+        <template v-if="characterData.damage_immunities">
+          <span class="CharacterDetails-label text-caption font-weight-bold text-medium-emphasis">Immunities</span>
+          <span>{{ characterData.damage_immunities }}</span>
+        </template>
+        <template v-if="characterData.damage_resistances">
+          <span class="CharacterDetails-label text-caption font-weight-bold text-medium-emphasis">Resistances</span>
+          <span>{{ characterData.damage_resistances }}</span>
+        </template>
+        <template v-if="characterData.damage_vulnerabilities">
+          <span class="CharacterDetails-label text-caption font-weight-bold text-medium-emphasis">Vulnerabilities</span>
+          <span>{{ characterData.damage_vulnerabilities }}</span>
+        </template>
+      </div>
+
+      <!-- Special abilities, Actions, Legendary Actions -->
+      <template v-if="characterData.special_abilities?.length">
+        <v-divider />
+        <div class="pa-3 text-body-2">
+          <p
+            v-for="(ability, index) in characterData.special_abilities"
+            :key="`special-${index}`"
+            class="mb-2"
+          >
+            <span class="font-weight-bold">{{ ability.name }}.</span>
+            <DiceText :text="ability.desc" />
           </p>
         </div>
-      </div>
-    </div>
+      </template>
 
-    <div class="p-4 bg-gray-300">
-      <div class="flex">
-        <div class="w-1/2 flex items-center">
-          <CharacterHealth :uuid="characterData.uuid" :hp="characterData.hit_points" />
-          <p class="ml-2 mb-0"><b>Dice:</b> {{ characterData.hit_dice }}</p>
+      <template v-if="characterData.actions?.length > 0">
+        <v-divider />
+        <div class="pa-3 text-body-2">
+          <p class="text-overline font-weight-bold mb-1">Actions</p>
+          <p
+            v-for="(action, index) in characterData.actions"
+            :key="`action-${index}`"
+            class="mb-2"
+          >
+            <span class="font-weight-bold">{{ action.name }}.</span>
+            <DiceText :text="action.desc" />
+          </p>
         </div>
-        <div class="w-1/2 flex items-center">
-          <CharacterArmorClass :armorClass="characterData.armor_class" />
-          <p class="mb-0" v-if="characterData.armor_desc">{{ characterData.armor_desc }}</p>
-          <p class="mb-0" v-else>Armor Class</p>
+      </template>
+
+      <template v-if="characterData.legendary_actions?.length > 0">
+        <v-divider />
+        <div class="pa-3 text-body-2">
+          <p class="text-overline font-weight-bold mb-1">Legendary Actions</p>
+          <p class="text-medium-emphasis mb-2">
+            The {{ characterData.name }} can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The {{ characterData.name }} regains spent legendary actions at the start of its turn.
+          </p>
+          <p
+            v-for="(action, index) in characterData.legendary_actions"
+            :key="`legendary-${index}`"
+            class="mb-2"
+          >
+            <span class="font-weight-bold">{{ action.name }}.</span>
+            <DiceText :text="action.desc" />
+          </p>
         </div>
-      </div>
+      </template>
 
-      <p class="mt-3">
-        <span class="font-bold">Speed</span> {{ speedString }}
-      </p>
-      <p class="mb-2" v-if="characterData.senses">
-        <span class="font-bold">Senses</span> {{ characterData.senses }}
-      </p>
-      <p v-if="characterData.languages">
-        <span class="font-bold">Languages</span> {{ characterData.languages }}
-      </p>
-      <p v-if="characterData.challenge_rating">
-        <span class="font-bold">Challenge Rating</span> {{ characterData.challenge_rating }}
-      </p>
-      <p v-if="characterData.damage_immunities">
-        <span class="font-bold">Damage Immunities</span> {{ characterData.damage_immunities }}
-      </p>
-      <p v-if="characterData.damage_resistances">
-        <span class="font-bold">Damage Resistances</span> {{ characterData.damage_resistances }}
-      </p>
-      <p v-if="characterData.damage_vulnerabilities">
-        <span class="font-bold">Damage Vulnerabilities</span> {{ characterData.damage_vulnerabilities }}
-      </p>
     </div>
-
-    <div class="p-4">
-      <template v-if="characterData.special_abilities">
-        <p v-for="(specialAbility, index) in characterData.special_abilities" :key="`special-${index}`">
-          <span class="font-bold">{{ specialAbility.name }}.</span> {{ specialAbility.desc }}
-        </p>
-      </template>
-
-      <template v-if="characterData.actions.length > 0">
-        <h3 class="CharacterDetails-sectionHeadline">Actions</h3>
-        <p v-for="(action, index) in characterData.actions" :key="index">
-          <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
-        </p>
-      </template>
-
-      <template v-if="characterData.legendary_actions.length > 0">
-        <h3 class="CharacterDetails-sectionHeadline">Legendary Actions</h3>
-        <p>The {{ characterData.name }} can take 3 legendary actions, choosing from the options below. Only one
-          legendary action option can be used at a time and only at the end of another creature's turn. The {{
-          characterData.name }} regains spent legendary actions at the start of its turn.</p>
-        <p v-for="(action, index) in characterData.legendary_actions" :key="`legendary-${index}`">
-          <span class="font-bold">{{ action.name }}.</span> {{ action.desc }}
-        </p>
-      </template>
-    </div>
-  </div>
+  </v-card>
 </template>
 
-<script lang='ts'>
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue'
+import { Character } from '@/classes/Character'
+import { stringModifier } from '@/utils/dnd'
+import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue'
+import CharacterHealth from '@/components/characters/common/CharacterHealth.vue'
+import DiceText from '@/components/common/DiceText.vue'
+import { CharacterAttributes } from '@/types/characterAttributes'
 
-import { Character } from '@/classes/Character';
-import { stringModifier as calculateStringModifier } from '@/utils/dnd';
-import CharacterArmorClass from '@/components/characters/common/CharacterArmorClass.vue';
-import CharacterHealth from '@/components/characters/common/CharacterHealth.vue';
-import { CharacterAttributes } from '@/types/characterAttributes';
+const props = defineProps<{
+  characterData: Character
+  isWide?: boolean
+}>()
 
-@Component({
-  components: {
-    CharacterArmorClass,
-    CharacterHealth,
-  },
-})
-export default class CharacterDetails extends Vue {
-  @Prop({ type: Object, required: true }) public characterData!: Character;
-  @Prop({ type: Boolean, default: false }) public isWide!: boolean;
+const statsArray = computed(() => CharacterAttributes)
 
+function getDescription(): string {
+  return Character.getDescription(props.characterData)
+}
 
-  public speedString: string = '';
-
-  public stringModifier(abilityScore: number): number | string {
-    return calculateStringModifier(abilityScore);
-  }
-
-  public get statsArray() {
-    return CharacterAttributes;
-  }
-
-  @Watch('characterData.speed', { immediate: true, deep: true })
-  public updateSpeedString(speedObj: object) {
-    const keys = Object.keys(speedObj);
-    this.speedString = keys.reduce((acc, current)  => {
-      const value = speedObj[current];
-      if (value > 0) {
-        return acc !== '' ? `${acc}, ${value}ft (${current})` : `${value}ft (${current})`;
-      }
-      return acc;
-    }, '');
-  }
+function getSpeedString(): string {
+  return Character.getSpeedString(props.characterData)
 }
 </script>
 
-<style lang="scss">
-  .CharacterDetails-sectionHeadline {
-    @apply mt-8 text-gray-500 text-base;
-  }
+<style>
+.CharacterDetails-stats th,
+.CharacterDetails-stats td {
+  padding: 4px 6px !important;
+}
+
+.CharacterDetails-props {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  row-gap: 4px;
+  align-items: baseline;
+}
 </style>

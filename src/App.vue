@@ -1,53 +1,42 @@
 <template>
-  <div class="flex flex-col h-screen bg-gray-200">
-    <MainMenu />
-    <router-view />
-  </div>
+  <v-app>
+    <AppBar v-if="!route.meta?.hideAppBar" />
+
+    <v-main>
+      <v-container :fluid="route.meta?.isFullWidth">
+        <router-view></router-view>
+        <Confirm />
+      </v-container>
+    </v-main>
+
+    <v-snackbar
+      v-model="snackbar.visible"
+      :timeout="snackbar.timeout"
+      location="bottom right"
+    >
+      <span v-html="snackbar.message"></span>
+      <template #actions>
+        <v-btn variant="text" @click="snackbar.visible = false">Close</v-btn>
+      </template>
+    </v-snackbar>
+  </v-app>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import AppBar from '@/components/AppBar.vue'
+import Confirm from '@/components/common/Confirm.vue'
+import { useNpcsStore } from '@/store/useNpcsStore'
+import { useSnackbarStore } from '@/store/useSnackbarStore'
 
-import { readIsLoggedIn, dispatchLogoutUser } from '@/store/usersModule';
-import { readGetNpcs, dispatchFetchNpcs } from '@/store/npcsModule';
-import MainMenu from '@/components/layout/MainMenu.vue';
+const route = useRoute()
+const snackbar = useSnackbarStore()
+const npcsStore = useNpcsStore()
 
-@Component({
-  components: { MainMenu },
+onMounted(async () => {
+  if (npcsStore.npcs.length < 1) {
+    await npcsStore.fetchNpcs()
+  }
 })
-export default class App extends Vue {
-
-  public logoutUser() {
-    dispatchLogoutUser(this.$store);
-  }
-
-  get isLoggedIn(): boolean {
-    return readIsLoggedIn(this.$store);
-  }
-
-  get monsters() {
-    return readGetNpcs(this.$store);
-  }
-
-  public async mounted() {
-    if (this.monsters.length < 1) {
-      await dispatchFetchNpcs(this.$store);
-    }
-  }
-}
 </script>
-
-
-<style>
-/* purgecss start ignore */
-@tailwind  base;
-@tailwind  components;
-/* purgecss end ignore */
-
-@tailwind  utilities;
-
-@import 'css/base.css';
-@import 'css/utilities.css';
-@import 'css/form.css';
-@import 'css/card.css';
-</style>

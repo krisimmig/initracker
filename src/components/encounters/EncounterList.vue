@@ -1,244 +1,162 @@
 <template>
-  <div v-if="currentEncounter" class="Encounter bg-white shadow-lg">
-    <div class="border-b">
-      <div class="Encounter-titleArea pt-4 pb-2 pl-4 relative">
-      <h4 class="uppercase">{{ currentEncounter.name }}</h4>
-      <div class="flex">
-        <div class="font-light text-gray-500 text-sm pt-2">
-          Round <span class="font-bold">{{ currentRound }}</span>
-          Turn <span class="font-bold">{{ currentEncounter.currentTurn }}</span>
-          Elapsed time <span class="font-bold">{{ elapsedTimeGame }}</span>
-        </div>
-        <div class="ml-auto">
-          <Button
-              @click="rollInitiative"
-              :disabled="npcs.length === 0"
-              v-if="currentRound === 1 && currentNpcIndex === 1"
-          >
-            Roll Initiative
-          </Button>
-          <Button
-            is-danger
-            @click="reset"
-            v-else
-          >
-            Reset
-          </Button>
-          <div class="Encounter-nextButton" @click="nextTurn" :disabled="npcs.length < 2">
-            <div class="text-3xl">»</div>
-            <div class="pb-4 text-sm italic">Next turn</div>
+  <div>
+    <div v-if="isLoading">
+      <v-skeleton-loader class="mx-auto mb-2" type="heading" />
+      <v-skeleton-loader type="text"/>
+      <div class="d-flex mb-3">
+        <v-skeleton-loader class="ml-auto ml-1" type="button" />
+        <v-skeleton-loader class="ml-1" type="avatar" />
+      </div>
+      <v-card class="mb-3">
+        <v-skeleton-loader class="mx-auto" type="heading, list-item-three-line" />
+      </v-card>
+      <v-card class="mb-3">
+        <v-skeleton-loader class="mx-auto" type="heading, list-item-three-line" />
+      </v-card>
+    </div>
+
+    <template v-if="!isLoading && currentEncounter">
+      <div class="Encounter">
+        <EncounterActionbar
+          :encounter="currentEncounter"
+          :disableActions="npcs.length === 0"
+          @nextTurn="nextTurn"
+          @addCharacters="showCharacterLibrary = true"
+          @rollInitiative="rollInitiative"
+          @reset="reset"
+        />
+
+        <v-dialog v-model="showCharacterLibrary" max-width="80vw">
+          <CharacterLibrary
+            :encounterId="route.params.encounterId"
+            @characterClicked="handleCharClicked"
+            @closeClicked="showCharacterLibrary = false"
+            button-text="Add"
+          />
+        </v-dialog>
+
+        <div v-if="npcs.length > 0">
+          <div class="p-4" style="overflow-y: auto; height: calc(100vh - 185px); margin-right: -16px;">
+            <div v-for="(npc, index) in npcs" :key="index">
+              <CharacterListItem
+                :npc="npc"
+                :isActive="currentNpcIndex - 1 === index"
+                :hasActed="currentNpcIndex - 1 > index"
+                :removable="true"
+                @remove="removeNpcFromEncounter(npc.uuid)"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    </div>
 
-    <div class="Encounter-npcsListWrapper u-scrollBoxParent">
-      <div class="Encounter-npcsListScrollBox u-scrollBoxChild">
-        <ul
-            v-if="npcs.length > 0"
-            class="Encounter-npcsList divide-y divide-gray-300 border-b"
-        >
-          <li v-for="(npc, index) in npcs" :key="index">
-            <CharacterListItem
-              :npc="npc"
-              :isActive="currentNpcIndex - 1 === index"
-              :removable="true"
-              @remove="removeNpcFromEncounter(npc.uuid)"
-            />
-          </li>
-        </ul>
-        <p v-else class="u-tip text-gray-600">Nobody is participating in this battle yet. Choose some combatans from the <b>Monsters</b> and <b>Player Characters</b> on the left.</p>
+        <v-alert v-if="npcs.length === 0" type="info" variant="outlined">
+          <p class="mb-3">Nobody is participating in this battle yet. Choose some combatants from the <strong>Characters</strong> library.</p>
+          <v-btn variant="tonal" color="info" prepend-icon="mdi-account-multiple-plus" @click="showCharacterLibrary = true">
+            Open character library
+          </v-btn>
+        </v-alert>
       </div>
-    </div>
-
+    </template>
   </div>
 </template>
 
-<script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { DiceRoll } from 'rpg-dice-roller';
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { DiceRoll } from '@dice-roller/rpg-dice-roller'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import { useNpcsStore } from '@/store/useNpcsStore'
+import { useSnackbarStore } from '@/store/useSnackbarStore'
+import CharacterListItem from '@/components/characters/CharacterListItem.vue'
+import CharacterLibrary from '@/components/characters/CharacterLibrary.vue'
+import EncounterActionbar from '@/components/encounters/EncounterActionbar.vue'
+import { modifierWithSign } from '@/utils/dnd'
+import { Character as ICharacter } from '@/classes/Character'
 
-import {
-  readGetEncountersCurrent,
-  readGetEncountersCurrentNpcs,
-  dispatchRemoveNpcFromEncounter,
-  dispatchUpdateRound,
-  dispatchUpdateActiveEntityIndex,
-} from '@/store/encountersModule';
-import { dispatchUpdateInitiative } from '@/store/npcsModule';
-import CharacterListItem from '@/components/characters/CharacterListItem.vue';
-import { modifierWithSign } from '@/utils/dnd';
-import Button from '@/components/common/Button.vue';
+const props = defineProps<{
+  id: string
+}>()
 
-@Component({
-  components: {
-    Button,
-    CharacterListItem,
-    Encounter: EncounterList,
-  },
-})
-export default class EncounterList extends Vue {
-  @Prop({ type: String, required: true }) public id!: string;
+const route = useRoute()
+const encountersStore = useEncountersStore()
+const npcsStore = useNpcsStore()
+const snackbar = useSnackbarStore()
 
-  currentTurn: number = 0;
+const showCharacterLibrary = ref(false)
 
-  get currentEncounter() {
-    return readGetEncountersCurrent(this.$store);
+const isLoading = computed(() => encountersStore.isLoading)
+const currentEncounter = computed(() => encountersStore.encountersCurrent)
+const currentNpcIndex = computed(() => currentEncounter.value?.activeEntityIndex ?? 1)
+const npcs = computed(() => encountersStore.encountersNpcs)
+
+function removeNpcFromEncounter(npcID: string) {
+  encountersStore.removeNpcFromEncounter({ npcID, encounterId: props.id })
+
+  if (currentNpcIndex.value > npcs.value.length - 1) {
+    encountersStore.updateActiveEntityIndex({
+      encounterId: props.id,
+      activeEntityIndex: (npcs.value.length - 1) || 1,
+    })
   }
+}
 
-  get currentRound() {
-    return this.currentEncounter.round;
-  }
+function rollInitiative(): void {
+  if (currentEncounter.value && npcs.value) {
+    npcs.value.forEach((npc) => {
+      const mod = modifierWithSign(npc.dexterity)
+      const newInitiative = new DiceRoll(`1d20${mod}`)
+      npcsStore.updateInitiative({
+        encounterId: props.id,
+        npcId: npc.uuid,
+        newInitiative: newInitiative.total,
+      })
+    })
 
-  get currentNpcIndex() {
-    if (this.currentEncounter) {
-      return this.currentEncounter.activeEntityIndex;
-    }
-    return 1;
-  }
-
-  get npcs() {
-    return readGetEncountersCurrentNpcs(this.$store);
-  }
-
-  public removeNpcFromEncounter(npcID: string) {
-    dispatchRemoveNpcFromEncounter(this.$store, {
-      npcID,
-      encounterId: this.id,
-    });
-
-    // Correct active entity index when removing single entity
-    if (this.currentNpcIndex > this.npcs.length - 1) {
-      dispatchUpdateActiveEntityIndex(this.$store, {
-        encounterId: this.id,
-        activeEntityIndex: (this.npcs.length - 1) || 1,
-      });
-    }
-  }
-
-  public rollInitiative(): void {
-    if (this.currentEncounter && this.npcs) {
-      this.npcs.forEach((npc) => {
-        const mod = modifierWithSign(npc.dexterity);
-        const newInitiative = new DiceRoll(`1d20${mod}`);
-        dispatchUpdateInitiative(this.$store, {
-          encounterId: this.id,
-          npcId: npc.uuid,
-          newInitiative: newInitiative.total,
-        });
-      });
-
-      // Reset active entity index
-      dispatchUpdateActiveEntityIndex(this.$store, {
-        encounterId: this.id,
-        activeEntityIndex: 1,
-        currentTurn: 1,
-      });
-
-      // Reset round counter
-      dispatchUpdateRound(this.$store, {
-        encounterId: this.id,
-        newRoundIndex: 1,
-      });
-    }
-  }
-
-  public get elapsedTimeGame(): string {
-    const seconds = (this.currentEncounter.currentTurn ? this.currentEncounter.currentTurn : 1) * 6;
-    const numHours = Math.floor(((seconds % 31536000) % 86400) / 3600);
-    const numMinutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-    const numSeconds = (((seconds % 31536000) % 86400) % 3600) % 60;
-    return `${numHours}:${numMinutes}:${numSeconds}`;
-  }
-
-  public reset(): void {
-    dispatchUpdateRound(this.$store, {
-      encounterId: this.id,
-      newRoundIndex: 1,
-    });
-
-    dispatchUpdateActiveEntityIndex(this.$store, {
-      encounterId: this.id,
+    encountersStore.updateActiveEntityIndex({
+      encounterId: props.id,
       activeEntityIndex: 1,
       currentTurn: 1,
-    });
+    })
+
+    encountersStore.updateRound({
+      encounterId: props.id,
+      newRoundIndex: 1,
+    })
+  }
+}
+
+function reset(): void {
+  encountersStore.updateRound({ encounterId: props.id, newRoundIndex: 1 })
+  encountersStore.updateActiveEntityIndex({ encounterId: props.id, activeEntityIndex: 1, currentTurn: 1 })
+}
+
+function nextTurn(): void {
+  const npc = npcs.value[currentNpcIndex.value - 1]
+  if (!npc) {
+    console.warn('No npc for next round found.')
+    return
   }
 
-  public nextTurn(): void {
-    const npc = this.npcs[this.currentNpcIndex - 1];
+  const isLastInRound = currentNpcIndex.value === npcs.value.length
+  const nextIndex = isLastInRound ? 1 : currentNpcIndex.value + 1
 
-    if (!npc) {
-      console.warn('No npc for next round found.');
-      return;
-    }
+  npcsStore.updateNpcConditionRound({ encounterId: props.id, npcId: npc.uuid })
 
-    if (this.currentNpcIndex === this.npcs.length) {
-      dispatchUpdateRound(this.$store, {
-        encounterId: this.id,
-        newRoundIndex: this.currentRound + 1,
-      });
+  encountersStore.updateTurnState({
+    encounterId: props.id,
+    activeEntityIndex: nextIndex,
+    currentTurn: (currentEncounter.value?.currentTurn ?? 1) + 1,
+    round: isLastInRound ? (currentEncounter.value?.round ?? 1) + 1 : undefined,
+  })
+}
 
-      dispatchUpdateActiveEntityIndex(this.$store, {
-        encounterId: this.id,
-        activeEntityIndex: 1,
-        currentTurn: this.currentEncounter.currentTurn + 1,
-      });
-    } else {
-      dispatchUpdateActiveEntityIndex(this.$store, {
-        encounterId: this.id,
-        activeEntityIndex: this.currentNpcIndex + 1,
-        currentTurn: this.currentEncounter.currentTurn + 1,
-      });
-    }
-  }
+function handleCharClicked(npcData: ICharacter) {
+  if (!route.params.encounterId) return
+
+  snackbar.show(`Added ${npcData.name}`)
+  encountersStore.addNpcToEncounter({
+    npcData: Object.assign({}, npcData),
+    encounterId: route.params.encounterId as string,
+  })
 }
 </script>
-
-<style lang="scss">
-.Encounter-titleArea {
-  padding-right: 116px !important;
-}
-
-.Encounter-npcsListWrapper {
-  height: calc(100vh - 152px) !important;
-}
-
-.Encounter-npcsList > li:last-child {
-  border-bottom: 1px solid theme('colors.gray.300');
-}
-
-.Encounter-roundIndicator {
-  padding: 1px 7px;
-  border-radius: 30%;
-  background: theme('colors.blue.200');
-  border: 1px solid theme('colors.blue.600');
-}
-
-.Encounter-nextButton {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  border-radius: 0;
-  width: 100px;
-  margin-bottom: 0;
-  @apply
-  text-blue-100
-  border-blue-300
-  transition
-  duration-200
-  ease-in-out
-  bg-blue-600
-  cursor-pointer
-  text-center
-  flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.Encounter-nextButton:hover {
-  @apply bg-blue-300 text-blue-600 shadow-md;
-}
-</style>
