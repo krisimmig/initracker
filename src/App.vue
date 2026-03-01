@@ -3,7 +3,7 @@
     <AppBar v-if="!route.meta?.hideAppBar" />
 
     <v-main>
-      <v-container :fluid="route.meta?.isFullWidth">
+      <v-container :fluid="(route.meta?.isFullWidth as boolean | undefined)">
         <router-view></router-view>
         <Confirm />
       </v-container>

@@ -11,6 +11,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "noImplicitAny": false,
+    "skipLibCheck": true,
     "types": [
       "vite/client"
     ],

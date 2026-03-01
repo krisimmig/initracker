@@ -68,7 +68,7 @@ export const useDemoStore = defineStore('demo', () => {
       // no-op: data already loaded
     }
 
-    encountersStore.updateTurnState = ({ activeEntityIndex, currentTurn, round }) => {
+    ;(encountersStore as unknown as Record<string, unknown>).updateTurnState = ({ activeEntityIndex, currentTurn, round }: { encounterId: string; activeEntityIndex: number; currentTurn: number; round?: number }) => {
       if (encountersStore.encountersCurrent) {
         const update: Record<string, number> = { activeEntityIndex, currentTurn }
         if (round !== undefined) update.round = round
@@ -77,7 +77,7 @@ export const useDemoStore = defineStore('demo', () => {
       trackInteraction()
     }
 
-    encountersStore.updateActiveEntityIndex = ({ activeEntityIndex, currentTurn }) => {
+    ;(encountersStore as unknown as Record<string, unknown>).updateActiveEntityIndex = ({ activeEntityIndex, currentTurn }: { encounterId: string; activeEntityIndex: number; currentTurn?: number }) => {
       if (encountersStore.encountersCurrent) {
         const update: Record<string, number> = { activeEntityIndex }
         if (currentTurn !== undefined) update.currentTurn = currentTurn
@@ -86,13 +86,13 @@ export const useDemoStore = defineStore('demo', () => {
       trackInteraction()
     }
 
-    encountersStore.updateRound = ({ newRoundIndex }) => {
+    ;(encountersStore as unknown as Record<string, unknown>).updateRound = ({ newRoundIndex }: { encounterId: string; newRoundIndex: number }) => {
       if (encountersStore.encountersCurrent) {
         encountersStore.encountersCurrent = { ...encountersStore.encountersCurrent, round: newRoundIndex }
       }
     }
 
-    encountersStore.addNpcToEncounter = ({ npcData }) => {
+    ;(encountersStore as unknown as Record<string, unknown>).addNpcToEncounter = ({ npcData }: { npcData: ICharacter; encounterId: string }) => {
       const clone = { ...npcData } as ICharacter
       clone.uuid = uuid()
       clone.conditions = []
@@ -172,10 +172,10 @@ export const useDemoStore = defineStore('demo', () => {
 
     // Restore original methods
     Object.entries(savedEncountersMethods).forEach(([key, fn]) => {
-      ;(encountersStore as Record<string, unknown>)[key] = fn
+      ;(encountersStore as unknown as Record<string, unknown>)[key] = fn
     })
     Object.entries(savedNpcsMethods).forEach(([key, fn]) => {
-      ;(npcsStore as Record<string, unknown>)[key] = fn
+      ;(npcsStore as unknown as Record<string, unknown>)[key] = fn
     })
 
     // Clear demo state
