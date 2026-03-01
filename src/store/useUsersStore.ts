@@ -29,17 +29,31 @@ export const useUsersStore = defineStore('users', () => {
   const userUid = computed(() => user.value ? user.value.uid : false)
 
   async function validateUser(loginCredentials: LoginCredentials): Promise<void> {
-    try {
-      const router = (await import('@/router')).default
-      const response = await firebase.auth().signInWithEmailAndPassword(
-        loginCredentials.email,
-        loginCredentials.password,
-      )
-      user.value = response.user
-      router.push({ name: 'home' })
-    } catch (error) {
-      console.warn('Error', error)
-    }
+    const response = await firebase.auth().signInWithEmailAndPassword(
+      loginCredentials.email,
+      loginCredentials.password,
+    )
+    user.value = response.user
+  }
+
+  async function registerUser(loginCredentials: LoginCredentials): Promise<void> {
+    const response = await firebase.auth().createUserWithEmailAndPassword(
+      loginCredentials.email,
+      loginCredentials.password,
+    )
+    user.value = response.user
+  }
+
+  async function signInWithGoogle(): Promise<void> {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    const result = await firebase.auth().signInWithPopup(provider)
+    user.value = result.user
+  }
+
+  async function signInWithTwitter(): Promise<void> {
+    const provider = new firebase.auth.TwitterAuthProvider()
+    const result = await firebase.auth().signInWithPopup(provider)
+    user.value = result.user
   }
 
   async function logoutUser(): Promise<void> {
@@ -62,5 +76,5 @@ export const useUsersStore = defineStore('users', () => {
     user.value = newUser
   }
 
-  return { user, isLoggedIn, userString, userPhotoUrl, userEmail, userUid, validateUser, logoutUser, loginUser }
+  return { user, isLoggedIn, userString, userPhotoUrl, userEmail, userUid, validateUser, registerUser, signInWithGoogle, signInWithTwitter, logoutUser, loginUser }
 })
