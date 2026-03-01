@@ -23,8 +23,8 @@ service cloud.firestore {
           // Owner can read/write NPCs in their encounters
           allow read, write: if request.auth != null && request.auth.uid == userId;
 
-          // Anyone can read NPCs if the parent encounter is shared
-          allow read: if exists(/databases/$(database)/documents/shared_encounters/$(get(/databases/$(database)/documents/users/$(userId)/encounters/$(encounterId)).data.shareId));
+          // Anyone can read NPCs if they have a valid shareId (denormalized from encounter)
+          allow read: if exists(/databases/$(database)/documents/shared_encounters/$(resource.data.shareId));
         }
       }
     }
