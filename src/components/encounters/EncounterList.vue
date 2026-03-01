@@ -64,8 +64,10 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { DiceRoll } from '@dice-roller/rpg-dice-roller'
+import { db } from '@/store/firebase'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import { useNpcsStore } from '@/store/useNpcsStore'
+import { useUsersStore } from '@/store/useUsersStore'
 import { useSnackbarStore } from '@/store/useSnackbarStore'
 import CharacterListItem from '@/components/characters/CharacterListItem.vue'
 import CharacterLibrary from '@/components/characters/CharacterLibrary.vue'
@@ -80,6 +82,7 @@ const props = defineProps<{
 const route = useRoute()
 const encountersStore = useEncountersStore()
 const npcsStore = useNpcsStore()
+const usersStore = useUsersStore()
 const snackbar = useSnackbarStore()
 
 const showCharacterLibrary = ref(false)
@@ -102,26 +105,20 @@ function removeNpcFromEncounter(npcID: string) {
 
 function rollInitiative(): void {
   if (currentEncounter.value && npcs.value) {
+    const userUid = usersStore.userUid
+    const batch = db.batch()
+
     npcs.value.forEach((npc) => {
       const mod = modifierWithSign(npc.dexterity)
-      const newInitiative = new DiceRoll(`1d20${mod}`)
-      npcsStore.updateInitiative({
-        encounterId: props.id,
-        npcId: npc.uuid,
-        newInitiative: newInitiative.total,
-      })
+      const roll = new DiceRoll(`1d20${mod}`)
+      const npcRef = db.doc(`users/${userUid}/encounters/${props.id}/npcs/${npc.uuid}`)
+      batch.update(npcRef, { initiative: roll.total })
     })
 
-    encountersStore.updateActiveEntityIndex({
-      encounterId: props.id,
-      activeEntityIndex: 1,
-      currentTurn: 1,
-    })
+    const encounterRef = db.doc(`users/${userUid}/encounters/${props.id}`)
+    batch.update(encounterRef, { activeEntityIndex: 1, currentTurn: 1, round: 1 })
 
-    encountersStore.updateRound({
-      encounterId: props.id,
-      newRoundIndex: 1,
-    })
+    batch.commit()
   }
 }
 

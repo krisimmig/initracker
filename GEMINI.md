@@ -28,6 +28,7 @@
 
 ## Project Structure
 
+*   **`docs/`**: All documentation files for this project, read the ones that are relevant to the current task.
 *   **`src/classes/`**: Domain entity classes.
     *   `Character.ts`: Core class for Characters/Monsters with 5e stats (AC, HP, Speed, etc.).
 *   **`src/components/`**: Vue components.

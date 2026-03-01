@@ -20,6 +20,11 @@ export const useEncountersStore = defineStore('encounters', () => {
   const isLoadingShared = ref(true)
   const sharedError = ref<string | null>(null)
 
+  // Listener unsubscribe functions
+  let unsubEncounters: (() => void) | null = null
+  let unsubEncounterById: (() => void) | null = null
+  let unsubEncounterNpcs: (() => void) | null = null
+
   const encountersActiveNpc = () => {
     if (encountersCurrent.value) {
       return encountersNpcs.value[encountersCurrent.value.activeEntityIndex - 1]
@@ -36,11 +41,14 @@ export const useEncountersStore = defineStore('encounters', () => {
   }
 
   function fetchEncounters() {
+    if (unsubEncounters) return // Already listening
+
     const usersStore = useUsersStore()
     isLoading.value = true
     const userUid = usersStore.userUid
-    db.collection(`users/${userUid}/encounters`)
+    unsubEncounters = db.collection(`users/${userUid}/encounters`)
       .orderBy('createdAt', 'desc')
+      .limit(50)
       .onSnapshot((data) => {
         const encounters: IEncounterEntity[] = []
         data.forEach((doc) => {
@@ -52,10 +60,16 @@ export const useEncountersStore = defineStore('encounters', () => {
   }
 
   function fetchEncounterById({ encounterId }: { encounterId: string }) {
+    // Tear down previous encounter listeners before setting up new ones
+    unsubEncounterById?.()
+    unsubEncounterNpcs?.()
+    unsubEncounterById = null
+    unsubEncounterNpcs = null
+
     const usersStore = useUsersStore()
     isLoading.value = true
     const userUid = usersStore.userUid
-    db.doc(`users/${userUid}/encounters/${encounterId}`).onSnapshot(async (doc) => {
+    unsubEncounterById = db.doc(`users/${userUid}/encounters/${encounterId}`).onSnapshot(async (doc) => {
       const encounter = doc.data()
       encountersCurrent.value = encounter as IEncounterEntity
       await fetchEncountersCurrentNpcs({ encounterId })
@@ -64,10 +78,13 @@ export const useEncountersStore = defineStore('encounters', () => {
   }
 
   function fetchEncountersCurrentNpcs({ encounterId }: { encounterId: string }) {
+    unsubEncounterNpcs?.()
+    unsubEncounterNpcs = null
+
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
     return new Promise<void>((resolve) => {
-      db.collection(`users/${userUid}/encounters/${encounterId}/npcs`)
+      unsubEncounterNpcs = db.collection(`users/${userUid}/encounters/${encounterId}/npcs`)
         .orderBy('initiative', 'desc')
         .onSnapshot((data) => {
           const npcs: ICharacter[] = []
@@ -91,6 +108,12 @@ export const useEncountersStore = defineStore('encounters', () => {
     npcData.conditions = []
     npcData.initiative = 0
     npcData.hit_points_current = npcData.hit_points
+
+    // Propagate shareId if encounter is already shared
+    if (encountersCurrent.value?.shareId) {
+      (npcData as any).shareId = encountersCurrent.value.shareId
+    }
+
     const npcsRef = await db.collection(`users/${userUid}/encounters/${encounterId}/npcs`)
     npcsRef.doc(id).set(npcData)
   }
@@ -134,14 +157,14 @@ export const useEncountersStore = defineStore('encounters', () => {
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
     const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId)
-    encounterRef.set({ name: newName }, { merge: true })
+    encounterRef.update({ name: newName })
   }
 
   async function updateRound({ encounterId, newRoundIndex }: { encounterId: string; newRoundIndex: number }) {
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
     const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId)
-    encounterRef.set({ round: newRoundIndex }, { merge: true })
+    encounterRef.update({ round: newRoundIndex })
   }
 
   async function updateActiveEntityIndex(
@@ -154,7 +177,7 @@ export const useEncountersStore = defineStore('encounters', () => {
       newData.currentTurn = currentTurn
     }
     const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId)
-    encounterRef.set(newData, { merge: true })
+    encounterRef.update(newData)
   }
 
   async function updateTurnState(
@@ -167,7 +190,7 @@ export const useEncountersStore = defineStore('encounters', () => {
       newData.round = round
     }
     const encounterRef = await db.collection(`users/${userUid}/encounters`).doc(encounterId)
-    encounterRef.set(newData, { merge: true })
+    encounterRef.update(newData)
   }
 
   function setNpcInDetail(npc: ICharacter) {
@@ -189,16 +212,22 @@ export const useEncountersStore = defineStore('encounters', () => {
 
     const shareId = nanoid(10)
 
-    // Write shareId to the encounter doc
-    await encounterRef.set({ shareId }, { merge: true })
-
-    // Create a lookup document in the shared_encounters collection
-    await db.doc(`shared_encounters/${shareId}`).set({
+    // Batch: write shareId to encounter, create lookup doc, and denormalize onto NPC docs
+    const batch = db.batch()
+    batch.update(encounterRef, { shareId })
+    batch.set(db.doc(`shared_encounters/${shareId}`), {
       ownerUid: userUid,
       encounterId,
       createdAt: Date.now(),
     })
 
+    // Denormalize shareId onto each NPC doc (reduces security rule reads)
+    const npcsSnapshot = await db.collection(`users/${userUid}/encounters/${encounterId}/npcs`).get()
+    npcsSnapshot.forEach((npcDoc) => {
+      batch.update(npcDoc.ref, { shareId })
+    })
+
+    await batch.commit()
     return shareId
   }
 
@@ -210,10 +239,19 @@ export const useEncountersStore = defineStore('encounters', () => {
     const existing = encounterDoc.data() as IEncounterEntity | undefined
 
     if (existing?.shareId) {
+      const batch = db.batch()
       // Remove the shared_encounters lookup doc
-      await db.doc(`shared_encounters/${existing.shareId}`).delete()
-      // Remove shareId from encounter using FieldValue.delete()
-      await encounterRef.update({ shareId: firebase.firestore.FieldValue.delete() })
+      batch.delete(db.doc(`shared_encounters/${existing.shareId}`))
+      // Remove shareId from encounter
+      batch.update(encounterRef, { shareId: firebase.firestore.FieldValue.delete() })
+
+      // Remove shareId from each NPC doc
+      const npcsSnapshot = await db.collection(`users/${userUid}/encounters/${encounterId}/npcs`).get()
+      npcsSnapshot.forEach((npcDoc) => {
+        batch.update(npcDoc.ref, { shareId: firebase.firestore.FieldValue.delete() })
+      })
+
+      await batch.commit()
     }
   }
 
@@ -269,6 +307,15 @@ export const useEncountersStore = defineStore('encounters', () => {
     })
   }
 
+  function cleanup() {
+    unsubEncounters?.()
+    unsubEncounterById?.()
+    unsubEncounterNpcs?.()
+    unsubEncounters = null
+    unsubEncounterById = null
+    unsubEncounterNpcs = null
+  }
+
   return {
     encountersAll,
     encountersCurrent,
@@ -297,5 +344,6 @@ export const useEncountersStore = defineStore('encounters', () => {
     generateShareLink,
     revokeShareLink,
     fetchSharedEncounter,
+    cleanup,
   }
 })

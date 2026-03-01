@@ -1,14 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { arrayUnion } from 'firebase/firestore'
+import { arrayUnion, arrayRemove } from 'firebase/firestore'
 import { db } from '@/store/firebase'
 import { Character as ICharacter } from '@/classes/Character'
 import { ICondition } from '@/types/conditionTypes'
-import { remove } from 'lodash'
 import { useUsersStore } from '@/store/useUsersStore'
+import { useEncountersStore } from '@/store/useEncountersStore'
 
 export const useNpcsStore = defineStore('npcs', () => {
   const npcs = ref<ICharacter[]>([])
+
+  let unsubNpcsConnection: (() => void) | null = null
 
   function getNpcById(npcID: string): ICharacter | undefined {
     return npcs.value.find((npc) => npc.id === npcID)
@@ -34,7 +36,9 @@ export const useNpcsStore = defineStore('npcs', () => {
   }
 
   function openNpcsConnection() {
-    db.collection('npcs').onSnapshot((data) => {
+    if (unsubNpcsConnection) return // Already listening
+
+    unsubNpcsConnection = db.collection('npcs').onSnapshot((data) => {
       npcs.value = data.docs.reduce((acc: ICharacter[], current) => {
         const newNpc: ICharacter = current.data() as ICharacter
         newNpc.id = current.id
@@ -50,22 +54,21 @@ export const useNpcsStore = defineStore('npcs', () => {
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
     const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`)
-    npcRef.set({ conditions: arrayUnion(newCondition) }, { merge: true })
+    npcRef.update({ conditions: arrayUnion(newCondition) })
   }
 
-  async function removeConditionFromNpc(
+  function removeConditionFromNpc(
     { encounterId, npcId, conditionId }: { encounterId: string; npcId: string; conditionId: string },
   ) {
+    const encountersStore = useEncountersStore()
+    const npc = encountersStore.encountersNpcs.find(n => n.uuid === npcId)
+    const conditionToRemove = npc?.conditions.find(c => c.id === conditionId)
+    if (!conditionToRemove) return
+
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
     const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`)
-    try {
-      const npc = (await npcRef.get()).data() as ICharacter
-      remove(npc.conditions, (condition) => condition.id === conditionId)
-      npcRef.set({ conditions: npc.conditions }, { merge: true })
-    } catch (e) {
-      console.error(e)
-    }
+    npcRef.update({ conditions: arrayRemove(conditionToRemove) })
   }
 
   function updateInitiative(
@@ -74,7 +77,7 @@ export const useNpcsStore = defineStore('npcs', () => {
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
     const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`)
-    npcRef.set({ initiative: newInitiative }, { merge: true })
+    npcRef.update({ initiative: newInitiative })
   }
 
   function updateHitPointCurrent(
@@ -84,30 +87,31 @@ export const useNpcsStore = defineStore('npcs', () => {
     const userUid = usersStore.userUid
     const encounterRef = db.collection(`users/${userUid}/encounters`).doc(encounterId)
     const npcRef = encounterRef.collection('npcs').doc(npcId)
-    npcRef.set({ hit_points_current: newHitPoints }, { merge: true })
+    npcRef.update({ hit_points_current: newHitPoints })
   }
 
   function updateNpcConditionRound(
     { encounterId, npcId }: { encounterId: string; npcId: string },
   ) {
+    const encountersStore = useEncountersStore()
+    const npc = encountersStore.encountersNpcs.find(n => n.uuid === npcId)
+    if (!npc || !npc.conditions || npc.conditions.length === 0) return // Skip NPCs with no conditions
+
+    const updatedConditions = npc.conditions
+      .map(c => c.duration ? { ...c, duration: c.duration - 1 } : c)
+      .filter(c => !Object.hasOwn(c, 'duration') || c.duration! >= 1)
+
+    // Only write if conditions actually changed
+    if (JSON.stringify(updatedConditions) === JSON.stringify(npc.conditions)) return
+
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
-    const npcRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`).get()
-    npcRef.then((doc) => {
-      const npc = doc.data() as ICharacter
-      const conditions = npc.conditions
-      conditions.forEach((condition) => {
-        if (condition.duration) {
-          condition.duration -= 1
-        }
-      })
+    db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`).update({ conditions: updatedConditions })
+  }
 
-      remove(conditions, (condition) => {
-        return Object.hasOwn(condition, 'duration') && condition.duration! < 1
-      })
-
-      db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${npcId}`).set({ conditions }, { merge: true })
-    })
+  function cleanup() {
+    unsubNpcsConnection?.()
+    unsubNpcsConnection = null
   }
 
   return {
@@ -121,5 +125,6 @@ export const useNpcsStore = defineStore('npcs', () => {
     updateInitiative,
     updateHitPointCurrent,
     updateNpcConditionRound,
+    cleanup,
   }
 })

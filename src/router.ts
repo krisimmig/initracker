@@ -7,7 +7,6 @@ import EncountersView from '@/views/EncountersView.vue'
 import EncounterDetailsView from '@/views/EncounterDetailsView.vue'
 import FeedbackView from '@/views/FeedbackView.vue'
 import LoginView from '@/views/LoginView.vue'
-import RegisterView from '@/views/RegisterView.vue'
 import UserDetailsView from '@/views/UserDetailsView.vue'
 import { isLoggedIn, authReady } from '@/store/firebase'
 
@@ -81,8 +80,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/register',
-    name: 'register',
-    component: RegisterView,
+    redirect: { name: 'login' },
   },
 ]
 
@@ -99,7 +97,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (requiresAuth && !isLoggedIn()) {
     next({ name: 'login', query: { redirect: to.name as string } })
-  } else if (isLoggedIn() && ['login', 'register'].includes(to.name as string)) {
+  } else if (isLoggedIn() && to.name === 'login') {
     next({ name: 'home' })
   } else {
     next()

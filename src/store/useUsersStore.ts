@@ -2,6 +2,9 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { firebase } from '@/store/firebase'
 import { LoginCredentials } from '@/types/users'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import { useCharactersStore } from '@/store/useCharactersStore'
+import { useNpcsStore } from '@/store/useNpcsStore'
 
 export const useUsersStore = defineStore('users', () => {
   const user = ref<firebase.User | null>(null)
@@ -26,21 +29,40 @@ export const useUsersStore = defineStore('users', () => {
   const userUid = computed(() => user.value ? user.value.uid : false)
 
   async function validateUser(loginCredentials: LoginCredentials): Promise<void> {
-    try {
-      const router = (await import('@/router')).default
-      const response = await firebase.auth().signInWithEmailAndPassword(
-        loginCredentials.email,
-        loginCredentials.password,
-      )
-      user.value = response.user
-      router.push({ name: 'home' })
-    } catch (error) {
-      console.warn('Error', error)
-    }
+    const response = await firebase.auth().signInWithEmailAndPassword(
+      loginCredentials.email,
+      loginCredentials.password,
+    )
+    user.value = response.user
+  }
+
+  async function registerUser(loginCredentials: LoginCredentials): Promise<void> {
+    const response = await firebase.auth().createUserWithEmailAndPassword(
+      loginCredentials.email,
+      loginCredentials.password,
+    )
+    user.value = response.user
+  }
+
+  async function signInWithGoogle(): Promise<void> {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    const result = await firebase.auth().signInWithPopup(provider)
+    user.value = result.user
+  }
+
+  async function signInWithTwitter(): Promise<void> {
+    const provider = new firebase.auth.TwitterAuthProvider()
+    const result = await firebase.auth().signInWithPopup(provider)
+    user.value = result.user
   }
 
   async function logoutUser(): Promise<void> {
     try {
+      // Tear down all Firestore listeners before signing out
+      useEncountersStore().cleanup()
+      useCharactersStore().cleanup()
+      useNpcsStore().cleanup()
+
       const router = (await import('@/router')).default
       await firebase.auth().signOut()
       user.value = null
@@ -54,5 +76,5 @@ export const useUsersStore = defineStore('users', () => {
     user.value = newUser
   }
 
-  return { user, isLoggedIn, userString, userPhotoUrl, userEmail, userUid, validateUser, logoutUser, loginUser }
+  return { user, isLoggedIn, userString, userPhotoUrl, userEmail, userUid, validateUser, registerUser, signInWithGoogle, signInWithTwitter, logoutUser, loginUser }
 })
