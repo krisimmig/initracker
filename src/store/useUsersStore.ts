@@ -2,6 +2,9 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { firebase } from '@/store/firebase'
 import { LoginCredentials } from '@/types/users'
+import { useEncountersStore } from '@/store/useEncountersStore'
+import { useCharactersStore } from '@/store/useCharactersStore'
+import { useNpcsStore } from '@/store/useNpcsStore'
 
 export const useUsersStore = defineStore('users', () => {
   const user = ref<firebase.User | null>(null)
@@ -41,6 +44,11 @@ export const useUsersStore = defineStore('users', () => {
 
   async function logoutUser(): Promise<void> {
     try {
+      // Tear down all Firestore listeners before signing out
+      useEncountersStore().cleanup()
+      useCharactersStore().cleanup()
+      useNpcsStore().cleanup()
+
       const router = (await import('@/router')).default
       await firebase.auth().signOut()
       user.value = null
