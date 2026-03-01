@@ -90,27 +90,29 @@ export const useCharacterBuilderStore = defineStore('characterBuilder', () => {
   async function updateCharacterInEncounters({ character: char }: { character: Character }) {
     const usersStore = useUsersStore()
     const userUid = usersStore.userUid
-    console.log('updating characterUuid', char.uuid_ref)
 
-    const encountersQuerySnapshot = await db.collection(`users/${userUid}/encounters`).get()
+    // Single collectionGroup query instead of N+1 pattern
+    const npcsSnapshot = await db.collectionGroup('npcs')
+      .where('uuid_ref', '==', char.uuid_ref)
+      .get()
 
-    for (const encounterDoc of encountersQuerySnapshot.docs) {
-      const npcsQuerySnapshot = await encounterDoc.ref
-        .collection('npcs')
-        .where('uuid_ref', '==', char.uuid_ref)
-        .get()
+    if (npcsSnapshot.empty) return
 
-      npcsQuerySnapshot.forEach((docRef) => {
-        const encounterId = docRef.ref.parent.parent?.id
-        const oldCharacterData = docRef.data()
-        char.conditions = oldCharacterData.conditions
-        char.hit_points_current = oldCharacterData.hit_points_current
-        char.uuid = oldCharacterData.uuid
-        char.initiative = oldCharacterData.initiative
-        const charRef = db.doc(`users/${userUid}/encounters/${encounterId}/npcs/${docRef.id}`)
-        charRef.set(char)
-      })
-    }
+    const batch = db.batch()
+    npcsSnapshot.forEach((docRef) => {
+      // Only update NPCs owned by this user
+      const pathParts = docRef.ref.path.split('/')
+      if (pathParts[1] !== userUid) return
+
+      const oldData = docRef.data()
+      const updatedChar = { ...char }
+      updatedChar.conditions = oldData.conditions
+      updatedChar.hit_points_current = oldData.hit_points_current
+      updatedChar.uuid = oldData.uuid
+      updatedChar.initiative = oldData.initiative
+      batch.set(docRef.ref, updatedChar)
+    })
+    await batch.commit()
   }
 
   function setCharacter(newCharacter: Character) {
