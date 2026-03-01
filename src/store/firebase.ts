@@ -17,6 +17,15 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 // Firestore DB
 const db = firebaseApp.firestore();
 
+// Enable offline persistence (IndexedDB cache)
+db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
+  if (err.code === 'failed-precondition') {
+    console.warn('Firestore persistence unavailable: multiple tabs open')
+  } else if (err.code === 'unimplemented') {
+    console.warn('Firestore persistence not supported in this browser')
+  }
+});
+
 // Resolves once Firebase has restored auth state from the session (fires once on startup)
 let resolveAuthReady: (user: firebase.User | null) => void
 const authReady = new Promise<firebase.User | null>((resolve) => {
