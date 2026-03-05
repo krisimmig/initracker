@@ -1,15 +1,13 @@
 <template>
   <div>
     <div class="CharacterArmorClass">
-      <SvgIcon name="shield" class="CharacterArmorClass-icon text-grey" />
+      <v-icon icon="mdi-shield" class="CharacterArmorClass-icon text-grey" />
       <p class="CharacterArmorClass-amount text-white">{{ armorClass }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import SvgIcon from '@/components/common/SvgIcon.vue'
-
 defineProps<{
   armorClass: number
 }>()

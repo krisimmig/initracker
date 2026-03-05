@@ -1,7 +1,7 @@
 <template>
   <div class="CharacterHealth">
     <div class="CharacterHealth-wrapper">
-      <SvgIcon name="heart" class="CharacterHealth-icon text-red" />
+      <v-icon icon="mdi-heart" class="CharacterHealth-icon text-red" />
       <div class="CharacterHealth-hpWrapper">
         <p class="CharacterHealth-hp mb-0 text-white">{{ hp }}</p>
       </div>
@@ -10,8 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import SvgIcon from '@/components/common/SvgIcon.vue'
-
 defineProps<{
   uuid?: string
   hp: number
