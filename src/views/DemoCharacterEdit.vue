@@ -1,7 +1,5 @@
 <template>
   <div>
-    <PageTitle title="Character editor (Demo)" icon="mdi-pencil" />
-
     <DemoBanner />
 
     <div v-if="!isLoading">
@@ -20,7 +18,6 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { v1 as uuidV1 } from 'uuid'
-import PageTitle from '@/components/common/PageTitle.vue'
 import CharacterBuilder from '@/components/characters/character-builder/CharacterBuilder.vue'
 import DemoBanner from '@/components/demo/DemoBanner.vue'
 import { useCharacterBuilderStore } from '@/store/useCharacterBuilderStore'

@@ -1,7 +1,5 @@
 <template>
   <div class="UserDetails">
-    <PageTitle title="Profile" icon="mdi-account-circle" />
-
     <v-row>
       <!-- Profile info card -->
       <v-col cols="12" md="4">
@@ -190,7 +188,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import PageTitle from '@/components/common/PageTitle.vue'
 import { useUsersStore } from '@/store/useUsersStore'
 import { db } from '@/store/firebase'
 import { IEncounterEntity } from '@/types/encounters'

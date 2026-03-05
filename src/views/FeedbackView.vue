@@ -1,7 +1,5 @@
 <template>
   <div class="Feedback">
-    <PageTitle title="Feedback" icon="mdi-message-draw" />
-
     <v-row>
       <v-col cols="12" md="6">
         <v-card variant="outlined">
@@ -70,8 +68,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import PageTitle from '@/components/common/PageTitle.vue'
-
 const newsletterEmail = ref('')
 
 function submitNewsletter() {

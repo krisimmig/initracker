@@ -1,7 +1,5 @@
 <template>
   <div class="Encounters">
-    <PageTitle title="Encounters" icon="mdi-sword-cross" />
-
     <v-row>
       <!-- New encounter: first on mobile, right column on md+ -->
       <v-col cols="12" md="4" :order="1" :order-md="2">
@@ -40,8 +38,6 @@ import { computed, onMounted } from 'vue'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import EncounterNew from '@/components/encounters/EncounterNew.vue'
 import EncounterTeaser from '@/components/encounters/EncounterTeaser.vue'
-import PageTitle from '@/components/common/PageTitle.vue'
-
 const encountersStore = useEncountersStore()
 
 const isLoading = computed(() => encountersStore.isLoading)

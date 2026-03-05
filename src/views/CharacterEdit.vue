@@ -1,10 +1,5 @@
 <template>
   <div class="">
-    <PageTitle
-      title="Character editor"
-      icon="mdi-pencil"
-    />
-
     <div v-if="!isLoading">
       <CharacterBuilder
         :character="character"
@@ -20,7 +15,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
-import PageTitle from '@/components/common/PageTitle.vue'
 import { useCharacterBuilderStore } from '@/store/useCharacterBuilderStore'
 import { useConfirmStore } from '@/store/useConfirmStore'
 import { Character } from '@/classes/Character'
