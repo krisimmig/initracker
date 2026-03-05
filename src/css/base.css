@@ -1,5 +1,12 @@
 
 /* src/styles/main.css */
+
+.app-name {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+}
 .app-menu.v-overlay__content > .v-list {
   border: 1px solid rgba(var(--v-border-color), calc(var(--v-border-opacity) * 2));
 }
