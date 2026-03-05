@@ -265,6 +265,7 @@
                 An encounter is a saved combat scene &mdash; give it a name, add your monsters and
                 player characters, and it is ready to run. When the fight starts, <span class="app-name">TOP OF THE ROUND</span> tracks the
                 initiative order and lets you update HP and conditions in real time.
+                Every action is recorded in the activity log so you can review dice rolls, damage, and conditions at any point.
                 Save encounters to reuse them or tweak them for different parties.
               </p>
             </v-card-text>
@@ -380,6 +381,11 @@ const features = [
     icon: 'mdi-bookshelf',
     title: 'Character Library',
     description: 'Build reusable characters and monsters once, then drop them into any encounter. Hundreds of monsters included.',
+  },
+  {
+    icon: 'mdi-text-box-outline',
+    title: 'Activity Log',
+    description: 'Every dice roll, HP change, condition, and turn is recorded. Review what happened at any point during the session.',
   },
 ]
 
