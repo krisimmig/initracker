@@ -74,6 +74,7 @@ import CharacterLibrary from '@/components/characters/CharacterLibrary.vue'
 import EncounterActionbar from '@/components/encounters/EncounterActionbar.vue'
 import { modifierWithSign } from '@/utils/dnd'
 import { Character as ICharacter } from '@/classes/Character'
+import { useActivityLogStore } from '@/store/useActivityLogStore'
 
 const props = defineProps<{
   id: string
@@ -85,6 +86,8 @@ const npcsStore = useNpcsStore()
 const usersStore = useUsersStore()
 const snackbar = useSnackbarStore()
 
+const activityLog = useActivityLogStore()
+
 const showCharacterLibrary = ref(false)
 
 const isLoading = computed(() => encountersStore.isLoading)
@@ -93,6 +96,11 @@ const currentNpcIndex = computed(() => currentEncounter.value?.activeEntityIndex
 const npcs = computed(() => encountersStore.encountersNpcs)
 
 function removeNpcFromEncounter(npcID: string) {
+  const npc = npcs.value.find((n) => n.uuid === npcID)
+  if (npc) {
+    activityLog.log('character_remove', `${npc.name} removed from encounter`, { actorName: npc.name })
+  }
+
   encountersStore.removeNpcFromEncounter({ npcID, encounterId: props.id })
 
   if (currentNpcIndex.value > npcs.value.length - 1) {
@@ -113,6 +121,10 @@ function rollInitiative(): void {
       const roll = new DiceRoll(`1d20${mod}`)
       const npcRef = db.doc(`users/${userUid}/encounters/${props.id}/npcs/${npc.uuid}`)
       batch.update(npcRef, { initiative: roll.total })
+      activityLog.log('initiative_roll', `${npc.name} rolled initiative: ${roll.total}`, {
+        actorName: npc.name,
+        detail: `1d20${mod} = ${roll.total}`,
+      })
     })
 
     const encounterRef = db.doc(`users/${userUid}/encounters/${props.id}`)
@@ -125,6 +137,7 @@ function rollInitiative(): void {
 function reset(): void {
   encountersStore.updateRound({ encounterId: props.id, newRoundIndex: 1 })
   encountersStore.updateActiveEntityIndex({ encounterId: props.id, activeEntityIndex: 1, currentTurn: 1 })
+  activityLog.log('encounter_reset', 'Encounter reset to Round 1')
 }
 
 function nextTurn(): void {
@@ -136,14 +149,30 @@ function nextTurn(): void {
 
   const isLastInRound = currentNpcIndex.value === npcs.value.length
   const nextIndex = isLastInRound ? 1 : currentNpcIndex.value + 1
+  const currentRound = currentEncounter.value?.round ?? 1
+  const currentTurn = (currentEncounter.value?.currentTurn ?? 1) + 1
+  const nextNpc = npcs.value[nextIndex - 1]
+
+  const nextPart = nextNpc ? `, now it is ${nextNpc.name}'s turn` : ''
+  activityLog.log('turn_advance', `${npc.name}'s turn ended${nextPart}`, {
+    actorName: npc.name,
+    round: currentRound,
+    turn: currentTurn,
+  })
+
+  if (isLastInRound) {
+    activityLog.log('round_advance', `Round ${currentRound + 1} started`, {
+      round: currentRound + 1,
+    })
+  }
 
   npcsStore.updateNpcConditionRound({ encounterId: props.id, npcId: npc.uuid })
 
   encountersStore.updateTurnState({
     encounterId: props.id,
     activeEntityIndex: nextIndex,
-    currentTurn: (currentEncounter.value?.currentTurn ?? 1) + 1,
-    round: isLastInRound ? (currentEncounter.value?.round ?? 1) + 1 : undefined,
+    currentTurn,
+    round: isLastInRound ? currentRound + 1 : undefined,
   })
 }
 
@@ -151,6 +180,7 @@ function handleCharClicked(npcData: ICharacter) {
   if (!route.params.encounterId) return
 
   snackbar.show(`Added ${npcData.name}`)
+  activityLog.log('character_add', `${npcData.name} joined the encounter`, { actorName: npcData.name })
   encountersStore.addNpcToEncounter({
     npcData: Object.assign({}, npcData),
     encounterId: route.params.encounterId as string,

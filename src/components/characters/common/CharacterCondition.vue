@@ -125,6 +125,7 @@ import { find } from 'lodash'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import { useNpcsStore } from '@/store/useNpcsStore'
 import { useSnackbarStore } from '@/store/useSnackbarStore'
+import { useActivityLogStore } from '@/store/useActivityLogStore'
 import { ICondition, conditionList } from '@/types/conditionTypes'
 
 const props = defineProps<{
@@ -140,6 +141,7 @@ const selectedCondition = ref<ICondition | null>(null)
 const encountersStore = useEncountersStore()
 const npcsStore = useNpcsStore()
 const snackbar = useSnackbarStore()
+const activityLog = useActivityLogStore()
 
 function isActiveCondition(conditionId: string): boolean {
   return !!find(props.conditions, (c) => c.id === conditionId)
@@ -157,6 +159,9 @@ function addCondition(condition: ICondition) {
 
   const rounds = condition.duration ? ` for ${condition.duration} rounds` : ''
   snackbar.show(`${props.name} is ${condition.name.toLowerCase()}${rounds}.`)
+  activityLog.log('condition_add', `${props.name} gained ${condition.name}${rounds}`, {
+    actorName: props.name,
+  })
 }
 
 function setSelectedCondition(conditionId: string) {
@@ -180,6 +185,9 @@ function removeCondition(conditionId: string) {
   const condition = npcConditions.value.find(({ id }) => id === conditionId)
   if (condition) {
     snackbar.show(`${props.name} is no longer ${condition.name.toLowerCase()}.`)
+    activityLog.log('condition_remove', `${props.name} lost ${condition.name}`, {
+      actorName: props.name,
+    })
   }
 }
 </script>

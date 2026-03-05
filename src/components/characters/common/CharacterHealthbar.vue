@@ -110,6 +110,7 @@
 import { ref, computed } from 'vue'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import { useNpcsStore } from '@/store/useNpcsStore'
+import { useActivityLogStore } from '@/store/useActivityLogStore'
 
 const props = defineProps<{
   uuid?: string
@@ -123,6 +124,7 @@ const hitPointChangeAmount = ref(0)
 
 const encountersStore = useEncountersStore()
 const npcsStore = useNpcsStore()
+const activityLog = useActivityLogStore()
 
 const quickAmounts = [1, 5, 10, 20]
 
@@ -147,6 +149,10 @@ function resetHitPoints() {
   const encounterId = encountersStore.encountersCurrentId()
   if (!encounterId || !props.maxHp) return
 
+  activityLog.log('hp_change', `${props.name} fully healed (HP: ${props.hp} → ${props.maxHp})`, {
+    actorName: props.name,
+  })
+
   npcsStore.updateHitPointCurrent({
     encounterId,
     npcId: props.uuid!,
@@ -165,6 +171,16 @@ function changeHitPoints({ subtract } = { subtract: true }) {
     newHitPoints = props.hp - hitPointChangeAmount.value
   } else {
     newHitPoints = props.hp + hitPointChangeAmount.value
+  }
+
+  if (subtract) {
+    activityLog.log('hp_change', `${props.name} took ${hitPointChangeAmount.value} damage (HP: ${props.hp} → ${newHitPoints})`, {
+      actorName: props.name,
+    })
+  } else {
+    activityLog.log('hp_change', `${props.name} healed ${hitPointChangeAmount.value} HP (HP: ${props.hp} → ${newHitPoints})`, {
+      actorName: props.name,
+    })
   }
 
   npcsStore.updateHitPointCurrent({

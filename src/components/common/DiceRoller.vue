@@ -15,12 +15,14 @@
 <script setup lang="ts">
 import { DiceRoll } from '@dice-roller/rpg-dice-roller'
 import { useSnackbarStore } from '@/store/useSnackbarStore'
+import { useActivityLogStore } from '@/store/useActivityLogStore'
 
 const props = defineProps<{
   notation: string
 }>()
 
 const snackbar = useSnackbarStore()
+const activityLog = useActivityLogStore()
 
 function roll(): void {
   try {
@@ -28,6 +30,9 @@ function roll(): void {
     const result = new DiceRoll(normalizedNotation)
     snackbar.show(`Rolled ${props.notation}: <strong>${result.total}</strong> (${result.output})`, {
       timeout: 500000,
+    })
+    activityLog.log('dice_roll', `Rolled ${props.notation}: ${result.total}`, {
+      detail: result.output,
     })
   } catch (e) {
     console.error('Invalid dice notation:', props.notation)
