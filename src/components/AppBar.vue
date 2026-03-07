@@ -7,7 +7,7 @@
       <template v-if="isLoggedIn">
         <v-toolbar-title>
           <router-link :to="{ name: 'home' }" class="d-flex align-center ga-2">
-            <img src="@/assets/logo.svg" style="height: 36px; width: auto;" alt="Top Of The Round" />
+            <img src="@/assets/logo_small.svg" style="height: 36px; width: auto;" alt="Top Of The Round" />
             <span class="app-name">TOP OF THE ROUND</span>
           </router-link>
         </v-toolbar-title>
@@ -57,7 +57,7 @@
       <template v-else>
         <v-toolbar-title>
           <router-link :to="{ name: 'home' }" class="d-flex align-center ga-2">
-            <img src="@/assets/logo.svg" style="height: 36px; width: auto;" alt="Top Of The Round" />
+            <img src="@/assets/logo_small.svg" style="height: 36px; width: auto;" alt="Top Of The Round" />
             <span class="app-name">TOP OF THE ROUND</span>
           </router-link>
         </v-toolbar-title>
