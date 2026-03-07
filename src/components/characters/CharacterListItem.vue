@@ -97,11 +97,11 @@ function showInDetail() {
 }
 
 .CharacterListItem.is-active {
-  border-color: rgb(var(--v-theme-primary)) !important;
+  border-color: rgb(var(--v-theme-primary));
 }
 
 .CharacterListItem.is-selected {
-  border-color: rgb(var(--v-theme-secondary)) !important;
+  border-color: rgb(var(--v-theme-secondary));
 }
 
 .CharacterListItem.has-acted {

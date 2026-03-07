@@ -2,7 +2,7 @@
   <div class="Characters">
     <v-row>
       <!-- New character: first on mobile, right column on md+ -->
-      <v-col cols="12" md="4" :order="1" :order-md="2">
+      <v-col cols="12" md="4" class="order-1 order-md-2">
         <v-card variant="outlined">
           <v-card-title class="d-flex align-center pa-3 pb-0">
             <v-icon color="primary" class="mr-2">mdi-account-plus</v-icon>
@@ -47,7 +47,7 @@
       </v-col>
 
       <!-- Character list: second on mobile, left column on md+ -->
-      <v-col cols="12" md="8" :order="2" :order-md="1">
+      <v-col cols="12" md="8" class="order-2 order-md-1">
         <div v-if="isLoading">
           <v-card class="mb-3">
             <v-skeleton-loader class="mx-auto" type="heading, list-item-three-line" />

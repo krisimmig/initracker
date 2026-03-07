@@ -52,6 +52,7 @@ export default createVuetify({
     VBtn: {
       rounded: 1,
       elevation: 0,
+      class: 'text-uppercase',
     },
     VBtnGroup: {
       rounded: 1,

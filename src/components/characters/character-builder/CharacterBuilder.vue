@@ -30,7 +30,7 @@
                 density="compact"
                 class="mb-2"
               />
-              <v-row dense>
+              <v-row density="compact">
                 <v-col cols="6" sm="4">
                   <v-text-field
                     v-model="character.challenge_rating"
@@ -51,7 +51,7 @@
                   />
                 </v-col>
               </v-row>
-              <v-row dense>
+              <v-row density="compact">
                 <v-col cols="12" sm="4">
                   <v-select
                     v-model="character.size"
@@ -93,7 +93,7 @@
           <v-card variant="outlined" class="mb-6">
             <v-card-title class="text-subtitle-1 font-weight-bold px-4 pt-4 pb-2">Defense</v-card-title>
             <v-card-text class="pt-0">
-              <v-row dense>
+              <v-row density="compact">
                 <v-col cols="4" sm="3">
                   <v-text-field
                     v-model.number="character.armor_class"
@@ -142,7 +142,7 @@
           <v-card variant="outlined" class="mb-6">
             <v-card-title class="text-subtitle-1 font-weight-bold px-4 pt-4 pb-2">Ability Scores</v-card-title>
             <v-card-text class="pt-0">
-              <v-row dense>
+              <v-row density="compact">
                 <v-col v-for="stat in abilityScores" :key="stat.key" cols="4" sm="2">
                   <v-text-field
                     v-model.number="character[stat.key]"
@@ -163,7 +163,7 @@
           <v-card variant="outlined" class="mb-6">
             <v-card-title class="text-subtitle-1 font-weight-bold px-4 pt-4 pb-2">Speed</v-card-title>
             <v-card-text class="pt-0">
-              <v-row dense>
+              <v-row density="compact">
                 <v-col v-for="speed in speedTypes" :key="speed.key" cols="4" sm="2">
                   <v-text-field
                     v-model.number="character.speed[speed.key]"
@@ -184,7 +184,7 @@
           <v-card variant="outlined" class="mb-6">
             <v-card-title class="text-subtitle-1 font-weight-bold px-4 pt-4 pb-2">Traits</v-card-title>
             <v-card-text class="pt-0">
-              <v-row dense>
+              <v-row density="compact">
                 <v-col cols="12">
                   <v-text-field
                     v-model="character.senses"

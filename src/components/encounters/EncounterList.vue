@@ -36,7 +36,7 @@
         </v-dialog>
 
         <div v-if="npcs.length > 0">
-          <div class="p-4" style="overflow-y: auto; height: calc(100vh - 185px); margin-right: -16px;">
+          <div class="p-4" style="overflow-y: auto; height: calc(100vh - 185px);">
             <div v-for="(npc, index) in npcs" :key="index">
               <CharacterListItem
                 :npc="npc"

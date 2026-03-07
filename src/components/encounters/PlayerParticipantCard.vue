@@ -75,7 +75,7 @@ const description = computed(() => Character.getDescription(props.npc))
 }
 
 .PlayerParticipantCard.is-active {
-  border-color: rgb(var(--v-theme-primary)) !important;
+  border-color: rgb(var(--v-theme-primary));
   box-shadow: 0 0 0 1px rgb(var(--v-theme-primary));
 }
 

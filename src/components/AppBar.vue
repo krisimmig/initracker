@@ -110,13 +110,13 @@ function logoutUser() {
 
 <style>
 header.AppBar {
-  background-color: rgba(0, 0, 0, 0.06) !important;
+  background-color: rgba(0, 0, 0, 0.06);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 .v-theme--dark header.AppBar {
-  background-color: rgba(255, 255, 255, 0.06) !important;
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 header.AppBar a {

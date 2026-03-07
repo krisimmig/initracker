@@ -164,7 +164,7 @@ function getSpeedString(): string {
 <style>
 .CharacterDetails-stats th,
 .CharacterDetails-stats td {
-  padding: 4px 6px !important;
+  padding: 4px 6px;
 }
 
 .CharacterDetails-props {
