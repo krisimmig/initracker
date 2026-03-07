@@ -101,8 +101,9 @@
           <!-- Social Login Buttons -->
           <div class="d-flex flex-column ga-3">
             <v-btn
-              variant="outlined"
               block
+              variant="outlined"
+              color="secondary"
               size="large"
               prepend-icon="mdi-google"
               :loading="isLoadingGoogle"
@@ -111,8 +112,9 @@
               Continue with Google
             </v-btn>
             <v-btn
-              variant="outlined"
               block
+              variant="outlined"
+              color="secondary"
               size="large"
               prepend-icon="mdi-twitter"
               :loading="isLoadingTwitter"
