@@ -15,22 +15,28 @@
       </v-alert>
     </v-col>
   </v-row>
+  <ActivityLog />
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useEncountersStore } from '@/store/useEncountersStore'
+import { useActivityLogStore } from '@/store/useActivityLogStore'
 import EncounterList from '@/components/encounters/EncounterList.vue'
 import CharacterDetails from '@/components/characters/CharacterDetails.vue'
+import ActivityLog from '@/components/encounters/ActivityLog.vue'
 
 const route = useRoute()
 const encountersStore = useEncountersStore()
+const activityLog = useActivityLogStore()
 
 const selectedCharacter = computed(() => encountersStore.npcInDetail)
 const activeCharacter = computed(() => encountersStore.encountersActiveNpc())
 
 onMounted(() => {
-  encountersStore.fetchEncounterById({ encounterId: route.params.encounterId as string })
+  const encounterId = route.params.encounterId as string
+  activityLog.setEncounter(encounterId)
+  encountersStore.fetchEncounterById({ encounterId })
 })
 </script>

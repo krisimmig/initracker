@@ -1,82 +1,89 @@
 <template>
   <v-app-bar
-    color="primary"
-    flat
     class="AppBar"
+    flat
   >
-    <template v-if="isLoggedIn">
-      <v-toolbar-title>
-        <router-link :to="{ name: 'home' }">
-          <div style="width: 50px; line-height: 1;">
-            <svg viewBox="0 0 92 77" xmlns="http://www.w3.org/2000/svg"><g fill="currentColor" fill-rule="nonzero"><path d="M73.554 32.583s0-6.338 5.856-6.338h8.787v-3.17s0-6.338-5.858-6.338H67.694c-5.86 0-5.86-3.171-5.86-3.171v63.348h20.505s5.858 0 5.858-6.339V32.583c0-3.169 2.93-3.169 2.93-3.169H79.41c-2.93 0-2.93 3.17-2.93 3.17v31.653c0 3.168-2.926 3.168-2.926 0V32.583ZM64.766.887c-2.931 0-2.931 3.17-2.931 3.17v3.171c0 6.339 5.86 6.339 5.86 6.339H82.34s5.858 0 5.858 3.17V7.227C88.198.887 82.34.887 82.34.887H64.766ZM47.19 32.583s0-6.338-5.861-6.338h-8.784v-3.17s0-6.338 5.856-6.338h14.646c5.858 0 5.858-3.171 5.858-3.171v63.348H38.4s-5.856 0-5.856-6.339V32.583c0-3.169-2.93-3.169-2.93-3.169h11.714c2.932 0 2.932 3.17 2.932 3.17v31.653c0 3.168 2.93 3.168 2.93 0V32.583ZM55.979.887c2.926 0 2.926 3.17 2.926 3.17v3.171c0 6.339-5.857 6.339-5.857 6.339H38.4s-5.856 0-5.856 3.17V7.227C32.544.887 38.4.887 38.4.887h17.579Z"/><path d="M29.615 4.057c0-3.17 2.929-3.17 2.929-3.17H20.827s-2.93 0-2.93 3.17v15.849c0 3.17-2.928 3.17-2.928 3.17V7.226c0-6.34-5.857-6.34-5.857-6.34H.322c2.93 0 2.93 3.17 2.93 3.17v72.857h11.717V35.753c2.928 0 2.928 3.169 2.928 3.169v34.823s0 3.169 2.93 3.169h11.717s-2.93 0-2.93-3.17V35.754c0-6.339-5.86-6.339-5.86-6.339s5.86 0 5.86-6.339V4.057Z"/></g></svg>
-          </div>
+    <div class="appbar-content">
+      <template v-if="isLoggedIn">
+        <v-toolbar-title>
+          <router-link :to="{ name: 'home' }" class="d-flex align-center ga-2">
+            <img src="@/assets/logo.svg" style="height: 36px; width: auto;" alt="Top Of The Round" />
+            <span class="app-name">TOP OF THE ROUND</span>
+          </router-link>
+        </v-toolbar-title>
+
+        <router-link :to="{ name: 'encounters' }">
+          <v-btn variant="text" rounded class="ml-4 my-2">
+            <v-icon start>mdi-sword-cross</v-icon>
+            Encounters
+          </v-btn>
         </router-link>
-      </v-toolbar-title>
 
-      <router-link :to="{ name: 'encounters' }">
-        <v-btn color="white" variant="text" rounded class="ml-4 my-2">
-          <v-icon start>mdi-sword-cross</v-icon>
-          Encounters
+        <router-link :to="{ name: 'characters' }">
+          <v-btn variant="text" rounded class="my-2">
+            <v-icon start>mdi-account-group</v-icon>
+            Characters
+          </v-btn>
+        </router-link>
+
+        <router-link :to="{ name: 'feedback' }">
+          <v-btn variant="text" rounded class="my-2">
+            <v-icon start>mdi-message-alert</v-icon>
+            Feedback
+          </v-btn>
+        </router-link>
+
+        <v-spacer></v-spacer>
+
+        <v-btn icon variant="text" class="my-2" @click="toggleTheme">
+          <v-icon>{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
         </v-btn>
-      </router-link>
 
-      <router-link :to="{ name: 'characters' }">
-        <v-btn color="white" variant="text" rounded class="my-2">
-          <v-icon start>mdi-account-group</v-icon>
-          Characters
-        </v-btn>
-      </router-link>
+        <router-link :to="{ name: 'userdetails' }">
+          <v-btn variant="text" rounded class="my-2">
+            <v-icon start>mdi-account-circle</v-icon>
+            {{ currentUserString }}
+          </v-btn>
+        </router-link>
 
-      <router-link :to="{ name: 'feedback' }">
-        <v-btn color="white" variant="text" rounded class="my-2">
-          <v-icon start>mdi-message-alert</v-icon>
-          Feedback
-        </v-btn>
-      </router-link>
+        <a href="#" @click.prevent="logoutUser">
+          <v-btn variant="text" rounded class="my-2">
+            <v-icon start>mdi-logout-variant</v-icon>
+            Logout
+          </v-btn>
+        </a>
+      </template>
 
-      <v-spacer></v-spacer>
+      <template v-else>
+        <v-toolbar-title>
+          <router-link :to="{ name: 'home' }" class="d-flex align-center ga-2">
+            <img src="@/assets/logo.svg" style="height: 36px; width: auto;" alt="Top Of The Round" />
+            <span class="app-name">TOP OF THE ROUND</span>
+          </router-link>
+        </v-toolbar-title>
 
-      <v-btn icon variant="text" color="white" class="my-2" @click="toggleTheme">
-        <v-icon>{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
-      </v-btn>
+        <router-link :to="{ name: 'home' }">
+          <v-btn variant="text" rounded class="my-2">
+            <v-icon start>mdi-home</v-icon>
+            Home
+          </v-btn>
+        </router-link>
 
-      <router-link :to="{ name: 'userdetails' }">
-        <v-btn color="white" variant="text" rounded class="my-2">
-          <v-icon start>mdi-account-circle</v-icon>
-          {{ currentUserString }}
-        </v-btn>
-      </router-link>
+        <router-link :to="{ name: 'demo' }">
+          <v-btn variant="text" rounded class="my-2">
+            <v-icon start>mdi-play-circle</v-icon>
+            Try Demo
+          </v-btn>
+        </router-link>
 
-      <a href="#" @click.prevent="logoutUser">
-        <v-btn color="white" variant="text" rounded class="my-2">
-          <v-icon start>mdi-logout-variant</v-icon>
-          Logout
-        </v-btn>
-      </a>
-    </template>
-
-    <template v-else>
-      <router-link :to="{ name: 'home' }">
-        <v-btn color="white" variant="text" rounded class="my-2">
-          <v-icon start>mdi-home</v-icon>
-          Home
-        </v-btn>
-      </router-link>
-
-      <router-link :to="{ name: 'demo' }">
-        <v-btn color="white" variant="text" rounded class="my-2">
-          <v-icon start>mdi-play-circle</v-icon>
-          Try Demo
-        </v-btn>
-      </router-link>
-
-      <router-link :to="{ name: 'login' }">
-        <v-btn color="white" variant="text" rounded class="my-2">
-          <v-icon start>mdi-login</v-icon>
-          Login
-        </v-btn>
-      </router-link>
-    </template>
+        <router-link :to="{ name: 'login' }">
+          <v-btn variant="text" rounded class="my-2">
+            <v-icon start>mdi-login</v-icon>
+            Login
+          </v-btn>
+        </router-link>
+      </template>
+    </div>
   </v-app-bar>
 </template>
 
@@ -102,8 +109,38 @@ function logoutUser() {
 </script>
 
 <style>
+header.AppBar {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.v-theme--dark header.AppBar {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
 header.AppBar a {
   text-decoration: none;
-  color: white;
+  color: inherit;
+}
+
+.appbar-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+header.AppBar a.is-active .v-btn,
+header.AppBar a.is-activeExact .v-btn {
+  background-color: rgba(0, 0, 0, 0.08);
+  font-weight: 700;
+}
+
+.v-theme--dark header.AppBar a.is-active .v-btn,
+.v-theme--dark header.AppBar a.is-activeExact .v-btn {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 </style>

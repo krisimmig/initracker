@@ -1,7 +1,5 @@
 <template>
   <div>
-    <PageTitle title="Welcome" icon="mdi-login" />
-
     <v-container style="max-width: 480px;">
       <v-card rounded="lg" class="pa-2">
         <v-tabs v-model="activeTab" color="primary" grow>
@@ -133,8 +131,6 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUsersStore } from '@/store/useUsersStore'
-import PageTitle from '@/components/common/PageTitle.vue'
-
 const route = useRoute()
 const router = useRouter()
 const usersStore = useUsersStore()

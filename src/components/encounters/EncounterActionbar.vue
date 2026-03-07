@@ -28,6 +28,27 @@
       Next
     </v-btn>
 
+    <v-tooltip location="bottom" text="Activity log">
+      <template #activator="{ props: logTooltipProps }">
+        <v-btn
+          v-bind="logTooltipProps"
+          variant="text"
+          class="ml-1"
+          @click="activityLog.toggle()"
+        >
+          <v-badge
+            v-if="activityLog.entries.length > 0"
+            :content="activityLog.entries.length"
+            color="primary"
+            floating
+          >
+            <v-icon>mdi-text-box-outline</v-icon>
+          </v-badge>
+          <v-icon v-else>mdi-text-box-outline</v-icon>
+        </v-btn>
+      </template>
+    </v-tooltip>
+
     <v-tooltip v-if="!demoStore.isDemoActive" location="bottom" text="Share with players">
       <template #activator="{ props: shareTooltipProps }">
         <v-btn
@@ -158,6 +179,7 @@ import { IEncounterEntity } from '@/types/encounters'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import { useSnackbarStore } from '@/store/useSnackbarStore'
 import { useDemoStore } from '@/store/useDemoStore'
+import { useActivityLogStore } from '@/store/useActivityLogStore'
 
 const props = defineProps<{
   encounter: IEncounterEntity
@@ -174,6 +196,7 @@ const emit = defineEmits<{
 const encountersStore = useEncountersStore()
 const snackbar = useSnackbarStore()
 const demoStore = useDemoStore()
+const activityLog = useActivityLogStore()
 
 const showShareDialog = ref(false)
 const showDemoShareDialog = ref(false)

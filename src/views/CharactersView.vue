@@ -1,7 +1,5 @@
 <template>
   <div class="Characters">
-    <PageTitle title="Characters"  icon="mdi-account-group" />
-
     <v-row>
       <!-- New character: first on mobile, right column on md+ -->
       <v-col cols="12" md="4" :order="1" :order-md="2">
@@ -85,7 +83,6 @@ import { useRouter } from 'vue-router'
 import { useCharactersStore } from '@/store/useCharactersStore'
 import CharacterTeaser from '@/components/characters/CharacterTeaser.vue'
 import { Character } from '@/classes/Character'
-import PageTitle from '@/components/common/PageTitle.vue'
 import CharacterLibrary from '@/components/characters/CharacterLibrary.vue'
 
 const router = useRouter()

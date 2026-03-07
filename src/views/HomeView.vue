@@ -1,17 +1,17 @@
 <template>
   <div>
-    <PageTitle title="Welcome to YAIT" icon="mdi-home" />
-
-    <v-container class="py-6" style="max-width: 1280px;">
+    <div class="py-6">
 
       <!-- ===== GUEST EXPERIENCE ===== -->
       <template v-if="!isLoggedIn">
 
         <!-- Hero -->
-        <section class="mb-10 text-center">
+        <section class="mb-14 text-center">
+          <img src="@/assets/logo.svg" alt="Top Of The Round" style="height: 160px; width: auto;" class="mb-3" />
+          <h2 class="app-name text-h5 mb-6">TOP OF THE ROUND</h2>
           <h1 class="text-h3 font-weight-bold mb-2">Run D&D Combat Without the Chaos</h1>
           <p class="text-h6 font-weight-regular text-medium-emphasis mb-6" style="max-width: 640px; margin: 0 auto;">
-            YAIT tracks initiative, HP, conditions, and turns &mdash; so you can focus on the story.
+            <span class="app-name">TOP OF THE ROUND</span> tracks initiative, HP, conditions, and turns &mdash; so you can focus on the story.
           </p>
 
           <div class="d-flex justify-center ga-3 flex-wrap">
@@ -36,7 +36,7 @@
         </section>
 
         <!-- Feature highlights -->
-        <section class="mb-10">
+        <section class="mb-14">
           <v-row>
             <v-col v-for="feature in features" :key="feature.title" cols="12" md="4">
               <v-card variant="tonal" rounded="lg" class="pa-4 h-100">
@@ -50,10 +50,10 @@
           </v-row>
         </section>
 
-        <v-divider class="mb-8" />
+        <v-divider class="mb-12" />
 
         <!-- Character Builder CTA (guest version) -->
-        <section class="mb-8">
+        <section class="mb-12">
           <v-card variant="outlined" rounded="lg">
             <v-card-item>
               <template #prepend>
@@ -99,10 +99,10 @@
           </v-dialog>
         </section>
 
-        <v-divider class="mb-8" />
+        <v-divider class="mb-12" />
 
         <!-- Sign-up nudge -->
-        <section class="mb-8">
+        <section class="mb-12">
           <v-alert type="info" variant="tonal" icon="mdi-cloud-check" rounded="lg">
             <strong>Ready to save your work?</strong> Create a free account to keep your characters
             and encounters synced across devices.
@@ -114,10 +114,10 @@
           </v-alert>
         </section>
 
-        <v-divider class="mb-8" />
+        <v-divider class="mb-12" />
 
         <!-- Feedback & Roadmap -->
-        <section class="mb-4">
+        <section class="mb-6">
           <v-card variant="outlined" rounded="lg">
             <v-card-item>
               <template #prepend>
@@ -129,7 +129,7 @@
 
             <v-card-text>
               <p class="text-body-2 mb-4">
-                YAIT is actively developed. If you hit a bug or have a feature idea, we want to
+                <span class="app-name">TOP OF THE ROUND</span> is actively developed. If you hit a bug or have a feature idea, we want to
                 hear it. Your feedback directly shapes the roadmap.
               </p>
 
@@ -153,13 +153,16 @@
       <template v-else>
 
         <!-- 1. Introduction -->
-        <section class="mb-8">
-          <h1 class="text-h4 font-weight-bold mb-1">Welcome to YAIT</h1>
-          <p class="text-subtitle-1 text-medium-emphasis mb-4">
-            Yet Another Initiative Tracker &mdash; built for Dungeon Masters and players.
-          </p>
+        <section class="mb-12">
+          <div class="text-center mb-6">
+            <img src="@/assets/logo.svg" alt="Top Of The Round" style="height: 140px; width: auto;" class="mb-3" />
+            <h2 class="app-name text-h5 mb-2">TOP OF THE ROUND</h2>
+            <p class="text-subtitle-1 text-medium-emphasis mb-0">
+              Built for Dungeon Masters and players.
+            </p>
+          </div>
           <p class="text-body-1 mb-5">
-            YAIT helps you run Dungeons &amp; Dragons combat sessions with less
+            <span class="app-name">TOP OF THE ROUND</span> helps you run Dungeons &amp; Dragons combat sessions with less
             friction. Build your roster of characters and monsters, organise them
             into reusable encounters, and focus on what matters &mdash; the story.
           </p>
@@ -170,7 +173,7 @@
             icon="mdi-shield-sword"
             class="mb-3"
           >
-            <strong>Less bookkeeping, more playing.</strong> YAIT tracks initiative
+            <strong>Less bookkeeping, more playing.</strong> <span class="app-name">TOP OF THE ROUND</span> tracks initiative
             order, HP, and conditions so you never lose the thread during a fight.
           </v-alert>
 
@@ -185,10 +188,10 @@
           </v-alert>
         </section>
 
-        <v-divider class="mb-8" />
+        <v-divider class="mb-12" />
 
         <!-- 2. Character Builder CTA -->
-        <section class="mb-8">
+        <section class="mb-12">
           <v-card variant="outlined" rounded="lg">
             <v-card-item>
               <template #prepend>
@@ -244,10 +247,10 @@
           </v-dialog>
         </section>
 
-        <v-divider class="mb-8" />
+        <v-divider class="mb-12" />
 
         <!-- 3. Encounters CTA -->
-        <section class="mb-8">
+        <section class="mb-12">
           <v-card variant="outlined" rounded="lg">
             <v-card-item>
               <template #prepend>
@@ -260,8 +263,9 @@
             <v-card-text>
               <p class="text-body-2 mb-0">
                 An encounter is a saved combat scene &mdash; give it a name, add your monsters and
-                player characters, and it is ready to run. When the fight starts, YAIT tracks the
+                player characters, and it is ready to run. When the fight starts, <span class="app-name">TOP OF THE ROUND</span> tracks the
                 initiative order and lets you update HP and conditions in real time.
+                Every action is recorded in the activity log so you can review dice rolls, damage, and conditions at any point.
                 Save encounters to reuse them or tweak them for different parties.
               </p>
             </v-card-text>
@@ -287,10 +291,10 @@
           </v-card>
         </section>
 
-        <v-divider class="mb-8" />
+        <v-divider class="mb-12" />
 
         <!-- 4. Feedback & Roadmap -->
-        <section class="mb-4">
+        <section class="mb-6">
           <v-card variant="outlined" rounded="lg">
             <v-card-item>
               <template #prepend>
@@ -302,7 +306,7 @@
 
             <v-card-text>
               <p class="text-body-2 mb-4">
-                YAIT is actively developed. If you hit a bug or have a feature idea, we want to
+                <span class="app-name">TOP OF THE ROUND</span> is actively developed. If you hit a bug or have a feature idea, we want to
                 hear it. Your feedback directly shapes the roadmap.
               </p>
 
@@ -333,7 +337,7 @@
 
       </template>
 
-    </v-container>
+    </div>
   </div>
 </template>
 
@@ -341,7 +345,6 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUsersStore } from '@/store/useUsersStore'
-import PageTitle from '@/components/common/PageTitle.vue'
 import CharacterLibrary from '@/components/characters/CharacterLibrary.vue'
 
 const router = useRouter()
@@ -378,6 +381,11 @@ const features = [
     icon: 'mdi-bookshelf',
     title: 'Character Library',
     description: 'Build reusable characters and monsters once, then drop them into any encounter. Hundreds of monsters included.',
+  },
+  {
+    icon: 'mdi-text-box-outline',
+    title: 'Activity Log',
+    description: 'Every dice roll, HP change, condition, and turn is recorded. Review what happened at any point during the session.',
   },
 ]
 

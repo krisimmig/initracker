@@ -18,6 +18,7 @@
         </v-alert>
       </v-col>
     </v-row>
+    <ActivityLog />
   </div>
 </template>
 
@@ -25,17 +26,21 @@
 import { computed, onUnmounted } from 'vue'
 import { useEncountersStore } from '@/store/useEncountersStore'
 import { useDemoStore } from '@/store/useDemoStore'
+import { useActivityLogStore } from '@/store/useActivityLogStore'
 import EncounterList from '@/components/encounters/EncounterList.vue'
 import CharacterDetails from '@/components/characters/CharacterDetails.vue'
 import DemoBanner from '@/components/demo/DemoBanner.vue'
+import ActivityLog from '@/components/encounters/ActivityLog.vue'
 
 const DEMO_ENCOUNTER_ID = 'demo-encounter'
 
 const encountersStore = useEncountersStore()
 const demoStore = useDemoStore()
+const activityLog = useActivityLogStore()
 
 // Activate demo synchronously in setup so data is ready before child components mount
 demoStore.activateDemo()
+activityLog.setEncounter(DEMO_ENCOUNTER_ID)
 
 const selectedCharacter = computed(() => encountersStore.npcInDetail)
 const activeCharacter = computed(() => encountersStore.encountersActiveNpc())
